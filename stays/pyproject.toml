@@ -82,6 +82,9 @@ django-cookie-consent = "^0.4.0"
 coverage = "^7.3.1"
 dj-database-url = "^2.1.0"
 dynaconf = "^3.2.2"
+django-configurations = "^2.4.1"
+python-slugify = "^8.0.1"
+python-decouple = "^3.8"
 
 
 [build-system]

@@ -1074,6 +1074,27 @@ files = [
 django = ">=3.2"
 
 [[package]]
+name = "django-configurations"
+version = "2.4.1"
+description = "A helper for organizing Django settings."
+optional = false
+python-versions = ">=3.7, <4.0"
+files = [
+    {file = "django-configurations-2.4.1.tar.gz", hash = "sha256:a6c25c143834e67b20d34751512d08b3290684f25098ee212b1ee36804a59085"},
+    {file = "django_configurations-2.4.1-py3-none-any.whl", hash = "sha256:8bf8866ae29db89ecf93a7743450b5d8974073cf7c194fd98764fd16deac218d"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+
+[package.extras]
+cache = ["django-cache-url"]
+database = ["dj-database-url"]
+email = ["dj-email-url"]
+search = ["dj-search-url"]
+testing = ["dj-database-url", "dj-email-url", "dj-search-url", "django-cache-url (>=1.0.0)"]
+
+[[package]]
 name = "django-cookie-consent"
 version = "0.4.0"
 description = "Django cookie consent application"
@@ -3347,6 +3368,17 @@ files = [
 six = ">=1.5"
 
 [[package]]
+name = "python-decouple"
+version = "3.8"
+description = "Strict separation of settings from code."
+optional = false
+python-versions = "*"
+files = [
+    {file = "python-decouple-3.8.tar.gz", hash = "sha256:ba6e2657d4f376ecc46f77a3a615e058d93ba5e465c01bbe57289bfb7cce680f"},
+    {file = "python_decouple-3.8-py3-none-any.whl", hash = "sha256:d0d45340815b25f4de59c974b855bb38d03151d81b037d9e3f463b0c9f8cbd66"},
+]
+
+[[package]]
 name = "python-levenshtein"
 version = "0.21.1"
 description = "Python extension for computing string edit distances and similarities."
@@ -3359,6 +3391,23 @@ files = [
 
 [package.dependencies]
 Levenshtein = "0.21.1"
+
+[[package]]
+name = "python-slugify"
+version = "8.0.1"
+description = "A Python slugify application that also handles Unicode"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "python-slugify-8.0.1.tar.gz", hash = "sha256:ce0d46ddb668b3be82f4ed5e503dbc33dd815d83e2eb6824211310d3fb172a27"},
+    {file = "python_slugify-8.0.1-py2.py3-none-any.whl", hash = "sha256:70ca6ea68fe63ecc8fa4fcf00ae651fc8a5d02d93dcd12ae6d4fc7ca46c4d395"},
+]
+
+[package.dependencies]
+text-unidecode = ">=1.3"
+
+[package.extras]
+unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "python-stdnum"
@@ -4061,6 +4110,17 @@ docs = ["sphinx (==3.2.1)", "sphinx-autodoc-typehints (==1.11.0)", "sphinx-rtd-t
 tests = ["nose2", "numpy"]
 
 [[package]]
+name = "text-unidecode"
+version = "1.3"
+description = "The most basic Text::Unidecode port"
+optional = false
+python-versions = "*"
+files = [
+    {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
+    {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
+]
+
+[[package]]
 name = "tinycss2"
 version = "1.2.1"
 description = "A tiny CSS parser"
@@ -4487,4 +4547,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "616d6673fb564fda0a72e06288033cea5cad9f51f5b27cafa8d6a48b6ccb10e2"
+content-hash = "6a3524c2429c17b59d5e6617af00d1dd2885598a1b532976613c2962586c9d4f"
