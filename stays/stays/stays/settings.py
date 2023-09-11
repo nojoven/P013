@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import django.conf.global_settings as djenvs
 import json
 from pathlib import Path
 
@@ -28,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #raise ValueError(settings.SECRET_KEY)
-SECRET_KEY = djenvs.SECRET_KEY
+SECRET_KEY = confs.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = djenvs.DEBUG # settings.DYNACONF_DEBUG
+DEBUG = confs.get("DEBUG") # settings.DYNACONF_DEBUG
 TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG")
 
 # Quick-start development settings - unsuitable for production
