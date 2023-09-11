@@ -1536,6 +1536,20 @@ docs = ["Sphinx (>=4.3.2,<5.0.0)", "furo (>=2021.11.23,<2022.0.0)", "linkify-it-
 minify = ["htmlmin (>=0.1.12,<0.2.0)"]
 
 [[package]]
+name = "django-watchman"
+version = "1.3.0"
+description = "django-watchman exposes a status endpoint for your backing services"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-watchman-1.3.0.tar.gz", hash = "sha256:33b5fc734d689b83cb96fc17beda624ae2955f4cede0856897d990c363eac962"},
+    {file = "django_watchman-1.3.0-py2.py3-none-any.whl", hash = "sha256:5f04300bd7fbdd63b8a883b2730ed1e4d9b0f9991133b33a1281134b81f466eb"},
+]
+
+[package.dependencies]
+django = ">=2.0"
+
+[[package]]
 name = "django-widget-tweaks"
 version = "1.5.0"
 description = "Tweak the form field rendering in templates, not in python-level form definitions."
@@ -4547,4 +4561,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "6a3524c2429c17b59d5e6617af00d1dd2885598a1b532976613c2962586c9d4f"
+content-hash = "429fe7af095bf34dd445078296bce0604310d030cd05631dde1d73df2c0f0d1f"

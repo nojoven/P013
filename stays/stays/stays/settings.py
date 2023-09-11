@@ -10,23 +10,36 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import django.conf.global_settings as djenvs
+import json
 from pathlib import Path
-from decouple import config
+
+
+vars_path = Path(__file__).absolute().parent / "confs.json"
+with open(vars_path) as file:
+    confs = json.loads(file.read())
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+#raise ValueError(settings.SECRET_KEY)
+SECRET_KEY = djenvs.SECRET_KEY
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = djenvs.DEBUG # settings.DYNACONF_DEBUG
+TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", "localhost", "0.0.0.0", "127.0.0.1"]
 
 
 # Application definition
@@ -38,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "watchman",
 ]
 
 MIDDLEWARE = [
@@ -76,11 +90,15 @@ WSGI_APPLICATION = "stays.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": confs.get("ENGINE"),
+        "NAME":confs.get("NAME"),
+        "USER": confs.get("USER"),
+        "PASSWORD": confs.get("PASSWORD"),
+        "HOST": confs.get("HOST"),
+        "PORT": confs.get("PORT"),
+        'OPTIONS': {'sslmode': 'require'}
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -122,3 +140,12 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
+# Read more at https://www.dynaconf.com/django/
+import dynaconf  # noqa
+settings = dynaconf.DjangoDynaconf(__name__)  # noqa
+# HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
+
+
+
