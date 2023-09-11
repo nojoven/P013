@@ -169,15 +169,17 @@ python-slugify = "^8.0.1"
 python-decouple = "^3.8"
 
 
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "stays.settings"
+testpaths = [
+    "tests"
+]
+addopts = "--import-mode importlib"
+allowlist_externals = "poetry"
+commands_pre = "poetry install"
+commands = "poetry run pytest"
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tox]
-isolated_build = true
-
-[testenv]
-# skip_install = true
-#allowlist_externals = poetry
-#commands_pre = poetry install
-#commands = poetry run pytest tests/ --import-mode importlib
