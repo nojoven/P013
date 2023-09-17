@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     "watchman",
     "users",
     "core",
-    "profiles"
 ]
 
 MIDDLEWARE = [
