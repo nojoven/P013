@@ -20,5 +20,6 @@ from django.urls import include, re_path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include("core.urls")),
     re_path(r'^watchman/', include('watchman.urls')),
 ]
