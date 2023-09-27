@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class Profile(models.Model):
     email = None
+    password = None
     year_of_birth = None
     id_user = None
     detected_ip = None

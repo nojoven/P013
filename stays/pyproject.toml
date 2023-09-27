@@ -86,6 +86,7 @@ python-decouple = "^3.8"
 django-watchman = "^1.3.0"
 pytest-django = "^4.5.2"
 pip = "^23.2.1"
+rapidfuzz = "2.15.1"
 
 [tool.poetry.dev-dependencies]
 python = "^3.11"
@@ -169,15 +170,16 @@ python-slugify = "^8.0.1"
 python-decouple = "^3.8"
 
 
-# [tool.pytest.ini_options]
-# DJANGO_SETTINGS_MODULE = "stays.settings"
-# testpaths = [
-#     "stays.tests"
-# ]
-# addopts = "--import-mode importlib"
-# allowlist_externals = "poetry"
+[tool.pytest.ini_options]
+pythonpath = "."
+DJANGO_SETTINGS_MODULE = "stays.stays.settings"
+testpaths = [
+    "tests"
+]
+addopts = "--import-mode importlib"
+allowlist_externals = "poetry"
 # commands_pre = "poetry install"
-# commands = "poetry run pytest"
+commands = "poetry run pytest tests/ --import-mode importlib"
 
 
 [build-system]
