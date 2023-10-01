@@ -15,13 +15,13 @@ class Location(models.Model):
     )
 
     given_name = models.CharField(max_length=50, unique=True, blank=False, null=True)
-    category = models.ForeignKey()
+    category = None #CountryField()
     summary = models.TextField(blank=True,null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     lattitude = models.DecimalField(max_digits=9, decimal_places=6,blank=True, null=True)
     
     continent_name = models.CharField(max_length=50, choices=CONTINENTS, blank=True, null=True)
-    country = CountryField()
+    country = None #CountryField()
     city_name = models.CharField(max_length=50, blank=True, null=True)
     area_name = models.CharField(max_length=50, blank=True, null=True)
     region_name = models.CharField(max_length=50, blank=True, null=True)

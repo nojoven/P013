@@ -10,7 +10,7 @@ class Publication(models.Model):
     summary = models.TextField(max_length=170, blank=False, null=True, help_text="Summarize your story.")
     date_of_post = models.DateTimeField(auto_now_add=True)
     date_of_update = models.DateTimeField(auto_now=True)
-    content_type = models.ForeignKey()
+    content_type = None #models.ForeignKey()
     location_of_stay = models.CharField(max_length=100, blank=False, null=True)
     location_flag_url = models.URLField(null=True)
     location_map_url = models.URLField(null=True)
@@ -34,7 +34,7 @@ class PublicationHasType(models.Model):
 class PublicationTypes(models.Model):
     is_text = models.BooleanField(default=True, unique=True)
     is_voice = models.BooleanField(default=False, unique=True)
-    content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice, ContentTypes.text])
+    content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
 
 
 class PublicationHasProfiles(models.Model):
