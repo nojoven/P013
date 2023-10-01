@@ -90,11 +90,12 @@ class LocationWebData(models.Model):
     google_map_url = models.URLField(blank=True, null=True)
     wiki_celebrities_list = models.TextField(blank=True, null=True)
 
-class LocationHasProfile(models.Model):
-
+class LocationHasProfileActivity(models.Model):
     location_given_name = models.ForeignKey('Location.given_name', on_delete=models.CASCADE, blank=True)
-    users_who_stayed = []
-    users_who_upvoted = []
-    location_followers = []
-    location_authors = []
-    location_upvotes_count = 0
+    # user_who_stayed = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
+    # user_who_upvoted = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
+    # location_followers = []
+    # location_author = []
+    location_upvotes_count = models.IntegerField(default=0)
+
+

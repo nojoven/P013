@@ -3,6 +3,8 @@ import uuid
 from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
+from ..core.models import Publication 
+
 # Create your models here.
 # Helper function to return uuid as string
 def uuid_generator():
@@ -56,24 +58,33 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     #known_countries = None
     #known_cities = None
     best_stay = models.CharField(max_length=255, null=True)
-    has_followers = None
+    # has_followers = None
     followers = models.ManyToManyField("self", symmetrical=False)
     profile_follows = models.ManyToManyField(User, related_name="followers")
-    has_publications = None
+    #has_publications = None
+    publications =  models.ManyToManyField(Publication, related_name="author") 
     profile_picture = models.URLField(null=True)
     background_picture = models.URLField(null=True)
-    favourite_publications = None
+    #favourite_publications = None
     motto = models.CharField(max_length=55, null=True)
     last_detected_data = models.TextField(null=True)
-    upvoted_publications_count = models
+    #upvoted_publications_count = models
+
+    created_at = models.DateTimeField(auto_now=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = "email"
+
 
 class ProfileFollowers:
-    profile_username = ""
-    profile_follower = ""
-    profile_followers_usernames = None
-    profile_followers_count = 0
+    profile_username = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
+    profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
+    #profile_followers_usernames = None
+    #profile_followers_count = 0
 
 class ProfileHasDetectedData(models.Model):
+    models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     last_detected_ip = models.CharField(max_length=15, null=True)
     last_detected_continent = models.CharField(max_length=15, null=True)
     last_detected_country = models.CharField(max_length=15, null=True)

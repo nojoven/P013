@@ -33,20 +33,23 @@ class PublicationHasLocation(models.Model):
     location_given_name = models.ForeignKey('Location.given_name', on_delete=models.CASCADE, blank=True)
     location_category = models.ForeignKey('Location.category', on_delete=models.CASCADE, blank=True)
     #location_exists = None
-    corresponding_location = None
+    #corresponding_location = None
 
 
 class PublicationType(models.Model):
     def __str__(self):
-        return {"publication_title": self.publication_title, "is_text": self.is_text, "is_voice": self.is_voice, "content_type": self.content_type}
-    publication_title = ""
-    is_text = models.BooleanField(default=True, unique=True)
-    is_voice = models.BooleanField(default=False, unique=True)
+        return self.content_type
+    
+    publication_title = models.ForeignKey('Publication.title', on_delete=models.CASCADE, blank=True)
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
+    is_text = models.BooleanField(default=True)
+    is_voice = models.BooleanField(default=False)
+    
 
+    
 
 class PublicationHasProfiles(models.Model):
-    publication_title = None
-    publication_author = None
-    publication_upvoters = []
-    publication_upvote_count = 0
+    publication_title = models.ForeignKey('Profile.title', on_delete=models.CASCADE, blank=True, null=True)
+    publication_author = models.ForeignKey('Profile.author', on_delete=models.CASCADE, blank=True, null=True)
+    publication_upvoter = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True, null=True)
+    publication_upvote_count = models.IntegerField(default=0)
