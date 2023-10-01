@@ -14,6 +14,8 @@ import json
 import os
 from pathlib import Path
 
+print("Thanks to https://simplemaps.com/data/world-cities")
+
 
 vars_path = Path(__file__).absolute().parent / "confs.json"
 with open(vars_path) as file:
@@ -39,6 +41,10 @@ TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG")
 ALLOWED_HOSTS = ["*", "localhost", "0.0.0.0", "127.0.0.1"]
 
 
+
+# GDAL_LIBRARY_PATH = os.path("c:\OSGeo4W\bin")
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,12 +54,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "cities",
+    "cities_light",
     "watchman",
     "users",
     "core",
     "locations"
 ]
+
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
+# CITIES_LIGHT_INCLUDE_COUNTRIES = ['FR']
+# CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

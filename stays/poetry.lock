@@ -985,6 +985,21 @@ files = [
 ]
 
 [[package]]
+name = "django-autoslug"
+version = "1.9.9"
+description = "An automated slug field for Django."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-autoslug-1.9.9.tar.gz", hash = "sha256:79f88e9433c1c88d8d3f2bec60d65ca98bffaff6c072b78aa5fd99d0e84a13dd"},
+    {file = "django_autoslug-1.9.9-py2.py3-none-any.whl", hash = "sha256:81cb018944498f27f439d439687cf902212cafbdb8c74c8ca0307543a3d82907"},
+]
+
+[package.extras]
+cyrillic = ["pytils (>=0.2)"]
+translitcodec = ["translitcodec (>=0.3)"]
+
+[[package]]
 name = "django-bootstrap-datepicker-plus"
 version = "5.0.4"
 description = "Bootstrap3/Bootstrap4/Bootstrap5 DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput"
@@ -1043,6 +1058,23 @@ django-model-utils = "*"
 six = "*"
 swapper = "*"
 tqdm = "*"
+
+[[package]]
+name = "django-cities-light"
+version = "3.9.2"
+description = "Simple alternative to django-cities"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-cities-light-3.9.2.tar.gz", hash = "sha256:c8f1e04fc2b607d142ec8163b5d85fa730dde89abc2cbfa28a6fc5859e1a0868"},
+    {file = "django_cities_light-3.9.2-py3-none-any.whl", hash = "sha256:30899beabcbf24cfe2ce345cfdb36d1b22f14bae3f45e06f56e08a3c39574edf"},
+]
+
+[package.dependencies]
+django-autoslug = ">=1.9.8"
+progressbar2 = ">=3.51.4"
+pytz = "*"
+unidecode = ">=0.04.13"
 
 [[package]]
 name = "django-ckeditor"
@@ -2994,6 +3026,24 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "progressbar2"
+version = "4.2.0"
+description = "A Python Progressbar library to provide visual (yet text based) progress to long running operations."
+optional = false
+python-versions = ">=3.7.0"
+files = [
+    {file = "progressbar2-4.2.0-py2.py3-none-any.whl", hash = "sha256:1a8e201211f99a85df55f720b3b6da7fb5c8cdef56792c4547205be2de5ea606"},
+    {file = "progressbar2-4.2.0.tar.gz", hash = "sha256:1393922fcb64598944ad457569fbeb4b3ac189ef50b5adb9cef3284e87e394ce"},
+]
+
+[package.dependencies]
+python-utils = ">=3.0.0"
+
+[package.extras]
+docs = ["sphinx (>=1.8.5)"]
+tests = ["flake8 (>=3.7.7)", "freezegun (>=0.3.11)", "pytest (>=4.6.9)", "pytest-cov (>=2.6.1)", "pytest-mypy", "sphinx (>=1.8.5)"]
+
+[[package]]
 name = "prompt-toolkit"
 version = "3.0.39"
 description = "Library for building powerful interactive command lines in Python"
@@ -3541,6 +3591,25 @@ files = [
 soap = ["zeep"]
 soap-alt = ["suds"]
 soap-fallback = ["PySimpleSOAP"]
+
+[[package]]
+name = "python-utils"
+version = "3.8.1"
+description = "Python Utils is a module with some convenient utilities not included with the standard Python install"
+optional = false
+python-versions = ">3.8.0"
+files = [
+    {file = "python-utils-3.8.1.tar.gz", hash = "sha256:ec3a672465efb6c673845a43afcfafaa23d2594c24324a40ec18a0c59478dc0b"},
+    {file = "python_utils-3.8.1-py2.py3-none-any.whl", hash = "sha256:efdf31c8154667d7dc0317547c8e6d3b506c5d4b6e360e0c89662306262fc0ab"},
+]
+
+[package.dependencies]
+typing-extensions = ">3.10.0.2"
+
+[package.extras]
+docs = ["mock", "python-utils", "sphinx"]
+loguru = ["loguru"]
+tests = ["flake8", "loguru", "pytest", "pytest-asyncio", "pytest-cov", "pytest-mypy", "sphinx", "types-setuptools"]
 
 [[package]]
 name = "python3-openid"
@@ -4428,6 +4497,17 @@ tzdata = {version = "*", markers = "platform_system == \"Windows\""}
 devenv = ["black", "check-manifest", "flake8", "pyroma", "pytest (>=4.3)", "pytest-cov", "pytest-mock (>=3.3)", "zest.releaser"]
 
 [[package]]
+name = "unidecode"
+version = "1.3.7"
+description = "ASCII transliterations of Unicode text"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "Unidecode-1.3.7-py3-none-any.whl", hash = "sha256:663a537f506834ed836af26a81b210d90cbde044c47bfbdc0fbbc9f94c86a6e4"},
+    {file = "Unidecode-1.3.7.tar.gz", hash = "sha256:3c90b4662aa0de0cb591884b934ead8d2225f1800d8da675a7750cbc3bd94610"},
+]
+
+[[package]]
 name = "url-normalize"
 version = "1.4.3"
 description = "URL normalization for Python"
@@ -4667,4 +4747,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "04a5f48baff16924cd15e79e14e3280d5930af430e90797ac3456fd19f2caa15"
+content-hash = "55ca55f609acf1b59e44fd1df7674ecd5a9ef2e977e428b821a32ee7808382e8"
