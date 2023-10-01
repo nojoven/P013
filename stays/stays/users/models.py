@@ -1,7 +1,39 @@
+import uuid
+
+from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
 # Create your models here.
-class Profile(models.Model):
+# Helper function to return uuid as string
+def uuid_generator():
+    return uuid.uuid4().hex
+
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        """Creates and saves a new user"""
+        if not email:
+            raise ValueError("Users must have an email address")
+
+        # Lower the domain part of the email address before creating the user
+        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, email, password=None):
+        """Creates and saves a new superuser"""
+        user = self.create_user(email, password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+
+        return user
+
+
+
+class Profile(AbstractBaseUser, PermissionsMixin):
+    uuid = models.UUIDField(default=uuid_generator, editable=False)
     username = models.CharField(max_length=20, null=True, unique=True)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
     password = models.CharField(max_length=50, blank=False, null=True, help_text="Your password")
@@ -21,21 +53,23 @@ class Profile(models.Model):
     prefered_country = models.CharField(max_length=25, null=True)
     prefered_city = models.CharField(max_length=25, null=True)
     prefered_continent = models.CharField(max_length=25, null=True)
-    known_countries = None
-    known_cities = None
+    #known_countries = None
+    #known_cities = None
     best_stay = models.CharField(max_length=255, null=True)
     has_followers = None
-    followers = None
-    profile_follows = None
+    followers = models.ManyToManyField("self", symmetrical=False)
+    profile_follows = models.ManyToManyField(User, related_name="followers")
     has_publications = None
     profile_picture = models.URLField(null=True)
     background_picture = models.URLField(null=True)
     favourite_publications = None
     motto = models.CharField(max_length=55, null=True)
     last_detected_data = models.TextField(null=True)
-    upvoted_publications = 0
+    upvoted_publications_count = models
 
 class ProfileFollowers:
+    profile_username = ""
+    profile_follower = ""
     profile_followers_usernames = None
     profile_followers_count = 0
 
