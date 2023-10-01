@@ -26,16 +26,21 @@ class Profile(models.Model):
     best_stay = models.CharField(max_length=255, null=True)
     has_followers = None
     followers = None
-    currently_followed_profiles = None
+    profile_follows = None
     has_publications = None
-    publications = models.IntegerField(default=0)
     profile_picture = models.URLField(null=True)
     background_picture = models.URLField(null=True)
     favourite_publications = None
     motto = models.CharField(max_length=55, null=True)
-    detected_ip = models.CharField(max_length=15, null=True)
-    detected_continent = models.CharField(max_length=15, null=True)
-    detected_country = models.CharField(max_length=15, null=True)
-    detected_city = models.CharField(max_length=20, null=True)
+    last_detected_data = models.TextField(null=True)
+    upvoted_publications = 0
 
+class ProfileFollowers:
+    profile_followers_usernames = None
+    profile_followers_count = 0
 
+class ProfileHasDetectedData(models.Model):
+    last_detected_ip = models.CharField(max_length=15, null=True)
+    last_detected_continent = models.CharField(max_length=15, null=True)
+    last_detected_country = models.CharField(max_length=15, null=True)
+    last_detected_city = models.CharField(max_length=20, null=True)

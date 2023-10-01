@@ -3,10 +3,6 @@ from django_countries.fields import CountryField
 from cities_light.models import City, Country, Region
 # Create your models here.
 
-
-
-
-
 class Location(models.Model):
 
     CONTINENTS = (
@@ -43,6 +39,7 @@ class Location(models.Model):
     has_stays = models.BooleanField(default=False)
     stays_count = models.IntegerField(default=0, blank=True, null=True)
 
+
     class Meta:
         ordering = ["given_name"]
 
@@ -70,3 +67,4 @@ class LocationHasProfiles(models.Model):
     users_who_upvoted = []
     location_followers = []
     location_authors = []
+    location_upvotes_count = 0

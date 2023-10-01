@@ -20,12 +20,13 @@ class Publication(models.Model):
 
 
 class PublicationHasLocation(models.Model):
-    publication_given_location = None
+    publication_location_given_name = None
     publication_location_category = None
     location_exists = None
+    corresponding_location = None
 
 class PublicationHasType(models.Model):
-    publication = None
+    publication_title = None
     publication_type = None
     publication_is_text = None
     publication_is_voice = None
@@ -34,3 +35,10 @@ class PublicationTypes(models.Model):
     is_text = models.BooleanField(default=True, unique=True)
     is_voice = models.BooleanField(default=False, unique=True)
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice, ContentTypes.text])
+
+
+class PublicationHasProfiles(models.Model):
+    publication_title = None
+    publication_author = None
+    publication_upvoters = []
+    publication_upvote_count = 0
