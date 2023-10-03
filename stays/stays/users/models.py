@@ -3,7 +3,7 @@ import uuid
 from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
-from ..core.models import Publication 
+# from core.models import Publication
 
 # Create your models here.
 # Helper function to return uuid as string
@@ -59,10 +59,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     #known_cities = None
     best_stay = models.CharField(max_length=255, null=True)
     # has_followers = None
-    followers = models.ManyToManyField("self", symmetrical=False)
-    profile_follows = models.ManyToManyField(User, related_name="followers")
+    # followers = models.ManyToManyField("self", symmetrical=False)
+    # profile_follows = models.ManyToManyField(User, related_name="followers")
     #has_publications = None
-    publications =  models.ManyToManyField(Publication, related_name="author") 
+    # publications =  models.ManyToManyField(Publication, related_name="author") 
     profile_picture = models.URLField(null=True)
     background_picture = models.URLField(null=True)
     #favourite_publications = None
@@ -79,7 +79,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
 class ProfileFollowers:
     profile_username = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
-    profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
+    # profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     #profile_followers_usernames = None
     #profile_followers_count = 0
 

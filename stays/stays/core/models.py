@@ -2,6 +2,8 @@ import uuid
 
 from django.db import models
 from math import inf
+from core import models as core_models
+from ..locations import models as location_models
 from .publications_types import ContentTypes
 
 def uuid_generator():
@@ -13,7 +15,7 @@ class Publication(models.Model):
         return self.title
 
     uuid = models.UUIDField(default=uuid_generator, editable=False)
-    author_username = models.ForeignKey('User.username', on_delete=models.CASCADE, blank=True)
+    author_username = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True)
     title = models.CharField(max_length=70, blank=False, null=True, help_text="Title of your publication.")
     year_of_stay = models.IntegerField(default=1950, blank=False, null=True)
     summary = models.TextField(max_length=170, blank=False, null=True, help_text="Summarize your story.")
@@ -29,9 +31,9 @@ class Publication(models.Model):
 
 
 class PublicationHasLocation(models.Model):
-    publication_title = models.ForeignKey('Publication.title', on_delete=models.CASCADE, blank=True)
-    location_given_name = models.ForeignKey('Location.given_name', on_delete=models.CASCADE, blank=True)
-    location_category = models.ForeignKey('Location.category', on_delete=models.CASCADE, blank=True)
+    publication_title = models.ForeignKey(core_models.Publication, on_delete=models.CASCADE, blank=True)
+    location_given_name = models.ForeignKey('Location', on_delete=models.CASCADE, blank=True)
+    location_category = models.ForeignKey('Location', on_delete=models.CASCADE, blank=True)
     #location_exists = None
     #corresponding_location = None
 
@@ -40,7 +42,7 @@ class PublicationType(models.Model):
     def __str__(self):
         return self.content_type
     
-    publication_title = models.ForeignKey('Publication.title', on_delete=models.CASCADE, blank=True)
+    publication_title = models.ForeignKey('Publication', on_delete=models.CASCADE, blank=True)
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
     is_text = models.BooleanField(default=True)
     is_voice = models.BooleanField(default=False)
@@ -49,7 +51,7 @@ class PublicationType(models.Model):
     
 
 class PublicationHasProfiles(models.Model):
-    publication_title = models.ForeignKey('Profile.title', on_delete=models.CASCADE, blank=True, null=True)
-    publication_author = models.ForeignKey('Profile.author', on_delete=models.CASCADE, blank=True, null=True)
-    publication_upvoter = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True, null=True)
+    publication_title = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
+    publication_author = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
+    publication_upvoter = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
     publication_upvote_count = models.IntegerField(default=0)

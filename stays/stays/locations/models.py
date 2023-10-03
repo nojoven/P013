@@ -24,7 +24,7 @@ class Location(models.Model):
 
     uuid = models.UUIDField(default=uuid_generator, editable=False)
     given_name = models.CharField(max_length=50, unique=True, blank=False, null=True)
-    category = models.ForeignKey('LocationCategory.category', on_delete=models.CASCADE, blank=True)
+    category = models.ForeignKey('LocationCategory', on_delete=models.CASCADE, blank=True)
     summary = models.TextField(blank=True,null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     lattitude = models.DecimalField(max_digits=9, decimal_places=6,blank=True, null=True)
@@ -57,7 +57,7 @@ class LocationCategory(models.Model):
     def __str__(self):
         return self.category
     
-    location_given_name = models.ForeignKey('Location.given_name', on_delete=models.CASCADE, blank=True)
+    location_given_name = models.ForeignKey('Location', on_delete=models.CASCADE, blank=True)
     is_city = models.BooleanField(default=False, null=True)
     is_country = models.BooleanField(default=False, null=True)
     is_area = models.BooleanField(default=False, null=True)
@@ -77,7 +77,7 @@ class LocationCategory(models.Model):
 
 
 class LocationWebData(models.Model):
-    location_given_name = models.ForeignKey('Location.given_name', on_delete=models.CASCADE, blank=True)   
+    location_given_name = models.ForeignKey('Location', on_delete=models.CASCADE, blank=True)   
     has_wiki_page = models.BooleanField(default=False)
     has_wiki_summary = models.BooleanField(default=False)
     wikipedia_url = models.URLField(default="https://lemag.ird.fr/fr", blank=True, null=True)
@@ -91,7 +91,7 @@ class LocationWebData(models.Model):
     wiki_celebrities_list = models.TextField(blank=True, null=True)
 
 class LocationHasProfileActivity(models.Model):
-    location_given_name = models.ForeignKey('Location.given_name', on_delete=models.CASCADE, blank=True)
+    location_given_name = models.ForeignKey('Location', on_delete=models.CASCADE, blank=True)
     # user_who_stayed = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     # user_who_upvoted = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     # location_followers = []

@@ -42,7 +42,6 @@ ALLOWED_HOSTS = ["*", "localhost", "0.0.0.0", "127.0.0.1"]
 
 
 
-# GDAL_LIBRARY_PATH = os.path("c:\OSGeo4W\bin")
 
 
 # Application definition
@@ -54,10 +53,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "core",
     "cities_light",
     "watchman",
     "users",
-    "core",
     "locations"
 ]
 
@@ -112,6 +111,7 @@ DATABASES = {
     }
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -154,6 +154,8 @@ STATICFILES_DIRS =  (os.path.join(BASE_DIR, "static"),)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "users.Profile"
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
