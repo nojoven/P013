@@ -17,14 +17,16 @@ from pathlib import Path
 print("Thanks to https://simplemaps.com/data/world-cities")
 
 
+
 vars_path = Path(__file__).absolute().parent / "confs.json"
 with open(vars_path) as file:
     confs = json.loads(file.read())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
 
-
+ 
 # SECURITY WARNING: keep the secret key used in production secret!
 #raise ValueError(settings.SECRET_KEY)
 SECRET_KEY = confs.get("SECRET_KEY")
@@ -37,11 +39,7 @@ TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG")
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 
-
 ALLOWED_HOSTS = ["*", "localhost", "0.0.0.0", "127.0.0.1"]
-
-
-
 
 
 # Application definition
@@ -53,10 +51,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "users",
     "core",
     "cities_light",
     "watchman",
-    "users",
     "locations"
 ]
 

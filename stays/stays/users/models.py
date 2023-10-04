@@ -1,6 +1,6 @@
 import uuid
 
-from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
 # from core.models import Publication
@@ -9,7 +9,7 @@ from django.db import models
 # Helper function to return uuid as string
 def uuid_generator():
     return uuid.uuid4().hex
-
+ 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Creates and saves a new user"""
@@ -78,13 +78,13 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
 
 class ProfileFollowers:
-    profile_username = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
+    profile_username = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
     # profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     #profile_followers_usernames = None
     #profile_followers_count = 0
 
 class ProfileHasDetectedData(models.Model):
-    models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
+    models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
     last_detected_ip = models.CharField(max_length=15, null=True)
     last_detected_continent = models.CharField(max_length=15, null=True)
     last_detected_country = models.CharField(max_length=15, null=True)
