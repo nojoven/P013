@@ -77,7 +77,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
 
-class ProfileFollowers:
+class ProfileFollowers(models.Model):
     profile_username = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
     # profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     #profile_followers_usernames = None
