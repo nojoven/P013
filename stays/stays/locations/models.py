@@ -74,9 +74,6 @@ class Location(models.Model):
     class Meta:
         ordering = ["given_name"]
 
-
-
-
 class LocationWebData(models.Model):
     location_given_name = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True,)   
     has_wiki_page = models.BooleanField(default=False)
