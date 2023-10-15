@@ -180,7 +180,7 @@ testpaths = [
 addopts = "--import-mode importlib"
 allowlist_externals = "poetry"
 # commands_pre = "poetry install"
-commands = "poetry run pytest tests/ --import-mode importlib"
+commands = "poetry run pytest --import-mode importlib"
 
 
 [build-system]
