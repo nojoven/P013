@@ -106,6 +106,15 @@ DATABASES = {
         "HOST": confs.get("HOST"),
         "PORT": confs.get("PORT"),
         'OPTIONS': {'sslmode': 'require'}
+    },
+    "test": {
+        "ENGINE": confs.get("ENGINE"),
+        "NAME":"test",
+        "USER": confs.get("USER"),
+        "PASSWORD": confs.get("PASSWORD"),
+        "HOST": confs.get("HOST"),
+        "PORT": confs.get("PORT"),
+        'OPTIONS': {'sslmode': 'require'}
     }
 }
 
