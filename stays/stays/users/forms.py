@@ -5,13 +5,10 @@ from .models import Profile
 
 class RegistrationForm(UserCreationForm):
     username = forms.CharField(required=True)
-    first_name = forms.CharField(required=True)
-    last_name = forms.CharField(required=True)
     class Meta:
         model = Profile
-        fields = [
-            'email', 
-            'username',
+        fields = [ 
+            'email',
             'password1',
             'password2'
         ]
