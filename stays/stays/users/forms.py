@@ -16,7 +16,7 @@ class RegistrationForm(UserCreationForm):
             'password2'
         ]
 
-class AccountForm(UserChangeForm):
+class AccountEditionForm(UserChangeForm):
     # Hide the password field
     password = None
     class Meta:

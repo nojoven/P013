@@ -109,7 +109,7 @@ DATABASES = {
     },
     "test": {
         "ENGINE": confs.get("ENGINE"),
-        "NAME":"test",
+        "NAME": confs.get("NAME"),
         "USER": confs.get("USER"),
         "PASSWORD": confs.get("PASSWORD"),
         "HOST": confs.get("HOST"),
@@ -163,13 +163,14 @@ STATICFILES_DIRS =  (os.path.join(BASE_DIR, "static"),)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "users.Profile"
+MEDIA_AUTO_FIELD = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+AUTH_USER_MODEL = "users.Profile"
 
 LOGIN_URL = "signin"
 LOGIN_REDIRECT_URL = "core:home"
 LOGOUT_REDIRECT_URL = "core:home"
-
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/

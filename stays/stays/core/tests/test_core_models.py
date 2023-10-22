@@ -13,19 +13,19 @@ from core.models import PublicationType, Publication, PublicationHasLocation, Pu
 # class TestCoreViews(TestCase):
 #     pass
 
-def test_can_select_all_publication_types():
+def test_can_select_all_publication_types_class():
     publications_types = PublicationType.objects.all()
     assert publications_types is not None
 
-def test_can_select_all_publications():
+def test_can_select_all_publications_class():
     publications = Publication.objects.all()
     assert publications is not None
 
-def test_can_select_all_publication_spots():
+def test_can_select_all_publication_spots_class():
     publication_spots = PublicationHasLocation.objects.all()
     assert publication_spots is not None
 
-def test_can_select_all_publication_profiles():
+def test_can_select_all_publication_profiles_class():
     likers = PublicationHasProfiles.objects.all()
     assert likers is not None
 

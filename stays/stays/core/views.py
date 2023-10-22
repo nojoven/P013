@@ -9,4 +9,4 @@ def home(request):
     context = {
         'profiles_list': profiles,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'home.html', context)
