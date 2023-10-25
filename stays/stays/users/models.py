@@ -1,15 +1,20 @@
 import uuid
-
+from django.contrib.auth import  get_user_model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.urls import reverse
 
 # from core.models import Publication
 
 # Create your models here.
+
+
 # Helper function to return uuid as string
 def uuid_generator():
     return uuid.uuid4().hex
- 
+
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Creates and saves a new user"""
@@ -22,6 +27,10 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
+    
+    def create_user_simply(**params):
+        """Helper function to create new user"""
+        return get_user_model().objects.create_user(**params)
 
     def create_superuser(self, email, password=None):
         """Creates and saves a new superuser"""
@@ -33,10 +42,9 @@ class UserManager(BaseUserManager):
         return user
 
 
-
 class Profile(AbstractBaseUser, PermissionsMixin):
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
-    user_id = models.IntegerField(default=0)
+    user_id = models.IntegerField(default=1)
     username = models.CharField(max_length=20, null=True, unique=True)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
     password = models.CharField(max_length=50, blank=False, null=True, help_text="Your password")
@@ -74,6 +82,9 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
+
+    def get_absolute_url(self):
+        return reverse("profile-detail", kwargs={"pk": self.pk})
 
     USERNAME_FIELD = "email"
 

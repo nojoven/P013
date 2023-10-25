@@ -1,25 +1,41 @@
-from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import  get_user_model
-from django.contrib import messages
+import time
 
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView 
+
+from django.views.generic.list import ListView
+from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
+
+from django.utils.decorators import method_decorator
 
 from users.forms import RegistrationForm, AccountEditionForm, PasswordChangeFromConnectedProfile
 from users.models import Profile
 
 # Create your views here.
-def create_profile(**params):
-    """Helper function to create new user"""
-    return get_user_model().objects.create_user(**params)
 
-class CreateUserView(CreateView):
+
+class CreateProfileView(CreateView):
     """Create a new user in the system"""
-    form_class = UserCreationForm
-    template_name = "stays/signup.html"
+    model = Profile
+    form_class = RegistrationForm
+    template_name = "signup.html"
     success_url = reverse_lazy("login")
+    
+
+    #fields = ["email", "password1", "password2"]
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        email = form.cleaned_data.get('email')
+        messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !")
+        time.sleep(120)
+        return super().form_valid(form)
 
 
 def register(request):
@@ -30,8 +46,9 @@ def register(request):
         if form.is_valid():
             form.save()
             email = form.cleaned_data.get('email')
-            messages.success(request, f"Welcome ! Your account is created with your email address {email} !")
-            return redirect('login')
+        messages.info(request, f"Welcome ! Your account is created with your email address {email} !")
+        time.sleep(15)
+        return redirect('login')
     else:        
         form = RegistrationForm()
     return render(request, 'signup.html', {'form': form})
