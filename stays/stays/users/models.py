@@ -42,7 +42,6 @@ class UserManager(BaseUserManager):
 
 class Profile(AbstractBaseUser, PermissionsMixin):
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
-    user_id = models.IntegerField(default=1)
     username = models.CharField(max_length=20, null=True, unique=True)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
     password = models.CharField(max_length=255, blank=False, null=True, help_text="Your password")
