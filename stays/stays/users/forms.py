@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Password
 from .models import Profile
 
 class RegistrationForm(UserCreationForm):
-    username = forms.CharField(required=True)
+    #username = forms.CharField(required=True)
     class Meta:
         model = Profile
         fields = [ 

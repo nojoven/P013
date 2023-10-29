@@ -13,8 +13,6 @@ from django.urls import reverse
 def uuid_generator():
     return uuid.uuid4().hex
 
-
-
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Creates and saves a new user"""
