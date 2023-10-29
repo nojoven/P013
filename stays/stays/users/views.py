@@ -43,13 +43,19 @@ def register(request):
     """Register the user"""
     print(request.method)
     if request.method == 'POST':
-        print(request.method+ " ****B************\n*******************************\n****************************") 
+        print(request.method+ " ****B************\n*******************************\n****************************")
         user = Profile()
         form = RegistrationForm(request.POST or None, instance=user)
+
         print(form.has_error("email"))
-        print(form.has_error("password1"))
-        print(form.has_error("password2"))
+        print(form.has_error("password"))
         print(form.is_valid())
+        print(form.data)
+        print(form.fields)
+        print(form.field_order)
+        print(form.cleaned_data)
+        print(form.non_field_errors())
+        print(form.errors.as_data())
         if form.is_valid():
             form.save()
             email = form.cleaned_data.get('email')

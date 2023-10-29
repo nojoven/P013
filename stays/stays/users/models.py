@@ -45,7 +45,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     user_id = models.IntegerField(default=1)
     username = models.CharField(max_length=20, null=True, unique=True)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
-    password = models.CharField(max_length=50, blank=False, null=True, help_text="Your password")
+    password = models.CharField(max_length=255, blank=False, null=True, help_text="Your password")
     # date_of_birth = models.DateField(help_text="Full user's birth date", blank=True, null=True)
     # year_of_birth = models.IntegerField(help_text="User's birth year")
     # first_name = models.CharField(max_length=25, null=True)
