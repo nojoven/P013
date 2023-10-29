@@ -24,8 +24,6 @@ with open(vars_path) as file:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print(BASE_DIR)
-
  
 # SECURITY WARNING: keep the secret key used in production secret!
 #raise ValueError(settings.SECRET_KEY)
@@ -107,15 +105,15 @@ DATABASES = {
         "PORT": confs.get("PORT"),
         'OPTIONS': {'sslmode': 'require'}
     },
-    "test": {
-        "ENGINE": confs.get("ENGINE"),
-        "NAME": confs.get("NAME"),
-        "USER": confs.get("USER"),
-        "PASSWORD": confs.get("PASSWORD"),
-        "HOST": confs.get("HOST"),
-        "PORT": confs.get("PORT"),
-        'OPTIONS': {'sslmode': 'require'}
-    }
+    # "test": {
+    #     "ENGINE": confs.get("ENGINE"),
+    #     "NAME": confs.get("NAME"),
+    #     "USER": confs.get("USER"),
+    #     "PASSWORD": confs.get("PASSWORD"),
+    #     "HOST": confs.get("HOST"),
+    #     "PORT": confs.get("PORT"),
+    #     'OPTIONS': {'sslmode': 'require'}
+    # }
 }
 
 
@@ -172,12 +170,8 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "core:home"
 LOGOUT_REDIRECT_URL = "core:home"
 
-
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
 import dynaconf  # noqa
 settings = dynaconf.DjangoDynaconf(__name__)  # noqa
 # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
-
-
-
