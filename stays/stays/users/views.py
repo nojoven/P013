@@ -19,35 +19,38 @@ from users.models import Profile
 # Create your views here.
 
 
-class CreateProfileView(CreateView):
-    """Create a new user in the system"""
-    model = Profile
-    form_class = RegistrationForm
-    template_name = "signup.html"
-    success_url = reverse_lazy("login")
+# class CreateProfileView(CreateView):
+#     """Create a new user in the system"""
+#     model = Profile
+#     form_class = RegistrationForm
+#     template_name = "signup.html"
+#     success_url = reverse_lazy("login")
+#     print("**********A***************************************************************")
     
 
     #fields = ["email", "password1", "password2"]
 
-    def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-        email = form.cleaned_data.get('email')
-        messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !")
-        time.sleep(120)
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     # This method is called when valid form data has been POSTed.
+    #     # It should return an HttpResponse.
+    #     email = form.cleaned_data.get('email')
+    #     messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !")
+    #     time.sleep(120)
+    #     return super().form_valid(form)
 
 
 def register(request):
     """Register the user"""
+    print(request.method)
     if request.method == 'POST':
+        print(request.method+ " ****B************\n*******************************\n****************************") 
         user = Profile()
         form = RegistrationForm(request.POST or None, instance=user)
         if form.is_valid():
             form.save()
             email = form.cleaned_data.get('email')
-        messages.info(request, f"Welcome ! Your account is created with your email address {email} !")
-        time.sleep(15)
+            messages.info(request, f"Welcome ! Your account is created with your email address {email} !")
+            time.sleep(15)
         return redirect('login')
     else:        
         form = RegistrationForm()

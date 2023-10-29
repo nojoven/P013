@@ -28,7 +28,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("core.urls")),
     path("", include("users.urls")),
-    path("register/", user_views.register, name="register"),
+    #path("signup", user_views.register, name="register"),
     re_path(r'^watchman/', include('watchman.urls')),
         path("login", authentication_views.LoginView.as_view(template_name='signin.html'), name='login'),
         path("logout", authentication_views.LogoutView.as_view(template_name='signout.html'), name='logout'),
