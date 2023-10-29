@@ -15,7 +15,14 @@
 </head>
 
 <body class="bg-gray-100">
+    {% if messages %}
+    {% for message in messages %}
+        <center><div class="alert">
+            {{ message }}
+        </div></center>
 
+    {% endfor %}
+    {% endif %}
 
     <div id="wrapper" class="flex flex-col justify-between h-screen">
 
