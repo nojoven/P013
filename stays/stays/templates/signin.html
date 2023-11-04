@@ -15,14 +15,6 @@
 </head>
 
 <body class="bg-gray-100">
-    {% if messages %}
-    {% for message in messages %}
-        <center><div class="alert">
-            {{ message }}
-        </div></center>
-
-    {% endfor %}
-    {% endif %}
 
     <div id="wrapper" class="flex flex-col justify-between h-screen">
 
@@ -30,19 +22,27 @@
         <div class="bg-white py-4 shadow dark:bg-gray-800">
             <div class="max-w-6xl mx-auto">
 
-
                 <div class="flex items-center lg:justify-between justify-around">
 
                     <a href="/">
-                       <b><h1 style="font-size: 1.5rem;">Socol</h1></b>
+                        <b><h1 style="font-size: 3.5rem;">S T A Y S</h1></b>
                     </a>
-
+                    
                     <div class="capitalize flex font-semibold hidden lg:block my-2 space-x-3 text-center text-sm">
                         
                         <a href="signup" class="bg-pink-500 pink-500 px-6 py-3 rounded-md shadow text-white">Register</a>
                     </div>
 
                 </div>
+                {% if messages %}
+                <div class="flex items-center lg:justify-between justify-around">
+                    {% for message in messages %}
+                        <center><div class="alert bg-green-100 text-white-50 !important">
+                            {{ message }}
+                        </div></center>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
         </div>
 

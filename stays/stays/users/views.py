@@ -32,7 +32,6 @@ class CreateProfileView(CreateView):
         # It should return an HttpResponse.
         email = form.cleaned_data.get('email')
         messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !")
-        time.sleep(3)
         return super().form_valid(form)
 
 
