@@ -77,7 +77,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     #upvoted_publications_count = models
 
     created_at = models.DateTimeField(auto_now=True)
-
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     objects = UserManager()
 
     def get_absolute_url(self):
