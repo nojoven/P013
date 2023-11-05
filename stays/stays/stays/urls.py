@@ -24,11 +24,12 @@ from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path("admin", admin.site.urls),
+    #path("", include('allauth.urls')),
     path("", include("core.urls")),
     path("", include("users.urls")),
     re_path(r'^watchman/', include('watchman.urls')),
-        path("login", authentication_views.LoginView.as_view(template_name='signin.html'), name='login'),
-        path("logout", authentication_views.LogoutView.as_view(template_name='signout.html'), name='logout'),
+    # path("login", authentication_views.LoginView.as_view(template_name='signin.html'), name='login'),
+    path("logout", authentication_views.LogoutView.as_view(template_name='signout.html'), name='logout'),
 ] + static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT

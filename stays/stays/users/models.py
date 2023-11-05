@@ -89,6 +89,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         return reverse("profile-detail", kwargs={"pk": self.pk})
 
     USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
 
 
 

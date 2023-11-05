@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
-    <title>Settings</title>
+    <title>Account</title>
     <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
@@ -16,7 +16,7 @@
 
 <body>
     <div class="container m-auto"> 
-        <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"> Account Setting </h1>
+        <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Account Setting for <b>{{profile.email}}</b></a></h1>
         <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab">
             <li class="uk-active"><a href="#">General</a></li>
             <li><a href="#">Profile</a></li>

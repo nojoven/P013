@@ -52,8 +52,11 @@ INSTALLED_APPS = [
     "users",
     "core",
     "cities_light",
+    "locations",
     "watchman",
-    "locations"
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
@@ -166,9 +169,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = "users.Profile"
 
-LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "core:home"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
+AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailBackend',  # custom backend
+    #'django.contrib.auth.backends.ModelBackend',  # default backend
+    #'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
+LOGIN_URL = "users:login"
+LOGIN_REDIRECT_URL = "users:myaccount"
 LOGOUT_REDIRECT_URL = "core:home"
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_UNIQUE_EMAIL = True
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
