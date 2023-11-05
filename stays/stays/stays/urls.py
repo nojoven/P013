@@ -21,14 +21,11 @@ from django.contrib.auth import views as authentication_views
 from django.urls import path, include, re_path
 from django.views.generic.base import TemplateView
 
-from users import views as user_views
-
 
 urlpatterns = [
     path("admin", admin.site.urls),
     path("", include("core.urls")),
     path("", include("users.urls")),
-    #path("signup", user_views.register, name="register"),
     re_path(r'^watchman/', include('watchman.urls')),
         path("login", authentication_views.LoginView.as_view(template_name='signin.html'), name='login'),
         path("logout", authentication_views.LogoutView.as_view(template_name='signout.html'), name='logout'),

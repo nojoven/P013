@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
+from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView
 from django.views.generic.detail import DetailView
@@ -49,3 +50,12 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'signup.html', {'form': form})
+
+@login_required
+def myaccount(request):
+    return render(request,"account.html")
+
+
+
+
+

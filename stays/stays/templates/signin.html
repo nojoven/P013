@@ -22,14 +22,12 @@
         <div class="bg-white py-4 shadow dark:bg-gray-800">
             <div class="max-w-6xl mx-auto">
 
-                <div class="flex items-center lg:justify-between justify-around">
-
+                <div class="flex items-center lg:justify-around justify-around">
                     <a href="/">
                         <b><h1 style="font-size: 3.5rem;">S T A Y S</h1></b>
                     </a>
                     
                     <div class="capitalize flex font-semibold hidden lg:block my-2 space-x-3 text-center text-sm">
-                        
                         <a href="signup" class="bg-pink-500 pink-500 px-6 py-3 rounded-md shadow text-white">Register</a>
                     </div>
 
@@ -37,9 +35,11 @@
                 {% if messages %}
                 <div class="flex items-center lg:justify-between justify-around">
                     {% for message in messages %}
-                        <center><div class="alert bg-green-100 text-white-50 !important">
+                        <center>
+                            <div class="alert bg-green-100 text-white-50 !important">
                             {{ message }}
-                        </div></center>
+                            </div>
+                    </center>
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -49,21 +49,22 @@
         <!-- Content-->
         <div>
             <div class="lg:p-12 max-w-md max-w-xl lg:my-0 my-12 mx-auto p-6 space-y-">
-                <h1 class="lg:text-3xl text-xl font-semibold  mb-6"> Log in</h1>
-                <form action="/" method="POST">
+                <h1 class="text-center lg:text-3xl text-xl font-semibold  mb-6"> SIGN IN</h1>
+                <form action="myaccount" method="POST">
                     {% csrf_token %}
-                    <input type="text" placeholder="Username" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+                    <input type="text" placeholder="Email" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
                     <input type="text" placeholder="***********" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
                     <div class="flex justify-between my-4">
-                        <div class="checkbox">
+                        {% comment %} <div class="checkbox">
                             <input type="checkbox" id="chekcbox1" checked>
                             <label for="chekcbox1"><span class="checkbox-icon"></span>Remember Me</label>
-                        </div>
-                        <a href="#"> Forgot Your Password? </a>
+                        </div> {% endcomment %}
+                        {% comment %} <a href="#"> Forgot Your Password? </a> {% endcomment %}
                     </div>
+                    <h6 class="text-center mb-5"><a href="#"> Forgot Your Password? </a></h6>
                     <button type="submit" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Login</button>
                     <div class="text-center mt-5 space-x-2">
-                        <p class="text-base"> Not registered? <a href="signup" class=""> Create a account </a></p>
+                        <p class="text-xl"> Not registered?  <a href="signup" class="text-xl"> Create an account </a></p>
                     </div>
                 </form>
             </div>
