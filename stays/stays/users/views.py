@@ -67,35 +67,17 @@ class AccountLoginView(authentication_views.LoginView):
     # success_url = reverse_lazy("myaccount")
 
     def get_success_url(self):
-        print("SUCCESS")
         return reverse_lazy('users:myaccount')
 
     def form_valid(self, form):
-        print(form.cleaned_data)
-        print("VALID")
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        print(form.cleaned_data)
-        print(form.errors.as_data())
+        #print(form.errors.as_data())
         messages.error(self.request,'Invalid username or password')
         return self.render_to_response(self.get_context_data(form=form))
-
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     account_email = Profile.objects.filter(email=context.get("email")).first()
-    #     account_password = Profile.objects.filter(password=ecom_company).first()
-    #     context.update({
-    #         'ecom_company': ecom_company,
-    #         'landing_details': landing_details,
-    #         'category_list': category_list,
-    #         'partners_list': partners_list,
-    #         'stock_list': stock_list
-    #     })
-    #     return context
 
 
 
