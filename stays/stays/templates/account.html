@@ -37,12 +37,31 @@
                 <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                     <div>
                         <label for=""> First name</label>
-                        <input type="text" placeholder="Your name.." class="shadow-none bg-gray-100">
+                        <input type="text" name="first_name" placeholder="Your first name.." class="shadow-none bg-gray-100">
                     </div>
                     <div>
                         <label for=""> Last name</label>
-                        <input type="text" placeholder="Your name.." class="shadow-none bg-gray-100">
+                        <input type="text" name="last_name" placeholder="Your last name.." class="shadow-none bg-gray-100">
                     </div>
+                    <div class="col-span-2">
+                        <label for=""> Username</label>
+                        <input type="text" name="username" placeholder="Your username name.." class="shadow-none bg-gray-100">
+                    </div>
+                    <div class="col-span-2">
+                        <label for="">Year of birth</label>
+                        <input type="number" name="birth_year" value="1980" min="1900" max="2010"  class="shadow-none bg-gray-100">
+                    </div>
+                    <div class="col-span-2">
+                        <label for="birth_season">Season of birth</label>
+                        <select id="seasons" name="seasons"  class="shadow-none bg-gray-100">
+                            <option value="0"></option>
+                            <option value="1">Spring</option>
+                            <option value="2">Summer</option>
+                            <option value="3">Autumn</option>
+                            <option value="4">Winter</option>
+                        </select>
+                    </div>
+
                     <div class="col-span-2">
                         <label for=""> Email</label>
                         <input type="text" placeholder="Your name.." class="shadow-none bg-gray-100">
@@ -52,10 +71,18 @@
                         <textarea id="about" name="about" rows="3"  class="shadow-none bg-gray-100"></textarea>
                     </div> 
                     <div class="col-span-2">
+                        <label for="about">Motto</label>  
+                        <textarea id="about" name="about" rows="3"  class="shadow-none bg-gray-100"></textarea>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="about">Signature</label>  
+                        <textarea id="about" name="about" rows="3"  class="shadow-none bg-gray-100"></textarea>
+                    </div> 
+                    <div class="col-span-2">
                         <label for=""> Location</label>
                         <input type="text" placeholder="" class="shadow-none bg-gray-100">
                     </div>
-                    <div>
+                    {% comment %} <div>
                         <label for=""> Working at</label>
                         <input type="text" placeholder="" class="shadow-none bg-gray-100">
                     </div> 
@@ -68,17 +95,17 @@
                         <option value="3">Married</option>
                         <option value="4">Engaged</option>
                         </select>
-                    </div>
+                    </div> {% endcomment %}
                 </div> 
 
-                <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-3">
                     <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel </button>
                     <button type="button" class="button bg-blue-700"> Save </button>
                 </div>
 
             </div>
 
-            <div>
+            {% comment %} <div>
                 <h3 class="text-xl mb-2"> Privacy</h3>
                 <p> </p>
             </div>
@@ -134,7 +161,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> {% endcomment %}
             <br>
 
         </div>

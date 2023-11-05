@@ -51,7 +51,7 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'signup.html', {'form': form})
 
-@login_required
+#@login_required
 def myaccount(request):
     return render(request,"account.html")
 

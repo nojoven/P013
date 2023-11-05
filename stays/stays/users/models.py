@@ -41,16 +41,21 @@ class UserManager(BaseUserManager):
 
 
 class Profile(AbstractBaseUser, PermissionsMixin):
+
+    SEASONS = (("Spring", 1), ("Summer", 2), ("Autumn", 3), ("Winter", 4),) 
+
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
     username = models.CharField(max_length=20, null=True, unique=True)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
     password = models.CharField(max_length=255, blank=False, null=True, help_text="Your password")
     # date_of_birth = models.DateField(help_text="Full user's birth date", blank=True, null=True)
-    # year_of_birth = models.IntegerField(help_text="User's birth year")
-    # first_name = models.CharField(max_length=25, null=True)
-    # last_name = models.CharField(max_length=35, null=True)
-    # signature = models.CharField(max_length=150, null=True)
-    # about_text = models.TextField(max_length=20, null=True)
+    year_of_birth = models.IntegerField(help_text="User's birth year", default=1900)
+    season_of_birth = models.CharField(max_length=50, default="Spring", blank=False, null=True)
+    first_name = models.CharField(max_length=25, null=True)
+    last_name = models.CharField(max_length=35, null=True)
+    motto = models.CharField(max_length=100, null=True)
+    signature = models.CharField(max_length=150, null=True, unique=True)
+    about_text = models.TextField(max_length=20, null=True)
     # city_of_birth = models.CharField(max_length=25, null=True)
     # country_of_birth = models.CharField(max_length=25, null=True)
     # continent_of_birth = models.CharField(max_length=15, null=True)
@@ -61,8 +66,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     # prefered_country = models.CharField(max_length=25, null=True)
     # prefered_city = models.CharField(max_length=25, null=True)
     # prefered_continent = models.CharField(max_length=25, null=True)
-    #known_countries = None
-    #known_cities = None
+    # known_countries = None
+    # known_cities = None
     # best_stay = models.CharField(max_length=255, null=True)
     # has_followers = None
     # followers = models.ManyToManyField("self", symmetrical=False)
@@ -70,9 +75,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     #has_publications = None
     # publications =  models.ManyToManyField(Publication, related_name="author") 
     profile_picture = models.ImageField(upload_to="profile_images", default="blank-profile-picture.jpg", null=True)
-    #background_picture = models.ImageField(upload_to="profile_images", null=True)
+    # background_picture = models.ImageField(upload_to="profile_images", null=True)
     #favourite_publications = None
-    # motto = models.CharField(max_length=55, null=True)
     # last_detected_data = models.TextField(null=True)
     #upvoted_publications_count = models
 
@@ -85,6 +89,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         return reverse("profile-detail", kwargs={"pk": self.pk})
 
     USERNAME_FIELD = "email"
+
 
 
 class ProfileFollowers(models.Model):
