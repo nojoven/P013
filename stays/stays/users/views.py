@@ -8,7 +8,6 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView
 from django.views.generic.detail import DetailView
@@ -55,7 +54,9 @@ class CreateProfileView(CreateView):
 
 # @login_required
 def myaccount(request, **kwargs):
-    return render(request,"account.html")
+    current_user = Profile.objects.get(email=request.user)
+    context = {"current_user": current_user}
+    return render(request,"account.html", context)
 
 
 class AccountLoginView(authentication_views.LoginView):
