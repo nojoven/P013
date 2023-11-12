@@ -26,8 +26,7 @@ class CreateProfileView(CreateView):
     model = Profile
     form_class = RegistrationForm
     template_name = "signup.html"
-    success_url = reverse_lazy("login")    
-    # fields = ["email", "password1", "password2"]
+    success_url = reverse_lazy("login")
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
@@ -35,22 +34,6 @@ class CreateProfileView(CreateView):
         email = form.cleaned_data.get('email')
         messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !")
         return super().form_valid(form)
-
-
-# def register(request):
-#     """Register the user"""
-#     if request.method == 'POST':
-#         user = Profile()
-#         form = RegistrationForm(request.POST or None, instance=user)
-#         if form.is_valid():
-#             form.save()
-#             email = form.cleaned_data.get('email')
-#             messages.info(request, f"Welcome ! Your account is created with your email address {email} !")
-#             time.sleep(2)
-#             return redirect('login')
-#     else:
-#         form = RegistrationForm()
-#     return render(request, 'signup.html', {'form': form})
 
 # @login_required
 def myaccount(request, **kwargs):
@@ -65,7 +48,6 @@ class AccountLoginView(authentication_views.LoginView):
     fields = ["email", "password"]
     template_name = "signin.html"
     redirect_authenticated_user = True
-    # success_url = reverse_lazy("myaccount")
 
     def get_success_url(self):
         return reverse_lazy('users:myaccount')
@@ -80,7 +62,8 @@ class AccountLoginView(authentication_views.LoginView):
         messages.error(self.request,'Invalid username or password')
         return self.render_to_response(self.get_context_data(form=form))
 
-
+class AccountSettingsView():
+    pass
 
 
 

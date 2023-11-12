@@ -17,19 +17,14 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth import views as authentication_views
 from django.urls import path, include, re_path
-from django.views.generic.base import TemplateView
 
 
 urlpatterns = [
     path("admin", admin.site.urls),
-    #path("", include('allauth.urls')),
     path("", include("core.urls")),
     path("", include("users.urls")),
     re_path(r'^watchman/', include('watchman.urls')),
-    # path("login", authentication_views.LoginView.as_view(template_name='signin.html'), name='login'),
-    path("logout", authentication_views.LogoutView.as_view(template_name='signout.html'), name='logout'),
 ] + static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT

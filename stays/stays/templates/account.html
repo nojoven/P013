@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,9 +16,19 @@
 </head>
 
 <body>
-    <div class="container m-auto"> 
-        <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Account Setting for <b>{{user.email}}</b></a></h1>
-        <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab">
+    <div class="container m-auto">
+        <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">
+            <a href="/">Account Setting for 
+                {% if user.username is not None %}
+                <b> {{ user.username }} </b>
+                {% else %}
+                <b> < {{ user.email }} - Please define a username > </b>
+                {% endif %}
+            </a>
+        </h1>
+        <br>
+        <hr>
+        {% comment %} <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab">
             <li class="uk-active"><a href="#">General</a></li>
             <li><a href="#">Profile</a></li>
             <li><a href="#">Privacy</a></li>
@@ -25,143 +36,149 @@
             <li><a href="#">Social links</a></li>
             <li><a href="#">Billing</a></li>
             <li><a href="#">Security</a></li>
-        </ul>
+        </ul>{% endcomment %}
+        <br>
 
         <div class="grid lg:grid-cols-3 mt-12 gap-8">
             <div>
-                <h3 class="text-xl mb-2"> Basic</h3>
+                <h3 class="text-xl mb-2">General Settings </h3>
                 <p></p>
             </div>
             <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
+                <form action="" method="POST">
+                {% csrf_token %}
+                    <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+                        <div class="col-span-2">
+                            <label for="">Your picture</label>
+                            <input type="file" name="profile_pic" class="shadow-none bg-gray-100">
+                        </div>
+                        <div>
+                            <label for="">First name</label>
+                            <input type="text" name="first_name" placeholder="Your first name.." class="shadow-none bg-gray-100">
+                        </div>
+                        <div>
+                            <label for="">Last name</label>
+                            <input type="text" name="last_name" placeholder="Your last name.." class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="">Username</label>
+                            <input type="text" name="username" placeholder="Your username name.." class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="">Year of birth</label>
+                            <input type="number" name="birth_year" value="1980" min="1900" max="2010"  class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="birth_season">Season of birth</label>
+                            <select id="seasons" name="seasons"  class="shadow-none bg-gray-100">
+                                <option value="0"></option>
+                                <option value="1">Spring</option>
+                                <option value="2">Summer</option>
+                                <option value="3">Autumn</option>
+                                <option value="4">Winter</option>
+                            </select>
+                        </div>
 
-                <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
-                    <div>
-                        <label for=""> First name</label>
-                        <input type="text" name="first_name" placeholder="Your first name.." class="shadow-none bg-gray-100">
-                    </div>
-                    <div>
-                        <label for=""> Last name</label>
-                        <input type="text" name="last_name" placeholder="Your last name.." class="shadow-none bg-gray-100">
-                    </div>
-                    <div class="col-span-2">
-                        <label for=""> Username</label>
-                        <input type="text" name="username" placeholder="Your username name.." class="shadow-none bg-gray-100">
-                    </div>
-                    <div class="col-span-2">
-                        <label for="">Year of birth</label>
-                        <input type="number" name="birth_year" value="1980" min="1900" max="2010"  class="shadow-none bg-gray-100">
-                    </div>
-                    <div class="col-span-2">
-                        <label for="birth_season">Season of birth</label>
-                        <select id="seasons" name="seasons"  class="shadow-none bg-gray-100">
-                            <option value="0"></option>
-                            <option value="1">Spring</option>
-                            <option value="2">Summer</option>
-                            <option value="3">Autumn</option>
-                            <option value="4">Winter</option>
-                        </select>
+                        <div class="col-span-2">
+                            <label for="">Email</label>
+                            <input type="text" name="account_email" placeholder={{ user.email }} class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="bio">Bio</label> 
+                            <textarea id="bio" name="bio" rows="3"  class="shadow-none bg-gray-100"></textarea>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="">Motto</label> 
+                            <textarea id="motto" name="motto" rows="3"  class="shadow-none bg-gray-100"></textarea>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="signature">Signature</label> 
+                            <textarea id="signature" name="signature" rows="3"  class="shadow-none bg-gray-100"></textarea>
+                        </div>
+                        {% comment %} <div class="col-span-2">
+                            <label for="">Current Location</label>
+                            <input type="text" placeholder="" class="shadow-none bg-gray-100">
+                        </div>{% endcomment %}
+                        {% comment %} <div>
+                            <label for="">Working at</label>
+                            <input type="text" placeholder="" class="shadow-none bg-gray-100">
+                        </div>
+                        <div>
+                            <label for="">Relationship </label>
+                            <select id="relationship" name="relationship"  class="shadow-none bg-gray-100">
+                            <option value="0">None</option>
+                            <option value="1">Single</option>
+                            <option value="2">In a relationship</option>
+                            <option value="3">Married</option>
+                            <option value="4">Engaged</option>
+                            </select>
+                        </div>{% endcomment %}
                     </div>
 
-                    <div class="col-span-2">
-                        <label for=""> Email</label>
-                        <input type="text" placeholder="Your name.." class="shadow-none bg-gray-100">
+                    <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-3">
+                        <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="myaccount"> Cancel </a></button>
+                        <button type="submit" class="button bg-blue-700">Save </button>
                     </div>
-                    <div class="col-span-2">
-                        <label for="about">About me</label>  
-                        <textarea id="about" name="about" rows="3"  class="shadow-none bg-gray-100"></textarea>
-                    </div> 
-                    <div class="col-span-2">
-                        <label for="about">Motto</label>  
-                        <textarea id="about" name="about" rows="3"  class="shadow-none bg-gray-100"></textarea>
-                    </div>
-                    <div class="col-span-2">
-                        <label for="about">Signature</label>  
-                        <textarea id="about" name="about" rows="3"  class="shadow-none bg-gray-100"></textarea>
-                    </div> 
-                    {% comment %} <div class="col-span-2">
-                        <label for="">Current Location</label>
-                        <input type="text" placeholder="" class="shadow-none bg-gray-100">
-                    </div> {% endcomment %}
-                    {% comment %} <div>
-                        <label for=""> Working at</label>
-                        <input type="text" placeholder="" class="shadow-none bg-gray-100">
-                    </div> 
-                    <div>
-                        <label for=""> Relationship </label>
-                        <select id="relationship" name="relationship"  class="shadow-none bg-gray-100">
-                        <option value="0">None</option>
-                        <option value="1">Single</option>
-                        <option value="2">In a relationship</option>
-                        <option value="3">Married</option>
-                        <option value="4">Engaged</option>
-                        </select>
-                    </div> {% endcomment %}
-                </div> 
-
-                <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-3">
-                    <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel </button>
-                    <button type="button" class="button bg-blue-700"> Save </button>
-                </div>
-
+                </form>
             </div>
 
             {% comment %} <div>
-                <h3 class="text-xl mb-2"> Privacy</h3>
-                <p> </p>
+                <h3 class="text-xl mb-2">Privacy</h3>
+                <p></p>
             </div>
             <div class="bg-white rounded-md lg:shadow-lg shadow lg:p-6 p-4 col-span-2">
 
                 <div class="space-y-3">
                     <div class="flex justify-between items-center">
                         <div>
-                            <h4> Who can follow me ?</h4>
-                            <div>  </div>
+                            <h4>Who can follow me ?</h4>
+                            <div> </div>
                         </div>
                         <div class="switches-list -mt-8 is-large">
                             <div class="switch-container">
-                                <label class="switch"><input type="checkbox"><span class="switch-button"></span> </label>
+                                <label class="switch"><input type="checkbox"><span class="switch-button"></span></label>
                             </div>
                         </div>
                     </div>
                     <hr>
                     <div class="flex justify-between items-center">
                         <div>
-                            <h4> Show my activities ?</h4>
-                            <div>  </div>
+                            <h4>Show my activities ?</h4>
+                            <div> </div>
                         </div>
                         <div class="switches-list -mt-8 is-large">
                             <div class="switch-container">
-                                <label class="switch"><input type="checkbox" checked><span class="switch-button"></span> </label>
+                                <label class="switch"><input type="checkbox" checked><span class="switch-button"></span></label>
                             </div>
                         </div>
                     </div>
                     <hr>
                     <div class="flex justify-between items-center">
                         <div>
-                            <h4> Search engines?</h4>
-                            <div>  </div>
+                            <h4>Search engines?</h4>
+                            <div> </div>
                         </div>
                         <div class="switches-list -mt-8 is-large">
                             <div class="switch-container">
-                                <label class="switch"><input type="checkbox"><span class="switch-button"></span> </label>
+                                <label class="switch"><input type="checkbox"><span class="switch-button"></span></label>
                             </div>
                         </div>
                     </div>
                     <hr>
                     <div class="flex justify-between items-center">
                         <div>
-                            <h4> Allow Commenting?</h4>
-                            <div>  </div>
+                            <h4>Allow Commenting?</h4>
+                            <div> </div>
                         </div>
                         <div class="switches-list -mt-8 is-large">
                             <div class="switch-container">
-                                <label class="switch"><input type="checkbox"><span class="switch-button"></span> </label>
+                                <label class="switch"><input type="checkbox"><span class="switch-button"></span></label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-            </div> {% endcomment %}
+            </div>{% endcomment %}
             <br>
 
         </div>
@@ -169,12 +186,12 @@
     </div>
             
 {% comment %}         </div>
-    </div> {% endcomment %}
+    </div>{% endcomment %}
     
 
  <!-- Scripts
     ================================================== -->
-    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script> 
     <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'assets/js/uikit.js' %}"></script>
     <script src="{% static 'assets/js/simplebar.js' %}"></script>
