@@ -102,7 +102,7 @@ class UpdateAccountView(UpdateView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        return super(UpdateAccountView,self).form_valid(form)
+        return super().form_valid(form)
 
     def form_invalid(self, form):
         #print(form.errors.as_data())
