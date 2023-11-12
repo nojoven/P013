@@ -10,9 +10,9 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = Profile
         fields = [ 
-            'email',
-            'password1',
-            'password2'
+            "email",
+            "password1",
+            "password2"
         ]
 
 class AccountLoginForm(AuthenticationForm):
@@ -22,23 +22,30 @@ class AccountLoginForm(AuthenticationForm):
     class Meta:
         model = Profile
         fields = [ 
-            'username',
-            'password'
+            "username",
+            "password"
         ]
 
 class AccountEditionForm(UserChangeForm):
-    # Hide the password field
-    password = None
-    class Meta:
-        model = Profile
-        fields = [
-            'username',
-        ]
+    """Update form for the currennt authenticated profile."""
+    model = Profile
+    fields = [
+        "profile_picture",
+        "username",
+        "first_name",         
+        "last_name",  
+        "year_of_birth",
+        "season_of_birth",
+        "motto",
+        "signature",
+    ]
+
+    # template_name_suffix = "_update_form"
 
 class PasswordChangeFromConnectedProfile(PasswordChangeForm):
     class Meta:
         model = Profile
         fields = [
-            'password'
+            "password"
         ]
 

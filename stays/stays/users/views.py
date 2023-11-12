@@ -34,6 +34,12 @@ class CreateProfileView(CreateView):
         email = form.cleaned_data.get('email')
         messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !")
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        #print(form.errors.as_data())
+        messages.error(self.request,'Invalud inputs. Please try again.')
+        return self.render_to_response(self.get_context_data(form=form))
+
 
 # @login_required
 def myaccount(request, **kwargs):
@@ -41,8 +47,15 @@ def myaccount(request, **kwargs):
     context = {"current_user": current_user}
     return render(request,"account.html", context)
 
+# @login_required
+def settings(request, **kwargs):
+    current_user = Profile.objects.get(email=request.user)
+    context = {"current_user": current_user}
+    return render(request,"settings.html", context)
+
 
 class AccountLoginView(authentication_views.LoginView):
+    """Login with a registered profile"""
     model = Profile
     form_class = AccountLoginForm
     fields = ["email", "password"]
@@ -62,8 +75,39 @@ class AccountLoginView(authentication_views.LoginView):
         messages.error(self.request,'Invalid username or password')
         return self.render_to_response(self.get_context_data(form=form))
 
-class AccountSettingsView():
+
+class DetailsAccountView(DetailView):
     pass
+
+class UpdateAccountView(UpdateView):
+    # slug_url_kwarg = "slug"
+    # slug_field = "slug"
+    model = Profile
+    # fields = [
+    #     "profile_picture",
+    #     "username",
+    #     "first_name",
+    #     "last_name",
+    #     "year_of_birth",
+    #     "season_of_birth",
+    #     "motto",
+    #     "about_text",
+    #     "signature"
+    #     ]
+    form_class = AccountEditionForm
+    template_name = "settings.html"
+    success_url = reverse_lazy('users:settings')
+    
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        return super(UpdateAccountView,self).form_valid(form)
+
+    def form_invalid(self, form):
+        #print(form.errors.as_data())
+        messages.error(self.request,'Unsuccessful update due to invalid submitted data. Please check your input.')
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 
