@@ -85,8 +85,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     objects = UserManager()
 
-    def get_absolute_url(self):
-        return reverse("profile-detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("profile-detail", kwargs={"pk": self.pk})
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

@@ -28,17 +28,30 @@ class AccountLoginForm(AuthenticationForm):
 
 class AccountEditionForm(UserChangeForm):
     """Update form for the currennt authenticated profile."""
-    model = Profile
-    fields = [
-        "profile_picture",
-        "username",
-        "first_name",         
-        "last_name",  
-        "year_of_birth",
-        "season_of_birth",
-        "motto",
-        "signature",
-    ]
+    profile_picture=forms.ImageField(required=False)
+    username=forms.CharField(required=False)
+    first_name=forms.CharField(required=False)
+    last_name=forms.CharField(required=False)
+    season_of_birth=forms.CharField(required=False)
+    year_of_birth=forms.IntegerField(required=False)
+    about_text=forms.Textarea()
+    motto=forms.CharField(required=False)
+    signature=forms.CharField(required=False)
+
+    class Meta:
+        model = Profile
+        exclude = ("date_joined",)
+        fields = [
+            "profile_picture",
+            "username",
+            "first_name",         
+            "last_name",  
+            "season_of_birth",
+            "year_of_birth",
+            "about_text",
+            "motto",
+            "signature",
+        ]
 
     # template_name_suffix = "_update_form"
 

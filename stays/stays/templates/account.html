@@ -19,10 +19,10 @@
     <div class="container m-auto">
         <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">
             <a href="/">Account Setting for 
-                {% if user.username is not None %}
-                <b> {{ user.username }}</b>
+                {% if current_user.username is not None and current_user.username != "" %}
+                <b> {{ current_user.username }}</b>
                 {% else %}
-                <b> < {{ user.email }} - Please define a username > </b>
+                <b> < {{ current_user.email }} - Please define a username > </b>
                 {% endif %}
             </a>
         </h1>
@@ -37,7 +37,7 @@
             <li><a href="#">Billing</a></li>
             <li><a href="#">Security</a></li> {% endcomment %}
             <li><a href="/">Home</a></li>
-            <li><a href="{% url 'users:settings' user.pk %}">Settings</a></li>
+            <li><a href="{% url 'users:settings' current_user.pk %}">Settings</a></li>
         </ul>
         <br>
 
@@ -47,7 +47,7 @@
                 <p></p>
             </div>
             <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <div class="col-span-2">
@@ -83,7 +83,7 @@
 
                         <div class="col-span-2">
                             <label for="">Email</label>
-                            <input type="text" name="account_email" placeholder={{ user.email }} class="shadow-none bg-gray-100">
+                            <input type="text" name="account_email" placeholder={{ current_user.email }} class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
                             <label for="">Bio</label> 

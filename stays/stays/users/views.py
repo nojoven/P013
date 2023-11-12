@@ -1,12 +1,10 @@
-import time
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as authentication_views
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 
 from django.views.generic.list import ListView
 from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView
@@ -20,6 +18,9 @@ from users.models import Profile
 
 # Create your views here.
 
+def retrieve_current_user(profile_email):
+    current_user = Profile.objects.get(email=profile_email)
+    return current_user
 
 class CreateProfileView(CreateView):
     """Create a new user in the system"""
@@ -41,17 +42,17 @@ class CreateProfileView(CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-# @login_required
+#@login_required
 def myaccount(request, **kwargs):
     current_user = Profile.objects.get(email=request.user)
     context = {"current_user": current_user}
     return render(request,"account.html", context)
 
 # @login_required
-def settings(request, **kwargs):
-    current_user = Profile.objects.get(email=request.user)
-    context = {"current_user": current_user}
-    return render(request,"settings.html", context)
+# def settings(request, **kwargs):
+#     current_user = Profile.objects.get(email=request.user)
+#     context = {"current_user": current_user}
+#     return render(request,"settings.html", context)
 
 
 class AccountLoginView(authentication_views.LoginView):
@@ -80,32 +81,27 @@ class DetailsAccountView(DetailView):
     pass
 
 class UpdateAccountView(UpdateView):
-    # slug_url_kwarg = "slug"
-    # slug_field = "slug"
     model = Profile
-    # fields = [
-    #     "profile_picture",
-    #     "username",
-    #     "first_name",
-    #     "last_name",
-    #     "year_of_birth",
-    #     "season_of_birth",
-    #     "motto",
-    #     "about_text",
-    #     "signature"
-    #     ]
     form_class = AccountEditionForm
     template_name = "settings.html"
-    success_url = reverse_lazy('users:settings')
+    success_url = reverse_lazy('users:myaccount')
+    http_method_names = ['get', 'post']
+
     
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        user_email = context.get("profile")
+        context["current_user"] =  retrieve_current_user(user_email)
+        return context
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        return super().form_valid(form)
+        return super(UpdateAccountView,self).form_valid(form)
 
     def form_invalid(self, form):
-        #print(form.errors.as_data())
+        # print(form.errors.as_data())
         messages.error(self.request,'Unsuccessful update due to invalid submitted data. Please check your input.')
         return self.render_to_response(self.get_context_data(form=form))
 

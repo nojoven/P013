@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
-    <title>Account</title>
+    <title>Settings</title>
     <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
@@ -19,10 +19,10 @@
     <div class="container m-auto">
         <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">
             <a href="/">Account Setting for 
-                {% if user.username is not None %}
-                <b> {{ user.username }} </b>
+                {% if current_user.username is not None and current_user.username != "" %}
+                <b> {{ current_user.username }} </b>
                 {% else %}
-                <b> < {{ user.email }} - Please define a username > </b>
+                <b> < {{ current_user.email }} - Please define a username > </b>
                 {% endif %}
             </a>
         </h1>
@@ -45,7 +45,7 @@
                 <p></p>
             </div>
             <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
-                <form action="" method="POST">
+                <form action="{% url 'users:settings' current_user.pk %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <div class="col-span-2">
@@ -81,7 +81,7 @@
 
                         <div class="col-span-2">
                             <label for="">Email</label>
-                            <input type="text" name="account_email" placeholder={{ user.email }} class="shadow-none bg-gray-100">
+                            <input type="text" name="account_email" placeholder={{ current_user.email }} class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
                             <label for="">Bio</label> 
@@ -116,7 +116,7 @@
                     </div>
 
                     <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-3">
-                        <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="myaccount"> Cancel </a></button>
+                        {% comment %} <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="{% url 'users:settings' user.pk %}"> Cancel </a></button> {% endcomment %}
                         <button type="submit" class="button bg-blue-700">Save </button>
                     </div>
                 </form>
