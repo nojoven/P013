@@ -34,8 +34,8 @@ class AccountEditionForm(UserChangeForm):
     last_name=forms.CharField(required=False)
     season_of_birth=forms.CharField(required=False)
     year_of_birth=forms.IntegerField(required=False)
-    about_text=forms.Textarea()
-    motto=forms.CharField(required=False)
+    about_text=forms.CharField(required=False)
+    motto=forms.CharField(required=False, empty_value="I LOVE THIS WEBSITE!")
     signature=forms.CharField(required=False)
 
     class Meta:
