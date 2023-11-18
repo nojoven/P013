@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load split_on_slash %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +60,7 @@
                 {% csrf_token %}
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <div class="col-span-2">
-                            <label for="">Your picture</label>
+                            <label for="">Your picture : {{ current_user.profile_picture|split_on_slash }}</label>
                             <input type="file" name="profile_picture" value="{{ current_user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
                         </div>
                         <div>
