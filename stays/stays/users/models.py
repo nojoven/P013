@@ -55,7 +55,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=35, null=True)
     motto = models.CharField(max_length=100, blank=False, null=False, default="I LOVE THIS WEBSITE!")
     signature = models.CharField(max_length=150, null=True, unique=True)
-    about_text = models.TextField(max_length=20, null=True)
+    about_text = models.TextField(max_length=255, null=True)
     # city_of_birth = models.CharField(max_length=25, null=True)
     # country_of_birth = models.CharField(max_length=25, null=True)
     # continent_of_birth = models.CharField(max_length=15, null=True)
