@@ -87,7 +87,17 @@ class UpdateAccountView(UpdateView):
     success_url = reverse_lazy('users:myaccount')
     http_method_names = ['get', 'post']
 
-    
+    # def post(self, request, **kwargs):
+    #     self.object = self.get_object()
+    #     post_request = request.POST.copy()
+    #     profile_email = super().get_context_data(**kwargs).get("profile")
+    #     profile = Profile.objects.get(email=profile_email)
+
+    #     for k,v in post_request.items():
+    #         if not v:
+    #             post_request[k] = profile.get(k)
+        
+    #     return super(UpdateAccountView, self).post(post_request, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
