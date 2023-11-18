@@ -61,6 +61,7 @@
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <div class="col-span-2">
                             <label for="">Your picture : {{ current_user.profile_picture|split_on_slash }}</label>
+                            <img src="{% get_media_prefix %}{{ current_user.profile_picture }}" height="100px" width="100px" />
                             <input type="file" name="profile_picture" value="{{ current_user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
                         </div>
                         <div>
