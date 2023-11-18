@@ -61,7 +61,7 @@
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <div class="col-span-2">
                             <label for="">Your picture</label>
-                            <input type="file" name="profile_picture" class="shadow-none bg-gray-100">
+                            <input type="file" name="profile_picture" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
                         </div>
                         <div>
                             <label for="">First name</label>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-span-2">
                             <label for="">Bio</label> 
-                            <textarea id="about_text" placeholder="Once upon a time..." name="about_text" rows="3"  class="shadow-none bg-gray-100"></textarea>
+                            <textarea id="about_text" name="about_text" placeholder="Once upon a time..." value="{{ current_user.about_text }}"  rows="3"  class="shadow-none bg-gray-100"></textarea>
                         </div>
                         <div class="col-span-2">
                             <label for="">Motto</label> 
