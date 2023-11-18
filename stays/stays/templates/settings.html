@@ -61,32 +61,32 @@
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <div class="col-span-2">
                             <label for="">Your picture</label>
-                            <input type="file" name="profile_picture" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
+                            <input type="file" name="profile_picture" value="{{ current_user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
                         </div>
                         <div>
                             <label for="">First name</label>
-                            <input type="text" name="first_name" placeholder="Your first name.." class="shadow-none bg-gray-100">
+                            <input type="text" name="first_name" placeholder="Your first name.." value="{{ current_user.first_name }}" class="shadow-none bg-gray-100">
                         </div>
                         <div>
                             <label for="">Last name</label>
-                            <input type="text" name="last_name" placeholder="Your last name.." class="shadow-none bg-gray-100">
+                            <input type="text" name="last_name" placeholder="Your last name.." value="{{ current_user.last_name }}" class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
                             <label for="">Username</label>
-                            <input type="text" name="username" placeholder="Your username name.." class="shadow-none bg-gray-100">
+                            <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.username }}" class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
                             <label for="">Year of birth</label>
-                            <input type="number" name="birth_year" value="1980" min="1900" max="2010"  class="shadow-none bg-gray-100">
+                            <input type="number" name="year_of_birth" value="1980" min="1900" max="2010"  class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
                             <label for="birth_season">Season of birth</label>
-                            <select id="seasons" name="seasons"  class="shadow-none bg-gray-100">
-                                <option value="0"></option>
-                                <option value="1">Spring</option>
-                                <option value="2">Summer</option>
-                                <option value="3">Autumn</option>
-                                <option value="4">Winter</option>
+                            <select id="seasons" name="season_of_birth"  class="shadow-none bg-gray-100">
+                                <option value="{{ current_user.season_of_birth }}"> Select a season (currently {{ current_user.season_of_birth }} )</option>
+                                <option value="Spring">Spring</option>
+                                <option value="Summer">Summer</option>
+                                <option value="Autmn">Autumn</option>
+                                <option value="Winter">Winter</option>
                             </select>
                         </div>
 
@@ -96,15 +96,15 @@
                         </div>
                         <div class="col-span-2">
                             <label for="">Bio</label> 
-                            <textarea id="about_text" name="about_text" placeholder="Once upon a time..." value="{{ current_user.about_text }}"  rows="3"  class="shadow-none bg-gray-100"></textarea>
+                            <textarea id="about_text" name="about_text" placeholder="{{ current_user.about_text }}" value=""  rows="3"  class="shadow-none bg-gray-100"></textarea>
                         </div>
                         <div class="col-span-2">
                             <label for="">Motto</label> 
                             <input id="motto" name="motto" placeholder="I love youuuu!" value="{{ current_user.motto }}" rows="3"  class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
-                            <label for="signature">Signature</label> 
-                            <input id="signature" name="signature" rows="3"  class="shadow-none bg-gray-100">
+                            <label for="">Signature</label> 
+                            <input id="signature" name="signature" placeholder="Profile signature" value="{{ current_user.signature }}" rows="3"  class="shadow-none bg-gray-100">
                         </div>
                         {% comment %} <div class="col-span-2">
                             <label for="">Current Location</label>

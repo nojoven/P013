@@ -28,15 +28,15 @@ class AccountLoginForm(AuthenticationForm):
 
 class AccountEditionForm(UserChangeForm):
     """Update form for the currennt authenticated profile."""
-    profile_picture=forms.ImageField(required=False)
-    username=forms.CharField(required=False)
-    first_name=forms.CharField(required=False)
-    last_name=forms.CharField(required=False)
-    season_of_birth=forms.CharField(required=False)
+    profile_picture=forms.ImageField(required=False, allow_empty_file=True)
+    username=forms.CharField(required=False, empty_value="Username")
+    first_name=forms.CharField(required=False, empty_value="First Name")
+    last_name=forms.CharField(required=False, empty_value="Last Name")
+    season_of_birth=forms.CharField(required=False, empty_value="Spring")
     year_of_birth=forms.IntegerField(required=False)
-    about_text=forms.CharField(required=False)
+    about_text=forms.CharField(required=False, empty_value="Once upon a time...")
     motto=forms.CharField(required=False, empty_value="I LOVE THIS WEBSITE!")
-    signature=forms.CharField(required=False)
+    signature=forms.CharField(required=False, empty_value="Myself!")
 
     class Meta:
         model = Profile

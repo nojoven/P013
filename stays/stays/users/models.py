@@ -13,6 +13,10 @@ from django.urls import reverse
 def uuid_generator():
     return uuid.uuid4().hex
 
+def build_default_username(uuid, email):
+    email_parts = email.split("@")
+    return f"{email_parts[0]}{uuid}{email_parts[1]}"
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Creates and saves a new user"""
@@ -45,17 +49,17 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     SEASONS = (("Spring", 1), ("Summer", 2), ("Autumn", 3), ("Winter", 4),) 
 
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
-    username = models.CharField(max_length=20, null=True, unique=True)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
+    username = models.CharField(max_length=20, blank=False, null=True, unique=True)
     password = models.CharField(max_length=255, blank=False, null=True, help_text="Your password")
     # date_of_birth = models.DateField(help_text="Full user's birth date", blank=True, null=True)
-    year_of_birth = models.IntegerField(help_text="User's birth year", default=1900)
-    season_of_birth = models.CharField(max_length=50, default="Spring", blank=False, null=True)
-    first_name = models.CharField(max_length=25, null=True)
-    last_name = models.CharField(max_length=35, null=True)
+    year_of_birth = models.IntegerField(help_text="User's birth year", default=1900, null=False)
+    season_of_birth = models.CharField(max_length=50, default="Spring", blank=False, null=False)
+    first_name = models.CharField(max_length=25, blank=False, null=True)
+    last_name = models.CharField(max_length=35, blank=False, null=True)
     motto = models.CharField(max_length=100, blank=False, null=False, default="I LOVE THIS WEBSITE!")
-    signature = models.CharField(max_length=150, null=True, unique=True)
-    about_text = models.TextField(max_length=255, null=True)
+    signature = models.CharField(max_length=150, blank=False, null=True, unique=True)
+    about_text = models.TextField(blank=False, null=True, default="Once upon a time...")
     # city_of_birth = models.CharField(max_length=25, null=True)
     # country_of_birth = models.CharField(max_length=25, null=True)
     # continent_of_birth = models.CharField(max_length=15, null=True)
