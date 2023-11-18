@@ -44,8 +44,8 @@ class AccountEditionForm(UserChangeForm):
         fields = [
             "profile_picture",
             "username",
-            "first_name",         
-            "last_name",  
+            "first_name",
+            "last_name",
             "season_of_birth",
             "year_of_birth",
             "about_text",
