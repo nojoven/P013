@@ -16,6 +16,11 @@ from django.utils.decorators import method_decorator
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PasswordChangeFromConnectedProfile
 from users.models import Profile
 
+
+# Custom sugar
+from loguru import logger
+from tabulate import tabulate
+
 # Create your views here.
 
 def retrieve_current_user(profile_email):
