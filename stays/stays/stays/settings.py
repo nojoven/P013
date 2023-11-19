@@ -100,6 +100,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # Add the account middleware:
+    #"allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "stays.urls"
@@ -203,7 +205,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTHENTICATION_BACKENDS = [
     'users.backends.EmailBackend',  # custom backend
     #'django.contrib.auth.backends.ModelBackend',  # default backend
-    #'allauth.account.auth_backends.AuthenticationBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 
