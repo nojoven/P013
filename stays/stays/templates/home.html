@@ -158,7 +158,11 @@
 
                 <!-- profile -->
                 <a href="#">
-                    <img src="{% static 'assets/images/avatars/avatar-2.jpg' %}" class="header-avatar" alt="">
+                  {% if user.is_authenticated %}
+                    <img src="{{ user.profile_picture }}" class="header-avatar" alt="">
+                  {% else %}
+                  <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar" alt="">
+                  {% endif %}
                 </a>
                 <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
                   <ul>
