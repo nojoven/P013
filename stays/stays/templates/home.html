@@ -161,12 +161,19 @@
                     <img src="{% static 'assets/images/avatars/avatar-2.jpg' %}" class="header-avatar" alt="">
                 </a>
                 <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
-                    <ul>
-                        <li><a href="setting.html"> Account setting </a> </li>
-                        <li><a href="explore.html">explore </a> </li>
-                        <li><a href="#"> Help </a> </li>
-                        <li><a href="logout"> Log Out</a></li>
-                    </ul>
+                  <ul>
+                    {% comment %} <li><a href="{% if user.is_authenticated %}{% url 'users:settings' slug=user.profile.slug %}{% else %}{% url 'users:login' %}{% endif %}">{% if user.is_authenticated %}Account Settings{% else %}Login{% endif %}</a></li> {% endcomment %}
+                    {% comment %} <li><a href="{% url 'explore' %}">Explore</a></li> {% endcomment %}
+                    {% comment %} <li><a href="{% url 'explore' %}">Explore</a></li> {% endcomment %}
+                    {% comment %} <li><a href="#">Help</a></li> {% endcomment %}
+                    <li>
+                        {% if user.is_authenticated %}
+                          <a href="{% url 'users:logout' %}">Log Out</a>
+                        {% else %}
+                        <a href="{% url 'users:login' %}">Sign In</a>
+                        {% endif %}
+                    </li>
+                </ul>
                 </div>
 
             </div>

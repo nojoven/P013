@@ -71,7 +71,15 @@ class AccountLoginView(authentication_views.LoginView):
     slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
 
     def get_success_url(self):
-        return reverse_lazy('users:myaccount')
+        # Assurez-vous que l'utilisateur est connecté
+        if self.request.user.is_authenticated:
+            # Essayez de récupérer le profil associé à l'utilisateur
+            print(self.request.user)
+            profile = retrieve_current_user(self.request.user)
+            if profile:
+                # Récupérez le slug du profil
+                user_slug = profile.slug
+                return reverse_lazy('users:myaccount', kwargs={'slug': user_slug})
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
@@ -96,7 +104,6 @@ class AccountDetailsView(DetailView):
         context["current_user"] =  retrieve_current_user(user_email)
         return context
 
-    
 
 class UpdateAccountView(UpdateView):
     model = Profile
@@ -106,18 +113,6 @@ class UpdateAccountView(UpdateView):
     http_method_names = ['get', 'post']
     slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
     slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
-
-    # def post(self, request, **kwargs):
-    #     self.object = self.get_object()
-    #     post_request = request.POST.copy()
-    #     profile_email = super().get_context_data(**kwargs).get("profile")
-    #     profile = Profile.objects.get(email=profile_email)
-
-    #     for k,v in post_request.items():
-    #         if not v:
-    #             post_request[k] = profile.get(k)
-        
-    #     return super(UpdateAccountView, self).post(post_request, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
