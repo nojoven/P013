@@ -3,6 +3,7 @@ from django.contrib.auth import  get_user_model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 # from core.models import Publication
 
@@ -47,7 +48,7 @@ class UserManager(BaseUserManager):
 class Profile(AbstractBaseUser, PermissionsMixin):
 
     SEASONS = (("Spring", 1), ("Summer", 2), ("Autumn", 3), ("Winter", 4),) 
-
+    slug = models.SlugField(unique=True, blank=False, null=True, max_length=255, default=None)
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
     username = models.CharField(max_length=20, blank=False, null=True, unique=True)
@@ -91,6 +92,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     # def get_absolute_url(self):
     #     return reverse("profile-detail", kwargs={"pk": self.pk})
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f"{self.email.split('@')[0]}{self.uuid}")
+        super().save(*args, **kwargs)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
