@@ -104,7 +104,7 @@ class ProfileFollowers(models.Model):
     #profile_followers_count = 0
 
 class ProfileHasDetectedData(models.Model):
-    models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
+    connected_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
     last_detected_ip = models.CharField(max_length=15, null=True)
     last_detected_continent = models.CharField(max_length=15, null=True)
     last_detected_country = models.CharField(max_length=15, null=True)
