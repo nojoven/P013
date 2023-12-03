@@ -82,8 +82,10 @@ class AccountLoginView(authentication_views.LoginView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class DetailsAccountView(DetailView):
-    pass
+class AccountDetailsView(DetailView):
+    model = Profile
+    template_name = "account.html"
+    http_method_names = ['get']
 
 class UpdateAccountView(UpdateView):
     model = Profile
@@ -119,6 +121,11 @@ class UpdateAccountView(UpdateView):
         # print(form.errors.as_data())
         messages.error(self.request,'Unsuccessful update due to invalid submitted data. Please check your input.')
         return self.render_to_response(self.get_context_data(form=form))
+    
+
+class UserAction():
+    pass
+
 
 
 
