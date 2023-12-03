@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "cities_light",
     "locations",
     "watchman",
+    "iommi",
     "allauth_ui",
     "allauth",
     "allauth.account",
@@ -113,6 +114,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # Iommi: these three are optional, but highly recommended!
+    'iommi.live_edit.Middleware',
+    'iommi.sql_trace.Middleware',
+    'iommi.profiling.Middleware',
+    # Iommi : this one is required
+    'iommi.middleware',
     # Add the account middleware:
     #"allauth.account.middleware.AccountMiddleware",
 ]
