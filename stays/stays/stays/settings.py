@@ -17,10 +17,23 @@ from pathlib import Path
 print("Thanks to https://simplemaps.com/data/world-cities")
 
 
+if "confs.json" in os.listdir(Path(__file__).absolute().parent):
+    vars_path = Path(__file__).absolute().parent / "confs.json"
+    with open(vars_path) as file:
+        confs = json.loads(file.read())
 
-vars_path = Path(__file__).absolute().parent / "confs.json"
-with open(vars_path) as file:
-    confs = json.loads(file.read())
+else:
+    confs = {
+        "DEBUG": True if os.environ.get("DEBUG") in ("True", "true") else False,
+        "ENGINE": os.environ.get("ENGINE"),
+        "HOST": os.environ.get("HOST"),
+        "NAME": os.environ.get("NAME"),
+        "PASSWORD": os.environ.get("PASSWORD"),
+        "PORT": int(os.environ.get("PORT")),
+        "SECRET_KEY": os.environ.get("SECRET_KEY"),
+        "TEMPLATE_DEBUG": os.environ.get(""),
+        "USER": os.environ.get("USER"),
+    }
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
