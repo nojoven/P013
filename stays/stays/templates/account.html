@@ -1,6 +1,5 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,13 +28,6 @@
         <br>
         <hr>
         <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab"> 
-            {% comment %} <li class="uk-active"><a href="#">General</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Notification</a></li>
-            <li><a href="#">Social links</a></li>
-            <li><a href="#">Billing</a></li>
-            <li><a href="#">Security</a></li> {% endcomment %}
             <li><a href="/">Home</a></li>
             <li><a href="{% url 'users:settings' current_user.slug %}">Settings</a></li>
         </ul>
@@ -43,10 +35,9 @@
 
         <div class="grid lg:grid-cols-3 mt-12 gap-8">
             <div>
-                <h3 class="text-xl mb-2">General Settings </h3>
+                <h3 class="text-xl mb-2"> Short story long </h3>
                 <p>{{ current_user.about_text }}</p>
             </div>
-
         </div>
     </div>        
 
