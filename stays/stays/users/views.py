@@ -67,6 +67,8 @@ class AccountLoginView(authentication_views.LoginView):
     fields = ["email", "password"]
     template_name = "signin.html"
     redirect_authenticated_user = True
+    slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
+    slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
 
     def get_success_url(self):
         return reverse_lazy('users:myaccount')
@@ -85,9 +87,16 @@ class AccountLoginView(authentication_views.LoginView):
 class AccountDetailsView(DetailView):
     model = Profile
     template_name = "account.html"
+    slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
+    slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(Profile, slug=self.kwargs['profile_slug'])
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        user_email = context.get("profile")
+        context["current_user"] =  retrieve_current_user(user_email)
+        return context
+
+    
 
 class UpdateAccountView(UpdateView):
     model = Profile
