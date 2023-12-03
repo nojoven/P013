@@ -47,19 +47,6 @@ class CreateProfileView(CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-#@login_required
-def myaccount(request, **kwargs):
-    current_user = Profile.objects.get(email=request.user)
-    context = {"current_user": current_user}
-    return render(request,"account.html", context)
-
-# @login_required
-# def settings(request, **kwargs):
-#     current_user = Profile.objects.get(email=request.user)
-#     context = {"current_user": current_user}
-#     return render(request,"settings.html", context)
-
-
 class AccountLoginView(authentication_views.LoginView):
     """Login with a registered profile"""
     model = Profile

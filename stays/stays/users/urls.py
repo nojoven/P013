@@ -8,10 +8,7 @@ app_name = 'users'
 
 urlpatterns = [
     path("", include('allauth.urls')),
-    #path("account/<int:pk>", views.UpdateAccountView.as_view(), name="account"),
-    #path("myaccount", views.myaccount, name="myaccount"),
     path("myaccount/<slug:slug>", views.AccountDetailsView.as_view(), name="myaccount"),
-    #path("settings", views.mysettings, name="settings"),
     path("settings/<slug:slug>", views.UpdateAccountView.as_view(), name="settings"),
     path("signup", views.CreateProfileView.as_view(), name="signup"),
     path("login", views.AccountLoginView.as_view(template_name='signin.html'), name='login'),
