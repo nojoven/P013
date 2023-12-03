@@ -18,7 +18,7 @@
 <body>
     <div class="container m-auto">
         <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">
-            <a href="/">Account Setting for 
+            <a href="{% url 'users:myaccount' %}">Account Setting for 
                 {% if current_user.username is not None and current_user.username != "" %}
                 <b> {{ current_user.username }} </b>
                 {% else %}
@@ -197,8 +197,6 @@
 
     </div>
             
-{% comment %}         </div>
-    </div>{% endcomment %}
     
 
  <!-- Scripts

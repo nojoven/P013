@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as authentication_views
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 
 from django.views.generic.list import ListView
@@ -85,7 +85,9 @@ class AccountLoginView(authentication_views.LoginView):
 class AccountDetailsView(DetailView):
     model = Profile
     template_name = "account.html"
-    http_method_names = ['get']
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Profile, slug=self.kwargs['profile_slug'])
 
 class UpdateAccountView(UpdateView):
     model = Profile
@@ -93,6 +95,8 @@ class UpdateAccountView(UpdateView):
     template_name = "settings.html"
     success_url = reverse_lazy('users:myaccount')
     http_method_names = ['get', 'post']
+    slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
+    slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
 
     # def post(self, request, **kwargs):
     #     self.object = self.get_object()
