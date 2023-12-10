@@ -30,14 +30,14 @@ class PublicationType(models.Model):
 class Publication(models.Model):
     def __str__(self):
         return self.title
-
-    uuid = models.UUIDField(default=uuid_generator, editable=False)
+    
+    uuid = models.UUIDField(primary_key=True, default=uuid_generator, editable=False)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
     title = models.CharField(max_length=70, blank=False, null=True, help_text="Title of your publication.")
     year_of_stay = models.IntegerField(default=1950, blank=False, null=True)
     summary = models.TextField(max_length=170, blank=False, null=True, help_text="Summarize your story.")
-    date_of_post = models.DateTimeField(auto_now_add=True)
-    date_of_update = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     content_type = models.ForeignKey(PublicationType, on_delete=models.SET_NULL, null=True)
     location_of_stay = models.CharField(max_length=100, blank=False, null=True)
     location_flag_url = models.URLField(null=True)
