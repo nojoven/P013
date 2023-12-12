@@ -8,6 +8,7 @@ app_name = 'users'
 
 urlpatterns = [
     path("", include('allauth.urls')),
+    # path('publish', core_forms.PublishForm.as_view()),
     path("myaccount/<slug:slug>", views.AccountDetailsView.as_view(), name="myaccount"),
     path("settings/<slug:slug>", views.UpdateAccountView.as_view(), name="settings"),
     path("signup", views.CreateProfileView.as_view(), name="signup"),

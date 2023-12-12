@@ -1,3 +1,6 @@
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import View
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as authentication_views
@@ -15,6 +18,7 @@ from django.utils.decorators import method_decorator
 
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PasswordChangeFromConnectedProfile
 from users.models import Profile
+from core.models import Publication
 
 
 # Custom sugar
@@ -118,10 +122,9 @@ class UpdateAccountView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
     
 
-class UserAction():
+class PublishView(FormView):
     pass
 
 
-
-
-
+class UserAction():
+    pass
