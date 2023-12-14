@@ -15,6 +15,7 @@ import os
 from pathlib import Path
 
 print("Thanks to https://simplemaps.com/data/world-cities")
+print("Image by Timur Kozmenko from Pixabay")
 
 
 if "confs.json" in os.listdir(Path(__file__).absolute().parent):
@@ -157,7 +158,7 @@ DATABASES = {
         "PASSWORD": confs.get("PASSWORD"),
         "HOST": confs.get("HOST"),
         "PORT": confs.get("PORT"),
-        'OPTIONS': {'sslmode': 'require'}
+        # 'OPTIONS': {'sslmode': 'require'}
     },
     # "test": {
     #     "ENGINE": confs.get("ENGINE"),
