@@ -42,7 +42,7 @@ class Publication(models.Model):
     location_of_stay = models.CharField(max_length=100, blank=False, null=True)
     location_flag_url = models.URLField(null=True)
     location_map_url = models.URLField(null=True)
-    image = models.URLField(null=True)
+    image = models.ImageField(upload_to="contents_illustrations", default="seals-6627197_1280.jpg", null=True)
     upvotes_count = models.IntegerField(default=0, null=True)
     website_ranking = models.IntegerField(default=-inf, null=True)
 
