@@ -16,12 +16,14 @@ from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteVi
 
 from django.utils.decorators import method_decorator
 
-from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PasswordChangeFromConnectedProfile
+from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm, PasswordChangeFromConnectedProfile
 from users.models import Profile
+
 from core.models import Publication
 
 
 # Custom sugar
+from icecream import ic
 from loguru import logger
 from tabulate import tabulate
 
@@ -123,7 +125,20 @@ class UpdateAccountView(UpdateView):
     
 
 class PublishView(FormView):
-    pass
+    template_name = 'publish.html'  # replace with your actual template
+    model = Publication
+    form_class = PublishContentForm
+    success_url = reverse_lazy('users:publish')  # replace with your actual success url
+    
+    def get_context_data(self, **kwargs):
+        super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.save()
+        messages.success(self.request, 'Publication created successfully!')
+        return super().form_valid(form)
 
 
 class UserAction():

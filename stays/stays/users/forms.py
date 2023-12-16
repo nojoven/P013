@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, AuthenticationForm
 
+from core.models import Publication
+
 from .models import Profile
 
 class RegistrationForm(UserCreationForm):
@@ -54,6 +56,16 @@ class AccountEditionForm(UserChangeForm):
         ]
 
     # template_name_suffix = "_update_form"
+
+
+
+
+class PublishContentForm(forms.ModelForm):
+    class Meta:
+        model = Publication
+        fields = ['location_of_stay', 'title', 'author', 'year_of_stay', 'summary', 'image']  # replace with your actual fields
+
+
 
 class PasswordChangeFromConnectedProfile(PasswordChangeForm):
     class Meta:
