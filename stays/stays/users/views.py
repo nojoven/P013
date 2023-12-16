@@ -48,7 +48,7 @@ class CreateProfileView(CreateView):
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        #print(form.errors.as_data())
+        # ic(form.errors.as_data())
         messages.error(self.request,'Invalud inputs. Please try again.')
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -67,7 +67,6 @@ class AccountLoginView(authentication_views.LoginView):
         # Assurez-vous que l'utilisateur est connecté
         if self.request.user.is_authenticated:
             # Essayez de récupérer le profil associé à l'utilisateur
-            print(self.request.user)
             profile = retrieve_current_user(self.request.user)
             if profile:
                 # Récupérez le slug du profil
@@ -80,7 +79,7 @@ class AccountLoginView(authentication_views.LoginView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        #print(form.errors.as_data())
+        # ic(form.errors.as_data())
         messages.error(self.request,'Invalid username or password')
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -102,24 +101,28 @@ class UpdateAccountView(UpdateView):
     model = Profile
     form_class = AccountEditionForm
     template_name = "settings.html"
-    success_url = reverse_lazy('users:myaccount')
     http_method_names = ['get', 'post']
     slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
     slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
+        context = super().get_context_data(**kwargs)
         user_email = context.get("profile")
-        context["current_user"] =  retrieve_current_user(user_email)
+        current_user = retrieve_current_user(user_email)
+
+        UpdateAccountView.success_url = reverse_lazy('users:myaccount', args=[current_user.slug])
+        
+        context["current_user"] =  current_user
         return context
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         return super(UpdateAccountView,self).form_valid(form)
+    
 
     def form_invalid(self, form):
-        # print(form.errors.as_data())
+        ic(form.errors.as_data())
         messages.error(self.request,'Unsuccessful update due to invalid submitted data. Please check your input.')
         return self.render_to_response(self.get_context_data(form=form))
     
