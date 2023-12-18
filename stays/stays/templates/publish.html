@@ -17,7 +17,7 @@
 
 <body>
     <div class="container m-auto">
-        <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">Publish a new story.</h1>
+        <b><a href="/"><h3 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">{{current_user.username}}</h3></a></b>
         <br>
         {% if messages %}
                 <div class="flex items-center lg:justify-between justify-around">
@@ -31,26 +31,14 @@
                 </div>
         {% endif %}
         <hr>
-        {% comment %} <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab">
-            <li class="uk-active"><a href="#">General</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Notification</a></li>
-            <li><a href="#">Social links</a></li>
-            <li><a href="#">Billing</a></li>
-            <li><a href="#">Security</a></li>
-        </ul>{% endcomment %}
         <br>
 
         <div class="grid lg:grid-cols-3 mt-12 gap-8">
-            <div>
-                <h3 class="text-xl mb-2">General Settings </h3>
-                <p></p>
-            </div>
             <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
                 <form action="{% url 'users:myaccount' user.slug %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+                        <center><b>Let's publish a new content.</b></center>
                         <div class="col-span-2">
                             {% comment %} <label for="">Your picture : {{ user.profile_picture|split_on_slash }}</label> {% endcomment %}
                             {% comment %} <img src="{% get_media_prefix %}{{ user.profile_picture }}" height="100px" width="100px" /> {% endcomment %}

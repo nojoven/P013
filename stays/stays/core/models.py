@@ -32,7 +32,7 @@ class Publication(models.Model):
         return self.title
     
     uuid = models.UUIDField(primary_key=True, default=uuid_generator, editable=False)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, to_field="slug")
     title = models.CharField(max_length=70, blank=False, null=True, help_text="Title of your publication.")
     year_of_stay = models.IntegerField(default=1950, blank=False, null=True)
     summary = models.TextField(max_length=170, blank=False, null=True, help_text="Summarize your story.")
@@ -55,8 +55,8 @@ class PublicationHasLocation(models.Model):
     #corresponding_location = None
 
 
-class PublicationHasProfiles(models.Model):
-    publication_title = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="title")
-    publication_author = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="author")
-    publication_upvoter = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="upvote_count")
-    publication_upvote_count = models.IntegerField(default=0)
+# class PublicationHasProfiles(models.Model):
+#     publication_title = models.ForeignKey(Publication, on_delete=models.CASCADE, blank=True, null=True, to_field="title")
+#     publication_author = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="author")
+#     publication_upvoter = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="upvote_count")
+#     publication_upvote_count = models.IntegerField(default=0)

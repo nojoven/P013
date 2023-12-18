@@ -134,7 +134,10 @@ class PublishView(FormView):
     success_url = reverse_lazy('users:publish')  # replace with your actual success url
     
     def get_context_data(self, **kwargs):
-        super().get_context_data(**kwargs)
+        # super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)        
+        context["current_user"] =  self.request.user
+        return context
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
