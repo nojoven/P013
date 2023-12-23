@@ -131,12 +131,19 @@ class PublishView(FormView):
     template_name = 'publish.html'  # replace with your actual template
     model = Publication
     form_class = PublishContentForm
-    success_url = reverse_lazy('users:publish')  # replace with your actual success url
+    slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
+    slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
+    # success_url = reverse_lazy('users:myaccount')  # replace with your actual success url
     
     def get_context_data(self, **kwargs):
-        # super().get_context_data(**kwargs)
-        context = super().get_context_data(**kwargs)        
-        context["current_user"] =  self.request.user
+        
+        context = super().get_context_data(**kwargs)
+        user_email = self.request.user
+        current_user = retrieve_current_user(user_email)
+        
+        PublishView.success_url = reverse_lazy('users:myaccount', args=[current_user.slug])
+        
+        context["current_user"] =  current_user
         return context
 
     def form_valid(self, form):
