@@ -79,7 +79,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     # profile_follows = models.ManyToManyField(User, related_name="followers")
     #has_publications = None
     # publications =  models.ManyToManyField(Publication, related_name="author") 
-    profile_picture = models.ImageField(upload_to="profile_images", default="blank-profile-picture.jpg", null=True)
+    profile_picture = models.ImageField(upload_to=f"uploads/{slug}/profile_images", default="blank-profile-picture.jpg", null=True)
     # background_picture = models.ImageField(upload_to="profile_images", null=True)
     #favourite_publications = None
     # last_detected_data = models.TextField(null=True)
