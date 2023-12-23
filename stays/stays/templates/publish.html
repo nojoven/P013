@@ -44,20 +44,33 @@
                             {% comment %} <img src="{% get_media_prefix %}{{ user.profile_picture }}" height="100px" width="100px" /> {% endcomment %}
                             <input type="file" name="profile_picture" value="{{ user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
                         </div>
-                        <div>
+                        <div class="col-span-2">
                             <label for="title">Title</label>
                             <input type="text" name="title" placeholder="" value="" class="shadow-none bg-gray-100">
                         </div>
-                    </div>
-
-                    <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-3">
-                        {% comment %} <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="{% url 'users:settings' user.pk %}"> Cancel </a></button> {% endcomment %}
-                        <button type="submit" class="button bg-blue-700">Save </button>
+                        <div class="col-span-1">
+                            <legend>Type of publication</legend>
+                            <input type="radio" id="contenttype1" name="contenttype" value="Text">
+                            <label for="contenttype1">Text</label>
+                            <input type="radio" id="contenttype2" name="contenttype" value="Voice">
+                            <label for="contenttype2">Voice</label>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="summary">Summary</label>
+                            <input type="text" name="summary" placeholder="" value="" class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label id="textstorylabel" for="story">Your story</label>
+                            <textarea id="story" name="story" placeholder="It was ..." value=""  rows="5"  class="shadow-none bg-gray-100"></textarea>
+                        </div>
+                        <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-6">
+                            {% comment %} <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="{% url 'users:settings' user.pk %}"> Cancel </a></button> {% endcomment %}
+                            <button type="submit" class="button bg-blue-700">Save</button>
+                        </div>
                     </div>
                 </form>
             </div>
             <br>
-
         </div>
 
     </div>
@@ -74,6 +87,25 @@
 
 
     <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+    <script>
+    const text_story = document.getElementById('story');
+    const text_story_label = document.getElementsByTagName('textstorylabel');
+
+    function handleRadioClick() {
+    if (document.getElementById('contenttype1').checked) {
+        text_story.style.display = 'block';
+        text_story_label.display = 'block';
+    } else {
+        $('label[for="story"]').hide ();
+        text_story.style.display = 'none';
+    }
+    }
+
+    const radioButtons = document.querySelectorAll('input[name="contenttype"]');
+    radioButtons.forEach(radio => {
+    radio.addEventListener('click', handleRadioClick);
+    });
+    </script>
 </body>
 
 </html>
