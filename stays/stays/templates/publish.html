@@ -38,21 +38,37 @@
                 <form action="{% url 'users:myaccount' user.slug %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
-                        <center><b>Let's publish a new content.</b></center>
+                        <center><b>Let's publish a new content</b></center>
                         <div class="col-span-2">
                             {% comment %} <label for="">Your picture : {{ user.profile_picture|split_on_slash }}</label> {% endcomment %}
                             {% comment %} <img src="{% get_media_prefix %}{{ user.profile_picture }}" height="100px" width="100px" /> {% endcomment %}
                             <input type="file" name="profile_picture" value="{{ user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
+                            <label for="author_slug" style="display: none;">Author ID</label>
+                            <input type="text" name="author_slug" value="{{ current_user.slug }}" class="shadow-none bg-gray-100" style="display: none;">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="author_slug" style="display: none;">Author Name</label>
+                            <input type="text" name="author_username" value="{{ current_user.username }}" class="shadow-none bg-gray-100" readonly style="display: none;">
+                        </div>
+                        <div class="col-span-2">
                             <label for="title">Title</label>
                             <input type="text" name="title" placeholder="" value="" class="shadow-none bg-gray-100">
                         </div>
-                        <div class="col-span-1">
+                        <div class="col-span-2">
+                            <label for="location_of_stay">Location of the stay</label>
+                            <input type="text" name="location_of_stay" placeholder="" value="" class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="">Year of Stay</label>
+                            <input type="number" name="year_of_stay" value="1990" min="1900" max="2023"  class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
                             <legend>Type of publication</legend>
-                            <input type="radio" id="contenttype1" name="contenttype" value="Text">
+                            <input class=form-check-input type="radio" id="contenttype1" name="contenttype" value="text">
                             <label for="contenttype1">Text</label>
-                            <input type="radio" id="contenttype2" name="contenttype" value="Voice">
+                            <input class=form-check-input type="radio" id="contenttype2" name="contenttype" value="voice">
                             <label for="contenttype2">Voice</label>
                         </div>
                         <div class="col-span-2">
@@ -60,8 +76,12 @@
                             <input type="text" name="summary" placeholder="" value="" class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
-                            <label id="textstorylabel" for="story">Your story</label>
-                            <textarea id="story" name="story" placeholder="It was ..." value=""  rows="5"  class="shadow-none bg-gray-100"></textarea>
+                            <label for="text_story">Your story</label>
+                            <textarea id="textstory" name="text_story" placeholder="It was ..." value=""  rows="5"  class="shadow-none bg-gray-100"></textarea>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="voice_story" class="input-group-text">Record your experience</label>
+                            <input type="file" id="voicestory"  name="voice_story" value=""  rows="5"  class="shadow-none bg-gray-100 form-control input-group">
                         </div>
                         <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-6">
                             {% comment %} <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="{% url 'users:settings' user.pk %}"> Cancel </a></button> {% endcomment %}
@@ -88,15 +108,20 @@
 
     <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
     <script>
-    const text_story = document.getElementById('story');
-    const text_story_label = document.getElementsByTagName('textstorylabel');
+    const text_story = document.getElementById('textstory');
+
+    const voice_story = document.getElementById('voicestory');
 
     function handleRadioClick() {
     if (document.getElementById('contenttype1').checked) {
         text_story.style.display = 'block';
-        text_story_label.display = 'block';
+        voice_story.style.display = 'none';
+        $('label[for="text_story"]').show();
+        $('label[for="voice_story"]').hide();
     } else {
-        $('label[for="story"]').hide ();
+        $('label[for="voice_story"]').show();
+        $('label[for="text_story"]').hide();
+        voice_story.style.display = 'block';
         text_story.style.display = 'none';
     }
     }

@@ -32,20 +32,25 @@ class Publication(models.Model):
         return self.title
     
     uuid = models.UUIDField(primary_key=True, default=uuid_generator, editable=False)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, to_field="slug")
+    author_username = models.CharField(blank=False, null=True, max_length=255, default=None)
+    author_slug = models.CharField(blank=False, null=True, max_length=255, default=None)
     title = models.CharField(max_length=70, blank=False, null=True, help_text="Title of your publication.")
-    year_of_stay = models.IntegerField(default=1950, blank=False, null=True)
+    year_of_stay = models.IntegerField(default=1990, blank=False, null=True)
     summary = models.TextField(max_length=170, blank=False, null=True, help_text="Summarize your story.")
     text_story = models.TextField(max_length=170, blank=True, null=True, help_text="Write your story.")
+    voice_story = models.FileField(upload_to=f"uploads/{author_slug}/%Y/%m/%d/{uuid}/", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    content_type = models.ForeignKey(PublicationType, on_delete=models.SET_NULL, null=True)
-    location_of_stay = models.CharField(max_length=100, blank=False, null=True)
+    content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
+    #content_type = models.ForeignKey(PublicationType, on_delete=models.SET_NULL, null=True)
+    location_of_stay = models.CharField(max_length=100, blank=True, null=True)
     location_flag_url = models.URLField(null=True)
     location_map_url = models.URLField(null=True)
-    image = models.ImageField(upload_to="contents_illustrations", default="seals-6627197_1280.jpg", null=True)
+    picture = models.ImageField(upload_to=f"uploads/{author_slug}/%Y/%m/%d/{uuid}/picture", default="seals-6627197_1280.jpg", null=True)
     upvotes_count = models.IntegerField(default=0, null=True)
     website_ranking = models.IntegerField(default=-inf, null=True)
+
+    
 
 
 class PublicationHasLocation(models.Model):

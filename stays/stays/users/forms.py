@@ -63,7 +63,7 @@ class AccountEditionForm(UserChangeForm):
 class PublishContentForm(forms.ModelForm):
     class Meta:
         model = Publication
-        fields = ['location_of_stay', 'title', 'author', 'year_of_stay', 'summary', 'image']  # replace with your actual fields
+        fields = ['title', 'author_slug', 'author_username', 'author_username', 'location_of_stay', 'year_of_stay', 'summary', 'picture']  # replace with your actual fields
 
 
 
