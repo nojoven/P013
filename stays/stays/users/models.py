@@ -18,6 +18,10 @@ def build_default_username(uuid, email):
     email_parts = email.split("@")
     return f"{email_parts[0]}{uuid}{email_parts[1]}"
 
+def profile_picture_upload_to(instance, filename):
+    return f"uploads/{instance.slug}/ProfilePicture/{filename}"
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Creates and saves a new user"""
@@ -79,7 +83,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     # profile_follows = models.ManyToManyField(User, related_name="followers")
     #has_publications = None
     # publications =  models.ManyToManyField(Publication, related_name="author") 
-    profile_picture = models.ImageField(upload_to=f"uploads/profile_pictures", default="blank-profile-picture.jpg", null=True)
+    profile_picture = models.ImageField(upload_to=profile_picture_upload_to, default="blank-profile-picture.jpg", null=True)
     # background_picture = models.ImageField(upload_to="profile_images", null=True)
     #favourite_publications = None
     # last_detected_data = models.TextField(null=True)
@@ -90,8 +94,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     objects = UserManager()
 
-    # def get_absolute_url(self):
-    #     return reverse("profile-detail", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse('users:account', args=[self.slug])
 
     def save(self, *args, **kwargs):
         self.slug = slugify(f"{self.email.split('@')[0]}{self.uuid}")
