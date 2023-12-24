@@ -95,7 +95,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(f"{self.email.split('@')[0]}{self.uuid}")
-        self.profile_picture.storage = self.profile_picture.storage.child("profile_images")
         super().save(*args, **kwargs)
 
     USERNAME_FIELD = "email"
