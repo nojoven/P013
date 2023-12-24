@@ -956,6 +956,23 @@ files = [
 django-widget-tweaks = ">=1.4.12,<2.0.0"
 
 [[package]]
+name = "django-apm"
+version = "0.3.0"
+description = "A fully featured APM for django using django"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "django-apm-0.3.0.tar.gz", hash = "sha256:d3e6bba9f38aca9745afab6cf15f94f484c3b3bc53b6117cd0e65c0a98f037f1"},
+    {file = "django_apm-0.3.0-py3-none-any.whl", hash = "sha256:2fe61542c745be5ec222825b9548ff33d896046486179b4ab439be79671ffd7f"},
+]
+
+[package.dependencies]
+celery = ">=5.2.7"
+Django = ">=4.1.1"
+djangorestframework = ">=3.14.0"
+requests = ">=2.28.1"
+
+[[package]]
 name = "django-appconf"
 version = "1.0.5"
 description = "A helper class for handling configuration defaults of packaged apps gracefully."
@@ -4787,4 +4804,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "6338fcc8baf064c7ffdc0bfad4d1b05ba156dab269f774abbb437923132cf117"
+content-hash = "3a7f409d41db9becdbf6936719cf4ef4b7c80a4bdd73d1b6c19fadf9d5e0839c"
