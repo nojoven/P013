@@ -87,6 +87,7 @@ class AccountLoginView(authentication_views.LoginView):
 class AccountDetailsView(DetailView):
     model = Profile
     template_name = "account.html"
+    http_method_names = ['get', 'post']
     slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
     slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
 
@@ -94,6 +95,7 @@ class AccountDetailsView(DetailView):
         context = super().get_context_data(**kwargs) 
         user_email = context.get("profile")
         context["current_user"] =  retrieve_current_user(user_email)
+        ic(context)
         return context
 
 
@@ -101,9 +103,7 @@ class UpdateAccountView(UpdateView):
     model = Profile
     form_class = AccountEditionForm
     template_name = "settings.html"
-    http_method_names = ['get', 'post']
     slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
-    slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -122,7 +122,6 @@ class UpdateAccountView(UpdateView):
     
 
     def form_invalid(self, form):
-        ic(form.errors.as_data())
         messages.error(self.request,'Unsuccessful update due to invalid submitted data. Please check your input.')
         return self.render_to_response(self.get_context_data(form=form))
     
@@ -131,16 +130,14 @@ class PublishView(FormView):
     template_name = 'publish.html'  # replace with your actual template
     model = Publication
     form_class = PublishContentForm
-    slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
-    slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
-    # success_url = reverse_lazy('users:myaccount')  # replace with your actual success url
-    
+    slug_field = 'author_slug'  # Indiquez le nom du champ slug dans votre modèle
+
     def get_context_data(self, **kwargs):
-        
+
         context = super().get_context_data(**kwargs)
         user_email = self.request.user
         current_user = retrieve_current_user(user_email)
-        
+        PublishView.slug_url_kwarg = current_user.slug
         PublishView.success_url = reverse_lazy('users:myaccount', args=[current_user.slug])
         
         context["current_user"] =  current_user
@@ -149,9 +146,8 @@ class PublishView(FormView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        form.save()
         messages.success(self.request, 'Publication created successfully!')
-        return super().form_valid(form)
+        return super(PublishView, self).form_valid(form)
 
 
 class UserAction():

@@ -35,7 +35,7 @@
 
         <div class="grid lg:grid-cols-3 mt-12 gap-8">
             <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
-                <form action="{% url 'users:myaccount' current_user.slug %}" method="post" enctype="multipart/form-data">
+                <form action="/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <center><b>Let's publish a new content</b></center>
@@ -66,9 +66,9 @@
                         </div>
                         <div class="col-span-2">
                             <legend>Type of publication</legend>
-                            <input class=form-check-input type="radio" id="contenttype1" name="contenttype" value="text">
+                            <input class=form-check-input type="radio" id="contenttype1" name="content_type" value="text">
                             <label for="contenttype1">Text</label>
-                            <input class=form-check-input type="radio" id="contenttype2" name="contenttype" value="voice">
+                            <input class=form-check-input type="radio" id="contenttype2" name="content_type" value="voice">
                             <label for="contenttype2">Voice</label>
                         </div>
                         <div class="col-span-2">
@@ -85,7 +85,7 @@
                         </div>
                         <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-6">
                             {% comment %} <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="{% url 'users:settings' user.pk %}"> Cancel </a></button> {% endcomment %}
-                            <button type="submit" class="button bg-blue-700">Save</button>
+                            <button type="submit" class="button bg-blue-700">Publish</button>
                         </div>
                     </div>
                 </form>
@@ -126,7 +126,7 @@
     }
     }
 
-    const radioButtons = document.querySelectorAll('input[name="contenttype"]');
+    const radioButtons = document.querySelectorAll('input[name="content_type"]');
     radioButtons.forEach(radio => {
     radio.addEventListener('click', handleRadioClick);
     });

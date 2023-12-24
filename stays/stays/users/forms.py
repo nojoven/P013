@@ -61,9 +61,18 @@ class AccountEditionForm(UserChangeForm):
 
 
 class PublishContentForm(forms.ModelForm):
+    content_type=forms.CharField(required=True)
+    title=forms.CharField(required=True)
+    author_slug=forms.SlugField(required=True)
+    author_username=forms.CharField(required=True)
+    location_of_stay=forms.CharField(required=True)
+    summary=forms.CharField(required=True)
+    picture=forms.FileField(required=True, allow_empty_file=False)
+    year_of_stay=forms.IntegerField(required=True)
+    picture=forms.FileField(required=True, allow_empty_file=False)
     class Meta:
         model = Publication
-        fields = ['title', 'author_slug', 'author_username', 'author_username', 'location_of_stay', 'year_of_stay', 'summary', 'picture']  # replace with your actual fields
+        fields = ['title', 'author_slug', 'author_username', 'author_username', 'location_of_stay', 'year_of_stay', 'summary', 'picture', 'content_type']  # replace with your actual fields
 
 
 
