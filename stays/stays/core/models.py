@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import uuid
 import sys
@@ -6,15 +7,21 @@ from pathlib import Path
 #sys.path.append(Path(os.getcwd()).parent.parent.absolute)
 
 from django.db import models
+from django.urls import reverse
 from math import inf
 from users.models import Profile
 from locations.models import Location
 from core.publications_types import ContentTypes
 
 
-
 def uuid_generator():
     return uuid.uuid4().hex
+
+def voice_story_upload_to(instance, filename):
+    return f"uploads/{instance.author_slug}/{datetime.now().strftime('%YYYY/%mm/%d')}/{instance.uuid}/voice/{filename}"
+
+def picture_upload_to(instance, filename):
+    return f"uploads/{instance.author_slug}/{datetime.now().strftime('%YYYY/%mm/%d')}/{instance.uuid}/picture/{filename}"
 
 class PublicationType(models.Model):
     def __str__(self):
@@ -38,7 +45,7 @@ class Publication(models.Model):
     year_of_stay = models.IntegerField(default=1990, blank=False, null=True)
     summary = models.TextField(max_length=170, blank=False, null=True, help_text="Summarize your story.")
     text_story = models.TextField(max_length=170, null=True, help_text="Write your story.")
-    voice_story = models.FileField(upload_to=f"uploads/voice/{author_slug}/%Y/%m/%d/{uuid}/", null=True, default=None)
+    voice_story = models.FileField(upload_to=voice_story_upload_to, null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
@@ -46,11 +53,14 @@ class Publication(models.Model):
     location_of_stay = models.CharField(max_length=100, blank=True, null=True)
     location_flag_url = models.URLField(null=True)
     location_map_url = models.URLField(null=True)
-    picture = models.ImageField(upload_to=f"uploads/{author_slug}/%Y/%m/%d/{uuid}/picture", default="seals-6627197_1280.jpg", null=True)
+    picture = models.ImageField(upload_to=picture_upload_to, default="seals-6627197_1280.jpg", null=True, max_length=800)
     upvotes_count = models.IntegerField(default=0, null=True)
-    website_ranking = models.IntegerField(default=-inf, null=True)
+    website_ranking = models.IntegerField(default=0, null=True)
 
-    
+    def get_absolute_url(self):
+        return reverse('users:myaccount', args=[self.author_slug])
+
+
 
 
 class PublicationHasLocation(models.Model):

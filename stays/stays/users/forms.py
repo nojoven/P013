@@ -69,7 +69,6 @@ class PublishContentForm(forms.ModelForm):
     summary=forms.CharField(required=True)
     picture=forms.FileField(required=True, allow_empty_file=False)
     year_of_stay=forms.IntegerField(required=True)
-    picture=forms.FileField(required=True, allow_empty_file=False)
     class Meta:
         model = Publication
         fields = ['title', 'author_slug', 'author_username', 'author_username', 'location_of_stay', 'year_of_stay', 'summary', 'picture', 'content_type']  # replace with your actual fields

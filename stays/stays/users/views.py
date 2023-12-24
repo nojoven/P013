@@ -95,7 +95,6 @@ class AccountDetailsView(DetailView):
         context = super().get_context_data(**kwargs) 
         user_email = context.get("profile")
         context["current_user"] =  retrieve_current_user(user_email)
-        ic(context)
         return context
 
 
@@ -126,7 +125,7 @@ class UpdateAccountView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
     
 
-class PublishView(FormView):
+class PublishView(FormView, CreateView):
     template_name = 'publish.html'  # replace with your actual template
     model = Publication
     form_class = PublishContentForm
@@ -147,7 +146,16 @@ class PublishView(FormView):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         messages.success(self.request, 'Publication created successfully!')
+        ic(self.request)
         return super(PublishView, self).form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request,'Something went wrong. Please check your input.')
+        print("********ARRRRRGG***********")
+        ic(self.request)
+        ic(form)
+        ic(form.errors.as_data())
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class UserAction():

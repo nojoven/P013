@@ -35,14 +35,14 @@
 
         <div class="grid lg:grid-cols-3 mt-12 gap-8">
             <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
-                <form action="/" method="post" enctype="multipart/form-data">
+                <form action="{% url 'users:publish' current_user.slug %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <center><b>Let's publish a new content</b></center>
                         <div class="col-span-2">
                             {% comment %} <label for="">Your picture : {{ user.profile_picture|split_on_slash }}</label> {% endcomment %}
                             {% comment %} <img src="{% get_media_prefix %}{{ user.profile_picture }}" height="100px" width="100px" /> {% endcomment %}
-                            <input type="file" name="profile_picture" value="{{ user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
+                            <input type="file" name="picture" value="" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
                             <label for="author_slug" style="display: none;">Author ID</label>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-span-2">
                             <label for="">Year of Stay</label>
-                            <input type="number" name="year_of_stay" value="1990" min="1900" max="2023"  class="shadow-none bg-gray-100">
+                            <input type="number" name="year_of_stay" value=1990 min=1900 max=2023  class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
                             <legend>Type of publication</legend>
