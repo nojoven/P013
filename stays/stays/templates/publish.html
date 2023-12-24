@@ -66,7 +66,7 @@
                         </div>
                         <div class="col-span-2">
                             <legend>Type of publication</legend>
-                            <input class=form-check-input type="radio" id="contenttype1" name="content_type" value="text">
+                            <input class=form-check-input type="radio" id="contenttype1" name="content_type" value="text" checked>
                             <label for="contenttype1">Text</label>
                             <input class=form-check-input type="radio" id="contenttype2" name="content_type" value="voice">
                             <label for="contenttype2">Voice</label>
@@ -109,15 +109,16 @@
     <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
     <script>
     const text_story = document.getElementById('textstory');
-
     const voice_story = document.getElementById('voicestory');
+    $('label[for="voice_story"]').hide();
+    voice_story.style.display = 'none';
 
     function handleRadioClick() {
     if (document.getElementById('contenttype1').checked) {
         text_story.style.display = 'block';
-        voice_story.style.display = 'none';
         $('label[for="text_story"]').show();
         $('label[for="voice_story"]').hide();
+        voice_story.style.display = 'none';
     } else {
         $('label[for="voice_story"]').show();
         $('label[for="text_story"]').hide();
