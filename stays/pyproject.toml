@@ -88,6 +88,8 @@ pytest-django = "^4.5.2"
 pip = "^23.2.1"
 rapidfuzz = "2.15.1"
 django-cities-light = "^3.9.2"
+django-apm = "^0.3.0"
+djangorestframework = "^3.14.0"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.10,<4.0"

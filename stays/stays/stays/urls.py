@@ -24,6 +24,7 @@ urlpatterns = [
     path("admin", admin.site.urls),
     path("", include("core.urls")),
     path("", include("users.urls")),
+    path("apm/", include("djapm.apm.urls")),
     re_path(r'^watchman/', include('watchman.urls')),
 ] + static(
         settings.MEDIA_URL,
