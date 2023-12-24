@@ -76,10 +76,17 @@
                             <label for="">Last name</label>
                             <input type="text" name="last_name" placeholder="Your last name.." value="{{ current_user.last_name }}" class="shadow-none bg-gray-100">
                         </div>
+                        {% if not current_user.username %}
+                        <div class="col-span-2">
+                            <label for="">Username</label>
+                            <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.slug }}" class="shadow-none bg-gray-100">
+                        </div>
+                        {% else %}
                         <div class="col-span-2">
                             <label for="">Username</label>
                             <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.username }}" class="shadow-none bg-gray-100">
                         </div>
+                        {% endif %}
                         <div class="col-span-2">
                             <label for="">Year of birth</label>
                             <input type="number" name="year_of_birth" value="1980" min="1900" max="2010"  class="shadow-none bg-gray-100">
@@ -97,11 +104,11 @@
 
                         <div class="col-span-2">
                             <label for="">Email</label>
-                            <input type="email" name="account_email" placeholder="{{ current_user.email }}" value="{{ current_user.email }}" class="shadow-none bg-gray-100">
+                            <input type="email" name="account_email" placeholder="{{ current_user.email }}" value="{{ current_user.email }}" class="shadow-none bg-gray-100" readonly>
                         </div>
                         <div class="col-span-2">
                             <label for="">Bio</label> 
-                            <textarea id="about_text" name="about_text" placeholder="{{ current_user.about_text }}" value=""  rows="3"  class="shadow-none bg-gray-100"></textarea>
+                            <textarea id="about_text" name="about_text" placeholder="{{ current_user.about_text }}" rows="3"  class="shadow-none bg-gray-100">{{ current_user.about_text }}</textarea>
                         </div>
                         <div class="col-span-2">
                             <label for="">Motto</label> 
