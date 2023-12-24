@@ -58,7 +58,7 @@ class Publication(models.Model):
     website_ranking = models.IntegerField(default=0, null=True)
 
     def get_absolute_url(self):
-        return reverse('users:myaccount', args=[self.author_slug])
+        return reverse('users:account', args=[self.author_slug])
 
 
 

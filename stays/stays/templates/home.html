@@ -112,7 +112,7 @@
               class="header_dropdown profile_dropdown border-t">
               <ul>
                   {% if user.is_authenticated %}
-                      <li><a href="{% url 'users:myaccount' user.slug %}">Account</a></li>
+                      <li><a href="{% url 'users:account' user.slug %}">Account</a></li>
                       <li><a href="{% url 'users:logout' %}">Log Out</a></li>
                   {% else %}
                       <li><a href="{% url 'users:login' %}">Sign In</a></li>

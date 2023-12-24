@@ -71,7 +71,7 @@ class AccountLoginView(authentication_views.LoginView):
             if profile:
                 # Récupérez le slug du profil
                 user_slug = profile.slug
-                return reverse_lazy('users:myaccount', kwargs={'slug': user_slug})
+                return reverse_lazy('users:account', kwargs={'slug': user_slug})
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
@@ -109,7 +109,7 @@ class UpdateAccountView(UpdateView):
         user_email = context.get("profile")
         current_user = retrieve_current_user(user_email)
 
-        UpdateAccountView.success_url = reverse_lazy('users:myaccount', args=[current_user.slug])
+        UpdateAccountView.success_url = reverse_lazy('users:account', args=[current_user.slug])
         
         context["current_user"] =  current_user
         return context
@@ -137,7 +137,7 @@ class PublishView(FormView, CreateView):
         user_email = self.request.user
         current_user = retrieve_current_user(user_email)
         PublishView.slug_url_kwarg = current_user.slug
-        PublishView.success_url = reverse_lazy('users:myaccount', args=[current_user.slug])
+        PublishView.success_url = reverse_lazy('users:account', args=[current_user.slug])
         
         context["current_user"] =  current_user
         return context

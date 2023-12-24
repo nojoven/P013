@@ -231,7 +231,7 @@ AUTHENTICATION_BACKENDS = [
 
 
 LOGIN_URL = "users:login"
-LOGIN_REDIRECT_URL = "users:myaccount"
+LOGIN_REDIRECT_URL = "users:account"
 LOGOUT_REDIRECT_URL = "core:home"
 
 SITE_ID = 1

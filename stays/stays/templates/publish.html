@@ -17,7 +17,7 @@
 
 <body>
     <div class="container m-auto">
-        <b><a href="{% url 'users:myaccount' current_user.slug %}"><h3 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">{{current_user.username}}</h3></a></b>
+        <b><a href="{% url 'users:account' current_user.slug %}"><h3 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">{{current_user.username}}</h3></a></b>
         <br>
         {% if messages %}
                 <div class="flex items-center lg:justify-between justify-around">
