@@ -18,10 +18,10 @@ def uuid_generator():
     return uuid.uuid4().hex
 
 def voice_story_upload_to(instance, filename):
-    return f"uploads/{instance.author_slug}/{datetime.now().strftime('%YYYY/%mm/%d')}/{instance.uuid}/voice/{filename}"
+    return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/voice/{filename}"
 
 def picture_upload_to(instance, filename):
-    return f"uploads/{instance.author_slug}/{datetime.now().strftime('%YYYY/%mm/%d')}/{instance.uuid}/picture/{filename}"
+    return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/picture/{filename}"
 
 class PublicationType(models.Model):
     def __str__(self):
