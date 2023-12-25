@@ -57,14 +57,23 @@
                             <input type="text" name="title" placeholder="" value="" class="shadow-none bg-gray-100">
                         </div>
                         <div class="col-span-2">
-                            <label for="location_of_stay">Location of the stay</label>
+                            <label for="country_code_of_stay">Country of the stay</label>
                             {% comment %} <input type="text" name="location_of_stay" placeholder="" value="" class="shadow-none bg-gray-100"> {% endcomment %}
                             {% load countries %}
                             {% get_countries as countries %}
-                            <select name="location_of_stay">
+                            <select name="country_code_of_stay">
                             {% for country in countries %}
                                 <option value="{{ country.code }}">{{ country.name }}</option>
                             {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="season_of_stay">Season of birth</label>
+                            <select id="stay_seasons" name="season_of_stay"  class="shadow-none bg-gray-100">
+                                <option value="Spring">Spring</option>
+                                <option value="Summer">Summer</option>
+                                <option value="Autmun">Autumn</option>
+                                <option value="Winter">Winter</option>
                             </select>
                         </div>
                         <div class="col-span-2">

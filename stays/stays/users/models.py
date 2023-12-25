@@ -51,13 +51,11 @@ class UserManager(BaseUserManager):
 
 class Profile(AbstractBaseUser, PermissionsMixin):
 
-    SEASONS = (("Spring", 1), ("Summer", 2), ("Autumn", 3), ("Winter", 4),) 
     slug = models.SlugField(unique=True, blank=False, null=True, max_length=255, default=None)
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
     username = models.CharField(max_length=20, blank=False, null=True, unique=True)
     password = models.CharField(max_length=255, blank=False, null=True, help_text="Your password")
-    # date_of_birth = models.DateField(help_text="Full user's birth date", blank=True, null=True)
     year_of_birth = models.IntegerField(help_text="User's birth year", default=1900, null=False)
     season_of_birth = models.CharField(max_length=50, default="Spring", blank=False, null=False)
     first_name = models.CharField(max_length=25, blank=False, null=True)
