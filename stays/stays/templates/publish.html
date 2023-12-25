@@ -58,7 +58,14 @@
                         </div>
                         <div class="col-span-2">
                             <label for="location_of_stay">Location of the stay</label>
-                            <input type="text" name="location_of_stay" placeholder="" value="" class="shadow-none bg-gray-100">
+                            {% comment %} <input type="text" name="location_of_stay" placeholder="" value="" class="shadow-none bg-gray-100"> {% endcomment %}
+                            {% load countries %}
+                            {% get_countries as countries %}
+                            <select name="location_of_stay">
+                            {% for country in countries %}
+                                <option value="{{ country.code }}">{{ country.name }}</option>
+                            {% endfor %}
+                            </select>
                         </div>
                         <div class="col-span-2">
                             <label for="">Year of Stay</label>

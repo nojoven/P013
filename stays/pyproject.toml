@@ -46,7 +46,7 @@ django-htmx = "^1.16.0"
 django-filer = "^3.0.5"
 django-bootstrap5 = "^23.3"
 django-tables2 = "^2.6.0"
-django-countries = "^7.5.1"
+django-countries = {extras = ["pyuca"], version = "^7.5.1"}
 django-bootstrap-datepicker-plus = "^5.0.4"
 django-audiofield = "^0.10.1"
 pillow = "^10.0.0"
@@ -90,6 +90,8 @@ rapidfuzz = "2.15.1"
 django-cities-light = "^3.9.2"
 django-apm = "^0.3.0"
 djangorestframework = "^3.14.0"
+django-select2 = "^8.1.2"
+django-redis = "^5.4.0"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.10,<4.0"

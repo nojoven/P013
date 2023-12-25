@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "cities_light",
     "locations",
     "watchman",
+    "django_select2",
     "iommi",
     "allauth_ui",
     "allauth",
@@ -104,6 +105,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.soundcloud",
     "allauth.socialaccount.providers.trainingpeaks",
     "widget_tweaks",
+    "django_countries",
 ]
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
@@ -167,17 +169,32 @@ DATABASES = {
         "PORT": confs.get("PORT"),
         # 'OPTIONS': {'sslmode': 'require'}
     },
-    # "test": {
-    #     "ENGINE": confs.get("ENGINE"),
-    #     "NAME": confs.get("NAME"),
-    #     "USER": confs.get("USER"),
-    #     "PASSWORD": confs.get("PASSWORD"),
-    #     "HOST": confs.get("HOST"),
-    #     "PORT": confs.get("PORT"),
-    #     'OPTIONS': {'sslmode': 'require'}
-    # }
 }
 
+
+CACHES = {
+    # … default cache config and others
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "select2": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "select2"
+
+# # Tell select2 which cache configuration to use:
+# SELECT2_CACHE_BACKEND = "select2"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

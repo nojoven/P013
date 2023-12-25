@@ -1,5 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, AuthenticationForm
+from django_select2 import forms as s2forms
+from django_countries.widgets import CountrySelectWidget
+from django_countries.fields import CountryField
 
 from core.models import Publication
 
@@ -65,15 +68,14 @@ class PublishContentForm(forms.ModelForm):
     title=forms.CharField(required=True)
     author_slug=forms.SlugField(required=True)
     author_username=forms.CharField(required=True)
-    location_of_stay=forms.CharField(required=True)
+    location_of_stay=CountryField().formfield()
     summary=forms.CharField(required=True)
     picture=forms.FileField(required=True, allow_empty_file=False)
     year_of_stay=forms.IntegerField(required=True)
     class Meta:
         model = Publication
         fields = ['title', 'author_slug', 'author_username', 'author_username', 'location_of_stay', 'year_of_stay', 'summary', 'picture', 'content_type']  # replace with your actual fields
-
-
+        widgets = {"location_of_stay": CountrySelectWidget()}
 
 class PasswordChangeFromConnectedProfile(PasswordChangeForm):
     class Meta:

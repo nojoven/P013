@@ -13,6 +13,8 @@ from users.models import Profile
 from locations.models import Location
 from core.publications_types import ContentTypes
 
+from django_countries.fields import CountryField
+
 
 def uuid_generator():
     return uuid.uuid4().hex
@@ -50,7 +52,8 @@ class Publication(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
     #content_type = models.ForeignKey(PublicationType, on_delete=models.SET_NULL, null=True)
-    location_of_stay = models.CharField(max_length=100, blank=True, null=True)
+    location_of_stay = CountryField(null=True)
+    # country_of_stay = models.CharField(max_length=100, blank=True, null=True)
     location_flag_url = models.URLField(null=True)
     location_map_url = models.URLField(null=True)
     picture = models.ImageField(upload_to=picture_upload_to, default="seals-6627197_1280.jpg", null=True, max_length=800)
