@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "djapm.apm.apps.ApmConfig",
     "django.contrib.admin",
+    "daphne",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -154,6 +155,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "stays.wsgi.application"
+ASGI_APPLICATION = "stays.asgi.application"
 
 
 # Database

@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from channels.db import database_sync_to_async
+from django.conf import settings as dj_conf_settings
 
 # from core.models import Publication
 
@@ -102,9 +104,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
+class ProfileHasPublication(models.Model):
+    pass
 
-
-class ProfileFollowers(models.Model):
+class ProfileHasFollower(models.Model):
     profile_username = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
     # profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     #profile_followers_usernames = None
@@ -116,3 +119,36 @@ class ProfileHasDetectedData(models.Model):
     last_detected_continent = models.CharField(max_length=15, null=True)
     last_detected_country = models.CharField(max_length=15, null=True)
     last_detected_city = models.CharField(max_length=20, null=True)
+
+
+
+
+
+class ConnectionHistory(models.Model):
+    ONLINE = 'online'
+    OFFLINE = 'offline'
+    STATUS = (
+        (ONLINE, 'On-line'),
+        (OFFLINE, 'Off-line'),
+    )
+    user = models.ForeignKey(
+        dj_conf_settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    device_id = models.CharField(max_length=100)
+    status = models.CharField(
+        max_length=10, choices=STATUS,
+        default=ONLINE
+    )
+    first_login = models.DateTimeField(auto_now_add=True)
+    last_echo = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = (("user", "device_id"),)
+
+
+    @database_sync_to_async
+    def update_user_status(self, user, device_id, status):
+        return ConnectionHistory.objects.get_or_create(
+            user=user, device_id=device_id,
+        ).update(status=status)

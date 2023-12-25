@@ -29,7 +29,6 @@ class PublicationType(models.Model):
     def __str__(self):
         return self.content_type
     
-    # publication_title = models.ForeignKey(Publication, on_delete=models.CASCADE, blank=True)
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
     is_text = models.BooleanField(default=True)
     is_voice = models.BooleanField(default=False)
@@ -53,13 +52,21 @@ class Publication(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
     country_code_of_stay = CountryField(null=True)
+    published_from_country_code = CountryField(null=True)
     picture = models.ImageField(upload_to=picture_upload_to, default="seals-6627197_1280.jpg", null=True, max_length=800)
     upvotes_count = models.IntegerField(default=0, null=True)
 
     def get_absolute_url(self):
         return reverse('users:account', args=[self.author_slug])
 
+class SeasonHasPublication(models.Model):
+    pass
 
+class YearHasPublication(models.Model):
+    pass
+
+class PublicationHasVoter(models.Model):
+    pass
 
 
 class PublicationHasLocation(models.Model):

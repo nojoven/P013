@@ -9,6 +9,42 @@ def uuid_generator():
     return uuid.uuid4().hex
 
 
+class ContinentHasPublication(models.Model):
+    continent_code = models.CharField(max_length=2, primary_key=True, unique=True)
+    pass
+
+class ContinentHasCountry(models.Model):
+    continent_code = models.CharField(max_length=2, primary_key=True, unique=True)
+    pass
+
+
+class CountryHasPublication(models.Model):
+    pass
+
+class CountryHasCity(models.Model):
+    pass
+
+class CountryHasRegion(models.Model):
+    pass
+
+class RegionHasPublication(models.Model):
+    pass
+
+class RegionHasCity(models.Model):
+    pass
+
+class RegionHasSubregion(models.Model):
+    pass
+
+class SubRegionHasCity(models.Model):
+    pass
+
+class SubRegionHasPublication(models.Model):
+    pass
+
+class CityHasPublication(models.Model):
+    pass
+
 class LocationCategory(models.Model):
     
     def __str__(self):
