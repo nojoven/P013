@@ -59,6 +59,13 @@ class Publication(models.Model):
     def get_absolute_url(self):
         return reverse('users:account', args=[self.author_slug])
 
+class Gallery(models.Model):
+    publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
+    pass
+
+class PublicationHasGallery(models.Model):
+    pass
+
 class SeasonHasPublication(models.Model):
     pass
 
