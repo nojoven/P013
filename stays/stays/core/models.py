@@ -28,7 +28,7 @@ def picture_upload_to(instance, filename):
 class PublicationType(models.Model):
     def __str__(self):
         return self.content_type
-    
+
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
     is_text = models.BooleanField(default=True)
     is_voice = models.BooleanField(default=False)
@@ -38,7 +38,7 @@ class PublicationType(models.Model):
 class Publication(models.Model):
     def __str__(self):
         return self.title
-    
+
     uuid = models.UUIDField(primary_key=True, default=uuid_generator, editable=False)
     author_username = models.CharField(blank=False, null=True, max_length=255, default=None)
     author_slug = models.SlugField(blank=False, null=True, max_length=255, default=None)
