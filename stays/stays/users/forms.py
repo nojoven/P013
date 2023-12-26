@@ -69,13 +69,14 @@ class PublishContentForm(forms.ModelForm):
     author_slug=forms.SlugField(required=True)
     author_username=forms.CharField(required=True)
     country_code_of_stay=CountryField().formfield()
+    published_from_country_code=CountryField().formfield()
     summary=forms.CharField(required=True)
     picture=forms.FileField(required=True, allow_empty_file=False)
     year_of_stay=forms.IntegerField(required=True)
     season_of_stay=forms.CharField(required=False, empty_value="Spring")
     class Meta:
         model = Publication
-        fields = ['title', 'author_slug', 'author_username', 'author_username', 'country_code_of_stay', 'year_of_stay', 'season_of_stay', 'summary', 'picture', 'content_type']  # replace with your actual fields
+        fields = ['title', 'author_slug', 'author_username', 'author_username', 'country_code_of_stay', 'published_from_country_code', 'year_of_stay', 'season_of_stay', 'summary', 'picture', 'content_type']  # replace with your actual fields
         widgets = {"country_code_of_stay": CountrySelectWidget()}
 
 class PasswordChangeFromConnectedProfile(PasswordChangeForm):

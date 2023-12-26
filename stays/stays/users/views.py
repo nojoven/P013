@@ -21,6 +21,7 @@ from users.models import Profile
 
 from core.models import Publication
 
+from django_countries import countries
 
 # Custom sugar
 from icecream import ic
@@ -142,8 +143,8 @@ class PublishView(FormView, CreateView):
         else:
             address = self.request.META.get('REMOTE_ADDR')
 
-        country = g.country_code(address if address != "127.0.0.1" else "88.175.243.206")
-        return country
+        country_id = g.country_code(address if address != "127.0.0.1" else "88.175.243.206")
+        return country_id
 
     def get_context_data(self, **kwargs):
 
@@ -151,10 +152,13 @@ class PublishView(FormView, CreateView):
         user_email = self.request.user
         current_user = retrieve_current_user(user_email)
         PublishView.slug_url_kwarg = current_user.slug
-        PublishView.success_url = reverse_lazy('users:account', args=[current_user.slug])
-        
-        context["current_user"] =  current_user
+        PublishView.success_url = reverse_lazy(
+            'users:account', args=[current_user.slug]
+        )
+
+        context["current_user"] = current_user
         context["active_from_contry_code"] = self.get_publication_origin()
+        context["active_from_contry_name"] = dict(countries)[context["active_from_contry_code"]]
         return context
 
     def form_valid(self, form):
@@ -163,9 +167,12 @@ class PublishView(FormView, CreateView):
         messages.success(self.request, 'Publication created successfully!')
         ic(self.request)
         return super(PublishView, self).form_valid(form)
-    
+
     def form_invalid(self, form):
-        messages.error(self.request,'Something went wrong. Please check your input.')
+        messages.error(
+            self.request,
+            'Something went wrong. Please check your input.'
+        )
         print("********ARRRRRGG***********")
         ic(self.request)
         ic(form)

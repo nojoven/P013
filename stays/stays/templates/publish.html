@@ -17,7 +17,7 @@
 
 <body>
     <div class="container m-auto">
-        <b><a href="{% url 'users:account' current_user.slug %}"><h3 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">{{current_user.username}}</h3></a></b>
+        <b><a href="{% url 'users:account' current_user.slug %}"><h3 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">{{ current_user.username }}</h3></a></b>
         <br>
         {% if messages %}
                 <div class="flex items-center lg:justify-between justify-around">
@@ -39,7 +39,7 @@
                 {% csrf_token %}
                     <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                         <center><b>Let's publish a new content</b></center>
-                        <center><b>You write from {{ active_from_contry_code }}</b></center>
+                        <center><b>You write from {{ active_from_contry_name }}</b></center>
                         <div class="col-span-2">
                             {% comment %} <label for="">Your picture : {{ user.profile_picture|split_on_slash }}</label> {% endcomment %}
                             {% comment %} <img src="{% get_media_prefix %}{{ user.profile_picture }}" height="100px" width="100px" /> {% endcomment %}
@@ -67,6 +67,10 @@
                                 <option value="{{ country.code }}">{{ country.name }}</option>
                             {% endfor %}
                             </select>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="published_from_country_code">This content is going to be published from {{ active_from_contry_name }} which code is :</label>
+                            <input type="text" name="published_from_country_code" value="{{ active_from_contry_code }}" class="shadow-none bg-gray-100" readonly>
                         </div>
                         <div class="col-span-2">
                             <label for="season_of_stay">Season of birth</label>
