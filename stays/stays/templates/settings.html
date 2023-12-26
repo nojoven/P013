@@ -49,7 +49,14 @@
             <li><a href="#">Security</a></li>
         </ul>{% endcomment %}
         <br>
-
+        {% comment %} <lr-config
+            ctx-name="my-uploader"
+            pubkey="ef97b8bb0e5c1dbe6431"
+            max-local-file-size-bytes="10000000"
+            multiple="false"
+            img-only="true"
+            source-list="local, url, camera, gdrive"
+        ></lr-config> {% endcomment %}
         <div class="grid lg:grid-cols-3 mt-12 gap-8">
             <div>
                 <h3 class="text-xl mb-2">General Settings </h3>
@@ -63,6 +70,12 @@
                             <label for="">Your picture : {{ current_user.profile_picture|split_on_slash }}</label>
                             <img src="{% get_media_prefix %}{{ current_user.profile_picture }}" height="100px" width="100px" />
                             <input type="file" name="profile_picture" value="{{ current_user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
+                            {% comment %} <lr-file-uploader-regular
+                            css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.30.5/web/lr-file-uploader-regular.min.css"
+                            ctx-name="my-uploader"
+                            class="my-config"                            
+                            >
+                            </lr-file-uploader-regular> {% endcomment %}
                         </div>
                         <div class="col-span-2">
                             <label for="slug">Profile ID</label>
@@ -220,6 +233,10 @@
 
 
     <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+    {% comment %} <script type="module">
+        import * as LR from "https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.30.5/web/lr-file-uploader-regular.min.js";
+        LR.registerBlocks(LR);
+    </script> {% endcomment %}
 </body>
 
 </html>

@@ -8,6 +8,16 @@
 
 
 /*===============
+***Pyuploader 
+===============*/
+.my-config {
+    --darkmode: 1;
+    --h-accent: 61;
+    --s-accent: 81%;
+    --l-accent: 60%;
+}
+
+/*===============
 ***General Styling 
 ===============*/
 html,body{
