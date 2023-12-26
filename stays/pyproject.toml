@@ -94,6 +94,9 @@ django-select2 = "^8.1.2"
 django-redis = "^5.4.0"
 channels = {extras = ["daphne"], version = "^4.0.0"}
 geoip2 = "^4.8.0"
+faker = "^21.0.0"
+faker-file = {extras = ["all"], version = "^0.17.11"}
+social-auth-app-django = "^5.4.0"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.10,<4.0"
