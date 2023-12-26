@@ -126,7 +126,7 @@ class UpdateAccountView(UpdateView):
     def form_invalid(self, form):
         messages.error(self.request,'Unsuccessful update due to invalid submitted data. Please check your input.')
         return self.render_to_response(self.get_context_data(form=form))
-    
+
 
 class PublishView(FormView, CreateView):
     template_name = 'publish.html'  # replace with your actual template
