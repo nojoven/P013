@@ -236,7 +236,7 @@ STATIC_URL = "/static/"
 COUNTRIES_FLAG_URL = "flags/{code}.png"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS =  (os.path.join(BASE_DIR, "static"),)
-
+GEOIP_PATH = os.path.join(BASE_DIR, "geoip")
 
 
 # Default primary key field type

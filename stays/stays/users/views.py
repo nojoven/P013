@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
-
+from django.contrib.gis.geoip2 import GeoIP2
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as authentication_views
@@ -32,6 +32,8 @@ from tabulate import tabulate
 def retrieve_current_user(profile_email):
     current_user = Profile.objects.get(email=profile_email)
     return current_user
+
+
 
 class CreateProfileView(CreateView):
     """Create a new user in the system"""
@@ -131,6 +133,18 @@ class PublishView(FormView, CreateView):
     form_class = PublishContentForm
     slug_field = 'author_slug'  # Indiquez le nom du champ slug dans votre modèle
 
+    def get_publication_origin(self):
+        g = GeoIP2()
+        remote_addr = self.request.META.get('HTTP_X_FORWARDED_FOR')
+
+        if remote_addr:
+            address = remote_addr.split(',')[-1].strip()
+        else:
+            address = self.request.META.get('REMOTE_ADDR')
+
+        country = g.country_code(address if address != "127.0.0.1" else "88.175.243.206")
+        return country
+
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
@@ -140,6 +154,7 @@ class PublishView(FormView, CreateView):
         PublishView.success_url = reverse_lazy('users:account', args=[current_user.slug])
         
         context["current_user"] =  current_user
+        context["active_from_contry_code"] = self.get_publication_origin()
         return context
 
     def form_valid(self, form):
