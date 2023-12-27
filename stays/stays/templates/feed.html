@@ -137,7 +137,7 @@
         <div class="mb-5 flex-shrink-0 col-lg-7">
 
             <!-- post 1-->
-            {% paginate page_obj %}
+            {% comment %} {% paginate page_obj %} {% endcomment %}
             {% for publication in page_obj %}
             <div class="bg-white shadow rounded-md mx-2 lg:mx-0">
                 <!-- post header-->
@@ -164,11 +164,11 @@
                                       <i class="bi bi-pencil-square me-1"></i> Edit Post
                                   </a>
                               </li>
-                              <li>
+                              {% comment %} <li>
                                   <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md">
                                       <i class="bi bi-chat-square-dots me-1"></i> Disable comments
                                   </a>
-                              </li>
+                              </li> {% endcomment %}
                               <li>
                                   <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md">
                                       <i class="bi bi-heart me-1"></i> Add favorites
@@ -234,7 +234,7 @@
                           Liked <strong> taiye</strong> and <strong> 209 Others </strong>
                       </div>
                   </div>
-                  <div class="border-top pt-4 space-y-4 ">
+                  {% comment %} <div class="border-top pt-4 space-y-4 ">
                       <div class="flex">
                           <div class="w-10 h-10 rounded-full relative flex-shrink-0">
                               <img src="{% static 'assets/images/avatars/avatar-1.jpg' %}" alt=""
@@ -259,20 +259,20 @@
                               <div class="absolute w-3 h-3 top-3 -start-1 bg-gray-100 transform rotate-45 "></div>
                           </div>
                       </div>
-                  </div>
-                  <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
+                  </div> {% endcomment %}
+                  {% comment %} <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
                       <input type="text" placeholder="post a comment" class="bg-transparent max-h-10 shadow-none">
                       <div class="absolute bottom-0 flex h-full items-center end-0 pe-3 text-xl space-x-2">
                           <a href="#"> <i class="uil-image"></i></a>
                           <a href="#"> <i class="uil-video"></i></a>
                       </div>
-                  </div>
+                  </div> {% endcomment %}
                 </div>
 
             </div>
             <br>
             {% endfor %}
-            {% show_pages %}
+            {% comment %} {% show_pages %} {% endcomment %}
             
             
 
