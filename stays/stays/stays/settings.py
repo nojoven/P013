@@ -116,6 +116,7 @@ INSTALLED_APPS = [
     "django_filters",
     #"extra_views",
 
+    # Pagination
     "django_cool_paginator",
 
     # Machina dependencies:
@@ -135,6 +136,10 @@ INSTALLED_APPS = [
     'machina.apps.forum_tracking',
     'machina.apps.forum_member',
     'machina.apps.forum_permission',
+
+    # Django-Ninja
+    "ninja_extra",
+
 ]
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']

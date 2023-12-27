@@ -1026,6 +1026,17 @@ files = [
 ]
 
 [[package]]
+name = "contextlib2"
+version = "21.6.0"
+description = "Backports and enhancements for the contextlib module"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "contextlib2-21.6.0-py2.py3-none-any.whl", hash = "sha256:3fbdb64466afd23abaf6c977627b75b6139a5a3e8ce38405c5b413aed7a0471f"},
+    {file = "contextlib2-21.6.0.tar.gz", hash = "sha256:ab1e2bfe1d01d968e1b7e8d9023bc51ef3509bba217bb730cee3827e1ee82869"},
+]
+
+[[package]]
 name = "courlan"
 version = "0.9.4"
 description = "Clean, filter and sample URLs to optimize data collection – includes spam, content type and language filters."
@@ -1994,6 +2005,49 @@ django-js-asset = "*"
 
 [package.extras]
 tests = ["coverage[toml]", "mock-django"]
+
+[[package]]
+name = "django-ninja"
+version = "1.1.0"
+description = "Django Ninja - Fast Django REST framework"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django_ninja-1.1.0-py3-none-any.whl", hash = "sha256:6330c3497061d9fd1f43c1200f85c13aab7687110e2899f8304e5aa476c10b44"},
+    {file = "django_ninja-1.1.0.tar.gz", hash = "sha256:87bff046416a2653ed2fbef1408e101292bf8170684821bac82accfd73bef059"},
+]
+
+[package.dependencies]
+Django = ">=3.1"
+pydantic = ">=2.0,<3.0.0"
+
+[package.extras]
+dev = ["pre-commit"]
+doc = ["markdown-include", "mkdocs", "mkdocs-material", "mkdocstrings"]
+test = ["django-stubs", "mypy (==1.7.1)", "psycopg2-binary", "pytest", "pytest-asyncio", "pytest-cov", "pytest-django", "ruff (==0.1.7)"]
+
+[[package]]
+name = "django-ninja-extra"
+version = "0.20.2"
+description = "Django Ninja Extra - Class Based Utility and more for Django Ninja(Fast Django REST framework)"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django_ninja_extra-0.20.2-py3-none-any.whl", hash = "sha256:3dcd820633a25af8d088bdcee73c9ac15c044136b4bb1d8c9fe07c212713ab0c"},
+    {file = "django_ninja_extra-0.20.2.tar.gz", hash = "sha256:057b263b974db6f2305235f26b0fb42156cbf0eeb05885f0a4704ba4aa8fc83d"},
+]
+
+[package.dependencies]
+asgiref = "*"
+contextlib2 = "*"
+Django = ">=2.2"
+django-ninja = "1.1.0"
+injector = ">=0.19.0"
+
+[package.extras]
+dev = ["pre-commit"]
+doc = ["markdown-include", "mdx-include (>=1.4.1,<2.0.0)", "mkdocs (>=1.1.2,<2.0.0)", "mkdocs-markdownextradata-plugin (>=0.1.7,<0.3.0)", "mkdocs-material (>=7.1.9,<8.0.0)", "mkdocstrings"]
+test = ["black (==23.10.1)", "django-stubs", "mypy (==1.6.1)", "ninja-schema (>=0.13.4)", "pytest", "pytest-asyncio", "pytest-cov", "pytest-django", "ruff (==0.1.4)"]
 
 [[package]]
 name = "django-parler"
@@ -3442,6 +3496,20 @@ files = [
     {file = "iniconfig-2.0.0-py3-none-any.whl", hash = "sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"},
     {file = "iniconfig-2.0.0.tar.gz", hash = "sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3"},
 ]
+
+[[package]]
+name = "injector"
+version = "0.21.0"
+description = "Injector - Python dependency injection framework, inspired by Guice"
+optional = false
+python-versions = "*"
+files = [
+    {file = "injector-0.21.0-py2.py3-none-any.whl", hash = "sha256:3942c5e4c501d390d5ad1b8d7d486ef93b844934afeeb17211acb6c4ca29eeb4"},
+    {file = "injector-0.21.0.tar.gz", hash = "sha256:919eb6b9f96f40bf98fda34c79762b217bd1544d9adc35805ff2948e92356c9c"},
+]
+
+[package.extras]
+dev = ["black (==23.3.0)", "build (==0.10.0)", "check-manifest (==0.49)", "click (==8.1.3)", "coverage (==7.2.7)", "exceptiongroup (==1.1.1)", "iniconfig (==2.0.0)", "mypy (==1.4.1)", "mypy-extensions (==1.0.0)", "packaging (==23.1)", "pathspec (==0.11.1)", "platformdirs (==3.8.0)", "pluggy (==1.2.0)", "pyproject-hooks (==1.0.0)", "pytest (==7.4.0)", "pytest-cov (==4.1.0)", "tomli (==2.0.1)", "typing-extensions (==4.7.0)"]
 
 [[package]]
 name = "iommi"
@@ -7925,4 +7993,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "e50c4fc03fc349bf219b1d04a95277613f5f9c97d3c2e6e8cfb403b91b6302b2"
+content-hash = "41b16c66bde6e562ea0ed2bbcb1bdc5b0052cb336a1808f9a5a6d61329eb3199"

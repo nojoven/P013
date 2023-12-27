@@ -99,6 +99,7 @@ faker-file = {extras = ["all"], version = "^0.17.11"}
 social-auth-app-django = "^5.4.0"
 django-machina = "^1.3.1"
 django-cool-pagination = "^0.3.0"
+django-ninja-extra = "^0.20.2"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.10,<4.0"
