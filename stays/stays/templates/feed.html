@@ -1,4 +1,5 @@
 {% load static %}
+<script src="{% static 'htmx.min.js' %}" defer></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+    <link href="{% static 'formset/css/collections.css' %}" rel="stylesheet">
 </head>
 
 <body>
@@ -593,6 +595,8 @@
 <script src="{% static 'assets/js/simplebar.js' %}"></script>
 <script src="{% static 'assets/js/custom.js' %}"></script>
 <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+<script type="module" src="{% static 'formset/js/django-formset.js' %}"></script>
+<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 
 </body>
 </html>
