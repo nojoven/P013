@@ -24,7 +24,7 @@ urlpatterns = [
     path("admin", admin.site.urls),
     path("", include("core.urls")),
     path("", include("users.urls")),
-    path('forum/', include(machina_urls)),
+    path("forum", include(machina_urls)),
     path("select2/", include("django_select2.urls")),
     path("apm/", include("djapm.apm.urls")),
     re_path(r'^watchman/', include('watchman.urls')),
