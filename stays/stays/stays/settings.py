@@ -14,7 +14,6 @@ import json
 import os
 from pathlib import Path
 import platform
-
 from machina import MACHINA_MAIN_TEMPLATE_DIR
 
 print("Thanks to https://simplemaps.com/data/world-cities")
@@ -121,6 +120,7 @@ INSTALLED_APPS = [
 
     # Pagination
     "django_cool_paginator",
+    "el_pagination",
 
     # Machina dependencies:
     'mptt',
