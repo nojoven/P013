@@ -1632,6 +1632,16 @@ release = ["tbump", "twine"]
 tests = ["black", "flake8", "isort", "pytest", "pytest-django", "tox"]
 
 [[package]]
+name = "django-cool-pagination"
+version = "0.3.0"
+description = "Simple pagination app that saves your time."
+optional = false
+python-versions = ">=3"
+files = [
+    {file = "django-cool-pagination-0.3.0.tar.gz", hash = "sha256:bdafc0d9e661f1d39348c05d9874b82af8d2274696f1e5ba1cb880461b736476"},
+]
+
+[[package]]
 name = "django-countries"
 version = "7.5.1"
 description = "Provides a country field for Django models."
@@ -7915,4 +7925,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "b82b31da05f182a5142905325541357afcb6848f6f8075c6dc84aed48e1876fb"
+content-hash = "e50c4fc03fc349bf219b1d04a95277613f5f9c97d3c2e6e8cfb403b91b6302b2"

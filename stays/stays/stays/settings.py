@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import json
 import os
 from pathlib import Path
+import platform
 
 from machina import MACHINA_MAIN_TEMPLATE_DIR
 
@@ -115,7 +116,7 @@ INSTALLED_APPS = [
     "django_filters",
     #"extra_views",
 
-
+    "django_cool_paginator",
 
     # Machina dependencies:
     'mptt',
@@ -227,7 +228,7 @@ CACHES = {
     },
     'machina_attachments': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '%USERPROFILE%\AppData\Local\Temp',
+        'LOCATION': '%USERPROFILE%\AppData\Local\Temp' if platform.system() == 'Windows' else '/tmp',
     },
 }
 
@@ -317,6 +318,8 @@ ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
+
+COOL_PAGINATOR_ELASTIC = True
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
