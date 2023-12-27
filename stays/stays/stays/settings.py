@@ -116,6 +116,9 @@ INSTALLED_APPS = [
     "django_filters",
     #"extra_views",
 
+    # Quill text editor
+    'django_quill',
+
     # Pagination
     "django_cool_paginator",
 
