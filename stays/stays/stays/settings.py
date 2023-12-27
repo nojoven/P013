@@ -14,6 +14,8 @@ import json
 import os
 from pathlib import Path
 
+from machina import MACHINA_MAIN_TEMPLATE_DIR
+
 print("Thanks to https://simplemaps.com/data/world-cities")
 print("Image by Timur Kozmenko from Pixabay")
 
@@ -105,8 +107,33 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.naver",
     "allauth.socialaccount.providers.soundcloud",
     "allauth.socialaccount.providers.trainingpeaks",
-    "widget_tweaks",
+    #"widget_tweaks",
     "django_countries",
+    "django_htmx",
+    "formset",
+    "django_tables2",
+    "django_filters",
+    #"extra_views",
+
+
+
+    # Machina dependencies:
+    'mptt',
+    'haystack',
+    'widget_tweaks',
+
+    # Machina apps:
+    'machina',
+    'machina.apps.forum',
+    'machina.apps.forum_conversation',
+    'machina.apps.forum_conversation.forum_attachments',
+    'machina.apps.forum_conversation.forum_polls',
+    'machina.apps.forum_feeds',
+    'machina.apps.forum_moderation',
+    'machina.apps.forum_search',
+    'machina.apps.forum_tracking',
+    'machina.apps.forum_member',
+    'machina.apps.forum_permission',
 ]
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
@@ -124,6 +151,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "djapm.apm.middlewares.ApmMetricsMiddleware",
     "djapm.apm.middlewares.ErrorTraceMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
     # Iommi: these three are optional, but highly recommended!
     'iommi.live_edit.Middleware',
     'iommi.sql_trace.Middleware',
@@ -132,7 +160,8 @@ MIDDLEWARE = [
     'iommi.middleware',
     # Add the account middleware:
     #"allauth.account.middleware.AccountMiddleware",
-
+    # Machina
+    'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
 ]
 
 ROOT_URLCONF = "stays.urls"
@@ -140,8 +169,8 @@ ROOT_URLCONF = "stays.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
-        "APP_DIRS": True,
+        "DIRS": [os.path.join(BASE_DIR, "templates"), MACHINA_MAIN_TEMPLATE_DIR,],
+        # "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -149,7 +178,13 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 # "django.core.context_processors.request"
+                # Machina
+                'machina.core.context_processors.metadata',
             ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ]
         },
     },
 ]
@@ -189,7 +224,11 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
-    }
+    },
+    'machina_attachments': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '%USERPROFILE%\AppData\Local\Temp',
+    },
 }
 
 # SESSION_ENGINE = "django.contrib.sessions.backends.cache"
@@ -197,6 +236,14 @@ SESSION_CACHE_ALIAS = "select2"
 
 # # Tell select2 which cache configuration to use:
 # SELECT2_CACHE_BACKEND = "select2"
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -235,7 +282,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 COUNTRIES_FLAG_URL = "flags/{code}.png"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS =  (os.path.join(BASE_DIR, "static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 GEOIP_PATH = os.path.join(BASE_DIR, "geoip")
 
 
