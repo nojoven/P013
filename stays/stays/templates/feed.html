@@ -15,6 +15,11 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     {% comment %} <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}"> {% endcomment %}
     <link href="{% static 'formset/css/collections.css' %}" rel="stylesheet">
+    {% comment %} Font Awesome {% endcomment %}
+    <!-- One file includes all the Font Awesome Free icons and utilities -->
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+    <!-- One file includes all the Font Awesome Free icons and utilities -->
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -135,6 +140,9 @@
                     {% if not user.is_authenticated %}
                     <center><a href="{% url 'users:login' %}" class="btn btn-primary">Login</a></center>
                     {% endif %}
+                    {% if user.is_authenticated %}
+                    <center><button id="upvbtn" class="btn btn-light btn-outline-info">Upvote <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg></i></button></center>
+                    {% endif %}
                 </div>
             </div>
             <br>
@@ -244,6 +252,7 @@
 
 <!-- Scripts ================================================== -->
 <!-- Add Bootstrap JS and Popper.js script links here -->
+{% comment %} <script src="https://kit.fontawesome.com/e5062e8b84.js" crossorigin="anonymous"></script> {% endcomment %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
 <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
@@ -254,6 +263,14 @@
 <script type="module" src="{% static 'formset/js/django-formset.js' %}"></script>
 <script src="{% static 'assets/js/htmx.min.js' %}" defer></script>
 <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-</body>
-</html>
+<!-- Script jQuery pour basculer les classes d'icônes -->
+<script>
+    $(document).ready(function () {
+      $('.fa-heart').click(function () {
+        $(this).toggleClass("fa-solid fa-heart-circle-check fa-beat-fade fa-xs");
+        
+      });
+    });
+  </script>
