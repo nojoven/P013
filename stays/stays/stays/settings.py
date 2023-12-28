@@ -49,6 +49,10 @@ SECRET_KEY = confs.get("SECRET_KEY")
 DEBUG = confs.get("DEBUG") # settings.DYNACONF_DEBUG
 TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG")
 
+if DEBUG is True:
+    from frosch import hook
+    hook()
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
