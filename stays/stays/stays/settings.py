@@ -247,6 +247,28 @@ SESSION_CACHE_ALIAS = "select2"
 # SELECT2_CACHE_BACKEND = "select2"
 
 
+THROTTLE_ZONES = {
+    'default': {
+        'VARY':'throttle.zones.RemoteIP',
+        'ALGORITHM': 'fixed-bucket',  # Default if not defined.
+        'BUCKET_INTERVAL':15 * 60,  # Number of seconds to enforce limit.
+        'BUCKET_CAPACITY':50,  # Maximum number of requests allowed within BUCKET_INTERVAL
+    },
+}
+
+# Where to store request counts.
+THROTTLE_BACKEND = 'throttle.backends.cache.CacheBackend'
+
+# Optional if Redis backend is chosen ('throttle.backends.redispy.RedisBackend')
+THROTTLE_REDIS_HOST = 'localhost'
+THROTTLE_REDIS_PORT = 6379
+THROTTLE_REDIS_DB = 0
+THROTTLE_REDIS_AUTH = 'pass'
+
+# Normally, throttling is disabled when DEBUG=True. Use this to force it to enabled.
+THROTTLE_ENABLED = True
+
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',

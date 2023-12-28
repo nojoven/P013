@@ -2186,6 +2186,19 @@ files = [
 test = ["factory-boy", "flake8", "pyflakes", "pytest", "pytest-cov", "pytest-django", "pytest-pythonpath"]
 
 [[package]]
+name = "django-throttle-requests"
+version = "0.7.0"
+description = "A Django framework for application-layer rate limiting"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-throttle-requests-0.7.0.tar.gz", hash = "sha256:5abd8c842ef402541d1eed85ec1e4f731a96bb2601d04527780e19bd6780898c"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+
+[[package]]
 name = "django-tinymce"
 version = "3.6.1"
 description = "A Django application that contains a widget to render a form field as a TinyMCE editor."
@@ -8007,4 +8020,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "ed57d2874ef886c26c8dad27320b81ac23c7fe710b4c760ce81756d9ecb82170"
+content-hash = "c03032f815c0999fe9f42931470b890ade67678fdf1c931223510dde2aec1305"
