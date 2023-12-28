@@ -16,8 +16,11 @@ from pathlib import Path
 import platform
 from machina import MACHINA_MAIN_TEMPLATE_DIR
 
-print("Thanks to https://simplemaps.com/data/world-cities")
-print("Image by Timur Kozmenko from Pixabay")
+from icecream import install as icinstall, ic
+icinstall()
+
+ic("Thanks to https://simplemaps.com/data/world-cities")
+ic("Image by Timur Kozmenko from Pixabay")
 
 
 if "confs.json" in os.listdir(Path(__file__).absolute().parent):
@@ -50,8 +53,15 @@ DEBUG = confs.get("DEBUG") # settings.DYNACONF_DEBUG
 TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG")
 
 if DEBUG is True:
+    # Comment the one you don't need
+
     from frosch import hook
     hook()
+
+    # os.environ['BETTER_EXCEPTIONS'] = "1"
+
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -171,6 +181,8 @@ MIDDLEWARE = [
     'iommi.profiling.Middleware',
     # Iommi : this one is required
     'iommi.middleware',
+    # better_exceptions
+    #"better_exceptions.integrations.django.BetterExceptionsMiddleware",
     # Add the account middleware:
     #"allauth.account.middleware.AccountMiddleware",
     # Machina

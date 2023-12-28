@@ -102,6 +102,7 @@ django-cool-pagination = "^0.3.0"
 django-ninja-extra = "^0.20.2"
 django-quill-editor = "^0.1.40"
 django-throttle-requests = "^0.7.0"
+better-exceptions = "^0.3.3"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.10,<4.0"
