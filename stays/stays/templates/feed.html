@@ -142,7 +142,9 @@
             
             <div class="card">
                 <div class="card-body">
-                  <h3 class="card-title">{{ publication.title }}</h3>
+                  <a href="{% url 'core:publication' publication.uuid %}">
+                    <h3 class="card-title">{{ publication.title }}</h3>
+                  </a>
                   <h5>Written by {{ publication.author_username }}, {{ publication.created_at }}</h5>
                   <p class="card-text">{{ publication.summary }}</p>
                   {% if publication.updated_at != publication.created_at %}
@@ -151,7 +153,8 @@
                 </div>
                 <img src="{{ publication.picture }}" class="card-img-bottom" alt="...">
                 <div class="card-body">
-                    <h2 class="card-title">Card title</h2>
+                    <h2 class="card-title">{{ publication.season_of_stay }}, {{ publication.country_code_of_stay }}</h2>
+                    <h3>Published from {{ publication.published_from_country_code }}</h3>
                     {% if publication.updated_at != publication.created_at %}
                     <p class="card-text"><small class="text-muted">Updated {{ publication.updated_at }}</small></p>
                     {% endif %}
@@ -167,16 +170,8 @@
                         </div>
                     </center>
                     {% endif %}
-                    {% if publication.content_type == "text" and not user.is_authenticated %}
-                    <p class="card-text"><small class="text-muted">{{ publication.text_story|slice:":25" }}...</small></p>
-                    <a href="{% url 'users:login' %}" class="btn btn-primary">Login</a>
-                    {% endif %}
-                    {% if not user.is_authenticated and publication.content_type == "voice" %}
-                    <center>
-                        <div class="col-sm-4 col-sm-offset-4 embed-responsive embed-responsive-4by3">
-                            <a href="{% url 'users:login' %}" class="btn btn-primary">Login</a>
-                        </div>
-                    </center>
+                    {% if not user.is_authenticated %}
+                    <center><a href="{% url 'users:login' %}" class="btn btn-primary">Login</a></center>
                     {% endif %}
                 </div>
             </div>
