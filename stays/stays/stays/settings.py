@@ -157,6 +157,9 @@ INSTALLED_APPS = [
     # Django-Ninja
     "ninja_extra",
 
+    # Font-Awesome
+    "fontawesomefree",
+
 ]
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']

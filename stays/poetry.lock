@@ -2683,6 +2683,16 @@ pycodestyle = ">=2.11.0,<2.12.0"
 pyflakes = ">=3.1.0,<3.2.0"
 
 [[package]]
+name = "fontawesomefree"
+version = "6.5.1"
+description = "Font Awesome Free"
+optional = false
+python-versions = "*"
+files = [
+    {file = "fontawesomefree-6.5.1-py3-none-any.whl", hash = "sha256:8dec4a2ee37bf8e53379ebbf0d38cefec4e06c7c9227f59af39dbb7b1632817b"},
+]
+
+[[package]]
 name = "fonttools"
 version = "4.47.0"
 description = "Tools to manipulate font files"
@@ -8045,4 +8055,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "73f7d87d5f4e08465e884dd89921cdb413c72349808e53cf5e93b781cc603845"
+content-hash = "07b8f8bc3d718442e58abf2dc11e8ce96b2df2dc0918c19fd061c7487acfedfc"
