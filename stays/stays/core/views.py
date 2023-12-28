@@ -4,6 +4,7 @@ from users.models import Profile
 from core.models import Publication
 from django.core.paginator import Paginator
 from django.views.generic.detail import DetailView
+from icecream import ic
 
 # Create your views here.
 def home(request):
@@ -29,7 +30,11 @@ class PublicationDetailView(DetailView):
     pk_url_kwarg = 'uuid'  # Indiquez le nom du paramètre slug dans votre URL
 
     def get_context_data(self, **kwargs):
-        super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        # published_stay = Publication.objects.get(uuid=publication_id)
+        # context["published_stay"] = published_stay
+        ic(context.items())
+        return context
 
 
 
