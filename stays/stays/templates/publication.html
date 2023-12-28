@@ -68,7 +68,7 @@
                 <!-- Profile -->
                 <a href="#">
                     {% if user.is_authenticated %}
-                        <img src="{{ user.profile_picture }}" class="header-avatar" alt="">
+                        <img src="{{ user.profile_picture.url }}" class="header-avatar" alt="">
                     {% else %}
                         <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar"
                             alt="https://icons8.com/icon/Hm0e3BaO54rH/login">
