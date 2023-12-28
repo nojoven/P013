@@ -187,6 +187,8 @@ MIDDLEWARE = [
     #"allauth.account.middleware.AccountMiddleware",
     # Machina
     'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
+    # Current user
+    'django_currentuser.middleware.ThreadLocalUserMiddleware',
 ]
 
 ROOT_URLCONF = "stays.urls"

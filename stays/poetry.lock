@@ -1689,6 +1689,17 @@ pyuca = ["pyuca"]
 test = ["djangorestframework", "graphene-django", "pytest", "pytest-cov", "pytest-django"]
 
 [[package]]
+name = "django-currentuser"
+version = "0.6.1"
+description = "Conveniently store reference to request user on thread/db level."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django_currentuser-0.6.1-py3-none-any.whl", hash = "sha256:615145569c55118f1566fd369fa87ade74e9cf46ba199f3ae0c1c2dee5df25b9"},
+    {file = "django_currentuser-0.6.1.tar.gz", hash = "sha256:7a53da0c7bbddf480dec838c744f92673f23cafe5be0aa4253f1391a9ac5dac4"},
+]
+
+[[package]]
 name = "django-defender"
 version = "0.9.7"
 description = "redis based Django app that locks out users after too many failed login attempts."
@@ -8034,4 +8045,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "8de1975c496477a0ae6799801b636c507929cf948dd1283185413847b9276445"
+content-hash = "73f7d87d5f4e08465e884dd89921cdb413c72349808e53cf5e93b781cc603845"
