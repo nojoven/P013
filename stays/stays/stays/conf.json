@@ -1,0 +1,11 @@
+{
+    "SECRET_KEY": "",
+    "DEBUG": false,
+    "TEMPLATE_DEBUG": false,
+    "ENGINE": "",
+    "NAME": "",
+    "USER": "",
+    "PASSWORD": "",
+    "HOST": "",
+    "PORT": 0
+}
