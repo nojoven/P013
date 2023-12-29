@@ -43,9 +43,9 @@ else:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
- 
+
 # SECURITY WARNING: keep the secret key used in production secret!
-#raise ValueError(settings.SECRET_KEY)
+# raise ValueError(settings.SECRET_KEY)
 SECRET_KEY = confs.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -59,8 +59,6 @@ if DEBUG is True:
     hook()
 
     # os.environ['BETTER_EXCEPTIONS'] = "1"
-
-
 
 
 # Quick-start development settings - unsuitable for production
@@ -100,7 +98,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.pinterest",
     "allauth.socialaccount.providers.apple",
     "allauth.socialaccount.providers.edx",
-    #"allauth.socialaccount.providers.23andme",
+    # "allauth.socialaccount.providers.23andme",
     "allauth.socialaccount.providers.eventbrite",
     "allauth.socialaccount.providers.mediawiki",
     "allauth.socialaccount.providers.kakao",
@@ -108,7 +106,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.eveonline",
     "allauth.socialaccount.providers.gumroad",
     "allauth.socialaccount.providers.baidu",
-    #"allauth.socialaccount.providers.500px",
+    # "allauth.socialaccount.providers.500px",
     "allauth.socialaccount.providers.draugiem",
     "allauth.socialaccount.providers.doximity",
     "allauth.socialaccount.providers.daum",
@@ -121,13 +119,13 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.naver",
     "allauth.socialaccount.providers.soundcloud",
     "allauth.socialaccount.providers.trainingpeaks",
-    #"widget_tweaks",
+    # "widget_tweaks",
     "django_countries",
     "django_htmx",
     "formset",
     "django_tables2",
     "django_filters",
-    #"extra_views",
+    # "extra_views",
 
     # Quill text editor
     'django_quill',
@@ -185,9 +183,9 @@ MIDDLEWARE = [
     # Iommi : this one is required
     'iommi.middleware',
     # better_exceptions
-    #"better_exceptions.integrations.django.BetterExceptionsMiddleware",
+    # "better_exceptions.integrations.django.BetterExceptionsMiddleware",
     # Add the account middleware:
-    #"allauth.account.middleware.AccountMiddleware",
+    # "allauth.account.middleware.AccountMiddleware",
     # Machina
     'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
     # Current user
@@ -229,7 +227,7 @@ ASGI_APPLICATION = "stays.asgi.application"
 DATABASES = {
     "default": {
         "ENGINE": confs.get("ENGINE"),
-        "NAME":confs.get("NAME"),
+        "NAME": confs.get("NAME"),
         "USER": confs.get("USER"),
         "PASSWORD": confs.get("PASSWORD"),
         "HOST": confs.get("HOST"),
@@ -270,10 +268,10 @@ SESSION_CACHE_ALIAS = "select2"
 
 THROTTLE_ZONES = {
     'default': {
-        'VARY':'throttle.zones.RemoteIP',
+        'VARY': 'throttle.zones.RemoteIP',
         'ALGORITHM': 'fixed-bucket',  # Default if not defined.
-        'BUCKET_INTERVAL':15 * 60,  # Number of seconds to enforce limit.
-        'BUCKET_CAPACITY':50,  # Maximum number of requests allowed within BUCKET_INTERVAL
+        'BUCKET_INTERVAL': 15 * 60,  # Number of seconds to enforce limit.
+        'BUCKET_CAPACITY': 50  # Maximum number of requests allowed within BUCKET_INTERVAL
     },
 }
 
@@ -371,6 +369,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
 
 COOL_PAGINATOR_ELASTIC = True
+
+
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
