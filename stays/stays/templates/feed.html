@@ -2,9 +2,9 @@
 {% load static %}
 {% load cool_paginate %}
 {% load el_pagination_tags %}
-
-<body>
-
+<title>STAYS FEED </title>
+<main>
+{% block content %}
 <div class="container mx-auto">
 
     <h1 class="lg:text-3xl text-lg font-extrabold leading-none text-gray-900 tracking-tight mb-5"> Feed </h1>
@@ -120,7 +120,5 @@
         </div>
     </div>               
 </div>
-
-</body>
-</html>
- 
+{% endblock content %}
+</main>
