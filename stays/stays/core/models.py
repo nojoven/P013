@@ -10,7 +10,7 @@ from django.db import models
 from django.urls import reverse
 from math import inf
 from users.models import Profile
-from locations.models import Location
+from locations.models import LocationRecord
 from core.publications_types import ContentTypes
 
 from django_countries.fields import CountryField
@@ -78,8 +78,8 @@ class PublicationHasVoter(models.Model):
 
 class PublicationHasLocation(models.Model):
     publication_title = models.ForeignKey(Publication, on_delete=models.CASCADE, blank=True)
-    given_name = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, related_name="given_name")
-    category = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, related_name="category")
+    given_name = models.ForeignKey(LocationRecord, on_delete=models.CASCADE, blank=True, related_name="given_name")
+    category = models.ForeignKey(LocationRecord, on_delete=models.CASCADE, blank=True, related_name="category")
     #location_exists = None
     #corresponding_location = None
 
