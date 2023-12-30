@@ -1343,6 +1343,19 @@ files = [
 ]
 
 [[package]]
+name = "directory-tree"
+version = "0.0.4"
+description = "Utility Package that Displays out the Tree Structure of a Particular Directory."
+optional = false
+python-versions = "*"
+files = [
+    {file = "directory_tree-0.0.4-py3-none-any.whl", hash = "sha256:862f53873c7007aa7486adfd04c64b28e0d58f47a319e4f93ed68b9e4c06b47d"},
+]
+
+[package.extras]
+dev = ["pytest (>=3.7)"]
+
+[[package]]
 name = "distlib"
 version = "0.3.7"
 description = "Distribution utilities"
@@ -8055,4 +8068,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "07b8f8bc3d718442e58abf2dc11e8ce96b2df2dc0918c19fd061c7487acfedfc"
+content-hash = "8823a2ccc5cdf72fc90a565f6045271e2efc5e29ab42d66bcd25af3fed0f61c0"

@@ -105,6 +105,7 @@ django-throttle-requests = "^0.7.0"
 better-exceptions = "^0.3.3"
 django-currentuser = "^0.6.1"
 fontawesomefree = "^6.5.1"
+directory-tree = "^0.0.4"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.10,<4.0"
