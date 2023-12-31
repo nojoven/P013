@@ -8,5 +8,6 @@
     "PASSWORD": "",
     "HOST": "",
     "PORT": 0,
-    "TINY_MCE_API_KEY": ""
+    "TINY_MCE_API_KEY": "",
+    "MACHINA_ATTACHMENT_CACHE_LOCATION": ""
 }
