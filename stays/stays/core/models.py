@@ -7,8 +7,8 @@ from pathlib import Path
 #sys.path.append(Path(os.getcwd()).parent.parent.absolute)
 
 from django.db import models
+from django.core.validators import MinValueValidator
 from django.urls import reverse
-from math import inf
 from users.models import Profile
 # from locations.models import StayCountry
 from core.publications_types import ContentTypes
@@ -54,10 +54,13 @@ class Publication(models.Model):
     country_code_of_stay = CountryField(null=True)
     published_from_country_code = CountryField(null=True)
     picture = models.ImageField(upload_to=picture_upload_to, default="seals-6627197_1280.jpg", null=True, max_length=800)
-    upvotes_count = models.IntegerField(default=0, null=True)
+    upvotes_count = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0, message="Upvotes count cannot be negative.")]
+    )
     reveal_city = models.BooleanField(default=False)
     city_name = models.CharField(max_length=255, null=True)
-    
+
 
     def get_absolute_url(self):
         return reverse('users:account', args=[self.author_slug])
@@ -82,12 +85,6 @@ class PublicationHasVoter(models.Model):
     pass
 
 
-class PublicationHasLocation(models.Model):
-    publication_title = models.ForeignKey(Publication, on_delete=models.CASCADE, blank=True)
-    # category = models.ForeignKey(StayCountry, on_delete=models.CASCADE, blank=True, related_name="category")
-    #location_exists = None
-    #corresponding_location = None
-
 
 # class PublicationHasProfiles(models.Model):
 #     publication_title = models.ForeignKey(Publication, on_delete=models.CASCADE, blank=True, null=True, to_field="title")
@@ -95,11 +92,5 @@ class PublicationHasLocation(models.Model):
 #     publication_upvoter = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="upvote_count")
 #     publication_upvote_count = models.IntegerField(default=0)
 
-class Guess(models.Model):
-    pass
-
-
-class PublicationHasUserGuess(models.Model):
-    pass
 
 
