@@ -113,16 +113,6 @@ class ProfileHasFollower(models.Model):
     #profile_followers_usernames = None
     #profile_followers_count = 0
 
-class ProfileHasDetectedData(models.Model):
-    connected_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
-    last_detected_ip = models.CharField(max_length=15, null=True)
-    last_detected_continent = models.CharField(max_length=15, null=True)
-    last_detected_country = models.CharField(max_length=15, null=True)
-    last_detected_city = models.CharField(max_length=20, null=True)
-
-
-
-
 
 class ConnectionHistory(models.Model):
     ONLINE = 'online'
