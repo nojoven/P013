@@ -24,13 +24,16 @@ from .api import api
 
 urlpatterns = [
     path("admin", admin.site.urls),
+    path('admin/defender/', include('defender.urls')),
     path("", include("core.urls")),
     path("", include("users.urls")),
+    path('friendship/', include('friendship.urls')),
     path("forum", include(machina_urls)),
     path("api/", api.urls),
     path("select2/", include("django_select2.urls")),
     path("apm/", include("djapm.apm.urls")),
     re_path(r'^watchman/', include('watchman.urls')),
+    path('tinymce/', include('tinymce.urls')),
 ] + static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT

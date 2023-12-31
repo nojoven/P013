@@ -25,8 +25,6 @@ from django_countries import countries
 
 # Custom sugar
 from icecream import ic
-from loguru import logger
-from tabulate import tabulate
 
 # Create your views here.
 

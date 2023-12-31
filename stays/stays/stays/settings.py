@@ -55,15 +55,17 @@ TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG")
 if DEBUG is True:
     # Comment the one you don't need
 
-    from frosch import hook
-    hook()
+    import stackprinter
+    stackprinter.set_excepthook(style='darkbg2')
+
+    # from frosch import hook
+    # hook()
 
     # os.environ['BETTER_EXCEPTIONS'] = "1"
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
 
 ALLOWED_HOSTS = ["*", "localhost", "0.0.0.0", "127.0.0.1"]
 
@@ -81,6 +83,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "defender",
     "rest_framework",
     "users",
     "core",
@@ -123,7 +126,6 @@ INSTALLED_APPS = [
     "django_countries",
     "django_htmx",
     "formset",
-    "django_tables2",
     "django_filters",
     # "extra_views",
 
@@ -158,6 +160,20 @@ INSTALLED_APPS = [
     # Font-Awesome
     "fontawesomefree",
 
+    # Thumbnails
+    'sorl.thumbnail',
+
+    # Audiofield
+    # "audiofield",
+
+    # Easy Maps
+    "easy_maps",
+
+    # tinymce
+    "tinymce",
+
+    # friendship
+    "friendship",
 ]
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
@@ -190,6 +206,10 @@ MIDDLEWARE = [
     'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
     # Current user
     'django_currentuser.middleware.ThreadLocalUserMiddleware',
+    # Defender
+    'defender.middleware.FailedLoginMiddleware',
+    # Auto Logout
+    "django_auto_logout.middleware.auto_logout"
 ]
 
 ROOT_URLCONF = "stays.urls"
@@ -208,6 +228,8 @@ TEMPLATES = [
                 # "django.core.context_processors.request"
                 # Machina
                 'machina.core.context_processors.metadata',
+                # auto logout
+                'django_auto_logout.context_processors.auto_logout_client',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
@@ -347,10 +369,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = "users.Profile"
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
+# AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
 AUTHENTICATION_BACKENDS = [
     'users.backends.EmailBackend',  # custom backend
-    #'django.contrib.auth.backends.ModelBackend',  # default backend
+    # 'django.contrib.auth.backends.ModelBackend',  # default backend
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
@@ -370,7 +392,20 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 COOL_PAGINATOR_ELASTIC = True
 
+AUTO_LOGOUT = {
+    'IDLE_TIME': 6000,
+    'SESSION_TIME': 36000,
+    'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
+    'MESSAGE': 'The session has expired. Please login again to continue.'
+    }
 
+
+EASY_MAPS_GOOGLE_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ___0123456789'
+EASY_MAPS_CENTER = (-41.3, 32)
+EASY_MAPS_LANGUAGE = 'fr'
+
+TINYMCE_JS_URL = f"https://cdn.tiny.cloud/1/{confs.get('TINY_MCE_API_KEY')}/tinymce/6/tinymce.min.js"
+TINYMCE_COMPRESSOR = False
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
