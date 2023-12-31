@@ -46,7 +46,7 @@ class StayCountry(models.Model):
 
 
 class StayCountryHasUpvotes(models.Model):
-    country_of_stay = models.ForeignKey(Country, on_delete=models.CASCADE)
+    country_of_stay = models.ForeignKey(Country, null=True, on_delete=models.CASCADE)
     upvotes_count = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0, message="Upvotes count cannot be negative.")]
