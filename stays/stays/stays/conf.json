@@ -7,5 +7,6 @@
     "USER": "",
     "PASSWORD": "",
     "HOST": "",
-    "PORT": 0
+    "PORT": 0,
+    "TINY_MCE_API_KEY": ""
 }
