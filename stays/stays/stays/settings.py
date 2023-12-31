@@ -277,7 +277,7 @@ CACHES = {
     },
     'machina_attachments': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '%USERPROFILE%\AppData\Local\Temp' if platform.system() == 'Windows' else '/tmp',
+        'LOCATION': confs.get("MACHINA_ATTACHMENT_CACHE_LOCATION") if platform.system() == 'Windows' else '/tmp',
     },
 }
 
