@@ -90,11 +90,14 @@ class StayChallenge(models.Model):
     max_number_of_attempts = models.IntegerField(default=15)
     has_winner = models.BooleanField(default=False)
     winner_slug = models.ForeignKey("ChallengeAttempt", max_length=500, null=True, on_delete=models.CASCADE)
+    start_date = models.DateTimeField(null=True)
+    date_of_success = models.DateTimeField(null=True)
+    end_date_limit = models.DateTimeField(null=True)
 
 
 class ChallengeAttempt(models.Model):
     pass
-    challenge_identifier = models.ForeignKey(StayChallenge, on_delete=models.CASCADE, null=True)
+    challenge = models.ForeignKey(StayChallenge, on_delete=models.CASCADE, null=True)
     profile_of_attempt = models.SlugField(max_length=500, null=True)
     date_of_attempt = models.DateTimeField(auto_now_add=True)
     number_of_attempts = models.IntegerField(
@@ -105,4 +108,19 @@ class ChallengeAttempt(models.Model):
         ]
     )
     answer_of_profile = models.ForeignKey(City, on_delete=models.CASCADE, null=True)
+    is_answer_correct = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        # Vérifier si la réponse est correcte lors de chaque sauvegarde
+        if self.answer_of_profile == self.challenge.right_answer:
+            # Mettre à jour les valeurs de StayChallenge
+            self.is_answer_correct = True
+            self.challenge.has_winner = True
+            self.challenge.is_open = False
+            self.challenge.winner_slug = self.profile_of_attempt
+            self.challenge.date_of_success = self.date_of_attempt
+            self.challenge.end_date_limit = self.date_of_attempt
+
+        super().save(*args, **kwargs)
+
 
