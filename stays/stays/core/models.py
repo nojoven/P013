@@ -10,7 +10,7 @@ from django.db import models
 from django.urls import reverse
 from math import inf
 from users.models import Profile
-from locations.models import LocationRecord
+# from locations.models import StayCountry
 from core.publications_types import ContentTypes
 
 from django_countries.fields import CountryField
@@ -55,9 +55,15 @@ class Publication(models.Model):
     published_from_country_code = CountryField(null=True)
     picture = models.ImageField(upload_to=picture_upload_to, default="seals-6627197_1280.jpg", null=True, max_length=800)
     upvotes_count = models.IntegerField(default=0, null=True)
+    reveal_city = models.BooleanField(default=False)
+    city_name = models.CharField(max_length=255, null=True)
+    
 
     def get_absolute_url(self):
         return reverse('users:account', args=[self.author_slug])
+
+
+
 
 class Gallery(models.Model):
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
@@ -78,8 +84,7 @@ class PublicationHasVoter(models.Model):
 
 class PublicationHasLocation(models.Model):
     publication_title = models.ForeignKey(Publication, on_delete=models.CASCADE, blank=True)
-    given_name = models.ForeignKey(LocationRecord, on_delete=models.CASCADE, blank=True, related_name="given_name")
-    category = models.ForeignKey(LocationRecord, on_delete=models.CASCADE, blank=True, related_name="category")
+    # category = models.ForeignKey(StayCountry, on_delete=models.CASCADE, blank=True, related_name="category")
     #location_exists = None
     #corresponding_location = None
 
@@ -89,3 +94,12 @@ class PublicationHasLocation(models.Model):
 #     publication_author = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="author")
 #     publication_upvoter = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="upvote_count")
 #     publication_upvote_count = models.IntegerField(default=0)
+
+class Guess(models.Model):
+    pass
+
+
+class PublicationHasUserGuess(models.Model):
+    pass
+
+
