@@ -8,7 +8,7 @@ from channels.db import database_sync_to_async
 from django.conf import settings as dj_conf_settings
 from core.models import Publication
 from core.utils.models_helpers import UUIDForeignKey, SlugFieldForeignKey
-
+from friendship.models import Follow
 # from core.models import Publication
 
 # Create your models here.
@@ -96,6 +96,23 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     objects = UserManager()
 
+    def follow(self, profile):
+        # Méthode pour faire en sorte que le profil actuel suive un autre profil
+        Follow.objects.add_follower(self, profile)
+
+    def unfollow(self, profile):
+        # Méthode pour faire en sorte que le profil actuel cesse de suivre un autre profil
+        Follow.objects.remove_follower(self, profile)
+
+    def get_following(self):
+        # Méthode pour récupérer les profils suivis par le profil actuel
+        return Follow.objects.following(self)
+
+    def get_followers(self):
+        # Méthode pour récupérer les profils qui suivent le profil actuel
+        return Follow.objects.followers(self)
+
+
     def get_absolute_url(self):
         return reverse('users:account', args=[self.slug])
 
@@ -103,8 +120,13 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         self.slug = slugify(f"{self.email.split('@')[0]}{self.uuid}")
         super().save(*args, **kwargs)
 
+
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+
+
 
 class ProfileHasPublication(models.Model):
     user_profile = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, null=True)
@@ -118,6 +140,11 @@ class ProfileHasFollower(models.Model):
     # profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     #profile_followers_usernames = None
     #profile_followers_count = 0
+
+
+
+
+
 
 
 class ConnectionHistory(models.Model):

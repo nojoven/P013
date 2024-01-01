@@ -96,33 +96,9 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.openid",
+    "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.reddit",
     "allauth.socialaccount.providers.pinterest",
-    "allauth.socialaccount.providers.apple",
-    "allauth.socialaccount.providers.edx",
-    # "allauth.socialaccount.providers.23andme",
-    "allauth.socialaccount.providers.eventbrite",
-    "allauth.socialaccount.providers.mediawiki",
-    "allauth.socialaccount.providers.kakao",
-    "allauth.socialaccount.providers.exist",
-    "allauth.socialaccount.providers.eveonline",
-    "allauth.socialaccount.providers.gumroad",
-    "allauth.socialaccount.providers.baidu",
-    # "allauth.socialaccount.providers.500px",
-    "allauth.socialaccount.providers.draugiem",
-    "allauth.socialaccount.providers.doximity",
-    "allauth.socialaccount.providers.daum",
-    "allauth.socialaccount.providers.pocket",
-    "allauth.socialaccount.providers.strava",
-    "allauth.socialaccount.providers.weixin",
-    "allauth.socialaccount.providers.weibo",
-    "allauth.socialaccount.providers.steam",
-    "allauth.socialaccount.providers.wahoo",
-    "allauth.socialaccount.providers.naver",
-    "allauth.socialaccount.providers.soundcloud",
-    "allauth.socialaccount.providers.trainingpeaks",
-    # "widget_tweaks",
     "django_countries",
     "django_htmx",
     "formset",
@@ -376,6 +352,9 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+FRIENDSHIP_CONTEXT_OBJECT_NAME = 'profile'
+FRIENDSHIP_CONTEXT_OBJECT_LIST_NAME = 'profiles'
+FRIENDSHIP_MANAGER_FRIENDSHIP_REQUEST_SELECT_RELATED_STRATEGY = 'select_related'  # ('select_related', 'prefetch_related', 'none')
 
 LOGIN_URL = "users:login"
 LOGIN_REDIRECT_URL = "users:account"
