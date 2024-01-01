@@ -1,4 +1,7 @@
 import uuid
+from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.dispatch import receiver
+from channels.db import database_sync_to_async
 from django.contrib.auth import  get_user_model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
@@ -90,7 +93,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     #favourite_publications = None
     # last_detected_data = models.TextField(null=True)
     #upvoted_publications_count = models
-
+    is_online = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -135,11 +138,7 @@ class ProfileHasPublication(models.Model):
     class Meta:
         unique_together = ('user_profile', 'publication_of_user')
 
-class ProfileHasFollower(models.Model):
-    profile_username = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, null=True)
-    # profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
-    #profile_followers_usernames = None
-    #profile_followers_count = 0
+
 
 
 
@@ -175,3 +174,27 @@ class ConnectionHistory(models.Model):
         return ConnectionHistory.objects.get_or_create(
             user=user, device_id=device_id,
         ).update(status=status)
+
+
+@receiver(user_logged_in)
+def user_logged_in_handler(sender, request, user, **kwargs):
+    # Utilisateur connecté
+    profile = Profile.objects.get(user=user)  # Adapté selon votre relation entre User et Profile
+    update_user_status(profile, profile.device_id, ConnectionHistory.ONLINE)
+
+@receiver(user_logged_out)
+def user_logged_out_handler(sender, request, user, **kwargs):
+    # Utilisateur déconnecté
+    profile = Profile.objects.get(user=user)  # Adapté selon votre relation entre User et Profile
+    update_user_status(profile, profile.device_id, ConnectionHistory.OFFLINE)
+
+@database_sync_to_async
+def update_user_status(profile, device_id, status):
+    # Mettez à jour l'état de connexion du profil
+    profile.is_online = (status == ConnectionHistory.ONLINE)
+    profile.save()
+
+    # Mettez à jour l'historique de connexion
+    return ConnectionHistory.objects.get_or_create(
+        profile=profile, device_id=device_id,
+    ).update(status=status)
