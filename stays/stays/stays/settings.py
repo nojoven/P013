@@ -275,6 +275,9 @@ THROTTLE_ZONES = {
 # Where to store request counts.
 THROTTLE_BACKEND = 'throttle.backends.cache.CacheBackend'
 
+# python manage.py cleanup_django_defender to unlock
+DEFENDER_LOGIN_FAILURE_LIMIT = 50
+
 # Optional if Redis backend is chosen ('throttle.backends.redispy.RedisBackend')
 THROTTLE_REDIS_HOST = 'localhost'
 THROTTLE_REDIS_PORT = 6379

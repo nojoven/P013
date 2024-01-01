@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from core.models import Publication
 from users.models import Profile
 
-from core.utils.models_helpers import SlugFieldForeignKey, UUIDForeignKey, NullableBigIntegerForeignKey
+from core.utils.models_helpers import SlugFieldForeignKey, UUIDFieldForeignKey, NullableBigIntegerFieldForeignKey
 
 # Create your models here.
 
@@ -149,6 +149,6 @@ class AttemptHasLocationChallenge(models.Model):
         unique_together = ('attempt', 'challenge')
 
 class ProfileRemainingAttempts(models.Model):
-    challenge_id = NullableBigIntegerForeignKey(StayChallenge, on_delete=models.CASCADE, to_field='id', null=True)
+    challenge_id = NullableBigIntegerFieldForeignKey(StayChallenge, on_delete=models.CASCADE, to_field='id', null=True)
     profile_slug = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, to_field='slug', null=True)
     remaining_attempts = models.IntegerField(default=5)

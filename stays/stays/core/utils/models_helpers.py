@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class UUIDForeignKey(models.ForeignKey):
+class UUIDFieldForeignKey(models.ForeignKey):
     def __init__(self, to, **kwargs):
         kwargs['db_column'] = kwargs.get('db_column', None)
         kwargs['blank'] = True
@@ -27,7 +27,7 @@ class SlugFieldForeignKey(models.ForeignKey):
         super().__init__(to, **kwargs)
 
 
-class NullableIntegerForeignKey(models.ForeignKey):
+class NullableIntegerFieldForeignKey(models.ForeignKey):
     def __init__(self, to, **kwargs):
         kwargs['db_column'] = kwargs.get('db_column', None)
         kwargs['blank'] = True
@@ -35,7 +35,15 @@ class NullableIntegerForeignKey(models.ForeignKey):
         super().__init__(to, **kwargs)
 
 
-class NullableBigIntegerForeignKey(models.ForeignKey):
+class NullableBigIntegerFieldForeignKey(models.ForeignKey):
+    def __init__(self, to, **kwargs):
+        kwargs['db_column'] = kwargs.get('db_column', None)
+        kwargs['blank'] = True
+        kwargs['null'] = True
+        super().__init__(to, **kwargs)
+
+
+class BooleanFieldForeignKey(models.ForeignKey):
     def __init__(self, to, **kwargs):
         kwargs['db_column'] = kwargs.get('db_column', None)
         kwargs['blank'] = True

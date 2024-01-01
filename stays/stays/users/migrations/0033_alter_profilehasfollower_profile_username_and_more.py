@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="profilehaspublication",
             name="publication_of_user",
-            field=core.utils.models_helpers.UUIDForeignKey(
+            field=core.utils.models_helpers.UUIDFieldForeignKey(
                 blank=True,
                 null=True,
                 on_delete=django.db.models.deletion.CASCADE,

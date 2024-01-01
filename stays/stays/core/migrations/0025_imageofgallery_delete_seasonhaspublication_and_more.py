@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="publicationhasgallery",
             name="gallery",
-            field=core.utils.models_helpers.UUIDForeignKey(
+            field=core.utils.models_helpers.UUIDFieldForeignKey(
                 blank=True,
                 null=True,
                 on_delete=django.db.models.deletion.CASCADE,
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="publicationhasgallery",
             name="publication",
-            field=core.utils.models_helpers.UUIDForeignKey(
+            field=core.utils.models_helpers.UUIDFieldForeignKey(
                 blank=True,
                 null=True,
                 on_delete=django.db.models.deletion.CASCADE,

@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
                 ("remaining_attempts", models.IntegerField(default=5)),
                 (
                     "challenge_id",
-                    core.utils.models_helpers.NullableBigIntegerForeignKey(
+                    core.utils.models_helpers.NullableBigIntegerFieldForeignKey(
                         blank=True,
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,

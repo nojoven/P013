@@ -10,12 +10,13 @@ from django.utils.text import slugify
 from channels.db import database_sync_to_async
 from django.conf import settings as dj_conf_settings
 from core.models import Publication
-from core.utils.models_helpers import UUIDForeignKey, SlugFieldForeignKey
+from core.utils.models_helpers import UUIDFieldForeignKey, SlugFieldForeignKey, BooleanFieldForeignKey
 from friendship.models import Follow
+from cities_light.models import CONTINENT_CHOICES, Country, City
+from django_countries.fields import CountryField
 # from core.models import Publication
 
 # Create your models here.
-
 
 # Helper function to return uuid as string
 def uuid_generator():
@@ -57,7 +58,7 @@ class UserManager(BaseUserManager):
 
 
 class Profile(AbstractBaseUser, PermissionsMixin):
-
+    is_online = models.BooleanField(default=False, verbose_name="Online Status")
     slug = models.SlugField(unique=True, blank=False, null=True, max_length=255, default=None)
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
@@ -70,30 +71,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     motto = models.CharField(max_length=100, blank=False, null=False, default="I LOVE THIS WEBSITE!")
     signature = models.CharField(max_length=150, blank=False, null=True, unique=True)
     about_text = models.TextField(blank=False, null=True, default="Once upon a time...")
-    # city_of_birth = models.CharField(max_length=25, null=True)
-    # country_of_birth = models.CharField(max_length=25, null=True)
-    # continent_of_birth = models.CharField(max_length=15, null=True)
-    # country_today = models.CharField(max_length=25, null=True)
-    # citizenship_1 = models.CharField(max_length=25, null=True) 
-    # citizenship_2 = models.CharField(max_length=25, null=True)
-    # number_of_publications = models.IntegerField(default=0)
-    # prefered_country = models.CharField(max_length=25, null=True)
-    # prefered_city = models.CharField(max_length=25, null=True)
-    # prefered_continent = models.CharField(max_length=25, null=True)
-    # known_countries = None
-    # known_cities = None
-    # best_stay = models.CharField(max_length=255, null=True)
-    # has_followers = None
-    # followers = models.ManyToManyField("self", symmetrical=False)
-    # profile_follows = models.ManyToManyField(User, related_name="followers")
-    #has_publications = None
-    # publications =  models.ManyToManyField(Publication, related_name="author") 
+    continent_of_birth = models.CharField(max_length=15, choices=CONTINENT_CHOICES, null=True)
     profile_picture = models.ImageField(upload_to=profile_picture_upload_to, default="blank-profile-picture.jpg", null=True)
-    # background_picture = models.ImageField(upload_to="profile_images", null=True)
-    #favourite_publications = None
-    # last_detected_data = models.TextField(null=True)
-    #upvoted_publications_count = models
-    is_online = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -123,78 +102,30 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         self.slug = slugify(f"{self.email.split('@')[0]}{self.uuid}")
         super().save(*args, **kwargs)
 
-
-
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
 
+class ConnectionStatus(models.Model):
+
+    profile = SlugFieldForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        null=True,
+        to_field="slug",
+        related_name="connection_status"  # nom de requête inverse différent
+    )
+    is_online = models.BooleanField(default=False, verbose_name="Online Status")  
+
+    class Meta:
+        unique_together = ('profile', 'is_online')
 
 
 class ProfileHasPublication(models.Model):
     user_profile = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, null=True)
-    publication_of_user = UUIDForeignKey(Publication, on_delete=models.CASCADE, null=True)
+    publication_of_user = UUIDFieldForeignKey(Publication, on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = ('user_profile', 'publication_of_user')
 
 
-
-
-
-
-
-
-
-class ConnectionHistory(models.Model):
-    ONLINE = 'online'
-    OFFLINE = 'offline'
-    STATUS = (
-        (ONLINE, 'On-line'),
-        (OFFLINE, 'Off-line'),
-    )
-    user = models.ForeignKey(
-        dj_conf_settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
-    )
-    device_id = models.CharField(max_length=100)
-    status = models.CharField(
-        max_length=10, choices=STATUS,
-        default=ONLINE
-    )
-    first_login = models.DateTimeField(auto_now_add=True)
-    last_echo = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = (("user", "device_id"),)
-
-
-    @database_sync_to_async
-    def update_user_status(self, user, device_id, status):
-        return ConnectionHistory.objects.get_or_create(
-            user=user, device_id=device_id,
-        ).update(status=status)
-
-
-@receiver(user_logged_in)
-def user_logged_in_handler(sender, request, user, **kwargs):
-    # Utilisateur connecté
-    profile = Profile.objects.get(user=user)  # Adapté selon votre relation entre User et Profile
-    update_user_status(profile, profile.device_id, ConnectionHistory.ONLINE)
-
-@receiver(user_logged_out)
-def user_logged_out_handler(sender, request, user, **kwargs):
-    # Utilisateur déconnecté
-    profile = Profile.objects.get(user=user)  # Adapté selon votre relation entre User et Profile
-    update_user_status(profile, profile.device_id, ConnectionHistory.OFFLINE)
-
-@database_sync_to_async
-def update_user_status(profile, device_id, status):
-    # Mettez à jour l'état de connexion du profil
-    profile.is_online = (status == ConnectionHistory.ONLINE)
-    profile.save()
-
-    # Mettez à jour l'historique de connexion
-    return ConnectionHistory.objects.get_or_create(
-        profile=profile, device_id=device_id,
-    ).update(status=status)

@@ -11,7 +11,7 @@ from core.publications_types import ContentTypes
 
 from django_countries.fields import CountryField
 
-from .utils.models_helpers import UUIDForeignKey, SlugFieldForeignKey
+from .utils.models_helpers import UUIDFieldForeignKey, SlugFieldForeignKey
 
 
 def uuid_generator():
@@ -79,8 +79,8 @@ class Gallery(models.Model):
 
 
 class PublicationHasGallery(models.Model):
-    publication = UUIDForeignKey('core.Publication', related_name='publication_galleries', on_delete=models.CASCADE, null=True)
-    gallery = UUIDForeignKey('core.Gallery', related_name='gallery_publications', on_delete=models.CASCADE, null=True)
+    publication = UUIDFieldForeignKey('core.Publication', related_name='publication_galleries', on_delete=models.CASCADE, null=True)
+    gallery = UUIDFieldForeignKey('core.Gallery', related_name='gallery_publications', on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = ('publication', 'gallery')

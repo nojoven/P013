@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="attempthaslocationchallenge",
             name="attempt",
-            field=core.utils.models_helpers.UUIDForeignKey(
+            field=core.utils.models_helpers.UUIDFieldForeignKey(
                 blank=True,
                 null=True,
                 on_delete=django.db.models.deletion.CASCADE,
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="attempthaslocationchallenge",
             name="challenge",
-            field=core.utils.models_helpers.UUIDForeignKey(
+            field=core.utils.models_helpers.UUIDFieldForeignKey(
                 blank=True,
                 null=True,
                 on_delete=django.db.models.deletion.CASCADE,
