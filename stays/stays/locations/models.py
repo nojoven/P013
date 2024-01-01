@@ -83,7 +83,7 @@ def update_top_upvoted_country(sender, instance, **kwargs):
 
 
 class StayChallenge(models.Model):
-    uuid = models.UUIDField(default=uuid_generator, editable=False, unique=True)
+    uuid = models.UUIDField(default=uuid_generator, editable=False)
     publication_identifier = models.ForeignKey(Publication, on_delete=models.CASCADE)
     challenge_text = models.CharField(max_length=255, default="Guess where it happened :", null=True)
     is_open = models.BooleanField(default=False)
@@ -97,7 +97,7 @@ class StayChallenge(models.Model):
 
 
 class ChallengeAttempt(models.Model):
-    uuid = models.UUIDField(default=uuid_generator, editable=False, unique=True)
+    uuid = models.UUIDField(default=uuid_generator, editable=False)
     challenge = models.ForeignKey(StayChallenge, on_delete=models.CASCADE, null=True)
     profile_of_attempt = models.SlugField(max_length=500, null=True)
     date_of_attempt = models.DateTimeField(auto_now_add=True)
@@ -126,8 +126,8 @@ class ChallengeAttempt(models.Model):
 
 
 class AttemptHasLocationChallenge(models.Model):
-    attempt = UUIDForeignKey(ChallengeAttempt, on_delete=models.CASCADE, to_field='uuid', null=True)
-    challenge = UUIDForeignKey(StayChallenge, on_delete=models.CASCADE, to_field='uuid', null=True)
+    attempt = models.ForeignKey(ChallengeAttempt, on_delete=models.CASCADE, to_field='id', null=True)
+    challenge = models.ForeignKey(StayChallenge, on_delete=models.CASCADE, to_field='id', null=True)
 
     class Meta:
         unique_together = ('attempt', 'challenge')
