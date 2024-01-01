@@ -2,21 +2,14 @@ import uuid
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django_countries.fields import CountryField
-from cities_light.settings import ICity, ISubRegion, IRegion, ICountry
-from cities_light.models import City, Country, Region
-from cities_light.abstract_models import (
-    AbstractSubRegion,
-    AbstractCity,
-    AbstractRegion,
-    AbstractCountry)
-from cities_light.receivers import connect_default_signals
-from django.db.models.signals import post_migrate, post_save
+from cities_light.models import City, Country
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from django.utils.translation import gettext_lazy as _
 from core.models import Publication
-from users.models import Profile
+
+from core.utils.models_helpers import UUIDForeignKey
 
 # Create your models here.
 
@@ -26,7 +19,11 @@ def uuid_generator():
 
 class StayCountry(models.Model):
     uuid = models.UUIDField(default=uuid_generator, editable=False)
-    country_code_of_stay = models.ForeignKey(Publication, on_delete=models.CASCADE, blank=True, null=True)
+    publication = models.ForeignKey(
+        Publication, 
+        on_delete=models.CASCADE,
+        null=True,
+    )
     continent_name = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True, related_name='continent_stay_set')
     country_name = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True, related_name='country_stay_set')
 
@@ -35,7 +32,7 @@ class StayCountry(models.Model):
             super().save(*args, **kwargs)
             return
 
-        country_instance, created = Country.objects.get_or_create(code2=self.country_code_of_stay)
+        country_instance, created = Country.objects.get_or_create(code2=self.publication.country_code_of_stay)
         self.continent_name = country_instance.continent
         self.country_name = country_instance.name
 
@@ -86,7 +83,7 @@ def update_top_upvoted_country(sender, instance, **kwargs):
 
 
 class StayChallenge(models.Model):
-    pass
+    uuid = models.UUIDField(default=uuid_generator, editable=False, unique=True)
     publication_identifier = models.ForeignKey(Publication, on_delete=models.CASCADE)
     challenge_text = models.CharField(max_length=255, default="Guess where it happened :", null=True)
     is_open = models.BooleanField(default=False)
@@ -100,7 +97,7 @@ class StayChallenge(models.Model):
 
 
 class ChallengeAttempt(models.Model):
-    pass
+    uuid = models.UUIDField(default=uuid_generator, editable=False, unique=True)
     challenge = models.ForeignKey(StayChallenge, on_delete=models.CASCADE, null=True)
     profile_of_attempt = models.SlugField(max_length=500, null=True)
     date_of_attempt = models.DateTimeField(auto_now_add=True)
@@ -129,8 +126,8 @@ class ChallengeAttempt(models.Model):
 
 
 class AttemptHasLocationChallenge(models.Model):
-    attempt = models.ForeignKey(ChallengeAttempt, on_delete=models.CASCADE, null=True)
-    challenge = models.ForeignKey(StayChallenge, on_delete=models.CASCADE, null=True)
+    attempt = UUIDForeignKey(ChallengeAttempt, on_delete=models.CASCADE, to_field='uuid', null=True)
+    challenge = UUIDForeignKey(StayChallenge, on_delete=models.CASCADE, to_field='uuid', null=True)
 
     class Meta:
         unique_together = ('attempt', 'challenge')

@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from channels.db import database_sync_to_async
 from django.conf import settings as dj_conf_settings
 from core.models import Publication
+from core.utils.models_helpers import UUIDForeignKey, SlugFieldForeignKey
 
 # from core.models import Publication
 
@@ -106,14 +107,14 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
 class ProfileHasPublication(models.Model):
-    user_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
-    publication_of_user = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
+    user_profile = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, null=True)
+    publication_of_user = UUIDForeignKey(Publication, on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = ('user_profile', 'publication_of_user')
 
 class ProfileHasFollower(models.Model):
-    profile_username = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
+    profile_username = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, null=True)
     # profile_following = models.ForeignKey('Profile.username', on_delete=models.CASCADE, blank=True)
     #profile_followers_usernames = None
     #profile_followers_count = 0

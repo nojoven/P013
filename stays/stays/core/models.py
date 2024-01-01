@@ -11,6 +11,8 @@ from core.publications_types import ContentTypes
 
 from django_countries.fields import CountryField
 
+from .utils.models_helpers import UUIDForeignKey, SlugFieldForeignKey
+
 
 def uuid_generator():
     return uuid.uuid4().hex
@@ -20,6 +22,9 @@ def voice_story_upload_to(instance, filename):
 
 def picture_upload_to(instance, filename):
     return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/picture/{filename}"
+
+def gallery_upload_to(instance, filename):
+    return f"uploads/galleries/gallery/{instance.gallery.uuid}/publication/{instance.gallery.publication.uuid}/{filename}"
 
 class PublicationType(models.Model):
     def __str__(self):
@@ -61,27 +66,28 @@ class Publication(models.Model):
     def get_absolute_url(self):
         return reverse('users:account', args=[self.author_slug])
 
-
-
+class ImageOfGallery(models.Model):
+    gallery = models.ForeignKey("core.Gallery", on_delete=models.CASCADE, null=True)
+    image = models.ImageField(upload_to=gallery_upload_to)
+    description = models.TextField(blank=True)
 
 class Gallery(models.Model):
+    uuid = models.UUIDField(default=uuid_generator, editable=False)
     is_visible = models.BooleanField(default=True)
+    images = models.ManyToManyField(ImageOfGallery, related_name='gallery_images')
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
-    
-    pass
+
 
 class PublicationHasGallery(models.Model):
-    pass
+    publication = UUIDForeignKey('core.Publication', related_name='publication_galleries', on_delete=models.CASCADE, null=True)
+    gallery = UUIDForeignKey('core.Gallery', related_name='gallery_publications', on_delete=models.CASCADE, null=True)
 
-class SeasonHasPublication(models.Model):
-    pass
-
-class YearHasPublication(models.Model):
-    pass
+    class Meta:
+        unique_together = ('publication', 'gallery')
 
 class PublicationUpvote(models.Model):
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
-    upvote_profile = models.ForeignKey("users.Profile", on_delete=models.CASCADE, null=True)
+    upvote_profile = SlugFieldForeignKey("users.Profile", on_delete=models.CASCADE, null=True)
     upvote_date = models.DateTimeField(auto_now_add=True)
     upvote_value = models.IntegerField(
         default=0,
