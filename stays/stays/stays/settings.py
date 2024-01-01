@@ -98,7 +98,6 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.reddit",
-    "allauth.socialaccount.providers.pinterest",
     "django_countries",
     "django_htmx",
     "formset",
