@@ -31,16 +31,20 @@ class StayCountry(models.Model):
     country_name = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True, related_name='country_stay_set')
 
     def save(self, *args, **kwargs):
-        if self.country_code_of_stay:
-            country_instance = Country.objects.get(code2=self.country_code_of_stay)
-            self.continent_name = country_instance.continent
-            self.country_name = country_instance.name
+        if not self.country_code_of_stay:
+            super().save(*args, **kwargs)
+            return
 
-            # Créer ou mettre à jour StayCountryHasUpvotes
-            stay_country_upvotes, created = StayCountryHasUpvotes.objects.get_or_create(country_of_stay=self.country_name)
-            if not created:
-                stay_country_upvotes.upvotes_count += 1
-                stay_country_upvotes.save()
+        country_instance, created = Country.objects.get_or_create(code2=self.country_code_of_stay)
+        self.continent_name = country_instance.continent
+        self.country_name = country_instance.name
+
+        # Créer ou obtenir StayCountryHasUpvotes
+        stay_country_upvotes, created = StayCountryHasUpvotes.objects.get_or_create(country_of_stay=self.country_name)
+
+        # Incrémenter upvotes_count, que l'enregistrement existait déjà ou non
+        stay_country_upvotes.upvotes_count += 1
+        stay_country_upvotes.save()
 
         super().save(*args, **kwargs)
 
@@ -64,7 +68,7 @@ def update_upvotes_count(sender, instance, **kwargs):
 
 
 class UpvoteCountryRanking(models.Model):
-    country_name = models.CharField(max_length=255, unique=True)
+    country_name = models.CharField(max_length=255, null=True)
     total_upvotes = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0, message="Total upvotes cannot be negative.")]
@@ -73,12 +77,12 @@ class UpvoteCountryRanking(models.Model):
 @receiver(post_save, sender=StayCountryHasUpvotes)
 def update_top_upvoted_country(sender, instance, **kwargs):
     country_name = instance.country_of_stay  # Assurez-vous que le nom du pays est correctement récupéré
-    top_country, created = UpvoteCountryRanking.objects.get_or_create(country_name=country_name)
+    country_ranking_entry, created = UpvoteCountryRanking.objects.get_or_create(country_name=country_name)
 
     if not created:
         # Mettez à jour la somme des upvotes_count pour ce pays
-        top_country.total_upvotes = StayCountryHasUpvotes.objects.filter(country_of_stay__name=country_name).aggregate(models.Sum('upvotes_count'))['upvotes_count__sum']
-        top_country.save()
+        country_ranking_entry.total_upvotes = StayCountryHasUpvotes.objects.filter(country_of_stay__name=country_name).aggregate(models.Sum('upvotes_count'))['upvotes_count__sum']
+        country_ranking_entry.save()
 
 
 class StayChallenge(models.Model):
@@ -124,3 +128,9 @@ class ChallengeAttempt(models.Model):
         super().save(*args, **kwargs)
 
 
+class AttemptHasLocationChallenge(models.Model):
+    attempt = models.ForeignKey(ChallengeAttempt, on_delete=models.CASCADE, null=True)
+    challenge = models.ForeignKey(StayChallenge, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        unique_together = ('attempt', 'challenge')

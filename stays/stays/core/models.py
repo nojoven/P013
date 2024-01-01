@@ -1,15 +1,11 @@
 from datetime import datetime
-import os
 import uuid
-import sys
-from pathlib import Path
-
-#sys.path.append(Path(os.getcwd()).parent.parent.absolute)
 
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
-from users.models import Profile
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # from locations.models import StayCountry
 from core.publications_types import ContentTypes
 
@@ -69,7 +65,9 @@ class Publication(models.Model):
 
 
 class Gallery(models.Model):
+    is_visible = models.BooleanField(default=True)
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
+    
     pass
 
 class PublicationHasGallery(models.Model):
@@ -81,16 +79,22 @@ class SeasonHasPublication(models.Model):
 class YearHasPublication(models.Model):
     pass
 
-class PublicationHasVoter(models.Model):
-    pass
+class PublicationUpvote(models.Model):
+    publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
+    upvote_profile = models.ForeignKey("users.Profile", on_delete=models.CASCADE, null=True)
+    upvote_date = models.DateTimeField(auto_now_add=True)
+    upvote_value = models.IntegerField(
+        default=0,
+        validators=[
+            MinValueValidator(0, message="Number of attempts cannot be negative."),
+            MaxValueValidator(1, message="Number of attempts cannot exceed the maximum allowed."),
+        ]
+    )
 
 
-
-# class PublicationHasProfiles(models.Model):
-#     publication_title = models.ForeignKey(Publication, on_delete=models.CASCADE, blank=True, null=True, to_field="title")
-#     publication_author = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="author")
-#     publication_upvoter = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True, related_name="upvote_count")
-#     publication_upvote_count = models.IntegerField(default=0)
-
-
-
+@receiver(post_save, sender=PublicationUpvote)
+def update_upvotes_count(sender, instance, **kwargs):
+    # Incrémenter upvotes_count de la publication associée
+    if instance.publication:
+        instance.publication.upvotes_count += 1
+        instance.publication.save()

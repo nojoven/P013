@@ -160,11 +160,36 @@ class PublishView(FormView, CreateView):
         return context
 
     def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
+        text_story = form.cleaned_data.get('text_story')
+        voice_story = form.cleaned_data.get('voice_story')
+
+        # Assurez-vous qu'au moins l'un des champs est rempli
+        if not text_story and not voice_story:
+            messages.error(self.request, 'Please provide either a text story or a voice recording.')
+            return self.form_invalid(form)
+
+        # Enregistrement de la publication
+        publication = form.save(commit=False)
+        publication.author_username = self.request.user.username
+
+        # Enregistrement du texte s'il est fourni
+        if text_story:
+            publication.text_story = text_story
+
+        # Enregistrement de l'enregistrement vocal s'il est fourni
+        if voice_story:
+            # Assurez-vous que le fichier est bien une piste audio
+            if not voice_story.name.endswith(('.mp3', '.wav', '.ogg')):
+                messages.error(self.request, 'Invalid audio file format.')
+                return self.form_invalid(form)
+
+            publication.voice_story = voice_story
+
+        # Sauvegarde finale
+        publication.save()
+
         messages.success(self.request, 'Publication created successfully!')
-        ic(self.request)
-        return super(PublishView, self).form_valid(form)
+        return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(
