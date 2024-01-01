@@ -8,8 +8,9 @@ from django.dispatch import receiver
 
 from django.utils.translation import gettext_lazy as _
 from core.models import Publication
+from users.models import Profile
 
-from core.utils.models_helpers import UUIDForeignKey
+from core.utils.models_helpers import SlugFieldForeignKey, UUIDForeignKey, NullableBigIntegerForeignKey
 
 # Create your models here.
 
@@ -88,9 +89,9 @@ class StayChallenge(models.Model):
     challenge_text = models.CharField(max_length=255, default="Guess where it happened :", null=True)
     is_open = models.BooleanField(default=False)
     right_answer = models.ForeignKey(City, on_delete=models.CASCADE, null=True)
-    max_number_of_attempts = models.IntegerField(default=15)
+    max_number_of_attempts = models.IntegerField(default=5)
     has_winner = models.BooleanField(default=False)
-    winner_slug = models.ForeignKey("ChallengeAttempt", max_length=500, null=True, on_delete=models.CASCADE)
+    winner_slug = models.SlugField(max_length=500, null=True)
     start_date = models.DateTimeField(null=True)
     date_of_success = models.DateTimeField(null=True)
     end_date_limit = models.DateTimeField(null=True)
@@ -99,13 +100,14 @@ class StayChallenge(models.Model):
 class ChallengeAttempt(models.Model):
     uuid = models.UUIDField(default=uuid_generator, editable=False)
     challenge = models.ForeignKey(StayChallenge, on_delete=models.CASCADE, null=True)
-    profile_of_attempt = models.SlugField(max_length=500, null=True)
+    profile_of_attempt = SlugFieldForeignKey(Profile, max_length=500, null=True, on_delete=models.CASCADE, to_field="slug")
     date_of_attempt = models.DateTimeField(auto_now_add=True)
+    incrementation_number = models.IntegerField(default=1)
     number_of_attempts = models.IntegerField(
         default=0,
         validators=[
             MinValueValidator(0, message="Number of attempts cannot be negative."),
-            MaxValueValidator(15, message="Number of attempts cannot exceed the maximum allowed."),
+            MaxValueValidator(1, message="Number of attempts cannot exceed the maximum allowed."),
         ]
     )
     answer_of_profile = models.ForeignKey(City, on_delete=models.CASCADE, null=True)
@@ -122,6 +124,20 @@ class ChallengeAttempt(models.Model):
             self.challenge.date_of_success = self.date_of_attempt
             self.challenge.end_date_limit = self.date_of_attempt
 
+            # Update ProfileRemainingAttempts
+            remaining_attempts_instance, _ = ProfileRemainingAttempts.objects.get_or_create(
+                challenge_id=self.challenge_id,
+                profile_slug=self.profile_of_attempt.slug,
+                defaults={'remaining_attempts': self.challenge.max_number_of_attempts}
+            )
+
+            ProfileRemainingAttempts.objects.filter(
+                challenge_id=self.challenge_id,
+                profile_slug=self.profile_of_attempt.slug
+            ).update(
+                remaining_attempts=models.F('remaining_attempts') - 1
+            )
+
         super().save(*args, **kwargs)
 
 
@@ -131,3 +147,8 @@ class AttemptHasLocationChallenge(models.Model):
 
     class Meta:
         unique_together = ('attempt', 'challenge')
+
+class ProfileRemainingAttempts(models.Model):
+    challenge_id = NullableBigIntegerForeignKey(StayChallenge, on_delete=models.CASCADE, to_field='id', null=True)
+    profile_slug = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, to_field='slug', null=True)
+    remaining_attempts = models.IntegerField(default=5)
