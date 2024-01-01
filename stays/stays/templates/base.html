@@ -156,10 +156,26 @@
 <script>
     $(document).ready(function () {
       $('.fa-heart').click(function () {
-        $(this).toggleClass("fa-solid fa-heart-circle-check fa-beat-fade fa-xs");
+        $(this).toggleClass("fa-solid fa-heart-circle-check fa-beat-fade fa-sm");
       });
     });
     
 </script>
+<script>
+    $(document).ready(function () {
+      $('.fa-sun').click(function () {
+        $(this).toggleClass("fa-solid fa-sun fa-sm")
+        if $(this).css('color', '#5df33f'){
+            $(this).css('color', '#a0a4ac');
+        }
+        else{
+            $(this).css('color', '#5df33f');
+        }
+      });
+    });
+    
+</script>
+
+
 </body>
 </html>
