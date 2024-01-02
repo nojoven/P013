@@ -106,26 +106,9 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
 
-class ConnectionStatus(models.Model):
-
-    profile = SlugFieldForeignKey(
-        Profile,
-        on_delete=models.CASCADE,
-        null=True,
-        to_field="slug",
-        related_name="connection_status"  # nom de requête inverse différent
-    )
-    is_online = models.BooleanField(default=False, verbose_name="Online Status")  
-
-    class Meta:
-        unique_together = ('profile', 'is_online')
-
-
 class ProfileHasPublication(models.Model):
     user_profile = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, null=True)
     publication_of_user = UUIDFieldForeignKey(Publication, on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = ('user_profile', 'publication_of_user')
-
-
