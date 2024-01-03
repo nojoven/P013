@@ -24,6 +24,10 @@
                     <h3 class="card-title">{{ publication.title }}</h3>
                   </a>
                   <h5 id="h5_username">Written by <a class="user-slug" data-slug="{{ publication.author_slug }}" href="{% url 'users:account' publication.author_slug %}">{{ publication.author_username }}</a> <i class="fa-regular fa-sun fa-2xs" style="color: #a0a4ac"></i>, {{ publication.created_at }}</h5>                  
+                  <script>
+                    var author_slug = "{{ publication.author_slug }}"; 
+                    var statusElement = document.querySelector(`[data-slug="${author_slug}"]`);
+                  </script>
                   <p class="card-text">{{ publication.summary }}</p>
                   {% if publication.updated_at != publication.created_at %}
                   <p class="card-text"><small class="text-muted">{{ publication.updated_at }}</small></p>

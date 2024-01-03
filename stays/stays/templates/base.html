@@ -15,6 +15,7 @@
     {% comment %} Font Awesome {% endcomment %}
     <!-- One file includes all the Font Awesome Free icons and utilities -->
     <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- One file includes all the Font Awesome Free icons and utilities -->
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
@@ -164,37 +165,41 @@
 
 
 <script>
-    const statusElement = document.getElementById(`status-${slug}`);
-console.log(statusElement);
+    // in feed.html let author_slug = "{{ publication.author_slug }}"; 
+    console.log(author_slug);
+    // const statusElement = author_slug;
     console.log('Script started');
 
-    async function updateUserStatus(slug) {
-        console.log(`Fetching status for ${slug}`);
+     // Use Django's template syntax to output the slug variable
+     async function updateUserStatus(author_slug) {
+        console.log(`Fetching status for ${author_slug}`);
         try {
-            const response = await fetch(`/api/isonline/${slug}/`);
-            console.log(`Received response for ${slug}`);
+            const response = await fetch(`/api/isonline/${author_slug}/`);
+            console.log(`Received response for ${author_slug}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            const statusElement = document.getElementById(`status-${slug}`);
-            if (data.is_online) {
-                statusElement.className = 'fa-solid fa-sun fa-sm';
-                statusElement.style.color = '#5df33f';
-            } else {
-                statusElement.className = 'fa-regular fa-sun fa-2xs';
-                statusElement.style.color = '#a0a4ac';
-            }
+            const statusElements = document.querySelectorAll(`[data-slug="${author_slug}"]`);
+            statusElements.forEach(statusElement => {
+                if (data.is_online) {
+                    statusElement.className = 'fa-solid fa-sun fa-sm';
+                    statusElement.style.color = '#5df33f';
+                } else {
+                    statusElement.className = 'fa-regular fa-sun fa-2xs';
+                    statusElement.style.color = '#a0a4ac';
+                }
+            });
         } catch (error) {
             console.log('There was a problem with the fetch operation: ' + error.message);
         }
     }
 
     setInterval(() => {
-        const slugs = Array.from(document.querySelectorAll('.user-slug')).map(el => el.dataset.slug);
+        var slugs = Array.from(document.querySelectorAll(`[data-slug="${author_slug}"]`)).map(el => author_slug);
         console.log(`Updating status for slugs: ${slugs.join(', ')}`);
-        slugs.forEach(slug => updateUserStatus(slug));
-    }, 10000);
+        slugs.forEach(author_slug => updateUserStatus(author_slug));
+    }, 7000);
 </script>
 
 
