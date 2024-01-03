@@ -146,9 +146,9 @@
 <script src="{% static 'assets/js/uikit.js' %}"></script>
 <script src="{% static 'assets/js/simplebar.js' %}"></script>
 <script src="{% static 'assets/js/custom.js' %}"></script>
-<script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+{% comment %} <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script> {% endcomment %}
 <script type="module" src="{% static 'formset/js/django-formset.js' %}"></script>
-<script src="{% static 'assets/js/htmx.min.js' %}" defer></script>
+<script src="{% static 'js/htmx.min.js' %}" defer></script>
 <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -161,19 +161,40 @@
     });
     
 </script>
+
+
 <script>
-    $(document).ready(function () {
-      $('.fa-sun').click(function () {
-        $(this).toggleClass("fa-solid fa-sun fa-sm")
-        if $(this).css('color', '#5df33f'){
-            $(this).css('color', '#a0a4ac');
+    const statusElement = document.getElementById(`status-${slug}`);
+console.log(statusElement);
+    console.log('Script started');
+
+    async function updateUserStatus(slug) {
+        console.log(`Fetching status for ${slug}`);
+        try {
+            const response = await fetch(`/api/isonline/${slug}/`);
+            console.log(`Received response for ${slug}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            const statusElement = document.getElementById(`status-${slug}`);
+            if (data.is_online) {
+                statusElement.className = 'fa-solid fa-sun fa-sm';
+                statusElement.style.color = '#5df33f';
+            } else {
+                statusElement.className = 'fa-regular fa-sun fa-2xs';
+                statusElement.style.color = '#a0a4ac';
+            }
+        } catch (error) {
+            console.log('There was a problem with the fetch operation: ' + error.message);
         }
-        else{
-            $(this).css('color', '#5df33f');
-        }
-      });
-    });
-    
+    }
+
+    setInterval(() => {
+        const slugs = Array.from(document.querySelectorAll('.user-slug')).map(el => el.dataset.slug);
+        console.log(`Updating status for slugs: ${slugs.join(', ')}`);
+        slugs.forEach(slug => updateUserStatus(slug));
+    }, 10000);
 </script>
 
 

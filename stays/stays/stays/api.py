@@ -1,5 +1,9 @@
-from ninja import NinjaAPI
+from ninja import NinjaAPI, Router
 from throttle.decorators import throttle
+from django.http import JsonResponse
+
+from users.models import Profile
+
 
 from django_currentuser.middleware import (
     get_current_user, 
@@ -7,8 +11,8 @@ from django_currentuser.middleware import (
 
 api = NinjaAPI()
 
-
 @throttle(zone='default')
-@api.get("/hello")
-def hello(request):
-    return "Hello world"
+@api.get("/isonline/{slug}/")
+def hello(request, slug: str):
+    profile = Profile.objects.get(slug=slug)
+    return JsonResponse({'is_online': profile.is_online})

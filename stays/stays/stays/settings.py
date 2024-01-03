@@ -267,16 +267,14 @@ THROTTLE_ZONES = {
     'default': {
         'VARY': 'throttle.zones.RemoteIP',
         'ALGORITHM': 'fixed-bucket',  # Default if not defined.
-        'BUCKET_INTERVAL': 15 * 60,  # Number of seconds to enforce limit.
-        'BUCKET_CAPACITY': 50  # Maximum number of requests allowed within BUCKET_INTERVAL
+        'BUCKET_INTERVAL': 5 * 60,  # Number of seconds to enforce limit.
+        'BUCKET_CAPACITY': 500  # Maximum number of requests allowed within BUCKET_INTERVAL
     },
 }
 
 # Where to store request counts.
 THROTTLE_BACKEND = 'throttle.backends.cache.CacheBackend'
 
-# python manage.py cleanup_django_defender to unlock
-DEFENDER_LOGIN_FAILURE_LIMIT = 50
 
 # Optional if Redis backend is chosen ('throttle.backends.redispy.RedisBackend')
 THROTTLE_REDIS_HOST = 'localhost'
@@ -294,6 +292,9 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+
+# python manage.py cleanup_django_defender to unlock
+DEFENDER_LOGIN_FAILURE_LIMIT = 50
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
