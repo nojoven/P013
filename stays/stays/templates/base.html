@@ -163,7 +163,12 @@
     
 </script>
 
-
+<style>
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
 <script>
     // in feed.html let author_slug = "{{ publication.author_slug }}"; 
     console.log(author_slug);
@@ -183,11 +188,11 @@
             const statusElements = document.querySelectorAll(`[data-slug="${author_slug}"]`);
             statusElements.forEach(statusElement => {
                 if (data.is_online) {
-                    statusElement.className = 'fa-solid fa-sun fa-sm';
-                    statusElement.style.color = '#5df33f';
+                    statusElement.className = 'fa-duotone fa-spin fa-solid fa-sun fa-xl';
+                    statusElement.style = 'color: #f08205; animation: spin 2s linear infinite; ';
                 } else {
-                    statusElement.className = 'fa-regular fa-sun fa-2xs';
-                    statusElement.style.color = '#a0a4ac';
+                    statusElement.className = 'fa-regular fa-sun fa-xs';
+                    statusElement.style = 'color: #a0a4ac;';
                 }
             });
         } catch (error) {
@@ -201,7 +206,7 @@
         slugs.forEach(author_slug => updateUserStatus(author_slug));
     }, 7000);
 </script>
-
+<i class="fa-duotone fa-sun fa-lg" style=""></i>
 
 </body>
 </html>
