@@ -24,7 +24,7 @@
                     <h3 class="card-title">{{ publication.title }}</h3>
                   </a>
                   
-                  <h5 id="h5_username">Written by <a class="user-slug"  href="{% url 'users:account' publication.author_slug %}">{{ publication.author_username    }}</a>   <i data-slug="{{ publication.author_slug }}" class="fa-solid fa-sun" style="color: #a0a4ac"></i></h5>
+                  <h5 id="h5_username">Written by <a class="user-slug"  href="{% url 'users:account' publication.author_slug %}"> {{ publication.author_username    }}</a>   <i data-slug="{{ publication.author_slug }}" class="fa-solid fa-sun" style="color: #a0a4ac"></i></h5>
                    
                   <h5>{{ publication.created_at }}</h5>                  
                   <script>

@@ -171,42 +171,45 @@
 </style>
 <script>
     // in feed.html let author_slug = "{{ publication.author_slug }}"; 
-    console.log(author_slug);
     // const statusElement = author_slug;
-    console.log('Script started');
+    if (typeof author_slug !== 'undefined') {
+        console.log('Display author presence');
 
-     // Use Django's template syntax to output the slug variable
-     async function updateUserStatus(author_slug) {
-        console.log(`Fetching status for ${author_slug}`);
-        try {
-            const response = await fetch(`/api/isonline/${author_slug}/`);
-            console.log(`Received response for ${author_slug}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            const statusElements = document.querySelectorAll(`[data-slug="${author_slug}"]`);
-            statusElements.forEach(statusElement => {
-                if (data.is_online) {
-                    statusElement.className = 'fa-duotone fa-spin fa-solid fa-sun fa-xl';
-                    statusElement.style = 'color: #f08205; animation: spin 2s linear infinite; ';
-                } else {
-                    statusElement.className = 'fa-regular fa-sun fa-xs';
-                    statusElement.style = 'color: #a0a4ac;';
+        // Use Django's template syntax to output the slug variable
+        async function updateUserStatus(author_slug) {
+            console.log(`Fetching status for ${author_slug}`);
+            try {
+                const response = await fetch(`/api/isonline/${author_slug}/`);
+                console.log(`Received response for ${author_slug}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            });
-        } catch (error) {
-            console.log('There was a problem with the fetch operation: ' + error.message);
+                const data = await response.json();
+                const statusElements = document.querySelectorAll(`[data-slug="${author_slug}"]`);
+                statusElements.forEach(statusElement => {
+                    if (data.is_online) {
+                        statusElement.className = 'fa-duotone fa-spin fa-solid fa-sun fa-xl';
+                        statusElement.style = 'color: #f08205; animation: spin 2s linear infinite; ';
+                    } else {
+                        statusElement.className = 'fa-regular fa-sun fa-xs';
+                        statusElement.style = 'color: #a0a4ac;';
+                    }
+                });
+            } catch (error) {
+                console.log('There was a problem with the fetch operation: ' + error.message);
+            }
         }
-    }
 
-    setInterval(() => {
-        var slugs = Array.from(document.querySelectorAll(`[data-slug="${author_slug}"]`)).map(el => author_slug);
-        console.log(`Updating status for slugs: ${slugs.join(', ')}`);
-        slugs.forEach(author_slug => updateUserStatus(author_slug));
-    }, 7000);
+        setInterval(() => {
+            var slugs = Array.from(document.querySelectorAll(`[data-slug="${author_slug}"]`)).map(el => author_slug);
+            console.log(`Updating status for slugs: ${slugs.join(', ')}`);
+            slugs.forEach(author_slug => updateUserStatus(author_slug));
+        }, 7000);
+    }
+    else {
+        console.log('Not on feed');
+    }
 </script>
-<i class="fa-duotone fa-sun fa-lg" style=""></i>
 
 </body>
 </html>
