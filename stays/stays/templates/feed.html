@@ -49,8 +49,8 @@
                     {% if user.is_authenticated and publication.content_type == "voice" %}
                     <center>
                         <div class="col-sm-4 col-sm-offset-4 embed-responsive embed-responsive-4by3">
-                            <audio controls class="embed-responsive-item">
-                                <source src="sample.mp3">
+                            <audio  controls class="embed-responsive-item">
+                                <source src="{{ publication.voice_story }}">
                             </audio>
                         </div>
                     </center>
