@@ -10,13 +10,14 @@
     <br>
     <br>
     <div class="row justify-content-md-center">
-        
       <div class="col-md-auto">
         <img src='{{ publication.picture.url }}' class="img-fluid" alt="...">
       </div>
     </div>
+    <div class="row justify-content-md-center">
     <br>
     <hr>
+    <center>
     <h1>{{ publication.title }}, {{ publication.created_at }}</h1>
     <h2>Published from {{ publication.published_from_country_code }}</h2>
     <h3>{{ publication.author }}</h3>
@@ -25,24 +26,24 @@
     {% endif %}
     <br>
     <hr>
-    <div class="row">
+    </center>
+    </div>
+    {% if publication.content_type == "voice" %}
+    <div class="row justify-content-md-center">
         <div class="col-md-auto">
-            {% if publication.content_type == "voice" %}
-            <center>
-                <div class="col-sm-4 col-sm-offset-4 embed-responsive embed-responsive-4by3">
-                    <audio controls class="embed-responsive-item">
-                        <source src="{{ publication.voice_story.url }}">
-                    </audio>
-                </div>
-            </center>
-            {% else %}
-            {{ publication.text_story }}
-            {% endif %}
+            <div class="col-sm-4 col-sm-offset-4 embed-responsive embed-responsive-4by3">
+                <audio controls class="embed-responsive-item">
+                    <source src="{{ publication.voice_story.url }}">
+                </audio>
+            </div>
         </div>
     </div>
+    {% else %}
     <br>
     <hr>
     <br>
+    {{ publication.text_story }}
+    {% endif %}
 </div>
 {% endblock content %}
 </main>
