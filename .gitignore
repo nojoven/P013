@@ -168,3 +168,4 @@ settings.ini
 *.env
 confs.json
 .cop*
+.idea/
