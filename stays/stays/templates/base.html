@@ -71,21 +71,20 @@
 
           <!-- Profile -->
           <a href="#">
-              {% if user.is_authenticated %}
-                  <img src="{{ user.profile_picture }}" class="header-avatar" alt="">
-              {% else %}
-                  <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar"
-                      alt="https://icons8.com/icon/Hm0e3BaO54rH/login">
-              {% endif %}
+            {% if user.is_authenticated %}
+            <img src="{{ user.profile_picture.url }}" class="header-avatar" alt="{% static 'assets/images/avatars/icons8-login-64.png' %}">
+            {% else %}
+            <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar" alt="{% static 'assets/images/avatars/vectorstock_7142223.png' %}">
+            {% endif %}
           </a>
           <div uk-drop="mode: click;offset:9"
               class="header_dropdown profile_dropdown border-t">
-              <ul>
+              <ul style="list-style: none;">
                   {% if user.is_authenticated %}
                       <li><a href="{% url 'users:account' user.slug %}">Account</a></li>
                       <li><a href="{% url 'users:logout' %}">Log Out</a></li>
                   {% else %}
-                      <li><a href="{% url 'users:login' %}">Sign In</a></li>
+                      <li ><a href="{% url 'users:login' %}">Sign In</a></li>
                   {% endif %}
               </ul>
           </div>
