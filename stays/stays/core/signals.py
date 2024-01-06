@@ -1,6 +1,23 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from core.models import PublicationUpvote
+from core.models import Publication, PublicationUpvote
+from locations.models import StayCountry
+from cities_light.models import Country
+
+@receiver(post_save, sender=Publication)
+def create_stay_country(sender, instance, created, **kwargs):
+    if created:
+        # Vérifier si le country_code_of_stay de la Publication existe déjà dans Country.code2
+        if Country.objects.filter(code2=instance.country_code_of_stay).exists() and not StayCountry.objects.filter(country_code_of_stay=instance.country_code_of_stay).exists():
+            # Si le country_code_of_stay existe, obtenir les informations du pays correspondant
+            country_instance = Country.objects.get(code2=instance.country_code_of_stay)
+            # Créer une nouvelle instance de StayCountry
+            StayCountry.objects.create(
+                publication=instance,
+                country_code_of_stay=instance.country_code_of_stay,
+                continent_name=country_instance.continent,  # Assigner une instance de Country
+                country_name=country_instance.name,
+            )
 
 @receiver(post_save, sender=PublicationUpvote)
 def update_upvotes_count(sender, instance, **kwargs):
@@ -8,4 +25,3 @@ def update_upvotes_count(sender, instance, **kwargs):
     if instance.publication:
         instance.publication.upvotes_count += 1
         instance.publication.save()
-

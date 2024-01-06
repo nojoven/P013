@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django_countries.fields import CountryField
 from cities_light.models import City, Country
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
@@ -25,26 +26,27 @@ class StayCountry(models.Model):
         on_delete=models.CASCADE,
         null=True,
     )
-    continent_name = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True, related_name='continent_stay_set')
-    country_name = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True, related_name='country_stay_set')
+    continent_name = models.CharField(null=True)
+    country_name = models.CharField(null=True)
+    country_code_of_stay = CountryField(null=True, unique=True)
 
-    def save(self, *args, **kwargs):
-        if not self.country_code_of_stay:
-            super().save(*args, **kwargs)
-            return
+    # def save(self, *args, **kwargs):
+    #     if not self.country_code_of_stay:
+    #         super().save(*args, **kwargs)
+    #         return
 
-        country_instance, created = Country.objects.get_or_create(code2=self.publication.country_code_of_stay)
-        self.continent_name = country_instance.continent
-        self.country_name = country_instance.name
+    #     country_instance, created = Country.objects.get_or_create(code2=self.publication.country_code_of_stay)
+    #     self.continent_name = country_instance.continent
+    #     self.country_name = country_instance.name
 
-        # Créer ou obtenir StayCountryHasUpvotes
-        stay_country_upvotes, created = StayCountryHasUpvotes.objects.get_or_create(country_of_stay=self.country_name)
+    #     # Créer ou obtenir StayCountryHasUpvotes
+    #     stay_country_upvotes, created = StayCountryHasUpvotes.objects.get_or_create(country_of_stay=self.country_name)
 
-        # Incrémenter upvotes_count, que l'enregistrement existait déjà ou non
-        stay_country_upvotes.upvotes_count += 1
-        stay_country_upvotes.save()
+    #     # Incrémenter upvotes_count, que l'enregistrement existait déjà ou non
+    #     stay_country_upvotes.upvotes_count += 1
+    #     stay_country_upvotes.save()
 
-        super().save(*args, **kwargs)
+    #     super().save(*args, **kwargs)
 
 
 class StayCountryHasUpvotes(models.Model):
