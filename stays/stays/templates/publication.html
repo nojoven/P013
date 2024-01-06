@@ -22,27 +22,28 @@
     <h2>Published from {{ publication.published_from_country_code }}</h2>
     <h3>{{ publication.author }}</h3>
     {% if publication.updated_at != publication.created_at %}
-    <h4>Updated : {{ publication.updated_at }}</h4>
+    <h4> Updated : {{ publication.updated_at }}</h4>
     {% endif %}
     <br>
     <hr>
     </center>
     </div>
-    {% if publication.content_type == "voice" %}
+    {% if publication.content_type == "voice" and publication.voice_story %}
     <div class="row justify-content-md-center">
         <div class="col-md-auto">
             <div class="col-sm-4 col-sm-offset-4 embed-responsive embed-responsive-4by3">
                 <audio controls class="embed-responsive-item">
-                    <source src="{{ publication.voice_story }}">
+                    <source src="{{ publication.voice_story.url }}">
                 </audio>
             </div>
         </div>
     </div>
-    {% else %}
     <br>
     <hr>
+    {% endif %}
     <br>
-    {{ publication.text_story }}
+    {% if publication.content_type == "text" and publication.text_story %}
+        {{ publication.text_story }}
     {% endif %}
 </div>
 {% endblock content %}

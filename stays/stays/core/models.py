@@ -47,7 +47,7 @@ class Publication(models.Model):
     season_of_stay = models.CharField(max_length=6, blank=False, null=True, help_text="Title of your publication.")
     year_of_stay = models.IntegerField(default=1990, blank=False, null=True)
     summary = models.TextField(max_length=170, blank=False, null=True, help_text="Summarize your story.")
-    text_story = models.TextField(max_length=25000, null=True, help_text="Write your story.")
+    text_story = models.TextField(max_length=25000, blank=True, null=True, help_text="Write your story.")
     voice_story = models.FileField(upload_to=voice_story_upload_to, null=False, blank=True, default=None, max_length=1000, help_text="Record your story.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -32,10 +32,14 @@ class PublicationDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # published_stay = Publication.objects.get(uuid=publication_id)
-        # context["published_stay"] = published_stay
+        publication = context.get("publication")
+        author_slug = publication.author_slug 
+        author_profile = Profile.objects.get(slug=author_slug)
+        author_profile_picture = author_profile.profile_picture
+
+        context["author_profile_picture"] = author_profile_picture
         ic(context.items())
         return context
-
 
 
 # django-cool-pagination CBV example

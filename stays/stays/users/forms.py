@@ -75,7 +75,7 @@ class PublishContentForm(forms.ModelForm):
     picture = forms.FileField(required=True, allow_empty_file=False)
     year_of_stay = forms.IntegerField(required=True)
     season_of_stay = forms.CharField(required=False, empty_value="Spring")
-    text_story = forms.CharField(required=True, empty_value=summary)
+    text_story = forms.CharField(required=False, empty_value="")
     voice_story = forms.FileField(required=False, allow_empty_file=True)
 
     class Meta:
