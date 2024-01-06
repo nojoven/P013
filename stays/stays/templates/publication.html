@@ -43,9 +43,13 @@
     <hr>
     {% endif %}
     <br>
+    <p>
     {% if publication.content_type == "text" and publication.text_story %}
         {{ publication.text_story }}
     {% endif %}
+    </p>
+    <br>
+    <br>
 </div>
 {% endblock content %}
 </main>
