@@ -50,7 +50,7 @@ class CreateProfileView(CreateView):
     
     def form_invalid(self, form):
         # ic(form.errors.as_data())
-        messages.error(self.request,'Invalud inputs. Please try again.')
+        messages.error(self.request,'Invalid inputs. Please try again.')
         return self.render_to_response(self.get_context_data(form=form))
 
 
