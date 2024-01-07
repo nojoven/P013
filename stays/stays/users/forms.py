@@ -4,6 +4,8 @@ from django_select2 import forms as s2forms
 from django_countries.widgets import CountrySelectWidget
 from django_countries.fields import CountryField
 
+from django.conf import settings
+
 from core.models import Publication
 
 from .models import Profile
@@ -64,6 +66,15 @@ class AccountEditionForm(UserChangeForm):
 
 
 
+
+class PublishCountrySelectWidget(CountrySelectWidget):
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        # Use the custom list of countries from settings
+        context['widget']['optgroups'] = self.optgroups(name, settings.COUNTRIES_LIST, context['widget']['value'])
+        return context
+
+
 class PublishContentForm(forms.ModelForm):
     content_type = forms.CharField(required=True)
     title = forms.CharField(required=True)
@@ -81,7 +92,7 @@ class PublishContentForm(forms.ModelForm):
     class Meta:
         model = Publication
         fields = ['title', 'author_slug', 'author_username', 'author_username', 'country_code_of_stay', 'published_from_country_code', 'year_of_stay', 'season_of_stay', 'summary', 'picture', 'content_type', 'text_story', 'voice_story']
-        widgets = {"country_code_of_stay": CountrySelectWidget()}
+        widgets = {"country_code_of_stay": PublishCountrySelectWidget()}
 
 
 class PasswordChangeFromConnectedProfile(PasswordChangeForm):

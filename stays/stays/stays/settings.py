@@ -392,6 +392,10 @@ TINYMCE_COMPRESSOR = False
 PORCUPINE_ACCESSKEY = confs.get("PORCUPINE_ACCESSKEY")
 OPENAI_API_KEY = confs.get("OPENAI_API_KEY")
 
+
+COUNTRIES_FIRST = ['FR', 'US', 'GB']
+COUNTRIES_FIRST_SORT = True
+
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
 import dynaconf  # noqa

@@ -32,14 +32,16 @@
                     var statusElement = document.querySelector(`[data-slug="${author_slug}"]`);
                   </script>
                   <p class="card-text">{{ publication.summary }}</p>
-                  {% if publication.updated_at != publication.created_at %}
+                  {% if not publication.updated_at == publication.created_at %}
                   <p class="card-text"><small class="text-muted">{{ publication.updated_at }}</small></p>
                   {% endif %}
                 </div>
                 <img src="{{ publication.picture }}" class="card-img-bottom" alt="...">
                 <div class="card-body">
-                    <h2 class="card-title">{{ publication.season_of_stay }}, {{ publication.country_code_of_stay }}</h2>
-                    <h3>Published from {{ publication.published_from_country_code }}</h3>
+                    <h2 class="card-title">{{ publication.season_of_stay }}, {{ publication.stay_country_name }}</h2>
+                    {% if publication.published_from_country_code %}
+                    <h6>Published from {{ publication.published_from_country_name }} </h6>
+                    {% endif %}
                     {% if publication.updated_at != publication.created_at %}
                     <p class="card-text"><small class="text-muted">Updated {{ publication.updated_at }}</small></p>
                     {% endif %}

@@ -19,8 +19,8 @@
     <br>
     <hr>
     <center>
-    <h1>{{ publication.title }}, {{ publication.created_at }}</h1>
-    <h2>Published from ({{ publication.published_from_country_code }}</h2>
+    <h1> {{ publication.title }}, {{ publication.created_at }}</h1> 
+    <h2> {% if publication.published_from_country_name  %} Published from {{ published_from_country_name }} {% endif %} </h2>
     <h3>{{ publication.author }}</h3>
     {% if publication.updated_at != publication.created_at %}
     <h4> Updated : {{ publication.updated_at }}</h4>
