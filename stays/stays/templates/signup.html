@@ -6,26 +6,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
-    <title>sign up</title>
+    <title>Sign Up</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            position: relative;
+            background: transparent;
+        }
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+        }
+        .header, .footer, .form-container {
+            opacity: 0.8;
+        }
+    </style>
 
 </head>
 
-<body class="bg-gray-100">
-    
+<body class="">
+    <div class="video-background">
+        <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+            <source src="{% static 'video/video1.mp4' %}" type="video/mp4">
+        </video>
+    </div>
     <div id="wrapper" class="flex flex-col justify-between h-screen">
-
         <!-- header-->
-        <div class="bg-white py-4 shadow dark:bg-gray-800">
+        <div class="py-4 shadow dark:bg-gray-800" style="background-color: transparent;">
             <div class="max-w-6xl mx-auto">
                 <div class="flex items-center lg:justify-between justify-around">
                     <a href="/">
-                        <b><h1 style="font-size: 3.5rem;">S T A Y S</h1></b>
+                        <b><h1 class="lg:text-3xl text-xl font-semibold mb-6 text-white">S T A Y S</h1></b>
                     </a>
 
                     <div class="capitalize flex font-semibold hidden lg:block my-2 space-x-3 text-center text-sm">
@@ -50,28 +77,25 @@
 
         <div>
             <div class="lg:p-12 max-w-md max-w-xl lg:my-0 my-12 mx-auto p-6 space-y-">
-                <h1 class="lg:text-3xl text-xl font-semibold mb-6"> Sign Up</h1>
+                <h1 class="lg:text-3xl text-xl font-semibold mb-6 text-white"> Sign Up </h1>
                 <!--<p class="mb-2 text-black text-lg"> Register to manage your account </p>-->
-                <form method="POST" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <!--<div class="flex lg:flex-row flex-col lg:space-x-2">
-                        <input type="text" placeholder="First Name"  class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                        <input type="text" placeholder="Last Name" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                    </div>-->
-                    <input type="email" name="email" placeholder="Email" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                    <input type="password" name="password1" placeholder="Password" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                    <input type="password" name="password2" placeholder="Confirm Password" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                    {% comment %} <div class="flex justify-start my-4 space-x-1">
-                        <div class="checkbox">
-                            <input type="checkbox" id="chekcbox1" checked>
-                            <label for="chekcbox1"><span class="checkbox-icon"></span> I Agree</label>
-                        </div>
-                        <a href="#"> Terms and Conditions</a>
-                    </div> {% endcomment %}
-                    <button type="submit" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Register</button>
+                    <style>
+                        input[name="password1"]::placeholder,
+                        input[name="password2"]::placeholder,
+                        input[name="email"]::placeholder {
+                            color: black;
+                        }
+                    </style>
+                    <input type="email" name="email" placeholder="Email" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important; color: black;">
+                    <input type="password" name="password1" placeholder="Password" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important; color: black;">
+                    <input type="password" name="password2" placeholder="Confirm Password" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important; color: black;">
+
+                    <button type="submit" class="bg-gradient-to-br from-yellow-900 py-3 rounded-md text-white text-xl to-red-400 w-full" style="border: 3px solid yellow;"><b>Register</b></button>
                     <div class="text-center mt-5 space-x-2">
-                        <p class="text-base"> Do you have an account? <a href="login"> SUBMIT </a></p>
-                    </div>
+                        <p class="text-base text-white text-2xl"><b>Do you have an account      ?     </b><a href="login"><b>LOGIN</b></a></p>
+                    </div> 
                 </form>
             </div>
         </div>

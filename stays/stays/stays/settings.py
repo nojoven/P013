@@ -396,6 +396,9 @@ OPENAI_API_KEY = confs.get("OPENAI_API_KEY")
 COUNTRIES_FIRST = ['FR', 'US', 'GB']
 COUNTRIES_FIRST_SORT = True
 
+
+UNDETECTABLE_AI_API_KEY = confs.get("UNDETECTABLE_AI_API_KEY")
+
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
 import dynaconf  # noqa
