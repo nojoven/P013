@@ -6,8 +6,9 @@
 <main>
 {% block content %}
 <div class="container">
+    <center><h1> {{ publication.title }}</h1></center>
     <center><h1>It was {{ publication.season_of_stay }}, in {{ publication.year_of_stay }} </h1></center>
-    <center><h2> {{ stay_country_name }}, {{ stay_continent_name }} </h2></center>
+    <center><h2> {{ publication.stay_country_name }}, {{ publication.stay_continent_code }} </h2></center>
     <br>
     <br>
     <div class="row justify-content-md-center">
@@ -19,8 +20,8 @@
     <br>
     <hr>
     <center>
-    <h1> {{ publication.title }}, {{ publication.created_at }}</h1> 
-    <h2> {% if publication.published_from_country_name  %} Published from {{ published_from_country_name }} {% endif %} </h2>
+    <h1> {{ publication.created_at }} </h1>
+    <h2> {% if publication.published_from_country_name  %} Published from {{ publication.published_from_country_name }} {% endif %} </h2>
     <h3>{{ publication.author }}</h3>
     {% if publication.updated_at != publication.created_at %}
     <h4> Updated : {{ publication.updated_at }}</h4>

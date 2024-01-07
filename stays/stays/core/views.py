@@ -19,17 +19,6 @@ def get_author_picture_from_slug(author_slug: str):
     return author_profile.profile_picture
 
 
-def get_name_and_continent_code_from_country_code(country_code: str):
-    ic(country_code)
-    ic(StayCountry.objects.get(country_code_of_stay=country_code))
-    try:
-        stay_country = StayCountry.objects.get(country_code_of_stay=country_code)
-    except StayCountry.DoesNotExist:
-        return {"country_name": None, "continent_code": None}
-    ic(stay_country.continent_name)
-    return {"country_name": stay_country.country_name, "continent_code": stay_country.continent_name}
-
-
 def get_continent_from_code(continent_code: str):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     json_file_path = os.path.join(current_dir, 'utils', 'continents.json')
@@ -40,9 +29,10 @@ def get_continent_from_code(continent_code: str):
 
 
 def find_cities_light_country_name_with_code(country_code: str):
-    country = Country.objects.get(code2=country_code)
-    return country.name
+    return Country.objects.get(code2=country_code).name
 
+def find_cities_light_continent_with_country_code(country_code: str):
+    return Country.objects.get(code2=country_code).continent
 
 # Create your views here.
 def home(request):
@@ -84,19 +74,20 @@ class PublicationDetailView(DetailView):
         author_profile_picture = get_author_picture_from_slug(
             publication.author_slug
         )
+        publication.author_profile_picture = author_profile_picture
 
-        stay_country_data = get_name_and_continent_code_from_country_code(
-            publication.country_code_of_stay
-        )
+        stay_country_name = find_cities_light_country_name_with_code(publication.country_code_of_stay)
+        publication.stay_country_name = stay_country_name
 
-        
+        stay_continent_code = find_cities_light_continent_with_country_code(publication.country_code_of_stay)
+        publication.stay_continent_code = get_continent_from_code(stay_continent_code)
 
-        context["author_profile_picture"] = author_profile_picture
-        context["stay_country_name"] = stay_country_data.get("country")
-        context["stay_continent_name"] = get_continent_from_code(stay_country_data.get("continent"))
-        context["published_from_country_name"] = Country.objects.get(code2=str(publication.published_from_country_code)).name if publication.published_from_country_code else ""
+        published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
+        publication.published_from_country_name = published_from_country_name
 
+        context["publication"] = publication
         ic(context.items())
+
         return context
 
 

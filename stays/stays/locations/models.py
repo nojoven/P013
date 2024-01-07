@@ -28,7 +28,7 @@ class StayCountry(models.Model):
     )
     continent_name = models.CharField(null=True)
     country_name = models.CharField(null=True)
-    country_code_of_stay = CountryField(null=True, unique=True)
+    country_code_of_stay = CountryField(null=True)
 
     # def save(self, *args, **kwargs):
     #     if not self.country_code_of_stay:
