@@ -63,6 +63,7 @@
                     {% if user.is_authenticated %}
                     <p>{{user.email}}</p>
                     <center>
+                        {% if user.slug not in publication.upvoters  %}
                         <button id="upvbtn" 
                                 type="button" 
                                 class="btn btn-light btn-outline-info"
@@ -73,6 +74,18 @@
                                 hx-headers='{"Content-Type":"application/json"}'>
                             Upvote <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg></i>
                         </button>
+                        {% else %}
+                        <button id="upvbtn" 
+                                type="button" 
+                                class="btn btn-light btn-outline-info"
+                                hx-post="{% url 'core:upvote' publication.uuid %}" 
+                                hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                                hx-target="#upvbtn" 
+                                hx-swap="none"
+                                hx-headers='{"Content-Type":"application/json"}'>
+                            Upvote <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm" style="color: #e22222;" data-fa-i2svg></i>
+                        </button>
+                        {% endif %}
                     </center>
                     {% endif %}
                 </div>

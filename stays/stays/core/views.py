@@ -81,6 +81,9 @@ def home(request):
             publication.published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
         else:
             publication.published_from_country_name = "" if not publication.published_from_country_code else Country.objects.get(code2=str(publication.country_code_of_stay)).name
+    
+        publication.upvoters = PublicationUpvote.objects.filter(publication_id=publication.uuid).values_list('upvote_profile', flat=True)
+
     paginator = Paginator(publications, 3)
 
     page = request.GET.get('page')
