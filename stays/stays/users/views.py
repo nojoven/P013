@@ -24,6 +24,8 @@ from core.models import Publication
 from django_countries import countries
 
 # Custom sugar
+from cleantext import clean
+from neattext.functions import clean_text
 from icecream import ic
 
 # Create your views here.
@@ -118,7 +120,24 @@ class UpdateAccountView(UpdateView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        return super(UpdateAccountView,self).form_valid(form)
+        about_text = form.cleaned_data.get('about_text')
+        if about_text:
+            about_text = clean_text(about_text, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, emojis=True)
+
+        signature = form.cleaned_data.get('signature')
+
+        if signature:
+            signature = clean_text(signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, emojis=False)
+
+        # Enregistrement de la publication
+        profile = form.save(commit=False)
+        profile.about_text = about_text
+        profile.signature = signature
+        profile.save()
+
+        messages.success(self.request, 'Profile updated successfully!')
+
+        return super(UpdateAccountView, self).form_valid(form)
     
 
     def form_invalid(self, form):
@@ -174,7 +193,26 @@ class PublishView(FormView, CreateView):
 
         # Enregistrement du texte s'il est fourni
         if text_story:
-            publication.text_story = text_story
+            publication.text_story = clean(  # Clean the texte
+                text_story,
+                fix_unicode=True,               # fix various unicode errors
+                to_ascii=True,                  # transliterate to closest ASCII representation
+                lower=False,                     # lowercase text
+                no_line_breaks=False,           # fully strip line breaks as opposed to only normalizing them
+                no_urls=True,                  # replace all URLs with a special token
+                no_emails=True,                # replace all email addresses with a special token
+                no_phone_numbers=True,         # replace all phone numbers with a special token
+                no_numbers=False,               # replace all numbers with a special token
+                no_digits=False,                # replace all digits with a special token
+                no_currency_symbols=False,      # replace all currency symbols with a special token
+                no_punct=False,                 # remove punctuations
+                replace_with_punct="",          # instead of removing punctuations you may replace them
+                replace_with_url="<URL>",
+                replace_with_email="<EMAIL>",
+                replace_with_phone_number="<PHONE>",
+                replace_with_currency_symbol="<$£>",
+                lang="en"                       # set to 'de' for German special handling
+            )
 
         # Enregistrement de l'enregistrement vocal s'il est fourni
         if voice_story:
@@ -196,7 +234,6 @@ class PublishView(FormView, CreateView):
             self.request,
             'Something went wrong. Please check your input.'
         )
-        print("********ARRRRRGG***********")
         ic(self.request)
         ic(form)
         ic(form.errors.as_data())
