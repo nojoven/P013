@@ -61,7 +61,19 @@
                     <center><a href="{% url 'users:login' %}" class="btn btn-primary">Login</a></center>
                     {% endif %}
                     {% if user.is_authenticated %}
-                    <center><button id="upvbtn" class="btn btn-light btn-outline-info">Upvote <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg></i></button></center>
+                    <p>{{user.email}}</p>
+                    <center>
+                        <button id="upvbtn" 
+                                type="button" 
+                                class="btn btn-light btn-outline-info"
+                                hx-post="{% url 'core:upvote' publication.uuid %}" 
+                                hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                                hx-target="#upvbtn" 
+                                hx-swap="none"
+                                hx-headers='{"Content-Type":"application/json"}'>
+                            Upvote <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg></i>
+                        </button>
+                    </center>
                     {% endif %}
                 </div>
             </div>
@@ -130,4 +142,23 @@
     </div>               
 </div>
 {% endblock content %}
+
+<script>
+    $(document).ready(function () {
+        $('#upvbtn').click(function () {
+            $.ajax({
+                url: "{% url 'publications:publication_upvote' publication.uuid %}",
+                method: 'POST',
+                data: {
+                    'publication_id': '{{ publication.uuid }}',
+                    'profile_slug': '{{ user.slug }}',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    // Update the button text or do something else with the response
+                }
+            });
+        });
+    });
+</script>
 </main>

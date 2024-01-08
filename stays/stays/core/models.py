@@ -87,7 +87,7 @@ class PublicationHasGallery(models.Model):
 
 class PublicationUpvote(models.Model):
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
-    upvote_profile = SlugFieldForeignKey("users.Profile", on_delete=models.CASCADE, null=True)
+    upvote_profile = models.SlugField(max_length=500, null=True)
     upvote_date = models.DateTimeField(auto_now_add=True)
     upvote_value = models.IntegerField(
         default=0,
@@ -96,6 +96,8 @@ class PublicationUpvote(models.Model):
             MaxValueValidator(1, message="Number of attempts cannot exceed the maximum allowed."),
         ]
     )
+    class Meta:
+        unique_together = (('publication', 'upvote_profile'),)
 
 
 # @receiver(post_save, sender=PublicationUpvote)

@@ -1,13 +1,15 @@
 import json
 import os
-
+from django.db.models import F
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from django.http import HttpResponse
 from users.models import Profile
-from core.models import Publication
+from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
 from django.views.generic.detail import DetailView
-from locations.models import StayCountry
 from cities_light.models import Country
 
 from icecream import ic
@@ -33,6 +35,36 @@ def find_cities_light_country_name_with_code(country_code: str):
 
 def find_cities_light_continent_with_country_code(country_code: str):
     return Country.objects.get(code2=country_code).continent
+
+
+@csrf_exempt
+@require_POST
+def toggle_upvote(request, uuid):
+    publication_id = uuid
+    req = request.POST
+    ic(req)
+    profile_email = None
+    for key in req.keys():
+        if 'profile_email' in key:
+            profile_email = key.split(":")[1].strip(' "')
+            ic(profile_email)
+            break
+        else:
+            continue
+    ic(profile_email)
+    publication = Publication.objects.get(uuid=publication_id)
+    profile = Profile.objects.get(email=profile_email)
+    upvote, created = PublicationUpvote.objects.get_or_create(publication=publication, upvote_profile=profile.slug)
+    if created:
+        upvote.upvote_value = 1
+        publication.upvotes_count = F('upvotes_count') + 1
+        upvote.save()
+    else:
+        publication.upvotes_count = F('upvotes_count') - 1
+        publication.save()
+        upvote.delete()
+    return JsonResponse({'message': 'Success'})
+
 
 # Create your views here.
 def home(request):

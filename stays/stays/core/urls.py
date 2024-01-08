@@ -8,4 +8,5 @@ urlpatterns = [
     path("", views.home, name="home"),
     # path("publications", views.PublicationsListView.as_view(), name="account"),
     path("publications/publication/<uuid:uuid>", views.PublicationDetailView.as_view(), name="publication"),
+    path('publications/publication/<uuid:uuid>/upvote', views.toggle_upvote, name='upvote'),
 ]
