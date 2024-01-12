@@ -79,7 +79,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def follow(self, profile):
-        # Méthode pour faire en sorte que le profil actuel suive un autre profil
+        # Méthode pour faire en sorte que le profil actuel suive un autre profile
         Follow.objects.add_follower(self, profile)
 
     def unfollow(self, profile):
