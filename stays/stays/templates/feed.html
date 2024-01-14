@@ -61,7 +61,6 @@
                     <center><a href="{% url 'users:login' %}" class="btn btn-primary">Login</a></center>
                     {% endif %}
                     {% if user.is_authenticated %}
-                    <p>{{user.email}}</p>
                     <center>
                         {% if user.slug not in publication.upvoters  %}
                         <button id="upvbtn" 
@@ -96,12 +95,12 @@
             
             
 
-            <!-- Load more -->
+            {% comment %} <!-- Load more -->
             <div class="d-flex justify-content-center mt-6">
               <a href="#" class="bg-white font-weight-bold my-3 px-6 py-2 rounded-full shadow-md" data-bs-toggle="collapse" data-bs-target="#toggle" aria-expanded="false" aria-controls="toggle">
                   Load more ..
               </a>
-            </div>
+            </div> {% endcomment %}
             <div class="d-flex justify-content-center mt-6">
                 <div class="d-flex justify-content-center mt-6">
                     {% cool_paginate page_obj=publication %}
