@@ -6,11 +6,14 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
+from core.forms import PublicationEditForm
 from users.models import Profile
 from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
+from django.views.generic.edit import UpdateView
 from django.views.generic.detail import DetailView
 from cities_light.models import Country
+from iommi import Table, Column, Action, Form, Field
 
 from icecream import ic
 
@@ -124,6 +127,44 @@ class PublicationDetailView(DetailView):
         ic(context.items())
 
         return context
+
+
+
+class PublicationUpdateView(UpdateView):
+    model = Publication
+    form_class = PublicationEditForm
+    template_name = "publication_update.html"
+    slug_field = 'uuid'  # Indiquez le nom du champ slug dans votre modèle
+    pk_url_kwarg = 'uuid'  # Indiquez le nom du paramètre slug dans votre URL
+
+    def get_success_url(self):
+        return reverse('publication_detail', kwargs={'uuid': self.object.uuid})
+
+
+
+def publications_view(request):
+    class PublicationTable(Table):
+        class Meta:
+            model = Publication
+            auto__model = Publication
+
+        select = Column.select()
+        title = Column.editable()
+        picture = Column.editable(form__field__factory=FileField.factory())
+        actions = Column.actions(
+            delete=Action.post(
+                attrs__href=lambda row, **_: f'/delete_publication/{row.pk}/',
+                include=lambda row, **_: row.author_username == request.user.username
+            )
+        )
+
+    table = PublicationTable()
+    table = table.bind(request=request)
+
+    if 'delete_selected' in request.POST:
+        Publication.objects.filter(pk__in=request.POST.getlist('select')).delete()
+
+    return render(request, 'publications.html', {'table': table})
 
 
 # django-cool-pagination CBV example

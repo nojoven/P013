@@ -62,7 +62,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     slug = models.SlugField(unique=True, blank=False, null=True, max_length=255, default=None)
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
     email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
-    username = models.CharField(max_length=20, blank=False, null=True, unique=True)
+    username = models.CharField(max_length=44, blank=False, null=True, unique=True)
     password = models.CharField(max_length=255, blank=False, null=True, help_text="Your password")
     year_of_birth = models.IntegerField(help_text="User's birth year", default=1900, null=False)
     season_of_birth = models.CharField(max_length=50, default="Spring", blank=False, null=False)

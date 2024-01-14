@@ -109,6 +109,11 @@ class AccountDetailsView(DetailView):
         return context
 
 
+
+class ProfileStaysListView(ListView):
+    pass
+
+
 class UpdateAccountView(UpdateView):
     model = Profile
     form_class = AccountEditionForm
