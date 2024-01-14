@@ -26,6 +26,7 @@ urlpatterns = [
     path("admin", admin.site.urls),
     path('admin/defender/', include('defender.urls')),
     path("", include("core.urls")),
+    path("", include("locations.urls")),
     path("", include("users.urls")),
     path('friendship/', include('friendship.urls')),
     path("forum", include(machina_urls)),

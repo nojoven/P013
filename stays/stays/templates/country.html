@@ -1,0 +1,7 @@
+<h1>{{ country_data[1][0].name }}</h1>
+
+<img src="https://api.mapbox.com/styles/v1/mapbox/dark-v10/static/pin-l({{ country_data[1][0].longitude }},{{ country_data[1][0].latitude }})/{{ country_data[1][0].longitude }},{{ country_data[1][0].latitude }},5/500x300?access_token=YOUR_MAPBOX_ACCESS_TOKEN" alt="Map">
+
+<h2>Country Data</h2>
+<p>Income Level: {{ country_data[1][0].incomeLevel.value }}</p>
+<p>Region: {{ country_data[1][0].region.value }}</p>
