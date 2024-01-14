@@ -13,5 +13,6 @@
     "PORCUPINE_ACCESSKEY": "",
     "OPENAI_API_KEY": "",
     "UNDETECTABLE_AI_API_KEY": "",
-    "MAPBOX_TOKEN": ""
+    "MAPBOX_TOKEN": "",
+    "NINJAS_API_KEY": ""
 }

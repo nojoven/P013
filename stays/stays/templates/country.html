@@ -1,7 +1,12 @@
-<h1>{{ country_data[1][0].name }}</h1>
+{% extends "base.html" %}
+{% load static %}
 
-<img src="https://api.mapbox.com/styles/v1/mapbox/dark-v10/static/pin-l({{ country_data[1][0].longitude }},{{ country_data[1][0].latitude }})/{{ country_data[1][0].longitude }},{{ country_data[1][0].latitude }},5/500x300?access_token=YOUR_MAPBOX_ACCESS_TOKEN" alt="Map">
 
-<h2>Country Data</h2>
-<p>Income Level: {{ country_data[1][0].incomeLevel.value }}</p>
-<p>Region: {{ country_data[1][0].region.value }}</p>
+
+<main>
+    {% block content %}
+    <h1>{{ country_data.name }}</h1>
+    <iframe X-Frame-Options="SAMEORIGIN"  src="{{ google_maps_url }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    <img src="{{ coat_of_arms }}" alt="Coat of Arms">
+    {% endblock content %}    
+</main>

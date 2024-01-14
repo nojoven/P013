@@ -397,9 +397,14 @@ COUNTRIES_FIRST = ['FR', 'US', 'GB']
 COUNTRIES_FIRST_SORT = True
 
 MAPBOX_TOKEN = confs.get("MAPBOX_TOKEN")
+NINJAS_API_KEY = confs.get("NINJAS_API_KEY")
 
 
 UNDETECTABLE_AI_API_KEY = confs.get("UNDETECTABLE_AI_API_KEY")
+
+
+# settings.py
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
