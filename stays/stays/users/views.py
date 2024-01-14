@@ -151,10 +151,10 @@ class UpdateAccountView(UpdateView):
         messages.success(self.request, 'Profile updated successfully!')
 
         return super(UpdateAccountView, self).form_valid(form)
-    
+
 
     def form_invalid(self, form):
-        messages.error(self.request,'Unsuccessful update due to invalid submitted data. Please check your input.')
+        messages.error(self.request, 'Unsuccessful update due to invalid submitted data. Please check your input.')
         return self.render_to_response(self.get_context_data(form=form))
 
 
