@@ -4,19 +4,24 @@ from django_select2 import forms as s2forms
 from django_countries.widgets import CountrySelectWidget
 from django_countries.fields import CountryField
 
+
 from django.conf import settings
 
 from core.models import Publication
 
 from .models import Profile
 
+from cities_light.models import CONTINENT_CHOICES
+
 class RegistrationForm(UserCreationForm):
     email = forms.CharField(required=True)
+    username = forms.CharField(required=True)
     password1 = forms.CharField(required=True)
     password2 = forms.CharField(required=True)
     class Meta:
         model = Profile
-        fields = [ 
+        fields = [
+            "username",
             "email",
             "password1",
             "password2"
@@ -45,6 +50,7 @@ class AccountEditionForm(UserChangeForm):
     about_text=forms.CharField(required=False, empty_value="Once upon a time...")
     motto=forms.CharField(required=False, empty_value="I LOVE THIS WEBSITE!")
     signature=forms.CharField(required=False, empty_value="Myself!")
+    continent_of_birth = forms.ChoiceField(choices=CONTINENT_CHOICES, required=False)
 
     class Meta:
         model = Profile
@@ -59,6 +65,7 @@ class AccountEditionForm(UserChangeForm):
             "about_text",
             "motto",
             "signature",
+            "continent_of_birth",
         ]
 
     # template_name_suffix = "_update_form"

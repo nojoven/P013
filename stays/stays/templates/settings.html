@@ -66,12 +66,12 @@
                         {% if not current_user.username %}
                         <div class="col-span-2">
                             <label for="">Username</label>
-                            <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.slug }}" class="form-control">
+                            <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.slug }}" class="form-control" readonly>
                         </div>
                         {% else %}
                         <div class="col-span-2">
                             <label for="">Username</label>
-                            <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.username }}" class="form-control">
+                            <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.username }}" class="form-control" readonly>
                         </div>
                         {% endif %}
                         <div class="col-span-2">
@@ -88,7 +88,15 @@
                                 <option value="Winter">Winter</option>
                             </select>
                         </div>
-
+                        <div class="col-span-2">
+                            <label for="continent_of_birth">Continent of birth</label>
+                            <select id="continent_of_birth" name="continent_of_birth" class="form-control">
+                                <option value="{{ current_user.continent_of_birth }}">Select a continent (currently {{ current_user.get_continent_of_birth_display }})</option>
+                                {% for value, display in form.fields.continent_of_birth.choices %}
+                                    <option value="{{ value }}" {% if current_user.continent_of_birth == value %}selected{% endif %}>{{ display }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <div class="col-span-2">
                             <label for="">Email</label>
                             <input type="email" name="account_email" placeholder="{{ current_user.email }}" value="{{ current_user.email }}" class="form-control" readonly>
