@@ -7,6 +7,6 @@ register = template.Library()
 @stringfilter
 def split_on_slash(arg):
     if "/" in arg:
-        return arg.split("/")[1]
+        return arg.split("/")[-1]
     else:
         return arg

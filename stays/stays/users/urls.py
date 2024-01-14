@@ -14,5 +14,6 @@ urlpatterns = [
     path("account/<slug:slug>/stays", views.AccountDetailsView.as_view(), name="stays"),
     path("account/<slug:slug>/publish", views.PublishView.as_view(), name="publish"),
     path("account/<slug:slug>/settings", views.UpdateAccountView.as_view(), name="settings"),
+    path("account/<slug:slug>/delete", views.DeleteProfileView.as_view(), name="delete_account"),
     path("", include('allauth.urls')),
 ]

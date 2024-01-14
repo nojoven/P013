@@ -2,9 +2,19 @@
 {% load static %}
 
 
-
-<main>
+<main class="flex-grow-1 bg-white">
     {% block content %}
-    
+        <div class="d-flex flex-column min-vh-100 bg-white">
+            <div class="d-flex justify-content-center align-items-center vh-100">
+                <form action="/" method="post" class="text-center">
+                    {% csrf_token %}
+                    <h1>Are you sure?</h1>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-danger">Confirm</button>
+                        <a href="/" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     {% endblock content %}
 </main>

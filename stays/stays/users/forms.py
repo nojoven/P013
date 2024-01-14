@@ -101,3 +101,11 @@ class PasswordChangeFromConnectedProfile(PasswordChangeForm):
         fields = [
             "password"
         ]
+
+
+class DeleteProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            "username"
+        ]

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
 from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView
 from django.views.generic.detail import DetailView
@@ -34,6 +34,14 @@ def retrieve_current_user(profile_email):
     current_user = Profile.objects.get(email=profile_email)
     return current_user
 
+
+class DeleteProfileView(LoginRequiredMixin, DeleteView):
+    model = Profile
+    template_name = 'delete_account.html'
+    success_url = reverse_lazy('core:home')
+
+    def get_object(self, queryset=None):
+        return retrieve_current_user(self.request.user)
 
 
 class CreateProfileView(CreateView):
