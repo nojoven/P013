@@ -11,12 +11,15 @@ from django.urls import reverse, reverse_lazy
 from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
-from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView
+from django.utils.encoding import force_bytes
+from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView, ArchiveIndexView, TodayArchiveView, WeekArchiveView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
 from .forms import PasswordResetForm
 from django.utils.decorators import method_decorator
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
 
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm, PasswordChangeFromConnectedProfile
 from users.models import Profile
@@ -256,29 +259,28 @@ class PublishView(FormView, CreateView):
 
 
 
-def send_password_reset_email(request, user):
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
-    token = default_token_generator.make_token(user)
-
-    url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-
-    # Now you can use 'url' in your email body
-    send_mail(
-        'Password Reset',
-        'Click the following link to reset your password: {}'.format(url),
-        'from@example.com',
-        [user.email],
-    )
-
-    return HttpResponse("Email sent.")
-
-
-
 class PasswordResetView(PasswordResetView):
     form_class = PasswordResetForm
     template_name = 'password_reset_form.html'  # point this to your template
     email_template_name = 'password_reset_email.html'  # point this to your email template
     success_url = reverse_lazy('users:password_reset_done')
+
+    def form_valid(self, form):
+        user = form.get_user()
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+
+        url = self.request.build_absolute_uri(reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token}))
+
+        # Now you can use 'url' in your email body
+        send_mail(
+            'Password Reset',
+            'Click the following link to reset your password: {}'.format(url),
+            'from@example.com',
+            [user.email],
+        )
+
+        return super().form_valid(form)
 
 class PasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'password_reset_confirm.html'  # point this to your template

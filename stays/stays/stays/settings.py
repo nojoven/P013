@@ -406,6 +406,17 @@ UNDETECTABLE_AI_API_KEY = confs.get("UNDETECTABLE_AI_API_KEY")
 # settings.py
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
+EMAIL_BACKEND = confs.get("EMAIL_BACKEND")
+# Hostname of your email provider
+EMAIL_HOST = confs.get("EMAIL_HOST")
+# port of your email provider
+EMAIL_PORT = confs.get("EMAIL_PORT")
+EMAIL_USE_TLS = confs.get("EMAIL_USE_TLS")
+# your email account
+EMAIL_HOST_USER = confs.get("EMAIL_HOST_USER")
+# your email password
+EMAIL_HOST_PASSWORD = confs.get("EMAIL_HOST_PASSWORD")
+
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
 import dynaconf  # noqa
