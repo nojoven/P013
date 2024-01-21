@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, AuthenticationForm
-from django_select2 import forms as s2forms
+# from django_select2 import forms as s2forms
 from django_countries.widgets import CountrySelectWidget
 from django_countries.fields import CountryField
+from django.contrib.auth.forms import PasswordResetForm
 
 
 from django.conf import settings
@@ -12,6 +13,10 @@ from core.models import Publication
 from .models import Profile
 
 from cities_light.models import CONTINENT_CHOICES
+
+
+
+
 
 class RegistrationForm(UserCreationForm):
     email = forms.CharField(required=True)
@@ -26,6 +31,13 @@ class RegistrationForm(UserCreationForm):
             "password1",
             "password2"
         ]
+
+
+class PasswordResetForm(PasswordResetForm):
+    # add any custom fields or validation here
+    pass
+
+
 
 class AccountLoginForm(AuthenticationForm):
     username = forms.EmailField(required=False)

@@ -31,7 +31,7 @@ urlpatterns = [
     path('friendship/', include('friendship.urls')),
     path("forum", include(machina_urls)),
     path("api/", api.urls),
-    path("select2/", include("django_select2.urls")),
+    # path("select2/", include("django_select2.urls")),
     path("apm/", include("djapm.apm.urls")),
     re_path(r'^watchman/', include('watchman.urls')),
     path('tinymce/', include('tinymce.urls')),
