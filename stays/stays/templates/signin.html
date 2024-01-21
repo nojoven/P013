@@ -81,7 +81,7 @@
                         </div> {% endcomment %}
                         {% comment %} <a href="#"> Forgot Your Password? </a> {% endcomment %}
                     </div>
-                    <h6 class="text-center mb-5"><a href="#"> Forgot Your Password? </a></h6>
+                    <h6 class="text-center mb-5"><a href="{% url 'users:password_reset' %}"> Forgot Your Password? </a></h6>
                     <button type="submit" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Login</button>
                     <div class="text-center mt-5 space-x-2">
                         <p class="text-xl"> Not registered ? <a href="signup" class="text-2xl"> Create an account </a></p>

@@ -347,7 +347,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = "users.Profile"
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
 AUTHENTICATION_BACKENDS = [
     'users.backends.EmailBackend',  # custom backend
@@ -416,6 +417,13 @@ EMAIL_USE_TLS = confs.get("EMAIL_USE_TLS")
 EMAIL_HOST_USER = confs.get("EMAIL_HOST_USER")
 # your email password
 EMAIL_HOST_PASSWORD = confs.get("EMAIL_HOST_PASSWORD")
+
+# Mailgun Authorized email
+DEFAULT_EMAIL_DESTINATION = confs.get("DEFAULT_EMAIL_DESTINATION")
+
+MAILGUN_API_KEY = confs.get("MAILGUN_API_KEY")
+MAILGUN_DOMAIN_NAME = confs.get("MAILGUN_DOMAIN_NAME")
+
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/

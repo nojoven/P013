@@ -54,7 +54,7 @@ class CreateProfileView(CreateView):
     model = Profile
     form_class = RegistrationForm
     template_name = "signup.html"
-    success_url = reverse_lazy("login")
+    success_url = reverse_lazy("users:login")
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
@@ -261,26 +261,8 @@ class PublishView(FormView, CreateView):
 
 class PasswordResetView(PasswordResetView):
     form_class = PasswordResetForm
-    template_name = 'password_reset_form.html'  # point this to your template
-    email_template_name = 'password_reset_email.html'  # point this to your email template
+    template_name = 'password_reset_form.html'
     success_url = reverse_lazy('users:password_reset_done')
-
-    def form_valid(self, form):
-        user = form.get_user()
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-
-        url = self.request.build_absolute_uri(reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token}))
-
-        # Now you can use 'url' in your email body
-        send_mail(
-            'Password Reset',
-            'Click the following link to reset your password: {}'.format(url),
-            'from@example.com',
-            [user.email],
-        )
-
-        return super().form_valid(form)
 
 class PasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'password_reset_confirm.html'  # point this to your template
