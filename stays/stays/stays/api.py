@@ -14,7 +14,7 @@ api = NinjaAPI()
 
 @throttle(zone='default')
 @api.get("/isonline/{slug}/")
-def hello(request, slug: str):
+def is_profile_online(request, slug: str):
     profile = Profile.objects.get(slug=slug)
     return JsonResponse({'is_online': profile.is_online})
 
