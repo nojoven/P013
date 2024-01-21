@@ -179,7 +179,8 @@
         async function updateUserStatus(author_slug) {
             console.log(`Fetching status for ${author_slug}`);
             try {
-                const response = await fetch(`/api/isonline/${author_slug}/`);
+                const cacheTime = 900000;
+                const response = await fetch(`/api/isonline/${author_slug}/`, { cache: "force-cache" }, cacheTime);
                 console.log(`Received response for ${author_slug}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
