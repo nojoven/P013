@@ -59,30 +59,49 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    document.getElementById('deletebtn').addEventListener('click', function(event) {
-        event.preventDefault();
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
-                    icon: "success"
-                });
-                // Here you can add a code to perform the actual deletion operation
-                // For example, you can redirect to the delete URL
-                // window.location.href = this.href;
-            }
+        document.getElementById('deletebtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/publications/publication/rm', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({
+                            identifier: '{{ publication.uuid }}'
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                        window.location.href = '/';  // replace with actual path
+                    })
+                    .catch((error) => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+                }
+            });
         });
-    });
-    </script>
+        </script>
     
     
     {% endif %}

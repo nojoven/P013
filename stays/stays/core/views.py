@@ -1,8 +1,9 @@
 import json
 import os
+from django.urls import reverse_lazy
 from django.db.models import F
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
@@ -11,8 +12,9 @@ from users.models import Profile
 from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic.detail import DetailView
+from django.utils.decorators import method_decorator
 from cities_light.models import Country
 from iommi import Style, register_style, Asset
 from iommi import Table, Column, Action, Form, Field
@@ -245,7 +247,7 @@ bootstrap5 = Style(
 
 my_style = bootstrap5
 
-register_style('my_style', my_style)
+# register_style('my_style', my_style)
 
 
 # @login_required
@@ -372,19 +374,29 @@ class PublicationDetailView(DetailView):
         return context
 
 
-
-class PublicationUpdateView(UpdateView):
+class PublicationDeleteView(DeleteView):
     model = Publication
-    form_class = PublicationEditForm
-    template_name = "publication_update.html"
-    slug_field = 'uuid'  # Indiquez le nom du champ slug dans votre modèle
-    pk_url_kwarg = 'uuid'  # Indiquez le nom du paramètre slug dans votre URL
+    success_url = reverse_lazy('core:home')
 
-    def get_success_url(self):
-        return reverse('publication_detail', kwargs={'uuid': self.object.uuid})
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        identifier = body.get('identifier')
 
+        if identifier:
+            Publication.objects.filter(uuid=identifier).delete()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'error': 'No identifier provided'})
 
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 
