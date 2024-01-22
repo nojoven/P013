@@ -5,6 +5,7 @@
 <title>{{ publication.title }}</title>
 <main>
 {% block content %}
+
 <div class="container">
     <center><h1> {{ publication.title }}</h1></center>
     <br>
@@ -50,8 +51,44 @@
         {{ publication.text_story }}
     {% endif %}
     </p>
+    {% if publication.author_slug == user.slug %}
+
+    <div class="text-center">
+        <button id="deletebtn" class="btn btn-lg btn-danger">DELETE</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    document.getElementById('deletebtn').addEventListener('click', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+                // Here you can add a code to perform the actual deletion operation
+                // For example, you can redirect to the delete URL
+                // window.location.href = this.href;
+            }
+        });
+    });
+    </script>
+    
+    
+    {% endif %}
     <br>
     <br>
 </div>
 {% endblock content %}
 </main>
+
