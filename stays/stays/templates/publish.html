@@ -48,11 +48,11 @@
                         </div>
                         <div class="col-span-2">
                             <label for="author_slug" style="display: none;">Author ID</label>
-                            <input type="text" name="author_slug" value="{{ current_user.slug }}" class="shadow-none bg-gray-100" style="display: none;">
+                            <input type="text" name="author_slug" value="{{ current_user.slug }}" class="shadow-none bg-gray-100" style="display: none;" readonly>
                         </div>
                         <div class="col-span-2">
-                            <label for="author_slug" style="display: none;">Author Name</label>
-                            <input type="text" name="author_username" value="{{ current_user.username }}" class="shadow-none bg-gray-100" readonly style="display: none;">
+                            <label for="author_username" style="display: none;">Author Name</label>
+                            <input type="text" name="author_username" value="{{ current_user.username }}" class="shadow-none bg-gray-100" readonly style="display: none;" readonly>
                         </div>
                         <div class="col-span-2">
                             <label for="title">Title</label>

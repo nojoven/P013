@@ -1,4 +1,3 @@
-import uuid
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
 from channels.db import database_sync_to_async
@@ -15,19 +14,9 @@ from friendship.models import Follow
 from cities_light.models import CONTINENT_CHOICES, Country, City
 from django_countries.fields import CountryField
 # from core.models import Publication
+from users.utils import uuid_generator, profile_picture_upload_to, build_default_username
 
 # Create your models here.
-
-# Helper function to return uuid as string
-def uuid_generator():
-    return uuid.uuid4().hex
-
-def build_default_username(uuid, email):
-    email_parts = email.split("@")
-    return f"{email_parts[0]}{uuid}{email_parts[1]}"
-
-def profile_picture_upload_to(instance, filename):
-    return f"uploads/{instance.slug}/ProfilePicture/{filename}"
 
 
 class UserManager(BaseUserManager):
