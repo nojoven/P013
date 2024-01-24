@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 import json
 from django.shortcuts import get_object_or_404
 from friendship.models import Follow
@@ -162,6 +163,12 @@ class ProfileStaysListView(ListView):
 
         # Ajouter les publications au contexte
         context['publications'] = self.get_queryset()
+
+        paginator = Paginator(context['publications'], 100)
+
+        page = self.request.GET.get('page')
+        page_obj = paginator.get_page(page)
+        context['page_obj'] = page_obj
 
         return context
 

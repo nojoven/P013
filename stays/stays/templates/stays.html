@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cool_paginate %}
 
 
 
@@ -45,6 +46,11 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-6">
+        <div class="d-flex justify-content-center mt-6">
+            {% cool_paginate page_obj=publication %}
         </div>
     </div>
     {% endblock content %}
