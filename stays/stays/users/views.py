@@ -30,7 +30,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm, PasswordChangeFromConnectedProfile
-from users.models import Profile
+from users.models import Profile, ProfileHasPublication
 
 from core.models import Publication
 
@@ -302,6 +302,9 @@ class ProfileDetailView(DetailView):
             continent_fullname = continents.get(profile.continent_of_birth, profile.continent_of_birth)
             # Modifie la valeur de profile.continent
             profile.continent_of_birth = continent_fullname
+            
+            profile.published_stays = ProfileHasPublication.objects.filter(user_profile=profile.slug)
+
             profile.save()
 
             return profile
