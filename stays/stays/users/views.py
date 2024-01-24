@@ -2,6 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.contrib.gis.geoip2 import GeoIP2
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as authentication_views
 from django.contrib.auth.decorators import login_required, permission_required
@@ -273,3 +275,17 @@ class PasswordResetCompleteView(PasswordResetCompleteView):
 
 class PasswordResetDoneView(PasswordResetDoneView):
     template_name = 'password_reset_done.html'
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    template_name = 'profile.html'
+    context_object_name = 'profile'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get_object(self, queryset=None):
+        try:
+            return super().get_object(queryset)
+        except ObjectDoesNotExist:
+            raise Http404("Désolé, ce profil n'existe plus.")
+
