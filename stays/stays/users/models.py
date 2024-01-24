@@ -96,8 +96,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
 
 class ProfileHasPublication(models.Model):
-    user_profile = SlugFieldForeignKey(Profile, on_delete=models.CASCADE, null=True)
-    publication_of_user = UUIDFieldForeignKey(Publication, on_delete=models.CASCADE, null=True)
+    user_profile = SlugFieldForeignKey(Profile, to_field='slug', on_delete=models.CASCADE, null=True)
+    publication_of_user = UUIDFieldForeignKey(Publication, to_field='uuid', on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = ('user_profile', 'publication_of_user')

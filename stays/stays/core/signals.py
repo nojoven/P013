@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from core.models import Publication, PublicationUpvote
 from locations.models import StayCountry
 from cities_light.models import Country
+from users.models import Profile, ProfileHasPublication
 
 @receiver(post_save, sender=Publication)
 def create_stay_country(sender, instance, created, **kwargs):
@@ -25,3 +26,10 @@ def update_upvotes_count(sender, instance, **kwargs):
     if instance.publication:
         instance.publication.upvotes_count += 1
         instance.publication.save()
+
+
+@receiver(post_save, sender=Publication)
+def create_profile_has_publication(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile.objects.get(slug=instance.author_slug)
+        ProfileHasPublication.objects.create(publication_of_user=instance, user_profile=user_profile)
