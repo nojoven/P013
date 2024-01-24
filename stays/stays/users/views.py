@@ -19,6 +19,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
 from .forms import PasswordResetForm
+from friendship.models import Friend, Follow, Block
 from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
@@ -289,3 +290,50 @@ class ProfileDetailView(DetailView):
         except ObjectDoesNotExist:
             raise Http404("Désolé, ce profil n'existe plus.")
 
+class FollowingListView(ListView):
+    pass
+
+from django.http import JsonResponse
+
+from django.http import HttpResponse, HttpResponseNotAllowed
+import json
+from django.shortcuts import get_object_or_404
+from friendship.models import Follow
+from django.contrib import messages
+from .models import Profile
+
+@login_required
+def follow_profile(request):
+    # Vérifie si la requête est de type POST
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    # Récupère le corps de la requête et le convertit en JSON
+    relation_request = json.loads(request.body)
+
+    # Récupère le profil demandeur et le profil cible à partir des slugs
+    profile_asking = get_object_or_404(Profile, slug=relation_request.get('asking'))
+    profile_target = get_object_or_404(Profile, slug=relation_request.get('target'))
+
+    # Vérifie si l'utilisateur demandeur est l'utilisateur actuel
+    if profile_asking != request.user:
+        return JsonResponse({"error": "Invalid asking user"}, status=400)
+
+    # Vérifie la valeur de "relation"
+    if relation_request.get('relation') == 'follow':
+        # Si "relation" est "follow", commence à suivre le profil
+        Follow.objects.add_follower(profile_asking, profile_target)
+        messages.success(request, f"You are now following {profile_target.username}")
+        # Renvoie une réponse HTTP 201 (Created)
+        return HttpResponse(status=201)
+
+    elif relation_request.get('relation') == 'unfollow':
+        # Si "relation" est "unfollow", arrête de suivre le profil
+        Follow.objects.remove_follower(profile_asking, profile_target)
+        messages.success(request, f"You have unfollowed {profile_target.username}")
+        # Renvoie une réponse HTTP 204 (No Content)
+        return HttpResponse(status=204)
+
+    else:
+        # Si "relation" n'est ni "follow" ni "unfollow", renvoie une erreur
+        return JsonResponse({"error": "Invalid relation value"}, status=400)

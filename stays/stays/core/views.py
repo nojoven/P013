@@ -15,6 +15,7 @@ from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
 from cities_light.models import Country
@@ -441,3 +442,6 @@ class PublicationUpdateView(UpdateView):
         ic(form.errors.as_data()) 
         messages.error(self.request, 'Something went wrong. Please check your input.')
         return super().form_invalid(form)
+
+class ProfileStaysListView(ListView):
+    pass

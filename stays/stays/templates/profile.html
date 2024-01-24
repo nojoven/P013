@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+<title>Stayer - {{ profile.username }}</title>
 
 {% block content %}
 <div class="container mt-5 d-flex justify-content-center align-items-center" style="height: 100vh;">
@@ -37,6 +38,19 @@
                 {% if profile.created_at %}
                     <p class="card-text">Stayer since: {{ profile.created_at }}</p>
                 {% endif %}
+				{% if user.is_authenticated and profile.slug != user.slug %}
+                <div class="d-flex justify-content-around mt-3">
+					<a href="{% url 'core:author_stays' profile.slug %}"><button type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOW ME</button></a>
+				</div>
+				{% endif %}
+                <div class="d-flex justify-content-around mt-3">
+					{% if profile.published_stays %}
+                    <a href="{% url 'core:author_stays' profile.slug %}"><button type="button" class="btn btn-warning text-dark fw-bold border border-dark">MY STAYS</button></a>
+                    {% endif %}
+					{% if profile.following and profile.following.count > 0 %}
+					<a href="{% url 'users:following' profile.slug %}"><button type="button" class="btn btn-success text-white fw-bold border border-white border-3">I FOLLOW STAYERS</button></a>
+					{% endif %}
+				</div>
             </div>
         </div>
     </div>
