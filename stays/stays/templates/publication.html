@@ -23,7 +23,7 @@
     <hr>
     <center>
     <h3> {{ publication.created_at }} </h3>
-    <h3>Published by <a href="{% url 'users:account' publication.author_slug %}">{{ publication.author_username }}</a></h3>
+    <h3>Published by <a href="{% url 'users:profile' publication.author_slug %}">{{ publication.author_username }}</a></h3>
     <h4> {% if publication.published_from_country_name  %} Published from {{ publication.published_from_country_name }} {% endif %} </h4>
     {% if publication.updated_at != publication.created_at %}
     <h4> Updated : {{ publication.updated_at }}</h4>
