@@ -54,7 +54,7 @@
     {% if publication.author_slug == user.slug %}
 
     <div class="text-center">
-        <a href=""><button id="editbtn" class="btn btn-lg btn-warning border-black "><b>EDIT CONTENT</b></button></a>
+        <a href="{% url 'core:edit_publication' publication.uuid %}"><button id="editbtn" class="btn btn-lg btn-warning border-black "><b>EDIT CONTENT</b></button></a>
         <button id="deletebtn" class="btn btn-lg btn-danger">DELETE</button>
     </div>
 

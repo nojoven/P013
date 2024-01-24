@@ -13,5 +13,6 @@ urlpatterns = [
     # path('publications/<slug:slug>', views.publications_management_table, name='publications_management_table'),
     path("publications/publication/rm", views.PublicationDeleteView.as_view(), name="delete_publication"),
     path("publications/publication/<uuid:uuid>", views.PublicationDetailView.as_view(), name="publication"),
+    path("publications/publication/<uuid:pk>/edit", views.PublicationUpdateView.as_view(), name="edit_publication"),
     path('publications/publication/<uuid:uuid>/upvote', views.toggle_upvote, name='upvote'),
 ]

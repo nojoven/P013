@@ -1,5 +1,7 @@
 import json
 import os
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse_lazy
 from django.db.models import F
 from django.contrib.auth import get_user_model
@@ -38,7 +40,14 @@ def get_continent_from_code(continent_code: str):
 
 
 def find_cities_light_country_name_with_code(country_code: str):
-    return Country.objects.get(code2=country_code).name
+    ic(f"Searching for country with code: '{country_code}'")
+    try:
+        country = Country.objects.get(code2=country_code)
+        ic(f"Found country: {country.name}")
+        return country.name
+    except ObjectDoesNotExist:
+        ic(f"No country found with code: '{country_code}'")
+        return None
 
 def find_cities_light_continent_with_country_code(country_code: str):
     return Country.objects.get(code2=country_code).continent
@@ -399,9 +408,36 @@ class PublicationDeleteView(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
+class PublicationUpdateView(UpdateView):
+    model = Publication
+    form_class = PublicationEditForm
+    template_name = 'update_publication.html'
+    exclude_fields = ['upvotes_count', 'reveal_city', 'content_type', 'published_from_country_code']
+    years = list(range(1950, 2025))
+    seasons = ['Spring', 'Summer', 'Autumn', 'Winter']
+    file_fields = ['picture', 'voice_story']
 
-# django-cool-pagination CBV example
-# https://github.com/joe513/django-cool-pagination#cbv-class-based-view
-# class Listing(ListView):
-#     model = Item
-#     paginate_by = 5
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        
+        context['years'] = PublicationUpdateView.years
+        context['seasons'] = PublicationUpdateView.seasons
+        context['exclude_fields'] = PublicationUpdateView.exclude_fields
+        if context['object'].content_type == 'voice':
+            context["exclude_fields"].append('text_story')
+        elif context['object'].content_type == 'text':
+            context["exclude_fields"].append('voice_story')
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('core:publication', args=[str(self.object.uuid)])
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Publication updated successfully!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        ic(form.errors.as_data()) 
+        messages.error(self.request, 'Something went wrong. Please check your input.')
+        return super().form_invalid(form)
