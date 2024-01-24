@@ -33,6 +33,7 @@ from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, 
 from users.models import Profile, ProfileHasPublication
 
 from core.models import Publication
+from core.views import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 
 from django_countries import countries
 
@@ -124,7 +125,45 @@ class AccountDetailsView(DetailView):
 
 
 class ProfileStaysListView(ListView):
-    pass
+    model = ProfileHasPublication
+    template_name = 'stays.html'
+
+    def get_queryset(self):
+        # Récupérer le slug de l'URL
+        slug = self.kwargs.get('slug')
+
+        # Récupérer le profil correspondant au slug
+        profile = get_object_or_404(Profile, slug=slug)
+
+        # Récupérer toutes les instances de ProfileHasPublication qui correspondent à ce profil
+        profile_has_publications = ProfileHasPublication.objects.filter(user_profile=profile)
+
+        # Récupérer les UUIDs des publications
+        publication_uuids = profile_has_publications.values_list('publication_of_user__uuid', flat=True)
+
+        # Récupérer toutes les publications qui correspondent à ces UUIDs
+        publications = Publication.objects.filter(uuid__in=publication_uuids)
+
+        for publication in publications:
+            stay_country_name = find_cities_light_country_name_with_code(publication.country_code_of_stay)
+            publication.stay_country_name = stay_country_name
+
+            stay_continent_code = find_cities_light_continent_with_country_code(publication.country_code_of_stay)
+            publication.stay_continent_code = get_continent_from_code(stay_continent_code)
+
+            published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
+            publication.published_from_country_name = published_from_country_name
+
+        return publications
+
+    def get_context_data(self, **kwargs):
+        # Obtenir le contexte existant
+        context = super().get_context_data(**kwargs)
+
+        # Ajouter les publications au contexte
+        context['publications'] = self.get_queryset()
+
+        return context
 
 
 class UpdateAccountView(UpdateView):
