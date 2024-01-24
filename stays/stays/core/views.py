@@ -19,10 +19,18 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
 from cities_light.models import Country
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from iommi import Style, register_style, Asset
 from iommi import Table, Column, Action, Form, Field
 
 from icecream import ic
+
+
+class NeverCacheMixin:
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
 def get_author_picture_from_slug(author_slug: str):
@@ -354,7 +362,7 @@ def home(request):
     return render(request, 'feed.html', context)
 
 
-class PublicationDetailView(DetailView):
+class PublicationDetailView(NeverCacheMixin, DetailView):
     model = Publication
     template_name = "publication.html"
     slug_field = 'uuid'  # Indiquez le nom du champ slug dans votre modèle
@@ -420,8 +428,8 @@ class PublicationUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        
+
+
         context['years'] = PublicationUpdateView.years
         context['seasons'] = PublicationUpdateView.seasons
         context['exclude_fields'] = PublicationUpdateView.exclude_fields
