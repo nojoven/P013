@@ -1,5 +1,10 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views import View
+from django.http import JsonResponse
+import json
+from django.shortcuts import get_object_or_404
+from friendship.models import Follow
+from django.contrib import messages
+from .models import Profile
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.contrib.gis.geoip2 import GeoIP2
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -286,21 +291,27 @@ class ProfileDetailView(DetailView):
 
     def get_object(self, queryset=None):
         try:
-            return super().get_object(queryset)
+            # Get the profile object based on the slug or raise a 404 error
+            profile = get_object_or_404(Profile, slug=self.kwargs.get('slug'))
+
+            # Ouvre le fichier JSON et charge les données
+            with open('core/utils/continents.json') as f:
+                continents = json.load(f)
+
+            # Obtient la valeur correspondante pour "EU"
+            continent_fullname = continents.get(profile.continent_of_birth, profile.continent_of_birth)
+            # Modifie la valeur de profile.continent
+            profile.continent_of_birth = continent_fullname
+            profile.save()
+
+            return profile
+
         except ObjectDoesNotExist:
             raise Http404("Désolé, ce profil n'existe plus.")
 
 class FollowingListView(ListView):
     pass
 
-from django.http import JsonResponse
-
-from django.http import HttpResponse, HttpResponseNotAllowed
-import json
-from django.shortcuts import get_object_or_404
-from friendship.models import Follow
-from django.contrib import messages
-from .models import Profile
 
 @login_required
 def follow_profile(request):
