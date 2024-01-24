@@ -23,4 +23,6 @@ urlpatterns = [
     path('profile/<slug:slug>/public', views.ProfileDetailView.as_view(), name='profile'),
     path('profile/<slug:slug>/followtoggle', views.follow_profile, name='follow_unfollow'),
     path('profile/<slug:slug>/following', views.FollowingListView.as_view(), name='following'),
+    path('publications/author/<slug:slug>/stays', views.ProfileStaysListView.as_view(), name='author_stays'),
+
 ]

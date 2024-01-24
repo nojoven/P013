@@ -3,8 +3,49 @@
 
 
 
-<main>
+<main>    
     {% block content %}
-    
+    <style>
+        .card:hover .card-img {
+            opacity: 0.1;
+        }
+        .card .card-img {
+            transition: opacity 0.3s ease;
+        }
+        .card .card-img-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .card:hover .card-img-overlay {
+            opacity: 1;
+        }
+        .card .card-img-overlay div {
+            text-align: center;
+        }
+    </style>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-2">
+            {% for publication in publications %}
+            <div class="col">
+                <div class="card bg-dark text-white border-1">
+                    <img src="{{ publication.picture.url }}" class="card-img" alt="{{ publication.title }}">
+                    <div class="card-img-overlay d-flex align-items-center justify-content-center">
+                        <div>
+                            <a href="{% url 'core:publication' publication.uuid %}" class="text-decoration-none text-reset">
+                                <h3 class="card-title">{{ publication.title }}</h5>
+                                <p class="card-text">{{ publication.country_code_of_stay }}</p>
+                                <p class="card-text">{{ publication.stay_country_name }}</p>
+                                <p class="card-text">{{ publication.stay_continent_code }}</p>
+                                <p class="card-text">{{ publication.year_of_stay }}</p>
+                                <p class="card-text">{{ publication.season_of_stay }}</p>
+                                <p class="card-text">{{ publication.created_at }}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
     {% endblock content %}
 </main>

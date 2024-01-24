@@ -443,5 +443,4 @@ class PublicationUpdateView(UpdateView):
         messages.error(self.request, 'Something went wrong. Please check your input.')
         return super().form_invalid(form)
 
-class ProfileStaysListView(ListView):
-    pass
+
