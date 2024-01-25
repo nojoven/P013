@@ -58,10 +58,10 @@ def get_all_profiles():
 
 
 def get_profile_from_email(email: str):
-    profile = Profile.objects.get(email=email)
+    profile = users_models.Profile.objects.get(email=email)
     return profile
 
 def get_author_picture_from_slug(author_slug: str):
     author_slug = author_slug
-    author_profile = Profile.objects.get(slug=author_slug)
+    author_profile = users_models.Profile.objects.get(slug=author_slug)
     return author_profile.profile_picture
