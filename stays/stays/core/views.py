@@ -19,7 +19,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
 from cities_light.models import Country
-from locations.utils import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
+from locations.utils.helpers import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 from icecream import ic
 from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email, get_all_profiles
 
