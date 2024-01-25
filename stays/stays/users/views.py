@@ -35,7 +35,7 @@ from users.models import Profile, ProfileHasPublication
 
 from core.models import Publication
 from core.views import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
-
+from locations.utils.helpers import get_continent_from_code
 from django_countries import countries
 
 # Custom sugar
@@ -340,12 +340,8 @@ class ProfileDetailView(DetailView):
             # Get the profile object based on the slug or raise a 404 error
             profile = get_object_or_404(Profile, slug=self.kwargs.get('slug'))
 
-            # Ouvre le fichier JSON et charge les données
-            with open('locations/utils/continents.json') as f:
-                continents = json.load(f)
-
             # Obtient la valeur correspondante pour "EU"
-            continent_fullname = continents.get(profile.continent_of_birth, profile.continent_of_birth)
+            continent_fullname = get_continent_from_code(profile.continent_of_birth)
             # Modifie la valeur de profile.continent
             profile.continent_of_birth = continent_fullname
             
