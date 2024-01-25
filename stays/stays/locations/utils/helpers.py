@@ -6,9 +6,8 @@ from cities_light.models import Country
 
 
 def get_continent_from_code(continent_code: str):
-    # current_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    json_file_path = os.path.join(base_dir, 'locations', 'continents.json')
+    json_file_path = os.path.join(base_dir, 'continents.json')
     with open(json_file_path) as json_file:
         mapping = json.load(json_file)
         return mapping.get(continent_code)

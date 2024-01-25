@@ -2,6 +2,7 @@ from django import forms
 from django_countries.widgets import CountrySelectWidget
 from django_countries.fields import CountryField
 from .models import Publication, ContentTypes
+from django.conf import settings
 
 class UpdateStayCountrySelectWidget(CountrySelectWidget):
     def get_context(self, name, value, attrs):

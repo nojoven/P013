@@ -8,10 +8,8 @@ from django.urls import reverse
 # from django.dispatch import receiver
 # from locations.models import StayCountry
 from core.publications_types import ContentTypes
-
 from django_countries.fields import CountryField
-
-from .utils.models_helpers import UUIDFieldForeignKey, SlugFieldForeignKey
+from .utils.models_helpers import UUIDFieldForeignKey
 
 
 def uuid_generator():
