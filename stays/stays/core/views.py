@@ -1,5 +1,4 @@
 import json
-import os
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse_lazy
@@ -9,8 +8,9 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
+from core.utils.requests_helpers import NeverCacheMixin
 from core.forms import PublicationEditForm
-from users.models import Profile
+
 from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -19,49 +19,12 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
 from cities_light.models import Country
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import never_cache
-from iommi import Style, register_style, Asset
-from iommi import Table, Column, Action, Form, Field
-
+from locations.utils import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 from icecream import ic
+from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email, get_all_profiles
 
-
-class NeverCacheMixin:
-    @method_decorator(never_cache)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
-
-def get_author_picture_from_slug(author_slug: str):
-    author_slug = author_slug
-    author_profile = Profile.objects.get(slug=author_slug)
-    return author_profile.profile_picture
-
-
-def get_continent_from_code(continent_code: str):
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    json_file_path = os.path.join(current_dir, 'utils', 'continents.json')
-
-    with open(json_file_path) as json_file:
-        mapping = json.load(json_file)
-        return mapping.get(continent_code)
-
-
-def find_cities_light_country_name_with_code(country_code: str):
-    ic(f"Searching for country with code: '{country_code}'")
-    try:
-        country = Country.objects.get(code2=country_code)
-        ic(f"Found country: {country.name}")
-        return country.name
-    except ObjectDoesNotExist:
-        ic(f"No country found with code: '{country_code}'")
-        return None
-
-def find_cities_light_continent_with_country_code(country_code: str):
-    return Country.objects.get(code2=country_code).continent
-
-
+from iommi import Table, Column, Action, Form, Field
+from iommi import Style, register_style, Asset
 from iommi.asset import Asset
 from iommi.style import (
     Style,
@@ -319,7 +282,7 @@ def toggle_upvote(request, uuid):
             continue
     ic(profile_email)
     publication = Publication.objects.get(uuid=publication_id)
-    profile = Profile.objects.get(email=profile_email)
+    profile = get_profile_from_email(profile_email)
     upvote, created = PublicationUpvote.objects.get_or_create(publication=publication, upvote_profile=profile.slug)
     if created:
         upvote.upvote_value = 1
@@ -334,7 +297,7 @@ def toggle_upvote(request, uuid):
 
 # Create your views here.
 def home(request):
-    profiles = Profile.objects.all()
+    profiles = get_all_profiles()
     # profiles = Profile.objects.all().filter(is_superuser=False)
     publications = Publication.objects.all().order_by('-created_at')
     for publication in publications:

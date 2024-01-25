@@ -12,3 +12,4 @@ def profile_picture_upload_to(instance, filename):
 def build_default_username(uuid, email):
     email_parts = email.split("@")
     return f"{email_parts[0]}{uuid}{email_parts[1]}"
+

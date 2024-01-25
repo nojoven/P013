@@ -341,7 +341,7 @@ class ProfileDetailView(DetailView):
             profile = get_object_or_404(Profile, slug=self.kwargs.get('slug'))
 
             # Ouvre le fichier JSON et charge les données
-            with open('core/utils/continents.json') as f:
+            with open('locations/utils/continents.json') as f:
                 continents = json.load(f)
 
             # Obtient la valeur correspondante pour "EU"

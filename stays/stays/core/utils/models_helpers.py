@@ -1,4 +1,5 @@
 from django.db import models
+from users import models as users_models
 
 
 class UUIDFieldForeignKey(models.ForeignKey):
@@ -49,3 +50,18 @@ class BooleanFieldForeignKey(models.ForeignKey):
         kwargs['blank'] = True
         kwargs['null'] = True
         super().__init__(to, **kwargs)
+
+
+def get_all_profiles():
+    profiles = users_models.Profile.objects.all()
+    return profiles
+
+
+def get_profile_from_email(email: str):
+    profile = Profile.objects.get(email=email)
+    return profile
+
+def get_author_picture_from_slug(author_slug: str):
+    author_slug = author_slug
+    author_profile = Profile.objects.get(slug=author_slug)
+    return author_profile.profile_picture
