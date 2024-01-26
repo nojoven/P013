@@ -129,6 +129,8 @@ def country_view(request, country_code):
 
                 # Format the datetime object as a string
                 new_value = dt_object.strftime("%H:%M:%S")
+            elif "rowth" in new_key or "rate" in new_key:
+                new_value = f'{value} %'
             else:
                 new_value = value
             formatted_weather_json[new_key] = new_value
