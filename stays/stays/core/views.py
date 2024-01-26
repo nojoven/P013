@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.db.models import F
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from core.utils.requests_helpers import NeverCacheMixin
@@ -265,6 +265,18 @@ my_style = bootstrap5
 
 
 
+@csrf_exempt
+@require_GET
+def check_user_upvoted_publication(request, uuid):
+    # Get the slug of the user from the request
+    viewer = request.user.slug
+
+    # Check if a PublicationUpvote object exists with the given publication UUID and user slug
+    has_upvoted = PublicationUpvote.objects.filter(publication__uuid=uuid, upvote_profile=viewer).exists()
+
+    # Return a JSON response
+    return JsonResponse({'has_upvoted': has_upvoted})
+
 
 @csrf_exempt
 @require_POST
@@ -350,6 +362,15 @@ class PublicationDetailView(NeverCacheMixin, DetailView):
         publication.published_from_country_name = published_from_country_name
 
         context["publication"] = publication
+
+        # Check if the current user has upvoted the current publication
+        if self.request.user.is_authenticated:
+            has_upvoted = PublicationUpvote.objects.filter(publication=publication.uuid, upvote_profile=self.request.user.slug).exists()
+        else:
+            has_upvoted = False
+
+        context["has_upvoted"] = has_upvoted
+
         ic(context.items())
 
         return context

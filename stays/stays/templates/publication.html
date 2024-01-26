@@ -4,11 +4,16 @@
 {% load el_pagination_tags %}
 <title>{{ publication.title }}</title>
 <main>
+
+
+
+
 {% block content %}
 <br>
 <br>
 <br>
 <div class="container">
+    
     <center><h1> {{ publication.title }}</h1></center>
     <br>
     <center><h1>It was {{ publication.season_of_stay }}, in {{ publication.year_of_stay }} </h1></center>
@@ -51,9 +56,44 @@
     <br>
     <p>
     {% if publication.content_type == "text" and publication.text_story %}
-        {{ publication.text_story }}
+        <center>{{ publication.text_story }}</center>
     {% endif %}
     </p>
+    {% if not user.is_authenticated %}
+        <center>
+            <a href="{% url 'users:login' %}" class="btn btn-light btn-outline-info">Connect <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-sm" style="color: #e22222;" data-fa-i2svg disabled></i></a>
+        </center>
+        <br>
+    {% elif has_upvoted is False %}
+        <center>
+            <button id="upvbtn" 
+                    type="button" 
+                    class="btn btn-light btn-outline-info"
+                    hx-post="{% url 'core:upvote' publication.uuid %}" 
+                    hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                    hx-target="#upvbtn" 
+                    hx-swap="none"
+                    hx-headers='{"Content-Type":"application/json"}'>
+                Upvote <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg></i>
+            </button>
+        </center>
+    {% elif has_upvoted is True %}
+        <center>
+            <button id="upvbtn" 
+                type="button" 
+                class="btn btn-light btn-outline-info"
+                hx-post="{% url 'core:upvote' publication.uuid %}" 
+                hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                hx-target="#upvbtn" 
+                hx-swap="none"
+                hx-headers='{"Content-Type":"application/json"}'>
+                You Like It <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm" style="color: #e22222;" data-fa-i2svg></i>
+            </button>
+        </center>
+        <br>
+    {% endif %}
+    <h1>{{ has_upvoted }}</h1>
+    <br>
     {% if publication.author_slug == user.slug %}
 
     <div class="text-center">
@@ -115,3 +155,22 @@
 {% endblock content %}
 </main>
 
+
+<script>
+    $(document).ready(function () {
+        $('#upvbtn').click(function () {
+            $.ajax({
+                url: "{% url 'publications:publication_upvote' publication.uuid %}",
+                method: 'POST',
+                data: {
+                    'publication_id': '{{ publication.uuid }}',
+                    'profile_slug': '{{ user.slug }}',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    // Update the button text or do something else with the response
+                }
+            });
+        });
+    });
+</script>
