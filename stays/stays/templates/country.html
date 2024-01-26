@@ -16,6 +16,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6">
+                {% if country_time %}
                 <table class="table table-bordered table-striped rounded text-center">
                     <tbody>
                         {% for key, value in country_time.items %}
@@ -30,6 +31,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
+                {% if weather %}
                 <table class="table table-bordered table-striped rounded text-center">
                     <thead class="text-center">
                         <tr>
@@ -49,6 +52,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
+                {% if general_information %}
                 <table class="table table-bordered table-striped rounded text-center">
                     <thead class="text-center">
                         <tr>
@@ -82,6 +87,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
 
             </div>
         </div>

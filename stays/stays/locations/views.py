@@ -6,8 +6,9 @@ from icecream import ic
 from stays.settings import NINJAS_API_KEY as napk
 from stays.settings import MAPBOX_TOKEN as mpt
 
-
-
+import httpx
+import asyncio
+from asgiref.sync import async_to_sync
 # Create your views here.
 
 
@@ -22,11 +23,11 @@ def country_view(request, country_code):
 
     native_name_code = list(country_details.get("name").get("nativeName").keys())[0]
     country_data = {
-        'Latitude': country_details.get("latlng")[0],
-        'Longitude': country_details.get("latlng")[1],
+        'Latitude': country_details.get("latlng")[0] if country_details.get("latlng") else "N/A",
+        'Longitude': country_details.get("latlng")[1] if country_details.get("latlng") else "N/A",
         'Official': country_details.get("name").get("official"),
         'Native': country_details.get("name").get("nativeName").get(native_name_code).get("official"),
-        'Capital': country_details.get("capital")[0],
+        'Capital': country_details.get("capital")[0] if country_details.get("capital") else "N/A",
         # 'Currency': f"{country_details.get('currencies').get('name')} ({country_details.get('currencies').get('symbol')})",
         'Languages': list(country_details.get("languages", "").values())[0],
         'Google': country_details.get("maps", "").get("googleMaps"),
@@ -78,10 +79,10 @@ def country_view(request, country_code):
     if country_data.get("Capital"):
         air_quality_ninjas_api_response = requests.get(f'https://api.api-ninjas.com/v1/airquality?city={country_data["Capital"]}', headers=headers)
         air_quality_json = air_quality_ninjas_api_response.json()
-        if air_quality_json:
+        if air_quality_json and "overall_aqi" in air_quality_json:
             air_quality_json["Overall"] = air_quality_json.get("overall_aqi")
             del air_quality_json["overall_aqi"]
-            context["air"] = air_quality_json
+        context["air"] = air_quality_json
 
     # Timezone
     # timezone_ninjas_api_response = requests.get(f'https://api.api-ninjas.com/v1/timezone?country={country_code}', headers=headers)
@@ -92,7 +93,7 @@ def country_view(request, country_code):
     # Weather                                         
     weather_ninjas_api_response = requests.get(f'https://api.api-ninjas.com/v1/weather?city={country_data["Capital"]}&country={country_code}', headers=headers)
     weather_json = weather_ninjas_api_response.json()
-    
+    ic(weather_json)
     # Mapping dictionary
     key_mapping = {
         'cloud_pct': 'Clouds',
@@ -108,27 +109,31 @@ def country_view(request, country_code):
     }
     formatted_weather_json = {}
 
-    for key, value in weather_json.items():
-        new_key = key_mapping.get(key).capitalize()  # Get the new key from the mapping, or use the old key if not found
-        if new_key in ['Clouds', 'Humidity']:
-            new_value = f'{value} %'
-        elif new_key in ['Perceived', 'Max', 'Min', 'Temperature']:
-            new_value = f'{value} °C'
-        elif new_key == 'Wind - degrees':
-            new_key = 'Wind - Degrees'
-            new_value = f'{value}°'
-        elif new_key == 'Wind - speed':
-            new_key = 'Wind - Speed'
-            new_value = f'{value} km/h'
-        elif new_key == 'Sunrise' or new_key == 'Sunset':
-            # Convert the timestamp to a datetime object
-            dt_object = datetime.fromtimestamp(value)
+    for wkey, value in weather_json.items():
+        ic(wkey)
+        if wkey in key_mapping:
+            new_key = key_mapping.get(wkey).capitalize()  # Get the new key from the mapping, or use the old key if not found
+            if new_key in ['Clouds', 'Humidity']:
+                new_value = f'{value} %'
+            elif new_key in ['Perceived', 'Max', 'Min', 'Temperature']:
+                new_value = f'{value} °C'
+            elif new_key == 'Wind - degrees':
+                new_key = 'Wind - Degrees'
+                new_value = f'{value}°'
+            elif new_key == 'Wind - speed':
+                new_key = 'Wind - Speed'
+                new_value = f'{value} km/h'
+            elif new_key == 'Sunrise' or new_key == 'Sunset':
+                # Convert the timestamp to a datetime object
+                dt_object = datetime.fromtimestamp(value)
 
-            # Format the datetime object as a string
-            new_value = dt_object.strftime("%H:%M:%S")
+                # Format the datetime object as a string
+                new_value = dt_object.strftime("%H:%M:%S")
+            else:
+                new_value = value
+            formatted_weather_json[new_key] = new_value
         else:
-            new_value = value
-        formatted_weather_json[new_key] = new_value
+            ic(f"{wkey} not in key_mapping")
     
     context["weather"] = formatted_weather_json
 
