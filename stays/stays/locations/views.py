@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 import requests
 from datetime import datetime
@@ -12,14 +13,19 @@ from stays.settings import MAPBOX_TOKEN as mpt
 
 def country_view(request, country_code):
     # Get country data from Restcountries API
+    if not isinstance(country_code, str) or len(country_code) < 2:
+        return HttpResponse("Invalid link url. Please inform our support team.", status=400)
+    if len(country_code) > 2:
+        country_code = country_code[:2].upper()
     response = requests.get(f'https://restcountries.com/v3.1/alpha/{country_code}')
     country_details = response.json()[0]
 
+    native_name_code = list(country_details.get("name").get("nativeName").keys())[0]
     country_data = {
         'Latitude': country_details.get("latlng")[0],
         'Longitude': country_details.get("latlng")[1],
         'Official': country_details.get("name").get("official"),
-        'Native': country_details.get("name").get("nativeName").get("fra").get("official"),
+        'Native': country_details.get("name").get("nativeName").get(native_name_code).get("official"),
         'Capital': country_details.get("capital")[0],
         # 'Currency': f"{country_details.get('currencies').get('name')} ({country_details.get('currencies').get('symbol')})",
         'Languages': list(country_details.get("languages", "").values())[0],
