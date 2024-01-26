@@ -1,4 +1,5 @@
 import json
+from django.middleware.csrf import get_token
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse_lazy
@@ -296,15 +297,43 @@ def toggle_upvote(request, uuid):
     publication = Publication.objects.get(uuid=publication_id)
     profile = get_profile_from_email(profile_email)
     upvote, created = PublicationUpvote.objects.get_or_create(publication=publication, upvote_profile=profile.slug)
+    
+    # Get the CSRF token for the current session
+    csrf_token = get_token(request)
+    
     if created:
         upvote.upvote_value = 1
         publication.upvotes_count = F('upvotes_count') + 1
         upvote.save()
+        button_html = f'''
+        <button id="upvbtn" 
+            type="button" 
+            class="btn btn-light btn-outline-info"
+            hx-post="/publications/publication/{publication.uuid}/upvote" 
+            hx-params='{{"publication_id": "{publication.uuid}", "profile_email": "{request.user.email}", "csrfmiddlewaretoken": "{csrf_token}"}}'
+            hx-target="#upvbtn" 
+            hx-swap="outerHTML"
+            hx-headers='{{"Content-Type":"application/json"}}'>
+            <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm" style="color: #e22222;" data-fa-i2svg>You Like It</i>
+        </button>
+        '''
     else:
         publication.upvotes_count = F('upvotes_count') - 1
         publication.save()
         upvote.delete()
-    return JsonResponse({'message': 'Success'})
+        button_html = f'''
+        <button id="upvbtn" 
+                type="button" 
+                class="btn btn-light btn-outline-info"
+                hx-post="/publications/publication/{publication.uuid}/upvote" 
+                hx-params='{{"publication_id": "{publication.uuid}", "profile_email": "{request.user.email}", "csrfmiddlewaretoken": "{csrf_token}"}}'
+                hx-target="#upvbtn" 
+                hx-swap="outerHTML"
+                hx-headers='{{"Content-Type":"application/json"}}'>
+            <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg>Upvote</i>
+        </button>
+        '''
+    return HttpResponse(button_html)
 
 
 # Create your views here.

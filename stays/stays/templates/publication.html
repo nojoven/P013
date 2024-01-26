@@ -60,39 +60,38 @@
     {% endif %}
     </p>
     {% if not user.is_authenticated %}
-        <center>
-            <a href="{% url 'users:login' %}" class="btn btn-light btn-outline-info">Connect <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-sm" style="color: #e22222;" data-fa-i2svg disabled></i></a>
-        </center>
-        <br>
-    {% elif has_upvoted is False %}
-        <center>
-            <button id="upvbtn" 
-                    type="button" 
-                    class="btn btn-light btn-outline-info"
-                    hx-post="{% url 'core:upvote' publication.uuid %}" 
-                    hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
-                    hx-target="#upvbtn" 
-                    hx-swap="none"
-                    hx-headers='{"Content-Type":"application/json"}'>
-                Upvote <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg></i>
-            </button>
-        </center>
-    {% elif has_upvoted is True %}
-        <center>
-            <button id="upvbtn" 
+    <center>
+        <a href="{% url 'users:login' %}" class="btn btn-light btn-outline-info">Connect <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-sm" style="color: #e22222;" data-fa-i2svg disabled></i></a>
+    </center>
+    <br>
+{% elif has_upvoted is False %}
+    <center>
+        <button id="upvbtn" 
                 type="button" 
                 class="btn btn-light btn-outline-info"
                 hx-post="{% url 'core:upvote' publication.uuid %}" 
                 hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
                 hx-target="#upvbtn" 
-                hx-swap="none"
+                hx-swap="outerHTML"
                 hx-headers='{"Content-Type":"application/json"}'>
-                You Like It <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm" style="color: #e22222;" data-fa-i2svg></i>
-            </button>
-        </center>
-        <br>
-    {% endif %}
-    <h1>{{ has_upvoted }}</h1>
+            <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg>Upvote</i>
+        </button>
+    </center>
+{% elif has_upvoted is True %}
+    <center>
+        <button id="upvbtn" 
+            type="button" 
+            class="btn btn-light btn-outline-info"
+            hx-post="{% url 'core:upvote' publication.uuid %}" 
+            hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+            hx-target="#upvbtn" 
+            hx-swap="outerHTML"
+            hx-headers='{"Content-Type":"application/json"}'>
+            <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm" style="color: #e22222;" data-fa-i2svg>You Like It</i>
+        </button>
+    </center>
+    <br>
+{% endif %}
     <br>
     {% if publication.author_slug == user.slug %}
 
@@ -153,24 +152,47 @@
     <br>
 </div>
 {% endblock content %}
+{% comment %} <script>
+    $(document).ready(function () {
+        var btn = $('#upvbtn');
+        $('.fa-heart').click(function () {
+            $(this).toggleClass("fa-solid fa-heart-circle-check fa-beat-fade fa-sm");
+        });
+    });
+</script> {% endcomment %}
 </main>
 
+{% comment %} <script>
+    document.getElementById('upvbtn').addEventListener('htmx:afterOnLoad', function (event) {
+        var btn = $(this);
+        var icon = btn.children('i');
+        if (btn.text().trim() == "Upvote") {
+            btn.text("You Like It");
+            icon.removeClass("fa-regular fa-heart");
+            icon.addClass("fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm");
+        } else {
+            btn.text("Upvote");
+            icon.removeClass("fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm");
+            icon.addClass("fa-regular fa-heart");
+        }
+    });
+</script> {% endcomment %}
 
 <script>
-    $(document).ready(function () {
-        $('#upvbtn').click(function () {
-            $.ajax({
-                url: "{% url 'publications:publication_upvote' publication.uuid %}",
-                method: 'POST',
-                data: {
-                    'publication_id': '{{ publication.uuid }}',
-                    'profile_slug': '{{ user.slug }}',
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (data) {
-                    // Update the button text or do something else with the response
-                }
-            });
+    $('#upvbtn').click(function () {
+        var btn = $(this);
+        var icon = btn.children('i');
+        $.ajax({
+            url: "{% url 'core:upvote' publication.uuid %}",
+            method: 'POST',
+            data: {
+                'publication_id': '{{ publication.uuid }}',
+                'profile_email': '{{ user.email }}',
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function (data) {
+                console.log(data); // Log the response
+            }
         });
     });
 </script>
