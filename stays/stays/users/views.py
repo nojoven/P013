@@ -194,12 +194,12 @@ class UpdateAccountView(UpdateView):
         # It should return an HttpResponse.
         about_text = form.cleaned_data.get('about_text')
         if about_text:
-            about_text = clean_text(about_text, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, emojis=True)
+            about_text = clean_text(about_text, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, multiple_whitespace=True, special_chars=True, emojis=False, stopwords=True)
 
         signature = form.cleaned_data.get('signature')
 
         if signature:
-            signature = clean_text(signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, emojis=False)
+            signature = clean_text(signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, multiple_whitespace=True, special_chars=True, emojis=False, stopwords=True)
 
         # Enregistrement de la publication
         profile = form.save(commit=False)
