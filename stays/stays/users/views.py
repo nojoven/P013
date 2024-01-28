@@ -144,6 +144,9 @@ class ProfileStaysListView(ListView):
 
         # Récupérer toutes les publications qui correspondent à ces UUIDs
         publications = Publication.objects.filter(uuid__in=publication_uuids)
+        publications.author_username = profile.username
+        publications.author_slug = profile.slug
+        publications.author_motto = f'" {profile.motto} "'.upper()
 
         for publication in publications:
             stay_country_name = find_cities_light_country_name_with_code(publication.country_code_of_stay)

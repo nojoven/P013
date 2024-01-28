@@ -25,6 +25,30 @@
         }
     </style>
     <div class="container">
+        {% if publications.author_username != "None" %}
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a href="{% url 'users:profile' publications.author_slug %}"><h2 class="text-dark">Stays of {{ publications.author_username }}</h2></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        {% if publications.author_motto != "None" %}
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h2 class="text-dark">{{ publications.author_motto }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endif %}
         <div class="row row-cols-1 row-cols-md-3 g-2">
             {% for publication in publications %}
             <div class="col">

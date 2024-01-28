@@ -8,31 +8,31 @@
         <div class="card">
             <div class="card-body text-center">
                 <h2 class="card-title">{{ profile.username }}</h2>
-                {% if profile.first_name %}
+                {% if profile.first_name != "None" %}
                     <p class="card-text">First Name: {{ profile.first_name }}</p>
                 {% endif %}
-                {% if profile.last_name %}
+                {% if profile.last_name != "None" %}
                     <p class="card-text">Last Name: {{ profile.last_name }}</p>
                 {% endif %}
-                {% if profile.year_of_birth %}
+                {% if profile.year_of_birth != "None" %}
                     <p class="card-text">Year of Birth: {{ profile.year_of_birth }}</p>
                 {% endif %}
-                {% if profile.season_of_birth %}
+                {% if profile.season_of_birth != "None" %}
                     <p class="card-text">Season of Birth: {{ profile.season_of_birth }}</p>
                 {% endif %}
-                {% if profile.motto %}
+                {% if profile.motto != "None" %}
                     <p class="card-text">Motto: {{ profile.motto }}</p>
                 {% endif %}
-                {% if profile.signature %}
+                {% if profile.signature != "None" %}
                     <p class="card-text">Signature: {{ profile.signature }}</p>
                 {% endif %}
-                {% if profile.about_text %}
+                {% if profile.about_text != "None" %}
                     <p class="card-text">About: {{ profile.about_text }}</p>
                 {% endif %}
-                {% if profile.continent_of_birth %}
+                {% if profile.continent_of_birth != "None" %}
                     <p class="card-text">Continent of Birth: {{ profile.continent_of_birth }}</p>
                 {% endif %}
-                {% if profile.profile_picture %}
+                {% if profile.profile_picture != "None" %}
                     <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3">
                 {% endif %}
                 {% if profile.created_at %}
