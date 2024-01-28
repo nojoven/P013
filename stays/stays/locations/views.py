@@ -7,33 +7,56 @@ from stays.settings import NINJAS_API_KEY as napk
 import httpx
 import asyncio
 from django_countries import countries as dj_countries
+from django.core.cache import cache
 from cities_light.models import Country
 # Create your views here.
 
 
 async def fetch_country_data(country_code, headers):
-    async with httpx.AsyncClient() as client:
-        url1 = f'https://restcountries.com/v3.1/alpha/{country_code}'
-        url2 = f'https://api.api-ninjas.com/v1/country?name={country_code}'
+    # Create a unique cache key for this function and country_code
+    cache_key = f'country_data_{country_code}'
 
-        responses = await asyncio.gather(
-            client.get(url1),
-            client.get(url2, headers=headers),
-        )
+    # Try to get the response from the cache
+    responses = cache.get(cache_key)
+
+    # If the response is not in the cache, fetch it
+    if responses is None:
+        async with httpx.AsyncClient() as client:
+            url1 = f'https://restcountries.com/v3.1/alpha/{country_code}'
+            url2 = f'https://api.api-ninjas.com/v1/country?name={country_code}'
+
+            responses = await asyncio.gather(
+                client.get(url1),
+                client.get(url2, headers=headers),
+            )
+
+        # Store the response in the cache
+        cache.set(cache_key, responses)
 
     return responses
 
 async def fetch_additional_data(capital, country_code, headers):
-    async with httpx.AsyncClient() as client:
-        url3 = f'https://api.api-ninjas.com/v1/airquality?city={capital}'
-        url4 = f'https://api.api-ninjas.com/v1/weather?city={capital}&country={country_code}'
-        url5 = f"https://api.api-ninjas.com/v1/worldtime?city={capital}&country={country_code}"
+    # Create a unique cache key for this function, capital and country_code
+    cache_key = f'additional_data_{capital}_{country_code}'
 
-        responses = await asyncio.gather(
-            client.get(url3, headers=headers),
-            client.get(url4, headers=headers),
-            client.get(url5, headers=headers)
-        )
+    # Try to get the response from the cache
+    responses = cache.get(cache_key)
+
+    # If the response is not in the cache, fetch it
+    if responses is None:
+        async with httpx.AsyncClient() as client:
+            url3 = f'https://api.api-ninjas.com/v1/airquality?city={capital}'
+            url4 = f'https://api.api-ninjas.com/v1/weather?city={capital}&country={country_code}'
+            url5 = f"https://api.api-ninjas.com/v1/worldtime?city={capital}&country={country_code}"
+
+            responses = await asyncio.gather(
+                client.get(url3, headers=headers),
+                client.get(url4, headers=headers),
+                client.get(url5, headers=headers)
+            )
+        
+        # Store the response in the cache
+        cache.set(cache_key, responses)
 
     return responses
 
@@ -43,7 +66,7 @@ async def country_view(request, country_code):
         return HttpResponse("Probable invalid code in the link url. Please inform our support team.", status=400)
     if len(country_code) == 2:
         # Check if the country code exists in django-countries
-        if country_code not in dj_countries:
+        if country_code.upper() not in dj_countries:
             return HttpResponse("Invalid country code.", status=400)
     if len(country_code) > 2:
         # Check if the country name exists in django-cities-light
