@@ -3,158 +3,133 @@
 {% load split_on_slash %}
 
 
-
-
 <main>
     {% block content %}
-    <div class="container m-auto">
-        <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">
-            <a href="{% url 'users:account' current_user.slug %}">Account Setting for 
-                {% if current_user.username is not None and current_user.username != "" %}
-                <b> {{ current_user.username }} </b>
-                {% else %}
-                <b> < {{ current_user.email }} - Please define a username > </b>
-                {% endif %}
-            </a>
-        </h1>
-        <br>
-        {% if messages %}
-        <div class="flex items-center lg:justify-between justify-around">
-            {% for message in messages %}
-                <center>
-                    <div class="alert bg-green-100 text-white-50 !important">
-                    {{ message }}
+    <div class="container mt-5 d-flex justify-content-center align-items-center" style="height: 15vh; padding-bottom: 5px; margin-bottom: 3px; margin-top: 0.5rem!important;">
+        <div class="col-md-6">
+            <div class="card mx-auto" style="max-width: 800px;">
+                <div class="card-body text-center">
+                    <h1>
+                        <a href="{% url 'users:account' current_user.slug %}" class="text-dark">
+                            {% if current_user.username is not None and current_user.username != "" %}
+                            <b> Settings of {{ current_user.username }} </b>
+                            {% else %}
+                            <b> < {{ current_user.email }} - Please define a username > </b>
+                            {% endif %}
+                        </a>
+                    </h1>
+                    <br>
+                    {% if messages %}
+                    <div class="d-flex justify-content-around">
+                        {% for message in messages %}
+                            <div class="alert alert-success">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     </div>
-            </center>
-            {% endfor %}
-        </div>
-        {% endif %}
-        <hr>
-        <br>
-        <div class="grid row mt-5 gap-3">
-            <div>
-                <h3 class="text-xl mb-2">General Settings </h3>
-                <p></p>
+                    {% endif %}
+                </div>
             </div>
-            <div class="bg-white rounded-md shadow col-span-2">
-                <form action="{% url 'users:settings' current_user.slug %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                    <div class="grid grid-cols-2 gap-3 p-4">
-                        <div class="col-span-2 d-flex align-items-center">
-                            <label for="pofile_picture" class="me-3">Your picture : {{ current_user.profile_picture|split_on_slash }}</label>
-                            <img src="{% get_media_prefix %}{{ current_user.profile_picture }}" height="100px" width="100px" />
-                            <input type="file" name="profile_picture" value="{{ current_user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="form-control">
-                            {% comment %} <lr-file-uploader-regular
-                            css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.30.5/web/lr-file-uploader-regular.min.css"
-                            ctx-name="my-uploader"
-                            class="my-config"                            
-                            >
-                            </lr-file-uploader-regular> {% endcomment %}
-                        </div>
-                        <div class="col-span-2">
-                            <label for="slug">Profile ID</label>
-                            <input type="text" name="slug" value="{{ current_user.slug }}" class="form-control" readonly>
-                        </div>
-                        <div>
-                            <label for="">First name</label>
-                            <input type="text" name="first_name" placeholder="Your first name.." value="{{ current_user.first_name }}" class="form-control">
-                        </div>
-                        <div>
-                            <label for="">Last name</label>
-                            <input type="text" name="last_name" placeholder="Your last name.." value="{{ current_user.last_name }}" class="form-control">
-                        </div>
-                        {% if not current_user.username %}
-                        <div class="col-span-2">
-                            <label for="">Username</label>
-                            <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.slug }}" class="form-control" readonly>
-                        </div>
-                        {% else %}
-                        <div class="col-span-2">
-                            <label for="">Username</label>
-                            <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.username }}" class="form-control" readonly>
-                        </div>
-                        {% endif %}
-                        <div class="col-span-2">
-                            <label for="">Year of birth</label>
-                            <input type="number" name="year_of_birth" value="1980" min="1900" max="2010"  class="form-control">
-                        </div>
-                        <div class="col-span-2">
-                            <label for="birth_season">Season of birth</label>
-                            <select id="seasons" name="season_of_birth"  class="form-control">
-                                <option value="{{ current_user.season_of_birth }}"> Select a season (currently {{ current_user.season_of_birth }} )</option>
-                                <option value="Spring">Spring</option>
-                                <option value="Summer">Summer</option>
-                                <option value="Autumn">Autumn</option>
-                                <option value="Winter">Winter</option>
-                            </select>
-                        </div>
-                        <div class="col-span-2">
-                            <label for="continent_of_birth">Continent of birth</label>
-                            <select id="continent_of_birth" name="continent_of_birth" class="form-control">
-                                <option value="{{ current_user.continent_of_birth }}">Select a continent (currently {{ current_user.get_continent_of_birth_display }})</option>
-                                {% for value, display in form.fields.continent_of_birth.choices %}
-                                    <option value="{{ value }}" {% if current_user.continent_of_birth == value %}selected{% endif %}>{{ display }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-span-2">
-                            <label for="">Email</label>
-                            <input type="email" name="account_email" placeholder="{{ current_user.email }}" value="{{ current_user.email }}" class="form-control" readonly>
-                        </div>
-                        <div class="col-span-2">
-                            <label for="">Bio</label> 
-                            <textarea id="about_text" name="about_text" placeholder="{{ current_user.about_text }}" rows="3"  class="form-control">{{ current_user.about_text }}</textarea>
-                        </div>
-                        <div class="col-span-2">
-                            <label for="">Motto</label> 
-                            <input id="motto" name="motto" placeholder="I love youuuu!" value="{{ current_user.motto }}" rows="3"  class="form-control">
-                        </div>
-                        <div class="col-span-2">
-                            <label for="">Signature</label> 
-                            <input id="signature" name="signature" placeholder="Profile signature" value="{{ current_user.signature }}" rows="3"  class="form-control">
-                        </div>
-                        {% comment %} <div class="col-span-2">
-                            <label for="">Current Location</label>
-                            <input type="text" placeholder="" class="form-control">
-                        </div>{% endcomment %}
-                        {% comment %} <div>
-                            <label for="">Working at</label>
-                            <input type="text" placeholder="" class="form-control">
-                        </div>
-                        <div>
-                            <label for="">Relationship </label>
-                            <select id="relationship" name="relationship"  class="form-control">
-                            <option value="0">None</option>
-                            <option value="1">Single</option>
-                            <option value="2">In a relationship</option>
-                            <option value="3">Married</option>
-                            <option value="4">Engaged</option>
-                            </select>
-                        </div>{% endcomment %}
-                    </div>
+            
+        </div>
+    </div>
 
-                    <div class="bg-light p-3 d-flex justify-content-center align-items-center">
-                        <button type="submit" class="btn btn-primary">Save </button>
-                    </div>
-                </form>
+    <div class="container mt-5"  style="padding: 4px 15px !important">
+        <div class="bg-white rounded-md shadow col-span-2">
+            <div class="card-body text-center">
+                <button class="btn btn-warning fs-3 fw-bold text-dark" disabled style="pointer-events: none; opacity: 1;">Edit your profile</button>
             </div>
-            <br>
+            <form action="{% url 'users:settings' current_user.slug %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                <div class="grid grid-cols-2 gap-3 p-4">
+                    <div class="col-span-2 d-flex align-items-center">
+                        <label for="pofile_picture" class="me-3">Your picture : {{ current_user.profile_picture|split_on_slash }}</label>
+                        <img src="{% get_media_prefix %}{{ current_user.profile_picture }}" height="100px" width="100px" />
+                        <input type="file" name="profile_picture" value="{{ current_user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="form-control">
 
+                    </div>
+                    <div class="col-span-2">
+                        <label for="slug">Profile ID</label>
+                        <input type="text" name="slug" value="{{ current_user.slug }}" class="form-control" readonly>
+                    </div>
+                    <div>
+                        <label for="">First name</label>
+                        <input type="text" name="first_name" placeholder="Your first name.." value="{{ current_user.first_name }}" class="form-control">
+                    </div>
+                    <div>
+                        <label for="">Last name</label>
+                        <input type="text" name="last_name" placeholder="Your last name.." value="{{ current_user.last_name }}" class="form-control">
+                    </div>
+                    {% if not current_user.username %}
+                    <div class="col-span-2">
+                        <label for="">Username</label>
+                        <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.slug }}" class="form-control" readonly>
+                    </div>
+                    {% else %}
+                    <div class="col-span-2">
+                        <label for="">Username</label>
+                        <input type="text" name="username" placeholder="Your username name.." value="{{ current_user.username }}" class="form-control" readonly>
+                    </div>
+                    {% endif %}
+                    <div class="col-span-2">
+                        <label for="">Year of birth</label>
+                        <input type="number" name="year_of_birth" value="1980" min="1900" max="2010"  class="form-control">
+                    </div>
+                    <div class="col-span-2">
+                        <label for="birth_season">Season of birth</label>
+                        <select id="seasons" name="season_of_birth"  class="form-control">
+                            <option value="{{ current_user.season_of_birth }}"> Select a season (currently {{ current_user.season_of_birth }} )</option>
+                            <option value="Spring">Spring</option>
+                            <option value="Summer">Summer</option>
+                            <option value="Autumn">Autumn</option>
+                            <option value="Winter">Winter</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="continent_of_birth">Continent of birth</label>
+                        <select id="continent_of_birth" name="continent_of_birth" class="form-control">
+                            <option value="{{ current_user.continent_of_birth }}">Select a continent (currently {{ current_user.get_continent_of_birth_display }})</option>
+                            {% for value, display in form.fields.continent_of_birth.choices %}
+                                <option value="{{ value }}" {% if current_user.continent_of_birth == value %}selected{% endif %}>{{ display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="">Email</label>
+                        <input type="email" name="account_email" placeholder="{{ current_user.email }}" value="{{ current_user.email }}" class="form-control" readonly>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="">Bio</label> 
+                        <textarea id="about_text" name="about_text" placeholder="{{ current_user.about_text }}" rows="3"  class="form-control">{{ current_user.about_text }}</textarea>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="">Motto</label> 
+                        <input id="motto" name="motto" placeholder="I love youuuu!" value="{{ current_user.motto }}" rows="3"  class="form-control">
+                    </div>
+                    <div class="col-span-2">
+                        <label for="">Signature</label> 
+                        <input id="signature" name="signature" placeholder="Profile signature" value="{{ current_user.signature }}" rows="3"  class="form-control">
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 d-flex justify-content-center align-items-center">
+                    <button type="submit" class="btn btn-primary">Save </button>
+                </div>
+            </form>
         </div>
-        <hr>
-        <div class="grid row mt-5 gap-3">
-            <div>
-                <h3 class="text-xl mb-2">Advanced Settings </h3>
-            </div>
-            <div class="bg-white rounded-md shadow col-span-2 d-flex justify-content-center align-items-center" style="min-height: 10px;">
-                <center><a href="{% url 'users:delete_account' current_user.slug %}" class="btn btn-danger">Delete Account</a></center>
-            </div>
-            <br>
-        </div>
+        <br>
 
     </div>
-            
-    
+    <div class="container mt-5" style="padding: 4px 15px !important">
+        <div class="card mx-auto" style="max-width: 800px;">
+            <div class="card-body text-center">
+                <h3 class="mb-2">Advanced Settings</h3>
+                <a href="{% url 'users:delete_account' current_user.slug %}" class="btn btn-danger">Delete Account</a>
+            </div>
+        </div>
+    </div>
+
+
 
  <!-- Scripts
     ================================================== -->

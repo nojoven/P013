@@ -107,7 +107,7 @@
 {% endblock content %}
 </main>
 <!-- Footer -->
-<footer class="bg-dark text-light py-5 bottom-0 " style="margin-top: 24% !important; margin-bottom: 0% !important">
+<footer class="bg-dark text-light py-5 bottom-0 " style="margin-top: 3% !important; margin-bottom: 0% !important">
   <div class="container">
       <div class="row">
           <div class="col-lg-3">
@@ -197,9 +197,15 @@
                     if (data.is_online) {
                         statusElement.className = 'fa-duotone fa-spin fa-solid fa-sun fa-xl';
                         statusElement.style = 'color: #f08205; animation: spin 2s linear infinite; ';
+
+                        statusElement.title = 'This user is online.'; // Add hover text
+                        $(function () {
+                            $('[data-toggle="tooltip"]').tooltip()
+                          })
                     } else {
                         statusElement.className = 'fa-regular fa-sun fa-xs';
                         statusElement.style = 'color: #a0a4ac;';
+                        statusElement.title = ''; // Remove hover text
                     }
                 });
             } catch (error) {

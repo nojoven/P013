@@ -7,31 +7,34 @@
 {% block content %}
 <div class="container mx-auto">
 
-    <h1 class="lg:text-3xl text-lg font-extrabold leading-none text-gray-900 tracking-tight mb-5"> Feed </h1>
-
     <div class="d-flex justify-content-center gx-4 gy-0">
 
         <!-- left sidebar-->
         <div class="mb-5 flex-shrink-0 col-lg-7">
 
             <!-- post 1-->
-            {% comment %} {% paginate page_obj %} {% endcomment %}
             {% for publication in page_obj %}
             
             <div class="card">
                 <div class="card-body">
-                  <a href="{% url 'core:publication' publication.uuid %}">
-                    <h3 class="card-title">{{ publication.title }}</h3>
-                  </a>
+                <center>
+                    <a href="{% url 'core:publication' publication.uuid %}">
+                        <h2 class="card-title">{{ publication.title }}</h2>
+                    </a>
+                </center>
                   
-                  <h5 id="h5_username">Written by <a class="user-slug"  href="{% url 'users:profile' publication.author_slug %}"> {{ publication.author_username    }}</a>   <i data-slug="{{ publication.author_slug }}" class="fa-solid fa-sun" style="color: #a0a4ac"></i></h5>
-                   
-                  <h5>{{ publication.created_at }}</h5>                  
-                  <script>
+                <h5 id="h5_username">Written by <a class="user-slug"  href="{% url 'users:profile' publication.author_slug %}"> {{ publication.author_username    }}</a><i data-toggle="tooltip" data-slug="{{ publication.author_slug }}" class="fa-solid fa-sun" style="color: #a0a4ac"></i></h5>
+                <script>
+                    $(function () {
+                        $('[data-toggle="tooltip"]').tooltip();
+                    });
+                </script>
+                <h5>{{ publication.created_at }}</h5>                  
+                <script>
                     var author_slug = "{{ publication.author_slug }}"; 
                     var statusElement = document.querySelector(`[data-slug="${author_slug}"]`);
-                  </script>
-                  <p class="card-text">{{ publication.summary }}</p>
+                </script>
+                <p class="card-text">{{ publication.summary }}</p>
                 </div>
                 <img src="{{ publication.picture }}" class="card-img-bottom" alt="...">
                 <div class="card-body">
@@ -88,16 +91,6 @@
             </div>
             <br>
             {% endfor %}
-            {% comment %} {% show_pages %} {% endcomment %}
-            
-            
-
-            {% comment %} <!-- Load more -->
-            <div class="d-flex justify-content-center mt-6">
-              <a href="#" class="bg-white font-weight-bold my-3 px-6 py-2 rounded-full shadow-md" data-bs-toggle="collapse" data-bs-target="#toggle" aria-expanded="false" aria-controls="toggle">
-                  Load more ..
-              </a>
-            </div> {% endcomment %}
             <div class="d-flex justify-content-center mt-6">
                 <div class="d-flex justify-content-center mt-6">
                     {% cool_paginate page_obj=publication %}
@@ -105,50 +98,7 @@
             </div>
 
         </div>
-        
-        <!-- right sidebar -->
-        <div class="col-lg-5">
-
-          <div class="bg-white shadow-md rounded-md overflow-hidden">
-
-              <div class="bg-gray-50 border-b border-gray-100 flex items-baseline justify-between py-4 px-6">
-                  <h2 class="font-semibold text-lg">Users You Can Follow</h2>
-                  <a href="#">Refresh</a>
-              </div>
-
-              <div class="divide-gray-300 divide-gray-50 divide-opacity-50 divide-y px-4">
-                  <div class="flex items-center justify-between py-3">
-                      <div class="flex flex-1 items-center space-x-4">
-                          <a href="profile.html">
-                              <img src="{% static 'images/resources/user-avatar2.jpg' %}" class="bg-gray-200 rounded-full w-10 h-10">
-                          </a>
-                          <div class="flex flex-col">
-                              <span class="block capitalize font-semibold">tomi_ml</span>
-                              <span class="block capitalize text-sm">320k followers</span>
-                          </div>
-                      </div>
-
-                      <a href="#" class="border border-gray-200 font-semibold px-4 py-1 rounded-full hover:bg-pink-600 hover:text-white hover:border-pink-600">Follow</a>
-                  </div>
-
-                  <div class="flex items-center justify-between py-3">
-                      <!-- Ajoutez d'autres éléments similaires ici -->
-                  </div>
-
-                  <div class="flex items-center justify-between py-3">
-                      <!-- Ajoutez d'autres éléments similaires ici -->
-                  </div>
-
-                  <div class="flex items-center justify-between py-3">
-                      <!-- Ajoutez d'autres éléments similaires ici -->
-                  </div>
-
-              </div>
-
-          </div>
-
-        </div>
-    </div>               
+    </div>
 </div>
 {% endblock content %}
 
