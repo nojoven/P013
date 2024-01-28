@@ -7,7 +7,7 @@
         <div class="card w-100">
             <div class="card-body text-center">
                 <h1 class="card-title">
-                    <a href="{% url 'users:pro' current_user.slug %}" class="text-dark">
+                    <a href="{% url 'users:profile' current_user.slug %}" class="text-dark">
                         {% if current_user.username is not None and current_user.username != "" %}
                         <b>{{ current_user.username }}</b>
                         {% else %}
