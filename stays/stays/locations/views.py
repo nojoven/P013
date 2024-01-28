@@ -132,7 +132,10 @@ async def country_view(request, country_code):
         
         if key == "iso2":
             context["general_information"]["ISO_2_Code"] = country_data_ninjas.get(key)
-            
+        
+        if "rowth" in key or "rate" in key:
+            context["general_information"][key.capitalize()] = f'{country_data_ninjas.get(key)} %'
+        
         if "gdp" in key and len(key.split("_")) > 1:
             gdp_new_key = key.capitalize().replace("gdp", "GDP")
             context["general_information"][gdp_new_key] = country_data_ninjas.get(key)
@@ -204,8 +207,6 @@ async def country_view(request, country_code):
 
                     # Format the datetime object as a string
                     new_value = dt_object.strftime("%H:%M:%S")
-                elif "rowth" in new_key or "rate" in new_key:
-                    new_value = f'{value} %'
                 else:
                     new_value = value
                 formatted_weather_json[new_key] = new_value
