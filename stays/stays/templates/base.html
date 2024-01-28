@@ -84,6 +84,7 @@
               <ul style="list-style: none;">
                   {% if user.is_authenticated %}
                       <li><a href="{% url 'users:account' user.slug %}">Account</a></li>
+                      <li><a href="{% url 'users:publish' user.slug %}">Publish</a></li>
                       <li><a href="{% url 'users:logout' %}">Log Out</a></li>
                   {% else %}
                       <li ><a href="{% url 'users:login' %}">Sign In</a></li>
