@@ -356,30 +356,49 @@ class ProfileDetailView(DetailView):
 
         except ObjectDoesNotExist:
             raise Http404("Désolé, ce profil n'existe plus.")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = self.get_object()
+        viewer = Profile.objects.get(slug=self.request.user.slug)
+
+        if Follow.objects.follows(viewer, profile):
+            context['viewer_follow_button'] = '<button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOWING</button>'
+            context['page_viewer_follows_profile'] = True
+        else:
+            context['viewer_follow_button'] = '<button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOW ME</button>'
+            context['page_viewer_follows_profile'] = False
+
+        return context
 
 class FollowingListView(ListView):
     pass
 
 
 @login_required
-def follow_profile(request):
+def follow_profile(request, slug):
     # Vérifie si la requête est de type POST
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
     # Récupère le corps de la requête et le convertit en JSON
     relation_request = json.loads(request.body)
-
+    ic(relation_request.get('asking'))
     # Récupère le profil demandeur et le profil cible à partir des slugs
     profile_asking = get_object_or_404(Profile, slug=relation_request.get('asking'))
+    profile_asking_slug =Profile.objects.get(email=profile_asking).slug
     profile_target = get_object_or_404(Profile, slug=relation_request.get('target'))
 
     # Vérifie si l'utilisateur demandeur est l'utilisateur actuel
-    if profile_asking != request.user:
+    if profile_asking_slug != request.user.slug:
+        ic(f"{profile_asking_slug} != {request.user.slug}")
         return JsonResponse({"error": "Invalid asking user"}, status=400)
 
     # Vérifie la valeur de "relation"
     if relation_request.get('relation') == 'follow':
+
+
+
         # Si "relation" est "follow", commence à suivre le profil
         Follow.objects.add_follower(profile_asking, profile_target)
         messages.success(request, f"You are now following {profile_target.username}")

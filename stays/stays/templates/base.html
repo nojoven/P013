@@ -21,6 +21,8 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
 
 <body>
 
@@ -199,9 +201,10 @@
                         statusElement.style = 'color: #f08205; animation: spin 2s linear infinite; ';
 
                         statusElement.title = 'This user is online.'; // Add hover text
-                        $(function () {
-                            $('[data-toggle="tooltip"]').tooltip()
-                          })
+                        tippy('.fa-sun', {
+                            content: statusElement.title,
+                        });
+                        
                     } else {
                         statusElement.className = 'fa-regular fa-sun fa-xs';
                         statusElement.style = 'color: #a0a4ac;';

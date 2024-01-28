@@ -25,8 +25,8 @@
                   
                 <h5 id="h5_username">Written by <a class="user-slug"  href="{% url 'users:profile' publication.author_slug %}"> {{ publication.author_username    }}</a><i data-toggle="tooltip" data-slug="{{ publication.author_slug }}" class="fa-solid fa-sun" style="color: #a0a4ac"></i></h5>
                 <script>
-                    $(function () {
-                        $('[data-toggle="tooltip"]').tooltip();
+                    tippy('.fa-sun', {
+                        content: "OK",
                     });
                 </script>
                 <h5>{{ publication.created_at }}</h5>                  
