@@ -1,14 +1,13 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-import requests
 from datetime import datetime
 from icecream import ic
 from stays.settings import NINJAS_API_KEY as napk
-from stays.settings import MAPBOX_TOKEN as mpt
 
 import httpx
 import asyncio
-from asgiref.sync import async_to_sync
+from django_countries import countries as dj_countries
+from cities_light.models import Country
 # Create your views here.
 
 
@@ -41,9 +40,17 @@ async def fetch_additional_data(capital, country_code, headers):
 async def country_view(request, country_code):
     # Get country data from Restcountries API
     if not isinstance(country_code, str) or len(country_code) < 2:
-        return HttpResponse("Invalid link url. Please inform our support team.", status=400)
+        return HttpResponse("Probable invalid code in the link url. Please inform our support team.", status=400)
+    if len(country_code) == 2:
+        # Check if the country code exists in django-countries
+        if country_code not in dj_countries:
+            return HttpResponse("Invalid country code.", status=400)
     if len(country_code) > 2:
-        country_code = country_code[:2].upper()
+        # Check if the country name exists in django-cities-light
+        if not Country.objects.filter(name=country_code).exists():
+            return HttpResponse("Invalid country name.", status=400)
+        else:
+            country_code = country_code[:2].upper()
 
     context = {}
     ninjas_api_headers = {'X-Api-Key': napk}
