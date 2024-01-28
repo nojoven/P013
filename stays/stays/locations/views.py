@@ -6,6 +6,7 @@ from stays.settings import NINJAS_API_KEY as napk
 
 import httpx
 import asyncio
+from asgiref.sync import sync_to_async
 from django_countries import countries as dj_countries
 from django.core.cache import cache
 from cities_light.models import Country
@@ -70,12 +71,17 @@ async def country_view(request, country_code):
             return HttpResponse("Invalid country code.", status=400)
     if len(country_code) > 2:
         # Check if the country name exists in django-cities-light
-        if not Country.objects.filter(name=country_code).exists():
+        exists = await sync_to_async(Country.objects.filter(name=country_code.capitalize()).exists)()
+
+        if not exists:
             return HttpResponse("Invalid country name.", status=400)
         else:
             country_code = country_code[:2].upper()
 
+    # Create the context dictionary
     context = {}
+
+    # Create the headers for the Ninjas API
     ninjas_api_headers = {'X-Api-Key': napk}
 
     # Call the async function and wait for it to finish
@@ -83,6 +89,8 @@ async def country_view(request, country_code):
 
     # Unpack the responses
     country_details, country_details_ninjas = responses
+    if country_details.status_code != 200 or country_details_ninjas.status_code != 200:
+        return HttpResponse("Invalid country code.", status=400)
 
     # Process The response from Restcountries API
     ic(country_details)
