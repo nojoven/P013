@@ -18,7 +18,9 @@
                 <hr>
                 <div class="btn-group mb-3 w-75 mx-auto" role="group" aria-label="Basic example">
                     <a href="{% url 'core:home' %}" class="btn btn-primary">Home</a>
-                    <a href="{% url 'users:stays' current_user.slug %}" class="btn btn-secondary btn-light ">Your Stays</a>
+                    {% if number_of_publications %}
+                        <a href="{% url 'users:stays' current_user.slug %}" class="btn btn-secondary btn-light ">Your Stays</a>
+                    {% endif %}
                     <a href="{% url 'users:publish' current_user.slug %}" class="btn btn-success">Publish</a>
                     <a href="{% url 'users:settings' current_user.slug %}" class="btn btn-info">Settings</a>
                 </div>
@@ -45,7 +47,13 @@
                     </div>
                 {% endif %}
                 <h3 class="card-subtitle mb-2 text-muted">Short story long</h3>
-                <a href="{% url 'users:settings' current_user.slug %}"><h6>Edit</h6></a>
+                {% if number_of_following %}
+                <h5>{{ profile.username }} follows {{ number_of_following }} Stayer(s).</h5>
+                {% endif %}
+                {% if number_of_followers %}
+                <h5>{{ number_of_followers }} Stayer(s) are following {{ profile.username }} </h5>
+                {% endif %}
+                <a href="{% url 'users:settings' current_user.slug %}"><h6>Edit Profile</h6></a>
 
                 <div class="container d-flex justify-content-center ">
                     <div class="accordion col-md-8" id="userInformationAccordion">

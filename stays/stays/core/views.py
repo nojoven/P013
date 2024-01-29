@@ -390,7 +390,6 @@ class PublicationDetailView(NeverCacheMixin, DetailView):
         published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
         publication.published_from_country_name = published_from_country_name
 
-        context["publication"] = publication
 
         # Check if the current user has upvoted the current publication
         if self.request.user.is_authenticated:
@@ -399,6 +398,13 @@ class PublicationDetailView(NeverCacheMixin, DetailView):
             has_upvoted = False
 
         context["has_upvoted"] = has_upvoted
+
+        # Get the number of upvotes for the current publication
+        total_upvotes_count = PublicationUpvote.objects.filter(publication=publication.uuid).count()
+
+        publication.total_upvotes_count = total_upvotes_count
+        
+        context["publication"] = publication
 
         ic(context.items())
 

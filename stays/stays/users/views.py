@@ -117,6 +117,18 @@ class AccountDetailsView(DetailView):
         context = super().get_context_data(**kwargs) 
         user_email = context.get("profile")
         context["current_user"] =  retrieve_current_user(user_email)
+
+
+        context["number_of_publications"] = ProfileHasPublication.objects.filter(user_profile=self.request.user.slug).count()
+
+
+        context["number_of_followers"] = Follow.objects.filter(followee=self.request.user).count()
+
+
+        context["number_of_following"] = Follow.objects.filter(follower=self.request.user).count()
+
+        context["current_user"] = self.request.user
+
         return context
 
 

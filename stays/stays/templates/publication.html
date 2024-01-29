@@ -15,6 +15,9 @@
 <div class="container">
     
     <center><h1> {{ publication.title }}</h1></center>
+    {% if publication.total_upvotes_count %}
+    <center><h3> {{ publication.total_upvotes_count }} Stayers upvote(s) !</h3></center>
+    {% endif %}
     <br>
     <center><h1>It was {{ publication.season_of_stay }}, in {{ publication.year_of_stay }}. </h1></center>
     <center><h2> It was in <a href="{% url 'locations:country' publication.country_code_of_stay %}">{{ publication.stay_country_name }}</a>, {{ publication.stay_continent_code }}. </h2></center>
