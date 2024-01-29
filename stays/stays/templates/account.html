@@ -18,9 +18,13 @@
                 <hr>
                 <div class="btn-group mb-3 w-75 mx-auto" role="group" aria-label="Basic example">
                     <a href="{% url 'core:home' %}" class="btn btn-primary">Home</a>
-                    <a href="{% url 'users:stays' current_user.slug %}" class="btn btn-secondary">Your Stays</a>
+                    <a href="{% url 'users:stays' current_user.slug %}" class="btn btn-secondary btn-light ">Your Stays</a>
                     <a href="{% url 'users:publish' current_user.slug %}" class="btn btn-success">Publish</a>
                     <a href="{% url 'users:settings' current_user.slug %}" class="btn btn-info">Settings</a>
+                </div>
+                <div class="btn-group mb-3 w-75 mx-auto" role="group" aria-label="Basic example">
+                    <a href="{% url 'users:followers' current_user.slug %}" class="btn btn-danger">Your followers</a>
+                    <a href="{% url 'users:following' current_user.slug %}" class="btn btn-warning">Favourite Stayers</a>
                 </div>
                 {% if profile.profile_picture and profile.profile_picture != "None" %}
                     <!-- Image -->
@@ -29,7 +33,6 @@
                             <img src="{{ profile.profile_picture.url }}" class="rounded-circle img-fluid mb-3" style="max-width: 50%;">
                         </a>
                     </div>
-
                     <!-- Modal -->
                     <div class="modal fade" id="profilePictureModal" tabindex="-1" aria-labelledby="profilePictureModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">

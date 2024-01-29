@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 import json
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from friendship.models import Follow
 from django.contrib import messages
@@ -10,25 +11,20 @@ from django.contrib.gis.geoip2 import GeoIP2
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as authentication_views
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
-from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
-from django.utils.encoding import force_bytes
-from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView, ArchiveIndexView, TodayArchiveView, WeekArchiveView
+from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
 from .forms import PasswordResetForm
-from friendship.models import Friend, Follow, Block
-from django.utils.decorators import method_decorator
-from django.utils.http import urlsafe_base64_encode
-from django.contrib.auth.tokens import default_token_generator
+from friendship.models import Follow
+
 
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm, PasswordChangeFromConnectedProfile
 from users.models import Profile, ProfileHasPublication
@@ -288,6 +284,10 @@ class PublishView(FormView, CreateView):
                 replace_with_currency_symbol="<$£>",
                 lang="en"                       # set to 'de' for German special handling
             )
+            
+            if self.request.user.signature and self.request.user.signature != "None":
+                publication.text_story += f"\n\n{self.request.user.signature}"
+
 
         # Enregistrement de l'enregistrement vocal s'il est fourni
         if voice_story:
@@ -371,8 +371,6 @@ class ProfileDetailView(DetailView):
 
         return context
 
-class FollowingListView(ListView):
-    pass
 
 
 @login_required
@@ -416,3 +414,36 @@ def follow_profile(request, slug):
     else:
         # Si "relation" n'est ni "follow" ni "unfollow", renvoie une erreur
         return JsonResponse({"error": "Invalid relation value"}, status=400)
+
+
+class FollowersListView(ListView):
+    model = Profile
+    template_name = 'followers.html'  # Ajustez ceci à votre template
+    context_object_name = 'followers'
+
+    def get_queryset(self):
+        profile = get_object_or_404(Profile, slug=self.kwargs['slug'])
+        return Follow.objects.followers(profile)
+
+
+class FollowingListView(ListView):
+    model = Follow
+    template_name = 'following.html'
+    context_object_name = 'stayers'
+
+    def get_queryset(self):
+        profile = get_object_or_404(Profile, slug=self.kwargs['slug'])
+        queryset = Follow.objects.filter(follower=profile).select_related('followee')
+        queryset = queryset.annotate(publication_count=Count('followee__profilehaspublication'))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = get_object_or_404(Profile, slug=self.kwargs['slug'])
+        context['follower_of_stayer'] = profile.slug
+        context['username_of_follower'] = profile.username
+        return context
+
+
+
+

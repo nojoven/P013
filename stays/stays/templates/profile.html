@@ -8,25 +8,27 @@
         <div class="card">
             <div class="card-body text-center">
                 <h2 class="card-title">{{ profile.username }}</h2>
-                {% if profile.first_name != "None" %}
+                {% if profile.first_name and profile.first_name != "None" %}
                     <p class="card-text">First Name: {{ profile.first_name }}</p>
                 {% endif %}
-                {% if profile.last_name != "None" %}
+                {% if profile.last_name and profile.last_name != "None" %}
                     <p class="card-text">Last Name: {{ profile.last_name }}</p>
                 {% endif %}
-                {% if profile.year_of_birth != "None" %}
+                {% if profile.year_of_birth and profile.year_of_birth != "None" and profile.year_of_birth != 1900 %}
                     <p class="card-text">Year of Birth: {{ profile.year_of_birth }}</p>
                 {% endif %}
-                {% if profile.season_of_birth != "None" %}
+                {% if profile.season_of_birth and profile.season_of_birth != "None" %}
                     <p class="card-text">Season of Birth: {{ profile.season_of_birth }}</p>
                 {% endif %}
-                {% if profile.motto != "None" %}
-                    <p class="card-text">Motto: {{ profile.motto }}</p>
+                {% if profile.motto and profile.motto != "None" %}
+                <h4 class="fst-italic blockquote">
+                    « {{ profile.motto }} »
+                </h4>
                 {% endif %}
-                {% if profile.signature != "None" %}
+                {% if profile.signature and profile.signature != "None" %}
                     <p class="card-text">Signature: {{ profile.signature }}</p>
                 {% endif %}
-                {% if profile.about_text != "None" %}
+                {% if profile.about_text and profile.about_text != "None" %}
                     <p class="card-text">About: {{ profile.about_text }}</p>
                 {% endif %}
                 {% if profile.continent_of_birth %}
@@ -38,8 +40,8 @@
                 {% if profile.created_at %}
                     <p class="card-text">Stayer since: {{ profile.created_at }}</p>
                 {% endif %}
-				{% if user.is_authenticated and user.slug != None and profile.slug != user.slug %}
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+				{% if user.is_authenticated and profile.slug != user.slug %}
+                <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
                     {% if page_viewer_follows_profile == False %}
                     <button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOW ME</button>
                     {% else %}
@@ -105,7 +107,7 @@
                     <a href="{% url 'users:stays' profile.slug %}"><button type="button" class="btn btn-warning text-dark fw-bold border border-dark">MY STAYS</button></a>
                     {% endif %}
 					{% if profile.following and profile.following.count > 0 %}
-					<a href="{% url 'users:following' profile.slug %}"><button type="button" class="btn btn-success text-white fw-bold border border-white border-3">I FOLLOW STAYERS</button></a>
+					<a href="{% url 'users:following' profile.slug %}"><button type="button" class="btn btn-success text-white fw-bold border border-white border-3">MY STAYERS</button></a>
 					{% endif %}
 				</div>
             </div>
