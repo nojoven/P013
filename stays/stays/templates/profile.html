@@ -8,6 +8,7 @@
         <div class="card">
             <div class="card-body text-center">
                 <h2 class="card-title">{{ profile.username }}</h2>
+                <h5> Shared {{ profile.number_of_published_stays }} stay(s).</h5>
                 {% if profile.first_name and profile.first_name != "None" %}
                     <p class="card-text">First Name: {{ profile.first_name }}</p>
                 {% endif %}
@@ -103,7 +104,7 @@
 </script>
 				{% endif %}
                 <div class="d-flex justify-content-around mt-3">
-					{% if profile.published_stays %}
+					{% if profile.number_of_published_stays %}
                     <a href="{% url 'users:stays' profile.slug %}"><button type="button" class="btn btn-warning text-dark fw-bold border border-dark">MY STAYS</button></a>
                     {% endif %}
 					{% if profile.following and profile.following.count > 0 %}

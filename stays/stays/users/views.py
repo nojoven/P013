@@ -348,7 +348,7 @@ class ProfileDetailView(DetailView):
             # Modifie la valeur de profile.continent
             profile.continent_of_birth = continent_fullname
             
-            profile.published_stays = ProfileHasPublication.objects.filter(user_profile=profile.slug)
+            profile.number_of_published_stays = ProfileHasPublication.objects.filter(user_profile=profile.slug).count()
 
             profile.save()
 
