@@ -29,7 +29,7 @@
                 {% if profile.about_text != "None" %}
                     <p class="card-text">About: {{ profile.about_text }}</p>
                 {% endif %}
-                {% if profile.continent_of_birth != "None" %}
+                {% if profile.continent_of_birth %}
                     <p class="card-text">Continent of Birth: {{ profile.continent_of_birth }}</p>
                 {% endif %}
                 {% if profile.profile_picture != "None" %}
@@ -39,9 +39,59 @@
                     <p class="card-text">Stayer since: {{ profile.created_at }}</p>
                 {% endif %}
 				{% if user.is_authenticated and profile.slug != user.slug %}
-                <div class="d-flex justify-content-around mt-3">
-					<a href="#"><button type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOW ME</button></a>
-				</div>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                    {% if page_viewer_follows_profile == False %}
+                    <button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOW ME</button>
+                    {% else %}
+                    <button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOWING</button>
+                    {% endif %}
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    $('#followButton').click(function() {
+        var profileSlug = '{{ profile.slug }}'; // Replace with actual profile slug
+        var userSlug = '{{ user.slug }}'; // Replace with actual user slug
+        console.log(profileSlug);
+        console.log(userSlug);
+        $.ajax({
+            url: '/profile/' + profileSlug + '/followtoggle',
+            type: 'POST',
+            data: JSON.stringify({ asking: userSlug, target: profileSlug, relation: 'follow' }),
+            contentType: 'application/json',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function(response){
+                if(response.status == 201){
+                    // Si le status code est 201, change le texte du bouton en "Following"
+                    $('#followButton').text('Following');
+                } else if(response.status == 204){
+                    // Si le status code est 204, change le texte du bouton en "FOLLOW ME"
+                    $('#followButton').text('FOLLOW ME');
+                }
+            },
+            error: function(data) {
+                // Handle error
+                console.log(data.responseJSON.error);
+            }
+        });
+    });
+</script>
 				{% endif %}
                 <div class="d-flex justify-content-around mt-3">
 					{% if profile.published_stays %}
