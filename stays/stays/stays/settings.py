@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import json
 import os
 from pathlib import Path
-import platform
-from machina import MACHINA_MAIN_TEMPLATE_DIR
+# import platform
+# from machina import MACHINA_MAIN_TEMPLATE_DIR
 
 from icecream import install as icinstall, ic
 icinstall()
@@ -117,17 +117,17 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     # Machina apps:
-    'machina',
-    'machina.apps.forum',
-    'machina.apps.forum_conversation',
-    'machina.apps.forum_conversation.forum_attachments',
-    'machina.apps.forum_conversation.forum_polls',
-    'machina.apps.forum_feeds',
-    'machina.apps.forum_moderation',
-    'machina.apps.forum_search',
-    'machina.apps.forum_tracking',
-    'machina.apps.forum_member',
-    'machina.apps.forum_permission',
+    # 'machina',
+    # 'machina.apps.forum',
+    # 'machina.apps.forum_conversation',
+    # 'machina.apps.forum_conversation.forum_attachments',
+    # 'machina.apps.forum_conversation.forum_polls',
+    # 'machina.apps.forum_feeds',
+    # 'machina.apps.forum_moderation',
+    # 'machina.apps.forum_search',
+    # 'machina.apps.forum_tracking',
+    # 'machina.apps.forum_member',
+    # 'machina.apps.forum_permission',
 
     # Django-Ninja
     "ninja_extra",
@@ -178,7 +178,7 @@ MIDDLEWARE = [
     # Add the account middleware:
     # "allauth.account.middleware.AccountMiddleware",
     # Machina
-    'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
+    # 'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
     # Current user
     'django_currentuser.middleware.ThreadLocalUserMiddleware',
     # Defender
@@ -192,7 +192,10 @@ ROOT_URLCONF = "stays.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates"), MACHINA_MAIN_TEMPLATE_DIR,],
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+            #  MACHINA_MAIN_TEMPLATE_DIR,
+            ],
         # "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -250,10 +253,10 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
-    'machina_attachments': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': confs.get("MACHINA_ATTACHMENT_CACHE_LOCATION") if platform.system() == 'Windows' else '/tmp',
-    },
+    # 'machina_attachments': {
+    #     'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    #     'LOCATION': confs.get("MACHINA_ATTACHMENT_CACHE_LOCATION") if platform.system() == 'Windows' else '/tmp',
+    # },
 }
 
 # SESSION_ENGINE = "django.contrib.sessions.backends.cache"

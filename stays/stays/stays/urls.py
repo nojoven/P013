@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
-from machina import urls as machina_urls
+# from machina import urls as machina_urls
 
 from .api import api
 
@@ -29,7 +29,7 @@ urlpatterns = [
     path("", include("locations.urls")),
     path("", include("users.urls")),
     path('friendship/', include('friendship.urls')),
-    path("forum", include(machina_urls)),
+    # path("forum", include(machina_urls)),
     path("api/", api.urls),
     # path("select2/", include("django_select2.urls")),
     path("apm/", include("djapm.apm.urls")),
