@@ -52,6 +52,16 @@ class DeleteProfileView(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         return retrieve_current_user(self.request.user)
+    
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Profile deleted successfully.')
+        return super().delete(request, *args, **kwargs)
+
+    def handle_no_permission(self):
+        messages.error(self.request, 'You do not have permission to delete this profile.')
+        return super().handle_no_permission()
+    
+    
 
 
 class CreateProfileView(CreateView):

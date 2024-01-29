@@ -1,6 +1,6 @@
 import json
 from django.middleware.csrf import get_token
-from stays.settings import ADMIN_EMAIL
+from stays.settings import ADMIN_EMAIL, EMAIL_HOST_USER, EMAIL_HOST, MAILGUN_API_KEY, DEFAULT_EMAIL_DESTINATION, MAILGUN_DOMAIN_NAME
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.views.generic.edit import FormView
@@ -25,7 +25,7 @@ from locations.utils.helpers import get_continent_from_code, find_cities_light_c
 from icecream import ic
 from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email, get_all_profiles
 
-from stays.utils.email_helpers import send_contact_form_message
+from stays.utils.email_helpers import send_contact_form_email
 
 
 from iommi import Table, Column, Action, Form, Field
@@ -432,6 +432,7 @@ class PublicationDeleteView(DeleteView):
             Publication.objects.filter(uuid=identifier).delete()
             return JsonResponse({'status': 'success'})
         else:
+            messages.error(self.request, 'Something went wrong. Please retry later.')
             return JsonResponse({'status': 'error', 'error': 'No identifier provided'})
 
     def delete(self, request, *args, **kwargs):
@@ -469,7 +470,6 @@ class PublicationUpdateView(UpdateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        ic(form.errors.as_data())
         messages.error(self.request, 'Something went wrong. Please check your input.')
         return super().form_invalid(form)
 
@@ -526,19 +526,30 @@ class ContactAdminView(FormView):
     success_url = reverse_lazy('core:home')  # Replace with your success url name
 
     def form_valid(self, form):
-        name = form.cleaned_data.get('name')
-        email = form.cleaned_data.get('email')
-        message = form.cleaned_data.get('message')
-        
-        # Send an email to the admin
-        send_mail(
-            f'Message from {name}',
-            message,
-            email,
-            [ADMIN_EMAIL],  # Replace with the admin's email address
-        )
+        ic(form.cleaned_data)
+        sender_name = form.cleaned_data.get('name', '')
+        from_email = form.cleaned_data.get('email', '')
+        subject = form.cleaned_data.get('subject', '')
+        message = form.cleaned_data.get('message', '')
 
-        
-        send_contact_form_message()
+        if not len(sender_name) or not len(from_email) or not len(message) or not len(subject):
+            messages.error(self.request, 'Please fill in all the fields.')
+            ic(form.errors.as_data())
+            return super().form_invalid(form)
+        else:
+            try:
+                send_contact_form_email(
+                    destination_email=ADMIN_EMAIL,
+                    domain_name=MAILGUN_DOMAIN_NAME,
+                    api_key=MAILGUN_API_KEY,
+                    from_email=from_email,
+                    subject=subject,
+                    sender_name=sender_name,
+                    message=message
+                )
+                messages.success(self.request, 'Your message has been sent.')
 
+            except Exception as e:
+                messages.error(self.request, 'Something went wrong. Please try again later.')
+                return super().form_invalid(form)
         return super().form_valid(form)

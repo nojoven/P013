@@ -63,13 +63,13 @@
 
                 </div>
                 {% if messages %}
-                <div class="flex items-center lg:justify-between justify-around">
-                    {% for message in messages %}
-                        <center><div class="alert bg-green-100 text-white-50 !important">
-                            {{ message }}
-                        </div></center>
-                    {% endfor %}
-                </div>
+                    <div class="d-flex justify-content-around">
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
         </div>

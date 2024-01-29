@@ -418,7 +418,6 @@ EMAIL_PORT = confs.get("EMAIL_PORT")
 EMAIL_USE_TLS = confs.get("EMAIL_USE_TLS")
 # your email account
 EMAIL_HOST_USER = confs.get("EMAIL_HOST_USER")
-ic(EMAIL_HOST_USER)
 # your email password
 EMAIL_HOST_PASSWORD = confs.get("EMAIL_HOST_PASSWORD")
 

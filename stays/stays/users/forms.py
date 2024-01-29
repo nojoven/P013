@@ -16,12 +16,10 @@ from .models import Profile
 
 from cities_light.models import CONTINENT_CHOICES
 
-from stays.utils.email_helpers import send_password_reset_email, EMAIL_HOST_USER, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME, DEFAULT_EMAIL_DESTINATION
-
+from stays.utils.email_helpers import send_password_reset_email
+from stays.settings import EMAIL_HOST_USER, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME, DEFAULT_EMAIL_DESTINATION
 
 from icecream import ic
-
-
 
 
 class RegistrationForm(UserCreationForm):

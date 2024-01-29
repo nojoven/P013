@@ -5,6 +5,15 @@
 <main class="flex-grow-1 bg-white">
     {% block content %}
         <div class="d-flex flex-column min-vh-100 bg-white">
+            {% if messages %}
+                    <div class="d-flex justify-content-around">
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+            {% endif %}
             <div class="d-flex justify-content-center align-items-center vh-100">
                 <form action="/" method="post" class="text-center">
                     {% csrf_token %}

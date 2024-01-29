@@ -35,15 +35,13 @@
 
                 </div>
                 {% if messages %}
-                <div class="flex items-center lg:justify-between justify-around">
-                    {% for message in messages %}
-                        <center>
-                            <div class="alert bg-green-100 text-white-50 !important">
-                            {{ message }}
+                    <div class="d-flex justify-content-around">
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
                             </div>
-                    </center>
-                    {% endfor %}
-                </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -77,11 +75,7 @@
                     <input type="email" name="username" placeholder="Email" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid black !important;">
                     <input type="password" name="password" placeholder="***********" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid black !important;">
                     <div class="flex justify-between my-4">
-                        {% comment %} <div class="checkbox">
-                            <input type="checkbox" id="chekcbox1" checked>
-                            <label for="chekcbox1"><span class="checkbox-icon"></span>Remember Me</label>
-                        </div> {% endcomment %}
-                        {% comment %} <a href="#"> Forgot Your Password? </a> {% endcomment %}
+                        
                     </div>
                     <h6 class="text-center mb-5"><a href="{% url 'users:password_reset' %}"> Forgot Your Password? </a></h6>
                     <button type="submit" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Login</button>
@@ -108,42 +102,6 @@
     </div>
 
 
-    <!--<script>
-        
-        (function (window, document, undefined) {
-            'use strict';
-            if (!('localStorage' in window)) return;
-            var nightMode = localStorage.getItem('gmtNightMode');
-            if (nightMode) {
-                document.documentElement.className += ' dark';
-            }
-        })(window, document);
-    
-    
-        (function (window, document, undefined) {
-    
-            'use strict';
-    
-            // Feature test
-            if (!('localStorage' in window)) return;
-    
-            // Get our newly insert toggle
-            var nightMode = document.querySelector('#night-mode');
-            if (!nightMode) return;
-    
-            // When clicked, toggle night mode on or off
-            nightMode.addEventListener('click', function (event) {
-                event.preventDefault();
-                document.documentElement.classList.toggle('dark');
-                if (document.documentElement.classList.contains('dark')) {
-                    localStorage.setItem('gmtNightMode', true);
-                    return;
-                }
-                localStorage.removeItem('gmtNightMode');
-            }, false);
-    
-        })(window, document);
-    </script>-->
 
     <!-- Scripts
     ================================================== -->
@@ -163,6 +121,5 @@
 
 
 </body>
-
 
 </html>
