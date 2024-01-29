@@ -16,4 +16,5 @@ urlpatterns = [
     path("publications/publication/<uuid:pk>/edit", views.PublicationUpdateView.as_view(), name="edit_publication"),
     path('publications/publication/<uuid:uuid>/upvote', views.toggle_upvote, name='upvote'),
     path('publications/publication/<uuid:uuid>/check_user_upvoted', views.check_user_upvoted_publication, name='check_user_upvoted'),
+    path("contact", views.ContactAdminView.as_view(), name="contact"),
 ]

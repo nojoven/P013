@@ -14,7 +14,6 @@ from django.http import Http404
 from django.contrib.auth import views as authentication_views
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
@@ -68,10 +67,10 @@ class CreateProfileView(CreateView):
         email = form.cleaned_data.get('email')
         messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !")
         return super().form_valid(form)
-    
+
     def form_invalid(self, form):
         # ic(form.errors.as_data())
-        messages.error(self.request,'Invalid inputs. Please try again.')
+        messages.error(self.request, 'Invalid inputs. Please try again.')
         return self.render_to_response(self.get_context_data(form=form))
 
 

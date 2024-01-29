@@ -418,11 +418,13 @@ EMAIL_PORT = confs.get("EMAIL_PORT")
 EMAIL_USE_TLS = confs.get("EMAIL_USE_TLS")
 # your email account
 EMAIL_HOST_USER = confs.get("EMAIL_HOST_USER")
+ic(EMAIL_HOST_USER)
 # your email password
 EMAIL_HOST_PASSWORD = confs.get("EMAIL_HOST_PASSWORD")
 
 # Mailgun Authorized email
 DEFAULT_EMAIL_DESTINATION = confs.get("DEFAULT_EMAIL_DESTINATION")
+ADMIN_EMAIL = confs.get("ADMIN_EMAIL")
 
 MAILGUN_API_KEY = confs.get("MAILGUN_API_KEY")
 MAILGUN_DOMAIN_NAME = confs.get("MAILGUN_DOMAIN_NAME")

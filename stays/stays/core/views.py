@@ -1,28 +1,32 @@
 import json
 from django.middleware.csrf import get_token
+from stays.settings import ADMIN_EMAIL
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
+from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.db.models import F
-from django.contrib.auth import get_user_model
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from core.utils.requests_helpers import NeverCacheMixin
-from core.forms import PublicationEditForm
+from core.forms import PublicationEditForm, ContactAdminForm
 
 from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, DeleteView
-from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
 from cities_light.models import Country
 from locations.utils.helpers import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 from icecream import ic
 from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email, get_all_profiles
+
+from stays.utils.email_helpers import send_contact_form_message
+
 
 from iommi import Table, Column, Action, Form, Field
 from iommi import Style, register_style, Asset
@@ -448,7 +452,6 @@ class PublicationUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-
         context['years'] = PublicationUpdateView.years
         context['seasons'] = PublicationUpdateView.seasons
         context['exclude_fields'] = PublicationUpdateView.exclude_fields
@@ -466,8 +469,76 @@ class PublicationUpdateView(UpdateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        ic(form.errors.as_data()) 
+        ic(form.errors.as_data())
         messages.error(self.request, 'Something went wrong. Please check your input.')
         return super().form_invalid(form)
 
 
+
+class PublicationDetailView(DetailView):
+    template_name = 'your_template_name.html'  # Replace with your template name
+    context_object_name = 'publication'
+
+    def get_object(self):
+        publication = get_object_or_404(Publication, uuid=self.kwargs['uuid'])
+
+        author_profile_picture = get_author_picture_from_slug(publication.author_slug)
+        publication.author_profile_picture = author_profile_picture
+
+        stay_country_name = find_cities_light_country_name_with_code(publication.country_code_of_stay)
+        publication.stay_country_name = stay_country_name
+
+        stay_continent_code = find_cities_light_continent_with_country_code(publication.country_code_of_stay)
+        publication.stay_continent_code = get_continent_from_code(stay_continent_code)
+
+        published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
+        publication.published_from_country_name = published_from_country_name
+
+        return publication
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        publication = context.get('publication')
+
+        # Check if the current user has upvoted the current publication
+        if self.request.user.is_authenticated:
+            has_upvoted = PublicationUpvote.objects.filter(publication=publication.uuid, upvote_profile=self.request.user.slug).exists()
+        else:
+            has_upvoted = False
+
+        context["has_upvoted"] = has_upvoted
+
+        # Get the number of upvotes for the current publication
+        total_upvotes_count = PublicationUpvote.objects.filter(publication=publication.uuid).count()
+
+        publication.total_upvotes_count = total_upvotes_count
+
+        return context
+
+
+
+
+
+class ContactAdminView(FormView):
+    template_name = 'contact.html'  # Replace with your template name
+    form_class = ContactAdminForm
+    success_url = reverse_lazy('core:home')  # Replace with your success url name
+
+    def form_valid(self, form):
+        name = form.cleaned_data.get('name')
+        email = form.cleaned_data.get('email')
+        message = form.cleaned_data.get('message')
+        
+        # Send an email to the admin
+        send_mail(
+            f'Message from {name}',
+            message,
+            email,
+            [ADMIN_EMAIL],  # Replace with the admin's email address
+        )
+
+        
+        send_contact_form_message()
+
+        return super().form_valid(form)

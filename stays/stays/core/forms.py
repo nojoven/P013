@@ -1,6 +1,5 @@
 from django import forms
 from django_countries.widgets import CountrySelectWidget
-from django_countries.fields import CountryField
 from .models import Publication, ContentTypes
 from django.conf import settings
 
@@ -41,3 +40,7 @@ class PublicationEditForm(forms.ModelForm):
         self.fields['content_type'].required = False 
 
 
+class ContactAdminForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)
