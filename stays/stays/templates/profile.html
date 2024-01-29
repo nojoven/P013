@@ -38,7 +38,7 @@
                 {% if profile.created_at %}
                     <p class="card-text">Stayer since: {{ profile.created_at }}</p>
                 {% endif %}
-				{% if user.is_authenticated and profile.slug != user.slug %}
+				{% if user.is_authenticated and user.slug != None and profile.slug != user.slug %}
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
                     {% if page_viewer_follows_profile == False %}
                     <button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOW ME</button>
