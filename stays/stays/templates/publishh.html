@@ -1,0 +1,165 @@
+{% load static %}
+{% load split_on_slash %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
+    <title>Publish</title>
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+
+</head>
+
+<body>
+    <div class="container m-auto">
+        <b><a href="{% url 'users:account' current_user.slug %}"><h3 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">{{ current_user.username }}</h3></a></b>
+        <br>
+        {% if messages %}
+                <div class="flex items-center lg:justify-between justify-around">
+                    {% for message in messages %}
+                        <center>
+                            <div class="alert bg-green-100 text-white-50 !important">
+                            {{ message }}
+                            </div>
+                    </center>
+                    {% endfor %}
+                </div>
+        {% endif %}
+        <hr>
+        <br>
+
+        <div class="grid lg:grid-cols-3 mt-12 gap-8">
+            <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
+                <form action="{% url 'users:publish' current_user.slug %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                    <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+                        <div class="col-span-2">
+                            <label for="picture">Select A Profile Picture</label>
+                            {% comment %} <label for="">Your picture : {{ user.profile_picture|split_on_slash }}</label> {% endcomment %}
+                            {% comment %} <img src="{% get_media_prefix %}{{ user.profile_picture }}" height="100px" width="100px" /> {% endcomment %}
+                            <input type="file" name="picture"  value="" accept=".jpg,.JPEG,.png,.svg" capture="user" class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="author_slug" style="display: none;">Author ID</label>
+                            <input type="text" name="author_slug" value="{{ current_user.slug }}" class="shadow-none bg-gray-100" style="display: none;" readonly>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="author_username" style="display: none;">Author Name</label>
+                            <input type="text" name="author_username" value="{{ current_user.username }}" class="shadow-none bg-gray-100" readonly style="display: none;" readonly>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="title">Title</label>
+                            <input type="text" name="title" placeholder="" value="" class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="country_code_of_stay">Country of the stay</label>
+                            {% comment %} <input type="text" name="location_of_stay" placeholder="" value="" class="shadow-none bg-gray-100"> {% endcomment %}
+                            {% load countries %}
+                            {% get_countries as countries %}
+                            <select name="country_code_of_stay">
+                            {% for country in countries %}
+                                <option value="{{ country.code }}">{{ country.name }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="published_from_country_code">This content is going to be published from {{ active_from_contry_name }} which code is :</label>
+                            <input type="text" name="published_from_country_code" value="{{ active_from_contry_code }}" class="shadow-none bg-gray-100" readonly>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="season_of_stay">Season of birth</label>
+                            <select id="stay_seasons" name="season_of_stay"  class="shadow-none bg-gray-100">
+                                <option value="Spring">Spring</option>
+                                <option value="Summer">Summer</option>
+                                <option value="Autumn">Autumn</option>
+                                <option value="Winter">Winter</option>
+                            </select>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="">Year of Stay</label>
+                            <input type="number" name="year_of_stay" value=1990 min=1900 max=2023  class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <legend>Type of publication</legend>
+                            <input class=form-check-input type="radio" id="contenttype1" name="content_type" value="text" checked>
+                            <label for="contenttype1">Text</label>
+                            <input class=form-check-input type="radio" id="contenttype2" name="content_type" value="voice">
+                            <label for="contenttype2">Voice</label>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="summary">Summary</label>
+                            <input type="text" name="summary" placeholder="" value="" class="shadow-none bg-gray-100">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="text_story">Your story</label>
+                            <textarea id="textstory" name="text_story" placeholder="It was ..." value=""  rows="5"  class="shadow-none bg-gray-100"></textarea>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="voice_story" class="input-group-text">Record your experience</label>
+                            <input type="file" id="voicestory"  name="voice_story" value="" accept="audio/*" rows="5"  class="shadow-none bg-gray-100 form-control input-group">
+                        </div>
+                        <div class="bg-gray-10 p-6 pt-0 flex justify-around justify-end space-x-6">
+                            {% comment %} <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="{% url 'users:settings' user.pk %}"> Cancel </a></button> {% endcomment %}
+                            <button type="submit" class="button bg-blue-700">Publish</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
+        </div>
+
+    </div>
+            
+    
+
+ <!-- Scripts
+    ================================================== -->
+    <!-- tippy Development -->
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <!-- tippy Production -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/6.2.5/simplebar.min.js"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+    <script>
+    const text_story = document.getElementById('textstory');
+    const voice_story = document.getElementById('voicestory');
+    $('label[for="voice_story"]').hide();
+    voice_story.style.display = 'none';
+
+    function handleRadioClick() {
+    if (document.getElementById('contenttype1').checked) {
+        text_story.style.display = 'block';
+        $('label[for="text_story"]').show();
+        $('label[for="voice_story"]').hide();
+        voice_story.style.display = 'none';
+    } else {
+        $('label[for="voice_story"]').show();
+        $('label[for="text_story"]').hide();
+        voice_story.style.display = 'block';
+        text_story.style.display = 'none';
+    }
+    }
+
+    const radioButtons = document.querySelectorAll('input[name="content_type"]');
+    radioButtons.forEach(radio => {
+    radio.addEventListener('click', handleRadioClick);
+    });
+    </script>
+</body>
+
+</html>
