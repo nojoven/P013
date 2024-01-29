@@ -395,6 +395,7 @@ def follow_profile(request, slug):
         return JsonResponse({"error": "Invalid asking user"}, status=400)
 
     # Vérifie la valeur de "relation"
+    ic(relation_request.get('relation'))
     if relation_request.get('relation') == 'follow':
 
 

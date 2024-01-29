@@ -62,32 +62,39 @@
     }
 
     var csrftoken = getCookie('csrftoken');
+    
+    var pageViewerFollowsProfile = '{{ page_viewer_follows_profile }}' == 'True';
 
     $('#followButton').click(function() {
         var profileSlug = '{{ profile.slug }}'; // Replace with actual profile slug
         var userSlug = '{{ user.slug }}'; // Replace with actual user slug
-        console.log(profileSlug);
-        console.log(userSlug);
+        var relation = pageViewerFollowsProfile ? 'unfollow' : 'follow';
+        console.log("relation: " + relation);
         $.ajax({
             url: '/profile/' + profileSlug + '/followtoggle',
             type: 'POST',
-            data: JSON.stringify({ asking: userSlug, target: profileSlug, relation: 'follow' }),
+            data: JSON.stringify({ asking: userSlug, target: profileSlug, relation: relation }),
             contentType: 'application/json',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             },
-            success: function(response){
-                if(response.status == 201){
+            success: function(data, textStatus, jqXHR){
+                if(jqXHR.status == 201){
                     // Si le status code est 201, change le texte du bouton en "Following"
                     $('#followButton').text('Following');
-                } else if(response.status == 204){
+                    pageViewerFollowsProfile = true;
+                } else if(jqXHR.status == 204){
                     // Si le status code est 204, change le texte du bouton en "FOLLOW ME"
                     $('#followButton').text('FOLLOW ME');
+                    pageViewerFollowsProfile = false;
                 }
+                // Mettre à jour relation avec la nouvelle valeur
+                relation = pageViewerFollowsProfile ? 'unfollow' : 'follow';
+                console.log("relation: " + relation);
             },
-            error: function(data) {
+            error: function(jqXHR, textStatus, errorThrown) {
                 // Handle error
-                console.log(data.responseJSON.error);
+                console.log(textStatus, errorThrown);
             }
         });
     });
