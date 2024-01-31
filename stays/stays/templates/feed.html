@@ -49,13 +49,11 @@
                     <p class="card-text">{{ publication.text_story }}</p>
                     {% endif %}
                     {% if user.is_authenticated and publication.content_type == "voice" %}
-                    <center>
-                        <div class="col-sm-4 col-sm-offset-4 embed-responsive embed-responsive-4by3">
-                            <audio  controls class="embed-responsive-item">
+                        <div class="col-sm-12 mx-auto embed-responsive embed-responsive-4by3">
+                            <audio  controls class="embed-responsive-item" style="display: block; margin: 0 auto;">
                                 <source src="{{ publication.voice_story }}">
                             </audio>
                         </div>
-                    </center>
                     {% endif %}
                     {% if not user.is_authenticated %}
                     <center><a href="{% url 'users:login' %}" class="btn btn-primary">Login</a></center>
@@ -151,10 +149,40 @@
                 this.classList.remove('fa-regular');
                 this.classList.add('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade');
             }
-        }, 100);
+        }, 80);
     }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+<script>
+    function showLoginModal(event) {
+        event.preventDefault();
+    
+        Swal.fire({
+            title: 'Login',
+            html:
+                '<input id="swal-input1" class="swal2-input" placeholder="Email">' +
+                '<input id="swal-input2" class="swal2-input" placeholder="Password" type="password">',
+            focusConfirm: false,
+            preConfirm: () => {
+                const email = document.getElementById('swal-input1').value;
+                const password = document.getElementById('swal-input2').value;
+    
+                return axios.post('/your-login-url/', {
+                    email: email,
+                    password: password
+                })
+                .then(function (response) {
+                    if (response.status === 200) {
+                        location.reload();
+                    }
+                })
+                .catch(function (error) {
+                    Swal.showValidationMessage(`Request failed: ${error}`);
+                });
+            }
+        });
+    }
+</script>
 
 </main>
