@@ -61,6 +61,7 @@
                     <center><a href="{% url 'users:login' %}" class="btn btn-primary">Login</a></center>
                     {% endif %}
                     {% if user.is_authenticated %}
+                    
                     <center>
                         {% if user.slug not in publication.upvoters %}
                         <button id="upvbtn" 
@@ -71,7 +72,7 @@
                                 hx-target="#upvbtn" 
                                 hx-swap="none"
                                 hx-headers='{"Content-Type":"application/json"}'>
-                            Upvote <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg></i>
+                            Upvote <i id="upvotei" class="fa-regular fa-heart" style="color: #e22222;" data-fa-i2svg></i>
                         </button>
                         {% else %}
                         <button id="upvbtn" 
@@ -121,6 +122,21 @@
     });
 </script>
 
+{% comment %} <script>
+    document.getElementById('upvotei').onclick = function() {
+        // Attendre 0,1 seconde
+        setTimeout(() => {
+            // Vérifier si toutes les classes sont présentes
+            if (this.classList.contains('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm')) {
+                // Si oui, remplacer les classes
+                this.classList.remove('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm');
+                this.classList.add('fa-regular', 'fa-heart');
+            }
+        }, 100);
+    }
+</script> {% endcomment %}
+
+<script>src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"</script>
 <script>
     document.getElementById('upvotei').onclick = function() {
         // Attendre 0,1 seconde
@@ -129,10 +145,16 @@
             if (this.classList.contains('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm')) {
                 // Si oui, remplacer les classes
                 this.classList.remove('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm');
-                this.classList.add('fa-regular', 'fa-heart', 'upvote');
+                this.classList.add('fa-regular', 'fa-heart');
+            } else if (!this.classList.contains('fa-heart-circle-check', 'fa-beat-fade')) {
+                // Si 'fa-heart-circle-check' et 'fa-beat-fade' ne sont pas présents, modifier les classes
+                this.classList.remove('fa-regular');
+                this.classList.add('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade');
             }
         }, 100);
     }
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
 
 </main>

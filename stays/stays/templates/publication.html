@@ -79,19 +79,19 @@
                 hx-target="#upvbtn" 
                 hx-swap="outerHTML"
                 hx-headers='{"Content-Type":"application/json"}'>
-            <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg>Upvote</i>
+            <i id="upvotei" class="fa-regular fa-heart" style="color: #e22222;" data-fa-i2svg>Upvote</i>
         </button>
     </center>
 {% elif has_upvoted is True %}
     <center>
         <button id="upvbtn" 
-            type="button" 
-            class="btn btn-light btn-outline-info"
-            hx-post="{% url 'core:upvote' publication.uuid %}" 
-            hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
-            hx-target="#upvbtn" 
-            hx-swap="outerHTML"
-            hx-headers='{"Content-Type":"application/json"}'>
+                type="button" 
+                class="btn btn-light btn-outline-info"
+                hx-post="{% url 'core:upvote' publication.uuid %}" 
+                hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                hx-target="#upvbtn" 
+                hx-swap="outerHTML"
+                hx-headers='{"Content-Type":"application/json"}'>
             <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm" style="color: #e22222;" data-fa-i2svg>You Like It</i>
         </button>
     </center>
