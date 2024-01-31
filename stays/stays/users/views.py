@@ -262,7 +262,8 @@ class PublishView(FormView, CreateView):
         current_user = retrieve_current_user(user_email)
         PublishView.slug_url_kwarg = current_user.slug
         PublishView.success_url = reverse_lazy(
-            'core:home', args=[current_user.slug]
+            # 'core:home', args=[current_user.slug]
+            'core:home'
         )
 
         context["current_user"] = current_user
