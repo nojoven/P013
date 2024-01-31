@@ -334,7 +334,7 @@ def toggle_upvote(request, uuid):
                 hx-target="#upvbtn" 
                 hx-swap="outerHTML"
                 hx-headers='{{"Content-Type":"application/json"}}'>
-            <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg>Upvote</i>
+                <i id="upvotei" class="fa-regular fa-heart upvote" style="color: #e22222;" data-fa-i2svg>Upvote</i>
         </button>
         '''
     return HttpResponse(button_html)
@@ -476,7 +476,7 @@ class PublicationUpdateView(UpdateView):
 
 
 class PublicationDetailView(DetailView):
-    template_name = 'your_template_name.html'  # Replace with your template name
+    template_name = 'publication.html'  # Replace with your template name
     context_object_name = 'publication'
 
     def get_object(self):
