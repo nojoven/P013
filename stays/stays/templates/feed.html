@@ -29,9 +29,9 @@
                         content: "OK",
                     });
                 </script>
-                <h5>{{ publication.created_at }}</h5>                  
+                <h5>{{ publication.created_at }}</h5>
                 <script>
-                    var author_slug = "{{ publication.author_slug }}"; 
+                    var author_slug = "{{ publication.author_slug }}";
                     var statusElement = document.querySelector(`[data-slug="${author_slug}"]`);
                 </script>
                 <p class="card-text">{{ publication.summary }}</p>
@@ -62,7 +62,7 @@
                     {% endif %}
                     {% if user.is_authenticated %}
                     <center>
-                        {% if user.slug not in publication.upvoters  %}
+                        {% if user.slug not in publication.upvoters %}
                         <button id="upvbtn" 
                                 type="button" 
                                 class="btn btn-light btn-outline-info"
@@ -120,4 +120,19 @@
         });
     });
 </script>
+
+<script>
+    document.getElementById('upvotei').onclick = function() {
+        // Attendre 0,1 seconde
+        setTimeout(() => {
+            // Vérifier si toutes les classes sont présentes
+            if (this.classList.contains('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm')) {
+                // Si oui, remplacer les classes
+                this.classList.remove('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm');
+                this.classList.add('fa-regular', 'fa-heart', 'upvote');
+            }
+        }, 100);
+    }
+</script>
+
 </main>
