@@ -9,6 +9,7 @@
     "HOST": "",
     "PORT": 0,
     "TINY_MCE_API_KEY": "",
+    "TINYMCE_COMPRESSOR": false,
     "MACHINA_ATTACHMENT_CACHE_LOCATION": "",
     "PORCUPINE_ACCESSKEY": "",
     "OPENAI_API_KEY": "",

@@ -391,7 +391,7 @@ EASY_MAPS_CENTER = (-41.3, 32)
 EASY_MAPS_LANGUAGE = 'fr'
 
 TINYMCE_JS_URL = f"https://cdn.tiny.cloud/1/{confs.get('TINY_MCE_API_KEY')}/tinymce/6/tinymce.min.js"
-TINYMCE_COMPRESSOR = False
+TINYMCE_COMPRESSOR = confs.get("TINYMCE_COMPRESSOR", False)
 
 PORCUPINE_ACCESSKEY = confs.get("PORCUPINE_ACCESSKEY")
 OPENAI_API_KEY = confs.get("OPENAI_API_KEY")
