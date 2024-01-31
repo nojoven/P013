@@ -50,13 +50,22 @@
                     {% endif %}
                     {% if user.is_authenticated and publication.content_type == "voice" %}
                         <div class="col-sm-12 mx-auto embed-responsive embed-responsive-4by3">
-                            <audio  controls class="embed-responsive-item" style="display: block; margin: 0 auto;">
+                            <audio controls class="embed-responsive-item" style="display: block; margin: 0 auto;">
                                 <source src="{{ publication.voice_story }}">
                             </audio>
                         </div>
                     {% endif %}
                     {% if not user.is_authenticated %}
-                    <center><a href="{% url 'users:login' %}" class="btn btn-primary">Login</a></center>
+                    <style>
+                        #loginfromfeedbtn:hover {
+                            background-color: transparent !important;
+                            color: red !important;
+                            transform: scale(1.1); /* Agrandit le bouton de 10% */
+                            font-size: 1.2em; /* Agrandit le texte de 20% */
+
+                        }
+                    </style>
+                    <center><a id="loginfromfeedbtn" href="{% url 'users:login' %}" class="btn btn-light btn-outline-info" style="color: red !important;">Login</a></center>
                     {% endif %}
                     {% if user.is_authenticated %}
                     
