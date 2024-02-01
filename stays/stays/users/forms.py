@@ -126,7 +126,7 @@ class PublishContentForm(forms.ModelForm):
     author_slug = forms.SlugField(required=True)
     author_username = forms.CharField(required=True)
     country_code_of_stay = CountryField().formfield()
-    published_from_country_code = CountryField().formfield()
+    published_from_country_code = CountryField(default='IT').formfield(required=True)
     summary = forms.CharField(required=True)
     picture = forms.FileField(required=True, allow_empty_file=False)
     year_of_stay = forms.IntegerField(required=True)

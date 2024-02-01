@@ -217,12 +217,12 @@ class UpdateAccountView(UpdateView):
         # It should return an HttpResponse.
         about_text = form.cleaned_data.get('about_text')
         if about_text:
-            about_text = clean_text(about_text, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, multiple_whitespaces=True, special_char=True, emojis=False, stopwords=True)
+            about_text = clean_text(about_text, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=False, multiple_whitespaces=True, special_char=False, emojis=False, stopwords=True)
 
         signature = form.cleaned_data.get('signature')
 
         if signature:
-            signature = clean_text(signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, multiple_whitespaces=True, special_char=True, emojis=False, stopwords=True)
+            signature = clean_text(signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=False, multiple_whitespaces=True, special_char=False, emojis=False, stopwords=True)
 
         # Enregistrement de la publication
         profile = form.save(commit=False)
@@ -292,7 +292,7 @@ class PublishView(FormView, CreateView):
             publication.text_story = clean(  # Clean the texte
                 text_story,
                 fix_unicode=True,               # fix various unicode errors
-                to_ascii=True,                  # transliterate to closest ASCII representation
+                to_ascii=False,                  # transliterate to closest ASCII representation
                 lower=False,                     # lowercase text
                 no_line_breaks=False,           # fully strip line breaks as opposed to only normalizing them
                 no_urls=True,                  # replace all URLs with a special token
@@ -311,7 +311,7 @@ class PublishView(FormView, CreateView):
             )
             
             if self.request.user.signature and self.request.user.signature != "None":
-                publication.text_story += f"\n\n{self.request.user.signature}"
+                publication.text_story += f"\n\n« {self.request.user.signature} »"
 
 
         # Enregistrement de l'enregistrement vocal s'il est fourni
