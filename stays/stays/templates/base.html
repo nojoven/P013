@@ -43,82 +43,82 @@
     }
 </style>
 <body class="site">
+    <style>
+        .navbar {
+            font-family: 'Poppins', sans-serif; /* This is a modern and stylish font. You can change it to any font you like. */
+        }
+        
+        .navbar a {
+            color: black !important; /* This will make the links black */
+        }
+        
+        .header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%; /* This will make the profile picture round */
+        }
+        .navbar-toggler {
+            display: none;
+        }
+    </style>
 
-<header>
-  <div class="header_inner">
-      <div class="left-side">
-          <!-- Logo -->
-          {% comment %} <div id="logo">
-              <a href="{% url 'core:home' %}">
-                  <b><h1 style="text-transform: uppercase;">STAYS : Remember them. Share them. Warm hearts.</h1></b>
-              </a>
-          </div> {% endcomment %}
-            {% comment %} <a href="{% url 'core:home' %}" class="logo">
-                <img src="{% static 'assets/images/logo.png' %}" alt="logo" style="width: 10%; height: 10%;">
-            </a> {% endcomment %}
-            <a href="{% url 'core:home' %}">
-                <h2><i class="fa-solid fa-house 2xl" style="color: #021bd9;"></i></h2>
-            </a>
-          
-          {% comment %} <div class="header_search">
-              <input type="text" class="form-control" placeholder="Search for username..">
-              <div class="icon-search">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-              </div>
-          </div> {% endcomment %}
-      </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <style>
+            /* ... other styles ... */
+            
+            h1 {
+                font-size: 1.5rem; /* Adjust as needed */
+            }
+            
+            /* Adjust the font size on larger screens */
+            @media (min-width: 992px) {
+                h1 {
+                    font-size: 2.5rem; /* Adjust as needed */
+                }
+            }
+            </style>
+        <div class="container">
+            <!-- Left side -->
+            <div class="navbar-brand">
+                <a href="{% url 'core:home' %}">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+    
+            <!-- Center title -->
+            <h1 class="mx-auto text-center">S. T. A. Y. S. -<br>SHARE EXPERIENCES -<br>WARM HEARTS</h1>
+    
+            <!-- Right side -->
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user.is_authenticated %}
+                        <img src="{{ user.profile_picture.url }}" class="header-avatar" alt="{% static 'assets/images/avatars/vectorstock_7142223.png' %}">
+                    {% else %}
+                        <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar" alt="{% static 'assets/images/avatars/vectorstock_7142223.png' %}">
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'users:account' user.slug %}">Account</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:publish' user.slug %}">Publish</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:logout' %}">Log Out</a></li>
+                    {% else %}
+                        <li><a class="dropdown-item" href="{% url 'users:login' %}">Sign In</a></li>
+                    {% endif %}
+                </ul>
+            </div>
 
-      <div class="right-side lg:pr-4">
-          <!-- Upload -->
-          {% if user.is_authenticated %}
-          <a href="{% url 'users:publish' user.slug %}"
-              class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
-              <ion-icon name="add-circle" class="-mb-1 mr-1 opacity-90 text-xl uilus-circle"></ion-icon>
-              Share an experience
-          </a>
-          {% endif %}
+            <!-- Toggler/collapsibe Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            
 
-          <!-- Notification -->
-          {% if user.is_authenticated %}
-          <a href="#" class="header-links-item">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"
-                  role="img">
-                  <g fill="none">
-                      <path
-                          d="M12 22a2.02 2.02 0 0 1-2.01-2h4a2.02 2.02 0 0 1-.15.78a2.042 2.042 0 0 1-1.44 1.18h-.047A1.922 1.922 0 0 1 12 22zm8-3H4v-2l2-1v-5.5a8.065 8.065 0 0 1 .924-4.06A4.654 4.654 0 0 1 10 4.18V2h4v2.18c2.579.614 4 2.858 4 6.32V16l2 1v2z"
-                          fill="currentColor" />
-                  </g>
-              </svg>
-          </a>
-          {% endif %}
-          <!-- ... (Rest of the code) ... -->
 
-          <!-- Profile -->
-          <a href="#">
-            {% if user.is_authenticated %}
-            <img src="{{ user.profile_picture.url }}" class="header-avatar" alt="{% static 'assets/images/avatars/icons8-login-64.png' %}">
-            {% else %}
-            <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar" alt="{% static 'assets/images/avatars/vectorstock_7142223.png' %}">
-            {% endif %}
-          </a>
-          <div uk-drop="mode: click;offset:9"
-              class="header_dropdown profile_dropdown border-t">
-              <ul style="list-style: none;">
-                  {% if user.is_authenticated %}
-                      <li><a href="{% url 'users:account' user.slug %}">Account</a></li>
-                      <li><a href="{% url 'users:publish' user.slug %}">Publish</a></li>
-                      <li><a href="{% url 'users:logout' %}">Log Out</a></li>
-                  {% else %}
-                      <li ><a href="{% url 'users:login' %}">Sign In</a></li>
-                  {% endif %}
-              </ul>
-          </div>
-      </div>
-  </div>
-</header>
+        </div>
+    </nav>
+
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
     <symbol id="check-circle-fill" viewBox="0 0 16 16">
       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
