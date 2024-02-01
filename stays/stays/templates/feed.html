@@ -4,9 +4,91 @@
 {% load el_pagination_tags %}
 <title>STAYS FEED </title>
 <main>
-{% block content %}
-<div class="container mx-auto">
+    {% block content %}
 
+<script>
+    // Définir la fonction showLoginModal ici
+    window.showLoginModal = function(event) {
+        event.preventDefault();
+    
+        Swal.fire({
+            title: '<strong style="color:black;">Login</strong>',
+            html:
+            '<form id="swal-form" onsubmit="event.preventDefault();">' +
+                '<input type="hidden" id="swal-csrf-token" value="{{ csrf_token }}">' +
+                '<label for="swal-input1">Email</label>' +
+                '<input name="username" id="swal-input1" class="swal2-input" placeholder="Email">' +
+                '<label for="swal-input2">Password</label>' +
+                '<input name="password" id="swal-input2" class="swal2-input" placeholder="Password" type="password">' +
+                '<div id="swal-input-error" style="color: red;"></div>' +
+                '</form>',
+            focusConfirm: false,
+            background: 'white',
+            preConfirm: () => {
+                const email = document.getElementById('swal-input1').value;
+                const password = document.getElementById('swal-input2').value;
+                const csrfToken = document.getElementById('swal-csrf-token').value;
+                const swalIcon = document.querySelector('.swal2-icon');
+                if (swalIcon) {
+                    swalIcon.style.display = 'flex'; // Show the error icon
+                }
+
+                const formData = new FormData();
+                formData.append('username', email);
+                formData.append('password', password);
+                formData.append('csrfmiddlewaretoken', csrfToken);
+
+                return axios.post('/login?fromfeed=fromfeed', formData, {
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                    }
+                })
+                .then(function (response) {
+                    console.log(response);
+                    if (!response.data.error) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Your are connected.',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        throw new Error(response.data.error);
+                    }
+                    
+                })
+                .catch(function (error) {
+                    document.getElementById('swal-input-error').textContent = 'Invalid credentials. Please try again';
+                    Swal.update({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Invalid credentials. Please try again',
+                        background: 'white',
+                        //position: 'center', // Position the error message at the center of the screen
+                        confirmButtonText: 'OK',
+
+                    });
+                    Swal.showValidationMessage(`Request failed: ${error}`);
+                    Swal.getConfirmButton().disabled = true; // Disable the confirm button
+                    setTimeout(() => {
+                        const swalIcon = document.querySelector('.swal2-icon');
+                        if (swalIcon) {
+                            swalIcon.style.display = 'none';
+                        }
+                        Swal.getConfirmButton().disabled = false; // Enable the confirm button
+                    }, 1500); // Make the error icon disappear after 1.5 seconds
+                    return new Promise((resolve, reject) => reject(error)); // Return a rejected promise
+                });
+            }
+        });
+    }
+</script>
+<div class="container mx-auto">
+        
     <div class="d-flex justify-content-center gx-4 gy-0">
 
         <!-- left sidebar-->
@@ -65,7 +147,11 @@
 
                         }
                     </style>
-                    <center><a id="loginfromfeedbtn" href="{% url 'users:login' %}" class="btn btn-light btn-outline-info" style="color: red !important;">Login</a></center>
+                    <center>
+                    <div class="text-center">
+                        <button type="button" id="loginfromfeedbtn" class="btn btn-light btn-outline-info" style="color: red !important;" onclick="showLoginModal(event)">Login</button>
+                    </div>
+                    </center>
                     {% endif %}
                     {% if user.is_authenticated %}
                     
@@ -129,21 +215,6 @@
     });
 </script>
 
-{% comment %} <script>
-    document.getElementById('upvotei').onclick = function() {
-        // Attendre 0,1 seconde
-        setTimeout(() => {
-            // Vérifier si toutes les classes sont présentes
-            if (this.classList.contains('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm')) {
-                // Si oui, remplacer les classes
-                this.classList.remove('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm');
-                this.classList.add('fa-regular', 'fa-heart');
-            }
-        }, 100);
-    }
-</script> {% endcomment %}
-
-<script>src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"</script>
 <script>
     document.getElementById('upvotei').onclick = function() {
         // Attendre 0,1 seconde
@@ -162,36 +233,5 @@
     }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
-<script>
-    function showLoginModal(event) {
-        event.preventDefault();
-    
-        Swal.fire({
-            title: 'Login',
-            html:
-                '<input id="swal-input1" class="swal2-input" placeholder="Email">' +
-                '<input id="swal-input2" class="swal2-input" placeholder="Password" type="password">',
-            focusConfirm: false,
-            preConfirm: () => {
-                const email = document.getElementById('swal-input1').value;
-                const password = document.getElementById('swal-input2').value;
-    
-                return axios.post('/your-login-url/', {
-                    email: email,
-                    password: password
-                })
-                .then(function (response) {
-                    if (response.status === 200) {
-                        location.reload();
-                    }
-                })
-                .catch(function (error) {
-                    Swal.showValidationMessage(`Request failed: ${error}`);
-                });
-            }
-        });
-    }
-</script>
 
 </main>

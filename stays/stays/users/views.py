@@ -91,16 +91,16 @@ class AccountLoginView(authentication_views.LoginView):
     fields = ["email", "password"]
     template_name = "signin.html"
     redirect_authenticated_user = True
-    slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
-    slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
+    slug_field = 'slug'  # field in the model
+    slug_url_kwarg = 'slug'  # slug in the url (URI parameter)
 
     def get_success_url(self):
-        # Assurez-vous que l'utilisateur est connecté
+        # Check if the user is connected
         if self.request.user.is_authenticated:
-            # Essayez de récupérer le profil associé à l'utilisateur
+            # Search the user in the database
             profile = retrieve_current_user(self.request.user)
             if profile:
-                # Récupérez le slug du profil
+                # Fetch user's slug
                 user_slug = profile.slug
                 return reverse_lazy('users:account', kwargs={'slug': user_slug})
 
@@ -110,9 +110,12 @@ class AccountLoginView(authentication_views.LoginView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        # ic(form.errors.as_data())
-        messages.error(self.request, 'Invalid username or password')
-        return self.render_to_response(self.get_context_data(form=form))
+        if 'fromfeed' in self.request.GET and self.request.GET['fromfeed'] == 'fromfeed':
+            return JsonResponse({'error': 'Invalid username or password'})
+        else:
+            # ic(form.errors.as_data())
+            messages.error(self.request, 'Invalid username or password')
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 class AccountDetailsView(DetailView):
