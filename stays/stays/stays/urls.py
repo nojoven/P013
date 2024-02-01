@@ -18,6 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
+from stays.utils.errors_helpers import random_error_handler
 # from machina import urls as machina_urls
 
 from .api import api
@@ -39,3 +40,44 @@ urlpatterns = [
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
 )
+
+
+# Error handlers WHEN DEBUG=TRUE
+def handler400(request, exception):
+    return random_error_handler(request, 400)
+
+
+def handler401(request, exception):
+    return random_error_handler(request, 401)
+
+
+def handler403(request, exception):
+    return random_error_handler(request, 403)
+
+
+def handler404(request, exception):
+    return random_error_handler(request, 404)
+
+
+def handler410(request, exception):
+    return random_error_handler(request, 410)
+
+
+def handler418(request, exception):
+    return random_error_handler(request, 418)
+
+
+def handler429(request, exception):
+    return random_error_handler(request, 429)
+
+
+def handler500(request):
+    return random_error_handler(request, 500)
+
+
+def handler503(request, exception):
+    return random_error_handler(request, 503)
+
+
+def handler504(request, exception):
+    return random_error_handler(request, 504)
