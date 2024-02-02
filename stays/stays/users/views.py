@@ -22,6 +22,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
 from .forms import PasswordResetForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from friendship.models import Follow
 
 
@@ -32,6 +33,7 @@ from core.models import Publication
 from core.views import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 from locations.utils.helpers import get_continent_from_code
 from django_countries import countries
+from users.utils import retrieve_current_user
 
 # Custom sugar
 from cleantext import clean
@@ -40,9 +42,9 @@ from icecream import ic
 
 # Create your views here.
 
-def retrieve_current_user(profile_email):
-    current_user = Profile.objects.get(email=profile_email)
-    return current_user
+# def retrieve_current_user(profile_email):
+#     current_user = Profile.objects.get(email=profile_email)
+#     return current_user
 
 
 class DeleteProfileView(LoginRequiredMixin, DeleteView):
@@ -51,7 +53,7 @@ class DeleteProfileView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('core:home')
 
     def get_object(self, queryset=None):
-        return retrieve_current_user(self.request.user)
+        return retrieve_current_user(self.request.user, self.model)
     
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Profile deleted successfully.')
@@ -60,8 +62,6 @@ class DeleteProfileView(LoginRequiredMixin, DeleteView):
     def handle_no_permission(self):
         messages.error(self.request, 'You do not have permission to delete this profile.')
         return super().handle_no_permission()
-    
-    
 
 
 class CreateProfileView(CreateView):
@@ -98,7 +98,7 @@ class AccountLoginView(authentication_views.LoginView):
         # Check if the user is connected
         if self.request.user.is_authenticated:
             # Search the user in the database
-            profile = retrieve_current_user(self.request.user)
+            profile = retrieve_current_user(self.request.user, self.model)
             if profile:
                 # Fetch user's slug
                 user_slug = profile.slug
@@ -128,7 +128,7 @@ class AccountDetailsView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         user_email = context.get("profile")
-        context["current_user"] =  retrieve_current_user(user_email)
+        context["current_user"] =  retrieve_current_user(user_email, self.model)
 
 
         context["number_of_publications"] = ProfileHasPublication.objects.filter(user_profile=self.request.user.slug).count()
@@ -205,7 +205,7 @@ class UpdateAccountView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_email = context.get("profile")
-        current_user = retrieve_current_user(user_email)
+        current_user = retrieve_current_user(user_email, self.model)
 
         UpdateAccountView.success_url = reverse_lazy('users:account', args=[current_user.slug])
         
@@ -262,7 +262,7 @@ class PublishView(FormView, CreateView):
 
         context = super().get_context_data(**kwargs)
         user_email = self.request.user
-        current_user = retrieve_current_user(user_email)
+        current_user = retrieve_current_user(user_email, Profile)
         PublishView.slug_url_kwarg = current_user.slug
         PublishView.success_url = reverse_lazy(
             # 'core:home', args=[current_user.slug]

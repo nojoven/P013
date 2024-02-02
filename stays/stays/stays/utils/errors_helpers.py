@@ -78,31 +78,32 @@ class ErrorHandlerMiddleware:
     def process_exception(self, request, exception):
         if isinstance(exception, Http404):
             return random_error_handler(request, 404)
-        elif isinstance(exception, response_unauthorized):
-            return random_error_handler(request, 401)
-        elif isinstance(exception, HttpResponseForbidden):
-            return random_error_handler(request, 403)
-        elif isinstance(exception, HttpResponseNotAllowed):
-            return random_error_handler(request, 405)
-        elif isinstance(exception, HttpResponseBadRequest):
-            return random_error_handler(request, 400)
-        elif isinstance(exception, HttpResponseNotModified):
-            return random_error_handler(request, 304)
-        elif isinstance(exception, HttpResponseGone):
-            return random_error_handler(request, 410)
-        elif isinstance(exception, response_teapot):
-            return random_error_handler(request, 418)
-        elif isinstance(exception, HttpResponseServerError):
-            return random_error_handler(request, 500)
-        elif isinstance(exception, HttpResponsePermanentRedirect):
-            return random_error_handler(request, 301)
-        elif isinstance(exception, response_temporary_redirect):
-            return random_error_handler(request, 307)
-        elif isinstance(exception, response_too_many_requests):
-            return random_error_handler(request, 429)
-        elif isinstance(exception, response_service_unavailable):
-            return random_error_handler(request, 503)
-        elif isinstance(exception, response_gateway_timeout):
-            return random_error_handler(request, 504)
-        else:
-            return random_error_handler(request, 500)
+        elif isinstance(exception, HttpResponse):
+            if exception.status_code == response_unauthorized.status_code:
+                return random_error_handler(request, 401)
+            elif exception.status_code == HttpResponseForbidden.status_code:
+                return random_error_handler(request, 403)
+            elif exception.status_code == HttpResponseNotAllowed.status_code:
+                return random_error_handler(request, 405)
+            elif exception.status_code == HttpResponseBadRequest.status_code:
+                return random_error_handler(request, 400)
+            elif exception.status_code == HttpResponseNotModified.status_code:
+                return random_error_handler(request, 304)
+            elif exception.status_code == HttpResponseGone.status_code:
+                return random_error_handler(request, 410)
+            elif exception.status_code == response_teapot.status_code:
+                return random_error_handler(request, 418)
+            elif exception.status_code == HttpResponseServerError.status_code:
+                return random_error_handler(request, 500)
+            elif exception.status_code == HttpResponsePermanentRedirect.status_code:
+                return random_error_handler(request, 301)
+            elif exception.status_code == response_temporary_redirect.status_code:
+                return random_error_handler(request, 307)
+            elif exception.status_code == response_too_many_requests.status_code:
+                return random_error_handler(request, 429)
+            elif exception.status_code == response_service_unavailable.status_code:
+                return random_error_handler(request, 503)
+            elif exception.status_code == response_gateway_timeout.status_code:
+                return random_error_handler(request, 504)
+            else:
+                return random_error_handler(request, 500)

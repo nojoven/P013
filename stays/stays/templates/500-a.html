@@ -6,7 +6,7 @@
 <main>
     {% block content %}
     <style>
-        @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
+       @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
        @import url('https://fonts.googleapis.com/css?family=Caveat+Brush');
        body{
            margin:0;
@@ -65,6 +65,21 @@
            50%{ transform: scale(1.5);}
            100% {transform: scale(1);}
        }
+       .position-absolute {
+        position: absolute;
+        }
+        
+        .top-50 {
+            top: 50%;
+        }
+        
+        .start-50 {
+            left: 50%;
+        }
+        
+        .translate-middle {
+            transform: translate(-50%, -50%);
+        }
        </style>
        <div class="container">
        <div class="wall">
@@ -74,7 +89,7 @@
        </div>
        <div class="errortext">
            <h1>Dang!! You've hit a wall!!</h1>
-           <h2>Would you like us to show you back <a href="{% url core:home %}">home</a>?</h2>
+           <h2>Would you like us to show you back <a href="{% url 'core:home' %}">home</a>?</h2>
        </div>
        </div>       
     {% endblock content %}
