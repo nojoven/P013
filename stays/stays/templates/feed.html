@@ -5,7 +5,23 @@
 <title>STAYS FEED </title>
 <main>
     {% block content %}
-
+<style>
+    @media (max-width: 992px) {
+        .container {
+            width: 750px; /* Remplacez par la largeur actuelle du conteneur à 992px */
+            height: 107px !important; /* Remplacez par la hauteur actuelle du conteneur à 992px */
+        }
+    
+        .card {
+            width: 300px !important;/* Remplacez par la largeur actuelle de la carte à 992px */
+            height: 400px !important; /* Remplacez par la hauteur actuelle de la carte à 992px */
+        }
+    
+        body {
+            height: 100vh !important; /* Cela fixe la hauteur du corps à la hauteur de la fenêtre de visualisation */
+        }
+    }
+</style>
 
 <script>
     // Définir la fonction showLoginModal ici
