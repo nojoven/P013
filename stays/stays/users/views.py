@@ -128,19 +128,27 @@ class AccountDetailsView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         user_email = context.get("profile")
-        context["current_user"] =  retrieve_current_user(user_email, self.model)
+        try:
+            current_user = retrieve_current_user(user_email, self.model)
+        except ObjectDoesNotExist:
+            raise Http404("No profile found for this user")
 
-
+        context["current_user"] = current_user
+        
         context["number_of_publications"] = ProfileHasPublication.objects.filter(user_profile=self.request.user.slug).count()
-
 
         context["number_of_followers"] = Follow.objects.filter(followee=self.request.user).count()
 
-
         context["number_of_following"] = Follow.objects.filter(follower=self.request.user).count()
 
-        context["current_user"] = self.request.user
+        # Check if the profile has followers
+        profile_has_followers = Follow.objects.filter(followee=self.request.user).exists()
+        context["profile_has_followers"] = profile_has_followers
 
+        # Check if the profile follows other users
+        profile_follows_stayers = Follow.objects.filter(follower=self.request.user).exists()
+        context["profile_follows_stayers"] = profile_follows_stayers
+        ic(context)
         return context
 
 

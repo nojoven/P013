@@ -25,8 +25,12 @@
                     <a href="{% url 'users:settings' current_user.slug %}" class="btn btn-info">Settings</a>
                 </div>
                 <div class="btn-group mb-3 w-75 mx-auto" role="group" aria-label="Basic example">
+                    {% if profile_has_followers %}
                     <a href="{% url 'users:followers' current_user.slug %}" class="btn btn-danger">Your followers</a>
+                    {% endif %}
+                    {% if profile_follows_stayers %}
                     <a href="{% url 'users:following' current_user.slug %}" class="btn btn-warning">Favourite Stayers</a>
+                    {% endif %}
                 </div>
                 {% if profile.profile_picture and profile.profile_picture != "None" %}
                     <!-- Image -->
