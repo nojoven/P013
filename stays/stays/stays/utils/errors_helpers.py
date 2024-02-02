@@ -32,6 +32,7 @@ from django.http import HttpResponseServerError
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 import sweetify
+from icecream import ic
 
 
 def random_error_handler(request, error_code):
@@ -76,6 +77,7 @@ class ErrorHandlerMiddleware:
         return response
 
     def process_exception(self, request, exception):
+        ic(exception)
         if isinstance(exception, Http404):
             return random_error_handler(request, 404)
         elif isinstance(exception, HttpResponse):
