@@ -26,7 +26,7 @@ from icecream import ic
 from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email, get_all_profiles
 
 from stays.utils.email_helpers import send_contact_form_email
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from iommi import Table, Column, Action, Form, Field
 from iommi import Style, register_style, Asset
@@ -272,6 +272,7 @@ my_style = bootstrap5
 
 @csrf_exempt
 @require_GET
+@login_required
 def check_user_upvoted_publication(request, uuid):
     # Get the slug of the user from the request
     viewer = request.user.slug
@@ -285,6 +286,7 @@ def check_user_upvoted_publication(request, uuid):
 
 @csrf_exempt
 @require_POST
+@login_required
 def toggle_upvote(request, uuid):
     publication_id = uuid
     req = request.POST
@@ -370,52 +372,7 @@ def home(request):
     return render(request, 'feed.html', context)
 
 
-class PublicationDetailView(NeverCacheMixin, DetailView):
-    model = Publication
-    template_name = "publication.html"
-    slug_field = 'uuid'  # Indiquez le nom du champ slug dans votre modèle
-    pk_url_kwarg = 'uuid'  # Indiquez le nom du paramètre slug dans votre URL
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        publication = context.get("publication")
-
-        author_profile_picture = get_author_picture_from_slug(
-            publication.author_slug
-        )
-        publication.author_profile_picture = author_profile_picture
-
-        stay_country_name = find_cities_light_country_name_with_code(publication.country_code_of_stay)
-        publication.stay_country_name = stay_country_name
-
-        stay_continent_code = find_cities_light_continent_with_country_code(publication.country_code_of_stay)
-        publication.stay_continent_code = get_continent_from_code(stay_continent_code)
-
-        published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
-        publication.published_from_country_name = published_from_country_name
-
-
-        # Check if the current user has upvoted the current publication
-        if self.request.user.is_authenticated:
-            has_upvoted = PublicationUpvote.objects.filter(publication=publication.uuid, upvote_profile=self.request.user.slug).exists()
-        else:
-            has_upvoted = False
-
-        context["has_upvoted"] = has_upvoted
-
-        # Get the number of upvotes for the current publication
-        total_upvotes_count = PublicationUpvote.objects.filter(publication=publication.uuid).count()
-
-        publication.total_upvotes_count = total_upvotes_count
-        
-        context["publication"] = publication
-
-        ic(context.items())
-
-        return context
-
-
-class PublicationDeleteView(DeleteView):
+class PublicationDeleteView(LoginRequiredMixin, DeleteView):
     model = Publication
     success_url = reverse_lazy('core:home')
 
@@ -441,7 +398,7 @@ class PublicationDeleteView(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class PublicationUpdateView(UpdateView):
+class PublicationUpdateView(LoginRequiredMixin, UpdateView):
     model = Publication
     form_class = PublicationEditForm
     template_name = 'update_publication.html'
@@ -474,8 +431,7 @@ class PublicationUpdateView(UpdateView):
         return super().form_invalid(form)
 
 
-
-class PublicationDetailView(DetailView):
+class PublicationDetailView(LoginRequiredMixin, NeverCacheMixin, DetailView):
     template_name = 'publication.html'  # Replace with your template name
     context_object_name = 'publication'
 
@@ -515,9 +471,6 @@ class PublicationDetailView(DetailView):
         publication.total_upvotes_count = total_upvotes_count
 
         return context
-
-
-
 
 
 class ContactAdminView(FormView):
