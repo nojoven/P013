@@ -5,11 +5,11 @@
 <title>STAYS FEED </title>
 <main>
     {% block content %}
-<style>
-    @media (max-width: 992px) {
+{% comment %} <style>
+    @media (max-width: 800px) {
         .container {
-            width: 750px; /* Remplacez par la largeur actuelle du conteneur à 992px */
-            height: 107px !important; /* Remplacez par la hauteur actuelle du conteneur à 992px */
+            width: 450px; /* Remplacez par la largeur actuelle du conteneur à 992px */
+            height: 200px !important; /* Remplacez par la hauteur actuelle du conteneur à 992px */
         }
     
         .card {
@@ -18,10 +18,10 @@
         }
     
         body {
-            height: 100vh !important; /* Cela fixe la hauteur du corps à la hauteur de la fenêtre de visualisation */
+            height: 270vh !important; /* Cela fixe la hauteur du corps à la hauteur de la fenêtre de visualisation */
         }
     }
-</style>
+</style> {% endcomment %}
 
 <script>
     // Définir la fonction showLoginModal ici
@@ -109,7 +109,7 @@
     <div class="d-flex justify-content-center gx-4 gy-0">
 
         <!-- left sidebar-->
-        <div class="mb-5 flex-shrink-0 col-lg-7">
+        <div class="col-lg-7">
 
             <!-- post 1-->
             {% for publication in page_obj %}
@@ -132,11 +132,7 @@
                 {% else %}
                 <h5 id="h5_username">Written by <a class="user-slug"  href="{% url 'users:profile' publication.author_slug %}"  onclick="showLoginModal(event)"> {{ publication.author_username }}</a><i data-toggle="tooltip" data-slug="{{ publication.author_slug }}" class="fa-solid fa-sun" style="color: #a0a4ac"></i></h5>
                 {% endif %}
-                <script>
-                    tippy('.fa-sun', {
-                        content: "OK",
-                    });
-                </script>
+
                 <h5>{{ publication.created_at }}</h5>
                 <script>
                     var author_slug = "{{ publication.author_slug }}";
@@ -217,6 +213,7 @@
             </div>
             <br>
             {% endfor %}
+            <br>
             <div class="d-flex justify-content-center mt-6">
                 <div class="d-flex justify-content-center mt-6">
                     {% cool_paginate page_obj=publication %}
