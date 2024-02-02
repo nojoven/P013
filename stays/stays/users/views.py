@@ -118,7 +118,7 @@ class AccountLoginView(authentication_views.LoginView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-class AccountDetailsView(DetailView):
+class AccountDetailsView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = "account.html"
     http_method_names = ['get', 'post']
@@ -196,7 +196,7 @@ class ProfileStaysListView(ListView):
         return context
 
 
-class UpdateAccountView(UpdateView):
+class UpdateAccountView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = AccountEditionForm
     template_name = "settings.html"
@@ -240,7 +240,7 @@ class UpdateAccountView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class PublishView(FormView, CreateView):
+class PublishView(LoginRequiredMixin, FormView, CreateView):
     template_name = 'publish.html'  # replace with your actual template
     model = Publication
     form_class = PublishContentForm
@@ -441,7 +441,7 @@ def follow_profile(request, slug):
         return JsonResponse({"error": "Invalid relation value"}, status=400)
 
 
-class FollowersListView(ListView):
+class FollowersListView(LoginRequiredMixin, ListView):
     model = Profile
     template_name = 'followers.html'  # Ajustez ceci à votre template
     context_object_name = 'followers'
@@ -451,7 +451,7 @@ class FollowersListView(ListView):
         return Follow.objects.followers(profile)
 
 
-class FollowingListView(ListView):
+class FollowingListView(LoginRequiredMixin, ListView):
     model = Follow
     template_name = 'following.html'
     context_object_name = 'stayers'
