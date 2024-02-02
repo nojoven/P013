@@ -42,16 +42,26 @@ def random_error_handler(request, error_code):
     """
     templates_dir = os.path.join(settings.BASE_DIR, 'templates')
     templates = [f for f in os.listdir(templates_dir) if f.startswith(f'{error_code}-') and f.endswith('.html')]
+    ic(templates)
     if templates:
         template = random.choice(templates)
+        ic("if")
+        ic(template)
     else:
         template = 'other-status.html'
+        ic("else")
+        ic(template)
+
     try:
         t = get_template(template)
+        ic(t)
         home_url = request.build_absolute_uri(reverse('core:home'))
+        ic(home_url)
         status = HTTPStatus(error_code)
         error_message = status.name
+        ic(error_message)
         error_description = status.description
+        ic(error_description) 
         sweetify.error(request, 'Oops', html='Code: {}, Message: {}, Description: {}. <a href="{}">FEED</a>'.format(error_code, error_message, error_description, home_url), persistent='FEED', icon='error')
         context = {
             'error_code': error_code,
@@ -59,11 +69,11 @@ def random_error_handler(request, error_code):
             'error_description': error_description,
             'home_url': home_url,
         }
-
-        return HttpResponseServerError(t.render(request=request, context=context))
+        ic(context)
+        return HttpResponse(t.render(request=request, context=context))
     except TemplateDoesNotExist:
-        pass
-    return HttpResponseServerError()
+        ic(f"Template {template} does not exist")
+        return HttpResponseServerError("Template does not exist", status=500)
 
 
 class ErrorHandlerMiddleware:
@@ -79,6 +89,7 @@ class ErrorHandlerMiddleware:
     def process_exception(self, request, exception):
         ic(exception)
         if isinstance(exception, Http404):
+            ic(404)
             return random_error_handler(request, 404)
         elif isinstance(exception, HttpResponse):
             if exception.status_code == response_unauthorized.status_code:
