@@ -105,7 +105,7 @@ INSTALLED_APPS = [
     # "extra_views",
 
     # Quill text editor
-    'django_quill',
+    # 'django_quill',
 
     # Pagination
     "django_cool_paginator",
@@ -149,7 +149,15 @@ INSTALLED_APPS = [
 
     # friendship
     "friendship",
+
+    # sweetify
+    'sweetify',
 ]
+
+
+# Sweet Alert choices: 'sweetalert', 'sweetalert2' - default is 'sweetalert2'
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
+
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
 # CITIES_LIGHT_INCLUDE_COUNTRIES = ['FR']
@@ -184,7 +192,9 @@ MIDDLEWARE = [
     # Defender
     'defender.middleware.FailedLoginMiddleware',
     # Auto Logout
-    "django_auto_logout.middleware.auto_logout"
+    "django_auto_logout.middleware.auto_logout",
+    # http error handler
+    "stays.utils.errors_helpers.ErrorHandlerMiddleware",
 ]
 
 ROOT_URLCONF = "stays.urls"
@@ -427,6 +437,17 @@ ADMIN_EMAIL = confs.get("ADMIN_EMAIL")
 
 MAILGUN_API_KEY = confs.get("MAILGUN_API_KEY")
 MAILGUN_DOMAIN_NAME = confs.get("MAILGUN_DOMAIN_NAME")
+
+HANDLER400 = 'stays.urls.handler400'
+HANDLER401 = 'stays.urls.handler401'
+HANDLER403 = 'stays.urls.handler403'
+HANDLER404 = 'stays.urls.handler404'
+HANDLER410 = 'stays.urls.handler410'
+HANDLER418 = 'stays.urls.handler418'
+HANDLER429 = 'stays.urls.handler429'
+HANDLER500 = 'stays.urls.handler500'
+HANDLER503 = 'stays.urls.handler503'
+HANDLER504 = 'stays.urls.handler504'
 
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)

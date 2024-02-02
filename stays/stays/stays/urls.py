@@ -41,6 +41,17 @@ urlpatterns = [
         document_root=settings.MEDIA_ROOT
 )
 
+handler400 = 'stays.urls.handler400'
+handler401 = 'stays.urls.handler401'
+handler403 = 'stays.urls.handler403'
+handler404 = 'stays.urls.handler404'
+handler410 = 'stays.urls.handler410'
+handler418 = 'stays.urls.handler418'
+handler429 = 'stays.urls.handler429'
+handler500 = 'stays.urls.handler500'
+handler503 = 'stays.urls.handler503'
+handler504 = 'stays.urls.handler504'
+
 
 # Error handlers WHEN DEBUG=TRUE
 def handler400(request, exception):
@@ -81,3 +92,7 @@ def handler503(request, exception):
 
 def handler504(request, exception):
     return random_error_handler(request, 504)
+
+def handlerOther(request, exception=None):
+    # 520 is an example. You can use any HTTP status code that you want to handle.
+    return random_error_handler(request, 520)
