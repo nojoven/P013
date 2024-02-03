@@ -22,6 +22,8 @@ icinstall()
 ic("Thanks to https://simplemaps.com/data/world-cities")
 ic("Image by Timur Kozmenko from Pixabay")
 
+import sentry_sdk
+
 
 if "confs.json" in os.listdir(Path(__file__).absolute().parent):
     vars_path = Path(__file__).absolute().parent / "confs.json"
@@ -131,7 +133,8 @@ INSTALLED_APPS = [
 
     # Django-Ninja
     "ninja_extra",
-
+    # Django Q2
+    "django_q",
     # Font-Awesome
     "fontawesomefree",
 
@@ -449,6 +452,51 @@ HANDLER500 = 'stays.urls.handler500'
 HANDLER503 = 'stays.urls.handler503'
 HANDLER504 = 'stays.urls.handler504'
 
+SENTRY_DSN_PROTOCOL = confs.get("SENTRY_DSN_PROTOCOL", "")
+SENTRY_DSN_START = confs.get("SENTRY_DSN_START", "")
+SENTRY_DSN_END = confs.get("SENTRY_DSN_END", "")
+dsn = f"{SENTRY_DSN_PROTOCOL}://{SENTRY_DSN_START}/{SENTRY_DSN_END}"
+if dsn and len(dsn) > 20:
+    sentry_sdk.init(
+        dsn=dsn,
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        traces_sample_rate=1.0,
+        # Set profiles_sample_rate to 1.0 to profile 100%
+        # of sampled transactions.
+        # We recommend adjusting this value in production.
+        profiles_sample_rate=1.0,
+    )
+
+
+Q_CLUSTER = {
+    'name': 'myproject',  # Name of your project
+    'workers': 8 if DEBUG is True else 4,  # Number of workers to use
+    'orm': 'default',  # The ORM to use
+    'recycle': 500,  # Number of tasks a worker will perform before being recycled
+    'timeout': 60,  # Timeout before a task is considered as blocked
+    'compress': True,  # If True, tasks will be compressed before being queued
+    'save_limit': 250,  # Maximum number of successful tasks to keep in the database
+    'queue_limit': 500,  # Maximum number of tasks to queue
+    'cpu_affinity': 1,  # Number of CPU cores to use per worker
+    'label': 'Django Q2',  # Label for the cluster
+    'redis': {  # Redis configuration
+        'host': '127.0.0.1',  # Redis host address
+        'port': 6379,  # Redis host port
+        'db': 0,  # Redis database to use
+    },
+    'ALT_CLUSTERS': {  # Alternative clusters for different categories of tasks
+        'long': {  # Configuration for long-running tasks
+            'timeout': 3000,  # Timeout before a task is considered as blocked
+            'retry': 3600,  # Time to wait before retrying a blocked task
+            'max_attempts': 2,  # Maximum number of attempts for a task
+        },
+        'short': {  # Configuration for short-running tasks
+            'timeout': 10,  # Timeout before a task is considered as blocked
+            'max_attempts': 1,  # Maximum number of attempts for a task
+        },
+    }
+}
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/

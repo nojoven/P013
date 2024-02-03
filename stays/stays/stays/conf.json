@@ -25,5 +25,9 @@
     "DEFAULT_EMAIL_DESTINATION": "",
     "MAILGUN_API_KEY": "",
     "MAILGUN_DOMAIN_NAME": "",
-    "ADMIN_EMAIL": ""
+    "ADMIN_EMAIL": "",
+    "CODECOV_TOKEN": "",
+    "SENTRY_DSN_PROTOCOL": "https",
+    "SENTRY_DSN_START": "",
+    "SENTRY_DSN_END": ""
 }
