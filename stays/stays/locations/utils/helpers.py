@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from icecream import ic
 from cities_light.models import Country
 
-
 def get_continent_from_code(continent_code: str):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     json_file_path = os.path.join(base_dir, 'continents.json')

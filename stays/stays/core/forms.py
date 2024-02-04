@@ -37,7 +37,7 @@ class PublicationEditForm(forms.ModelForm):
         self.fields['published_from_country_code'].required = False
         self.fields['picture'].required = False
         self.fields['upvotes_count'].required = False
-        self.fields['content_type'].required = False 
+        self.fields['content_type'].required = False
 
 
 class ContactAdminForm(forms.Form):

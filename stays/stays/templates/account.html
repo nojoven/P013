@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         {% endif %}
-                        {% if season_of_birth or year_of_birth or continent_of_birth %}
+                        {% if current_user.season_of_birth or current_user.year_of_birth or continent_of_birth %}
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingBirth">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBirth" aria-expanded="false" aria-controls="collapseBirth">
@@ -121,13 +121,13 @@
                             <div id="collapseBirth" class="accordion-collapse collapse" aria-labelledby="headingBirth" data-bs-parent="#userInformationAccordion">
                                 <div class="accordion-body">
                                     {% if current_user.season_of_birth %}
-                                    {{ current_user.season_of_birth }},
+                                    {{ current_user.season_of_birth }}
                                     {% endif %}
                                     {% if current_user.year_of_birth %}
-                                        {{ current_user.year_of_birth }},
+                                        , {{ current_user.year_of_birth }}
                                     {% endif %}
-                                    {% if current_user.continent_of_birth %}
-                                        {{ current_user.continent_of_birth }}
+                                    {% if continent_of_birth %}
+                                        , {{ continent_of_birth }}
                                     {% endif %}
                             </div>
                         </div>

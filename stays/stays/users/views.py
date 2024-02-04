@@ -24,7 +24,7 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
 from .forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from friendship.models import Follow
-
+from icecream import ic
 
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm
 from users.models import Profile, ProfileHasPublication
@@ -77,7 +77,7 @@ class CreateProfileView(CreateView):
 
         messages.error(
             self.request,
-            f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+            f'Something went wrong. Please check your input ({", ".join([f.capitalize().replace("_"," ") for f in form.errors.as_data().keys()])}).'
         )
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -113,7 +113,7 @@ class AccountLoginView(authentication_views.LoginView):
         else:
             messages.error(
                 self.request,
-                f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+                f'Something went wrong. Please check your input ({", ".join([f.capitalize().replace("_"," ") for f in form.errors.as_data().keys()])}).'
             )
             return self.render_to_response(self.get_context_data(form=form))
 
@@ -149,6 +149,7 @@ class AccountDetailsView(LoginRequiredMixin, DetailView):
         profile_follows_stayers = Follow.objects.filter(follower=self.request.user).exists()
         context["profile_follows_stayers"] = profile_follows_stayers
 
+        context["continent_of_birth"] = get_continent_from_code(current_user.continent_of_birth)
         return context
 
 
@@ -244,7 +245,7 @@ class UpdateAccountView(LoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         messages.error(
             self.request,
-            f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+            f'Something went wrong. Please check your input ({", ".join([f.capitalize().replace("_"," ") for f in form.errors.as_data().keys()])}).'
         )
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -344,7 +345,7 @@ class PublishView(LoginRequiredMixin, FormView, CreateView):
     def form_invalid(self, form):
         messages.error(
             self.request,
-            f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+            f'Something went wrong. Please check your input ({", ".join([f.capitalize().replace("_"," ") for f in form.errors.as_data().keys()])}).'
         )
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -382,6 +383,7 @@ class ProfileDetailView(DetailView):
 
             # Obtient la valeur correspondante pour "EU"
             continent_fullname = get_continent_from_code(profile.continent_of_birth)
+
             # Modifie la valeur de profile.continent
             profile.continent_of_birth = continent_fullname
             

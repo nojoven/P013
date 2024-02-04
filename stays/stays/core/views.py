@@ -184,7 +184,7 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         messages.error(
             self.request,
-            f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+            f'Something went wrong. Please check your input ({", ".join([f.capitalize().replace("_"," ") for f in form.errors.as_data().keys()])}).'
         )
         return super().form_invalid(form)
 

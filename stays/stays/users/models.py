@@ -60,7 +60,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     motto = models.CharField(max_length=100, blank=False, null=False, default="I LOVE THIS WEBSITE!")
     signature = models.CharField(max_length=150, blank=False, null=True, unique=True)
     about_text = models.TextField(blank=False, null=True, default="Once upon a time...")
-    continent_of_birth = models.CharField(max_length=15, choices=CONTINENT_CHOICES, null=True)
+    continent_of_birth = models.CharField(max_length=15, choices=CONTINENT_CHOICES, null=True, default='AN')
     profile_picture = models.ImageField(upload_to=profile_picture_upload_to, default="blank-profile-picture.jpg", null=True)
     created_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
