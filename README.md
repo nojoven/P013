@@ -7,7 +7,27 @@ P13 2023
 
 ## Start the project
 ### Run the command     ```poetry shell```
+python manage.py runserver
 
+python manage.py qcluster
+
+[Unit]
+Description=Django-Q cluster for My Project
+After=network.target
+
+[Service]
+User=myuser
+Group=www-data
+WorkingDirectory=/path/to/myproject
+ExecStart=/path/to/myenv/bin/python manage.py qcluster
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo systemctl start myproject-qcluster
+sudo systemctl enable myproject-qcluster
 
 ### Run tests:
 ```python -m pytest --import-mode importlib```
