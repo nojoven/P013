@@ -10,6 +10,7 @@ from asgiref.sync import sync_to_async
 from django_countries import countries as dj_countries
 from django.core.cache import cache
 from cities_light.models import Country
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -61,6 +62,8 @@ async def fetch_additional_data(capital, country_code, headers):
 
     return responses
 
+
+@login_required
 async def country_view(request, country_code):
     # Get country data from Restcountries API
     if not isinstance(country_code, str) or len(country_code) < 2:

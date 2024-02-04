@@ -1,6 +1,5 @@
 from django.http import JsonResponse
 from django_q.tasks import async_task
-from stays.settings import NINJAS_API_KEY as napk
 from django.core.paginator import Paginator
 import json
 from django.db.models import Count
@@ -19,7 +18,6 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
-from django.views.generic.dates import DateDetailView, DayArchiveView, YearArchiveView, MonthArchiveView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
@@ -28,7 +26,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from friendship.models import Follow
 
 
-from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm, PasswordChangeFromConnectedProfile
+from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm
 from users.models import Profile, ProfileHasPublication
 
 from core.models import Publication
@@ -40,13 +38,8 @@ from core.utils.models_helpers import profanity_filter_and_update
 # Custom sugar
 from cleantext import clean
 from neattext.functions import clean_text
-from icecream import ic
 
 # Create your views here.
-
-# def retrieve_current_user(profile_email):
-#     current_user = Profile.objects.get(email=profile_email)
-#     return current_user
 
 
 class DeleteProfileView(LoginRequiredMixin, DeleteView):
@@ -223,7 +216,7 @@ class UpdateAccountView(LoginRequiredMixin, UpdateView):
 
         UpdateAccountView.success_url = reverse_lazy('users:account', args=[current_user.slug])
         
-        context["current_user"] =  current_user
+        context["current_user"] = current_user
         return context
 
     def form_valid(self, form):
@@ -247,7 +240,6 @@ class UpdateAccountView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Profile updated successfully!', extra_tags='base_success')
 
         return super(UpdateAccountView, self).form_valid(form)
-
 
     def form_invalid(self, form):
         messages.error(
@@ -326,10 +318,9 @@ class PublishView(LoginRequiredMixin, FormView, CreateView):
                 replace_with_currency_symbol="<$£>",
                 lang="en"                       # set to 'de' for German special handling
             )
-            
+
             if self.request.user.signature and self.request.user.signature != "None":
                 publication.text_story += f"\n\n« {self.request.user.signature} »"
-
 
         # Enregistrement de l'enregistrement vocal s'il est fourni
         if voice_story:
@@ -363,15 +354,19 @@ class PasswordResetView(PasswordResetView):
     template_name = 'password_reset_form.html'
     success_url = reverse_lazy('users:password_reset_done')
 
+
 class PasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'password_reset_confirm.html'  # point this to your template
     success_url = reverse_lazy('users:password_reset_complete')
 
+
 class PasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'password_reset_complete.html'
 
+
 class PasswordResetDoneView(PasswordResetDoneView):
     template_name = 'password_reset_done.html'
+
 
 class ProfileDetailView(DetailView):
     model = Profile
@@ -414,7 +409,6 @@ class ProfileDetailView(DetailView):
         return context
 
 
-
 @login_required
 def follow_profile(request, slug):
     # Vérifie si la requête est de type POST
@@ -425,7 +419,7 @@ def follow_profile(request, slug):
     relation_request = json.loads(request.body)
     # Récupère le profil demandeur et le profil cible à partir des slugs
     profile_asking = get_object_or_404(Profile, slug=relation_request.get('asking'))
-    profile_asking_slug =Profile.objects.get(email=profile_asking).slug
+    profile_asking_slug = Profile.objects.get(email=profile_asking).slug
     profile_target = get_object_or_404(Profile, slug=relation_request.get('target'))
 
     # Vérifie si l'utilisateur demandeur est l'utilisateur actuel
@@ -434,8 +428,6 @@ def follow_profile(request, slug):
 
     # Vérifie la valeur de "relation"
     if relation_request.get('relation') == 'follow':
-
-
 
         # Si "relation" est "follow", commence à suivre le profil
         Follow.objects.add_follower(profile_asking, profile_target)
@@ -482,7 +474,3 @@ class FollowingListView(LoginRequiredMixin, ListView):
         context['follower_of_stayer'] = profile.slug
         context['username_of_follower'] = profile.username
         return context
-
-
-
-
