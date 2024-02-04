@@ -31,7 +31,7 @@
                     <div class="row g-3 p-4 p-lg-6">
                         <div class="col-12">
                             <label for="picture" class="form-label">Select A Picture (required)</label>
-                            <input type="file" name="picture" value="" accept=".jpg,.JPEG,.png,.svg" capture="user" class="form-control bg-light">
+                            <input type="file" name="picture" value="{{ form.picture.value|default_if_none:'' }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="form-control bg-light">
                         </div>
                         <div class="col-12 d-none">
                             <label for="author_slug" class="form-label visually-hidden">Author ID</label>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-12">
                             <label for="title" class="form-label text-black">Title (required)</label>
-                            <input type="text" name="title" placeholder="" value="" class="form-control bg-light text-dark">
+                            <input type="text" name="title" placeholder="" value="{{ form.title.value|default_if_none:'' }}" class="form-control bg-light text-dark">
                         </div>
                         <div class="col-12">
                             <label for="country_code_of_stay" class="form-label">Country of the stay (required)</label>
@@ -51,7 +51,7 @@
                             {% get_countries as countries %}
                             <select name="country_code_of_stay" class="form-select">
                             {% for country in countries %}
-                                <option value="{{ country.code }}">{{ country.name }}</option>
+                                <option value="{{ country.code }}" {% if form.country_code_of_stay.value == country.code %}selected{% endif %}>{{ country.name }}</option>
                             {% endfor %}
                             </select>
                         </div>
@@ -62,15 +62,15 @@
                         <div class="col-12">
                             <label for="season_of_stay" class="form-label">Season (required)</label>
                             <select id="stay_seasons" name="season_of_stay" class="form-select">
-                                <option value="Spring">Spring</option>
-                                <option value="Summer">Summer</option>
-                                <option value="Autumn">Autumn</option>
-                                <option value="Winter">Winter</option>
+                                <option value="Spring" {% if form.season_of_stay.value == "Spring" %}selected{% endif %}>Spring</option>
+                                <option value="Summer" {% if form.season_of_stay.value == "Summer" %}selected{% endif %}>Summer</option>
+                                <option value="Autumn" {% if form.season_of_stay.value == "Autumn" %}selected{% endif %}>Autumn</option>
+                                <option value="Winter" {% if form.season_of_stay.value == "Winter" %}selected{% endif %}>Winter</option>
                             </select>
                         </div>
                         <div class="col-12">
                             <label for="year_of_stay" class="form-label">Year of Stay  (required)</label>
-                            <input type="number" name="year_of_stay" value=1990 min=1900 max=2023 class="form-control bg-light text-dark">
+                            <input type="number" name="year_of_stay" value="{{ form.year_of_stay.value }}" min=1918 max=2023 class="form-control bg-light text-dark">
                         </div>
                         <div class="col-12">
                             <legend class="form-label">Type of publication  (required)</legend>
@@ -102,15 +102,15 @@
                         </div>
                         <div class="col-12">
                             <label for="summary" class="form-label text-dark">Summary  (required)</label>
-                            <input type="text" name="summary" placeholder="" value="" class="form-control bg-light text-dark">
+                            <input type="text" name="summary" placeholder="" value="{{ form.summary.value|default_if_none:'' }}" class="form-control bg-light text-dark">
                         </div>
                         <div class="col-12">
                             <label for="text_story" class="form-label">Write about your stay (required)</label>
-                            <textarea id="textstory" name="text_story" placeholder="It was ..." value="" rows="5" class="form-control bg-light text-dark"></textarea>
+                            <textarea id="textstory" name="text_story" placeholder="{{ form.text_story.value|default_if_none:'It was ...' }}" value="{{ form.text_story.value|default_if_none:'' }}" rows="5" class="form-control bg-light text-dark"></textarea>
                         </div>
                         <div class="col-12">
                             <label for="voice_story" class="form-label">Record your experience  (required)</label>
-                            <input type="file" id="voicestory" name="voice_story" value="" accept="audio/*" class="form-control bg-light text-dark">
+                            <input type="file" id="voicestory" name="voice_story" value="{{ form.voice_story.value|default_if_none:'' }}" accept="audio/*" class="form-control bg-light text-dark">
                         </div>
                         <div class="bg-gray-10 p-6 pt-0 d-flex justify-content-center space-x-6">
                             <button type="submit" class="btn btn-primary">Publish</button>

@@ -1,4 +1,6 @@
 from django.http import JsonResponse
+from django_q.tasks import async_task
+from stays.settings import NINJAS_API_KEY as napk
 from django.core.paginator import Paginator
 import json
 from django.db.models import Count
@@ -34,7 +36,7 @@ from core.views import get_continent_from_code, find_cities_light_country_name_w
 from locations.utils.helpers import get_continent_from_code
 from django_countries import countries
 from users.utils import retrieve_current_user
-
+from core.utils.models_helpers import profanity_filter_and_update
 # Custom sugar
 from cleantext import clean
 from neattext.functions import clean_text
@@ -56,7 +58,7 @@ class DeleteProfileView(LoginRequiredMixin, DeleteView):
         return retrieve_current_user(self.request.user, self.model)
     
     def delete(self, request, *args, **kwargs):
-        messages.success(request, 'Profile deleted successfully.')
+        messages.success(request, 'Profile deleted successfully.', extra_tags='base_success')
         return super().delete(request, *args, **kwargs)
 
     def handle_no_permission(self):
@@ -75,12 +77,15 @@ class CreateProfileView(CreateView):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         email = form.cleaned_data.get('email')
-        messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !")
+        messages.success(self.request, f"Welcome ! Your account is being created with your email address {email} !", extra_tags='base_success')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         # ic(form.errors.as_data())
-        messages.error(self.request, 'Invalid inputs. Please try again.')
+        messages.error(
+            self.request,
+            f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+        )
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -114,7 +119,10 @@ class AccountLoginView(authentication_views.LoginView):
             return JsonResponse({'error': 'Invalid username or password'})
         else:
             # ic(form.errors.as_data())
-            messages.error(self.request, 'Invalid username or password')
+            messages.error(
+                self.request,
+                f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+            )
             return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -150,7 +158,6 @@ class AccountDetailsView(LoginRequiredMixin, DetailView):
         context["profile_follows_stayers"] = profile_follows_stayers
         ic(context)
         return context
-
 
 
 class ProfileStaysListView(ListView):
@@ -238,13 +245,16 @@ class UpdateAccountView(LoginRequiredMixin, UpdateView):
         profile.signature = signature
         profile.save()
 
-        messages.success(self.request, 'Profile updated successfully!')
+        messages.success(self.request, 'Profile updated successfully!', extra_tags='base_success')
 
         return super(UpdateAccountView, self).form_valid(form)
 
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Unsuccessful update due to invalid submitted data. Please check your input.')
+        messages.error(
+            self.request,
+            f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+        )
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -288,7 +298,7 @@ class PublishView(LoginRequiredMixin, FormView, CreateView):
 
         # Assurez-vous qu'au moins l'un des champs est rempli
         if not text_story and not voice_story:
-            messages.error(self.request, 'Please provide either a text story or a voice recording.')
+            messages.error(self.request, 'Please provide either a text story OR a voice recording.')
             return self.form_invalid(form)
 
         # Enregistrement de la publication
@@ -334,19 +344,23 @@ class PublishView(LoginRequiredMixin, FormView, CreateView):
         # Sauvegarde finale
         publication.save()
 
-        messages.success(self.request, 'Publication created successfully!')
+        if publication.text_story:
+            # Background task to check for profanity
+            ic("OK")
+            async_task(profanity_filter_and_update, publication)
+
+        messages.success(self.request, 'Publication created successfully!', extra_tags='base_success')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(
             self.request,
-            'Something went wrong. Please check your input.'
+            f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
         )
         ic(self.request)
         ic(form)
         ic(form.errors.as_data())
         return self.render_to_response(self.get_context_data(form=form))
-
 
 
 class PasswordResetView(PasswordResetView):
@@ -433,14 +447,14 @@ def follow_profile(request, slug):
 
         # Si "relation" est "follow", commence à suivre le profil
         Follow.objects.add_follower(profile_asking, profile_target)
-        messages.success(request, f"You are now following {profile_target.username}")
+        messages.success(request, f"You are now following {profile_target.username}", extra_tags='base_success')
         # Renvoie une réponse HTTP 201 (Created)
         return HttpResponse(status=201)
 
     elif relation_request.get('relation') == 'unfollow':
         # Si "relation" est "unfollow", arrête de suivre le profil
         Follow.objects.remove_follower(profile_asking, profile_target)
-        messages.success(request, f"You have unfollowed {profile_target.username}")
+        messages.success(request, f"You have unfollowed {profile_target.username}", extra_tags='base_success')
         # Renvoie une réponse HTTP 204 (No Content)
         return HttpResponse(status=204)
 

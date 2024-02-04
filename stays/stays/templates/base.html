@@ -134,9 +134,11 @@
 {% if messages %}
 <div class="d-flex justify-content-around">
     {% for message in messages %}
-        <div class="alert alert-success ">
-            {{ message }}
-        </div>
+        {% if 'base_success' in message.tags %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
 {% endif %}

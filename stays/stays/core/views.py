@@ -423,11 +423,14 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('core:publication', args=[str(self.object.uuid)])
     
     def form_valid(self, form):
-        messages.success(self.request, 'Publication updated successfully!')
+        messages.success(self.request, 'Publication updated successfully!', extra_tags='base_success')
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Something went wrong. Please check your input.')
+        messages.error(
+            self.request,
+            f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
+        )
         return super().form_invalid(form)
 
 
@@ -500,7 +503,7 @@ class ContactAdminView(FormView):
                     sender_name=sender_name,
                     message=message
                 )
-                messages.success(self.request, 'Your message has been sent.')
+                messages.success(self.request, 'Your message has been sent.', extra_tags='base_success')
 
             except Exception as e:
                 messages.error(self.request, 'Something went wrong. Please try again later.')

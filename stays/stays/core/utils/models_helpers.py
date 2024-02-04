@@ -1,5 +1,32 @@
+import requests
 from django.db import models
 from users import models as users_models
+from stays.settings import NINJAS_API_KEY as napk
+from icecream import ic
+
+def profanity_filter_and_update(publication):
+    try:
+        ic("profanity_filter_and_update")
+        text = publication.text_story
+        headers = {'X-Api-Key': napk}
+        url = 'https://api.api-ninjas.com/v1/profanityfilter?text='
+        censored_text = ''
+        for i in range(0, len(text), 1000):
+            chunk = text[i:i+1000]
+            response = requests.get(url + chunk, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+            if data['has_profanity']:
+                censored_text += data['censored']
+            else:
+                censored_text += data['original']
+        if censored_text != text:
+            publication.text_story = censored_text
+            publication.save()
+    except requests.exceptions.RequestException as e:
+        ic(f"Request to profanity filter API failed: {e}")
+    except Exception as e:
+        ic(f"Unexpected error in profanity_filter_and_update: {e}")
 
 
 class UUIDFieldForeignKey(models.ForeignKey):

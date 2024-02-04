@@ -140,7 +140,7 @@
                 </script>
                 <p class="card-text">{{ publication.summary }}</p>
                 </div>
-                <img src="{{ publication.picture }}" class="card-img-bottom" alt="...">
+                <img src="{{ publication.picture }}" class="card-img-bottom" alt="Illustration">
                 <div class="card-body">
                     {% if user.is_authenticated %}
                     <h2 class="card-title">{{ publication.season_of_stay }}, <a href="{% url 'locations:country' publication.country_code_of_stay %}">{{ publication.stay_country_name }}</a></h2>
