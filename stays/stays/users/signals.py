@@ -8,12 +8,10 @@ from icecream import ic
 
 @receiver(user_logged_in)
 def user_logged_in_handler(sender, request, **kwargs):
-    ic(kwargs.items())
     async_to_sync(update_user_status)(kwargs.get("user").email, True)
 
 @receiver(user_logged_out)
 def user_logged_out_handler(sender, request, **kwargs):
-    ic(kwargs.items())
     async_to_sync(update_user_status)(kwargs.get("user").email, False)
 
 @database_sync_to_async

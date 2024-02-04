@@ -11,4 +11,3 @@ string_representation = display_tree(
     show_hidden=True)
 
 ic(string_representation)
-

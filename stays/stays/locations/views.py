@@ -93,10 +93,8 @@ async def country_view(request, country_code):
         return HttpResponse("Invalid country code.", status=400)
 
     # Process The response from Restcountries API
-    ic(country_details)
     country_details = country_details.json()[0]
     # Format the currency details
-    ic(country_details.get('currencies'))
     currency_code = list(country_details.get('currencies').keys())[0]
     currency_name = country_details.get('currencies').get(currency_code).get('name')
     currency_symbol = country_details.get('currencies').get(currency_code).get('symbol')
@@ -171,7 +169,6 @@ async def country_view(request, country_code):
 
     # Weather
     if weather_json:
-        ic(weather_json)
         # Mapping dictionary
         key_mapping = {
             'cloud_pct': 'Clouds',
@@ -216,7 +213,6 @@ async def country_view(request, country_code):
 
     # World Time
     if world_time_json:
-        ic(world_time_json)
         context["country_time"] = {"Local_Time": world_time_json.get("datetime"), "Time_Zone": world_time_json.get("timezone")}
 
     return render(request, 'country.html', context)

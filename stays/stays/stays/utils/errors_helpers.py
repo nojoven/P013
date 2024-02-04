@@ -42,7 +42,6 @@ def random_error_handler(request, error_code):
     """
     templates_dir = os.path.join(settings.BASE_DIR, 'templates')
     templates = [f for f in os.listdir(templates_dir) if f.startswith(f'{error_code}-') and f.endswith('.html')]
-    ic(templates)
     if templates:
         template = random.choice(templates)
     else:
@@ -52,7 +51,6 @@ def random_error_handler(request, error_code):
 
         return HttpResponse(t.render(request=request))
     except TemplateDoesNotExist:
-        ic(f"Template {template} does not exist")
         return HttpResponseServerError("Template does not exist", status=500)
 
 
@@ -69,7 +67,6 @@ class ErrorHandlerMiddleware:
     def process_exception(self, request, exception):
         try:
             if isinstance(exception, Http404):
-                ic(404)
                 return random_error_handler(request, 404)
             elif isinstance(exception, HttpResponse):
                 if exception.status_code == response_unauthorized.status_code:

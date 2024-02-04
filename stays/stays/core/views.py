@@ -290,16 +290,14 @@ def check_user_upvoted_publication(request, uuid):
 def toggle_upvote(request, uuid):
     publication_id = uuid
     req = request.POST
-    ic(req)
     profile_email = None
     for key in req.keys():
         if 'profile_email' in key:
             profile_email = key.split(":")[1].strip(' "')
-            ic(profile_email)
             break
         else:
             continue
-    ic(profile_email)
+
     publication = Publication.objects.get(uuid=publication_id)
     profile = get_profile_from_email(profile_email)
     upvote, created = PublicationUpvote.objects.get_or_create(publication=publication, upvote_profile=profile.slug)
@@ -345,10 +343,9 @@ def toggle_upvote(request, uuid):
 # Create your views here.
 def home(request):
     profiles = get_all_profiles()
-    # profiles = Profile.objects.all().filter(is_superuser=False)
+
     publications = Publication.objects.all().order_by('-created_at')
     for publication in publications:
-        # ic(str(publication.country_code_of_stay))
         country_data = Country.objects.get(code2=str(publication.country_code_of_stay))
 
         publication.stay_country_name = country_data.name
@@ -482,7 +479,6 @@ class ContactAdminView(FormView):
     success_url = reverse_lazy('core:home')  # Replace with your success url name
 
     def form_valid(self, form):
-        ic(form.cleaned_data)
         sender_name = form.cleaned_data.get('name', '')
         from_email = form.cleaned_data.get('email', '')
         subject = form.cleaned_data.get('subject', '')
@@ -490,7 +486,6 @@ class ContactAdminView(FormView):
 
         if not len(sender_name) or not len(from_email) or not len(message) or not len(subject):
             messages.error(self.request, 'Please fill in all the fields.')
-            ic(form.errors.as_data())
             return super().form_invalid(form)
         else:
             try:

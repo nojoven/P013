@@ -81,7 +81,7 @@ class CreateProfileView(CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        # ic(form.errors.as_data())
+
         messages.error(
             self.request,
             f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
@@ -118,7 +118,6 @@ class AccountLoginView(authentication_views.LoginView):
         if 'fromfeed' in self.request.GET and self.request.GET['fromfeed'] == 'fromfeed':
             return JsonResponse({'error': 'Invalid username or password'})
         else:
-            # ic(form.errors.as_data())
             messages.error(
                 self.request,
                 f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
@@ -156,7 +155,7 @@ class AccountDetailsView(LoginRequiredMixin, DetailView):
         # Check if the profile follows other users
         profile_follows_stayers = Follow.objects.filter(follower=self.request.user).exists()
         context["profile_follows_stayers"] = profile_follows_stayers
-        ic(context)
+
         return context
 
 
@@ -346,7 +345,6 @@ class PublishView(LoginRequiredMixin, FormView, CreateView):
 
         if publication.text_story:
             # Background task to check for profanity
-            ic("OK")
             async_task(profanity_filter_and_update, publication)
 
         messages.success(self.request, 'Publication created successfully!', extra_tags='base_success')
@@ -357,9 +355,6 @@ class PublishView(LoginRequiredMixin, FormView, CreateView):
             self.request,
             f'Something went wrong. Please check your input ({", ".join([f.capitalize() for f in form.errors.as_data().keys()])}).'
         )
-        ic(self.request)
-        ic(form)
-        ic(form.errors.as_data())
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -428,7 +423,6 @@ def follow_profile(request, slug):
 
     # Récupère le corps de la requête et le convertit en JSON
     relation_request = json.loads(request.body)
-    ic(relation_request.get('asking'))
     # Récupère le profil demandeur et le profil cible à partir des slugs
     profile_asking = get_object_or_404(Profile, slug=relation_request.get('asking'))
     profile_asking_slug =Profile.objects.get(email=profile_asking).slug
@@ -436,11 +430,9 @@ def follow_profile(request, slug):
 
     # Vérifie si l'utilisateur demandeur est l'utilisateur actuel
     if profile_asking_slug != request.user.slug:
-        ic(f"{profile_asking_slug} != {request.user.slug}")
         return JsonResponse({"error": "Invalid asking user"}, status=400)
 
     # Vérifie la valeur de "relation"
-    ic(relation_request.get('relation'))
     if relation_request.get('relation') == 'follow':
 
 

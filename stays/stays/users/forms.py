@@ -50,7 +50,6 @@ class PasswordResetForm(DjangoPasswordResetForm):
         self.email_to = self.cleaned_data.get("email", DEFAULT_EMAIL_DESTINATION) if not DEFAULT_EMAIL_DESTINATION else DEFAULT_EMAIL_DESTINATION
 
         self.user = next(self.get_users(self.email_to), None)
-        ic(self.user)
 
         # Generate the password reset token
         self.token = default_token_generator.make_token(self.user)

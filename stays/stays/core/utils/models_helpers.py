@@ -6,7 +6,6 @@ from icecream import ic
 
 def profanity_filter_and_update(publication):
     try:
-        ic("profanity_filter_and_update")
         text = publication.text_story
         headers = {'X-Api-Key': napk}
         url = 'https://api.api-ninjas.com/v1/profanityfilter?text='

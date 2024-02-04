@@ -14,10 +14,8 @@ def get_continent_from_code(continent_code: str):
 
 
 def find_cities_light_country_name_with_code(country_code: str):
-    # ic(f"Searching for country with code: '{country_code}'")
     try:
         country = Country.objects.get(code2=country_code)
-        # ic(f"Found country: {country.name}")
         return country.name
     except ObjectDoesNotExist:
         ic(f"No country found with code: '{country_code}'")
