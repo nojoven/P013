@@ -32,7 +32,11 @@ sudo systemctl enable myproject-qcluster
 ### Run tests:
 ```python -m pytest --import-mode importlib```
 
+Install mailpit
+https://github.com/axllent/mailpit/releases/tag/v1.13.1
 
+start it 
+INFO[2024/02/04 15:31:50] [http] accessible via http://localhost:8025/
 
 
 credits
