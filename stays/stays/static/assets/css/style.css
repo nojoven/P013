@@ -2501,13 +2501,13 @@ header .uk-dropdown {
   font-size: 16px;
 }
 
-.story-modal {
+/* .story-modal {
   max-width: 990px !important;
   min-height: 87vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-}
+} */
 
 .story-modal .story-modal-media {
   max-width: 660px;
