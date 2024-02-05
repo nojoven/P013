@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from locations.models import StayCountry, StayCountryHasUpvotes, UpvoteCountryRanking
+# from locations.models import StayCountry, StayCountryHasUpvotes, UpvoteCountryRanking
 
 
 # # Signal pour mettre à jour StayCountryHasUpvotes après chaque sauvegarde de StayCountry
