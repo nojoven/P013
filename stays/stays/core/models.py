@@ -64,24 +64,24 @@ class Publication(models.Model):
     def get_absolute_url(self):
         return reverse('users:account', args=[self.author_slug])
 
-class ImageOfGallery(models.Model):
-    gallery = models.ForeignKey("core.Gallery", on_delete=models.CASCADE, null=True)
-    image = models.ImageField(upload_to=gallery_upload_to)
-    description = models.TextField(blank=True)
+# class ImageOfGallery(models.Model):
+#     gallery = models.ForeignKey("core.Gallery", on_delete=models.CASCADE, null=True)
+#     image = models.ImageField(upload_to=gallery_upload_to)
+#     description = models.TextField(blank=True)
 
-class Gallery(models.Model):
-    uuid = models.UUIDField(default=uuid_generator, editable=False)
-    is_visible = models.BooleanField(default=True)
-    images = models.ManyToManyField(ImageOfGallery, related_name='gallery_images')
-    publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
+# class Gallery(models.Model):
+#     uuid = models.UUIDField(default=uuid_generator, editable=False)
+#     is_visible = models.BooleanField(default=True)
+#     images = models.ManyToManyField(ImageOfGallery, related_name='gallery_images')
+#     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
 
 
-class PublicationHasGallery(models.Model):
-    publication = UUIDFieldForeignKey('core.Publication', related_name='publication_galleries', on_delete=models.CASCADE, null=True)
-    gallery = UUIDFieldForeignKey('core.Gallery', related_name='gallery_publications', on_delete=models.CASCADE, null=True)
+# class PublicationHasGallery(models.Model):
+#     publication = UUIDFieldForeignKey('core.Publication', related_name='publication_galleries', on_delete=models.CASCADE, null=True)
+#     gallery = UUIDFieldForeignKey('core.Gallery', related_name='gallery_publications', on_delete=models.CASCADE, null=True)
 
-    class Meta:
-        unique_together = ('publication', 'gallery')
+#     class Meta:
+#         unique_together = ('publication', 'gallery')
 
 class PublicationUpvote(models.Model):
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)
