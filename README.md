@@ -9,6 +9,7 @@ P13 2023
    - Clone the repository
    - Checkout to branch develop
    - ```cd stays/stays``` to open the file of the  pyproject.toml
+   - ```poetry shell```
    - ```poetry install``` (or ```pip install -r requirements.txt``` )
    - ````python manage.py makemigrations```
    - ````python manage.py migrate```
