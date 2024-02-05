@@ -189,3 +189,6 @@ commands = "poetry run pytest --import-mode importlib"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.djlint]
+profile="django"
