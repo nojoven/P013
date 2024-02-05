@@ -2,12 +2,10 @@
 {% load static %}
 {% load cool_paginate %}
 {% load el_pagination_tags %}
-<title>{{ publication.title }}</title>
+{% block title %}
+{{ publication.title }}
+{% endblock title %}
 <main>
-
-
-
-
 {% block content %}
 <br>
 <br>

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
-<title>Stayer - {{ profile.username }}</title>
+{% block title %}
+{{ profile.username }}
+{% endblock title %}
 
 {% block content %}
 <div class="container mt-5 d-flex justify-content-center align-items-center" style="height: 100vh;">

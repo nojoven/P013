@@ -2,20 +2,27 @@
 {% load static %}
 {% load cool_paginate %}
 
+{% block title %}
+STAYS
+{% endblock title %}
 
-
-<main>    
+<main>
     {% block content %}
     <style>
         .card:hover .card-img {
+            /*transform: scale(1.6);*/
             opacity: 0.1;
+        }
+        .card:hover {
+            transform: scale(1.2);
         }
         .card .card-img {
             transition: opacity 0.3s ease;
         }
         .card .card-img-overlay {
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
+            overflow: auto;
         }
         .card:hover .card-img-overlay {
             opacity: 1;
@@ -23,6 +30,14 @@
         .card .card-img-overlay div {
             text-align: center;
         }
+
+        .card p {
+            margin: 0.05em 0; /* Réduit l'espace entre les éléments <p> */
+        }
+        .card h3 {
+            margin: 0.05em 0; /* Réduit l'espace entre les éléments <p> */
+        }
+        
     </style>
     <div class="container">
         {% if publications.author_username != "None" %}
@@ -58,12 +73,9 @@
                         <div>
                             <a href="{% url 'core:publication' publication.uuid %}" class="text-decoration-none text-reset">
                                 <h3 class="card-title"> {{ publication.title }} </h3>
-                                <p class="card-text">{{ publication.country_code_of_stay }}</p>
-                                <p class="card-text">{{ publication.stay_country_name }}</p>
-                                <p class="card-text">{{ publication.stay_continent_code }}</p>
-                                <p class="card-text">{{ publication.year_of_stay }}</p>
-                                <p class="card-text">{{ publication.season_of_stay }}</p>
-                                <p class="card-text">{{ publication.created_at }}</p>
+                                <p class="card-text">{{ publication.stay_country_name }}, {{ publication.stay_continent_code }}</p>
+                                <p class="card-text">{{ publication.year_of_stay }}, {{ publication.season_of_stay }}</p>
+                                <p class="card-text">Published {{ publication.created_at }}</p>
                             </a>
                         </div>
                     </div>

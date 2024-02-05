@@ -195,7 +195,7 @@ class ProfileStaysListView(ListView):
         # Ajouter les publications au contexte
         context['publications'] = self.get_queryset()
 
-        paginator = Paginator(context['publications'], 100)
+        paginator = Paginator(context['publications'], 9)
 
         page = self.request.GET.get('page')
         page_obj = paginator.get_page(page)

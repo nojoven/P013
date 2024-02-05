@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% load replace_in_str %}
-
+{% block title %}
+{{ general_information.Official }}
+{% endblock title %}
 <main>
     {% block content %}
     <div class="d-flex justify-content-center">
