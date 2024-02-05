@@ -94,12 +94,12 @@ INSTALLED_APPS = [
     "watchman",
     "django_select2",
     "iommi",
-    "allauth_ui",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.github",
-    "allauth.socialaccount.providers.reddit",
+    # "allauth_ui",
+    # "allauth",
+    # "allauth.account",
+    # "allauth.socialaccount",
+    # "allauth.socialaccount.providers.github",
+    # "allauth.socialaccount.providers.reddit",
     "django_countries",
     "django_htmx",
     "formset",
@@ -369,7 +369,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 AUTHENTICATION_BACKENDS = [
     'users.backends.EmailBackend',  # custom backend
     # 'django.contrib.auth.backends.ModelBackend',  # default backend
-    'allauth.account.auth_backends.AuthenticationBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 FRIENDSHIP_CONTEXT_OBJECT_NAME = 'profile'

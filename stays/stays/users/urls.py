@@ -19,7 +19,7 @@ urlpatterns = [
     path("account/<slug:slug>/publish", views.PublishView.as_view(), name="publish"),
     path("account/<slug:slug>/settings", views.UpdateAccountView.as_view(), name="settings"),
     path("account/<slug:slug>/delete", views.DeleteProfileView.as_view(), name="delete_account"),
-    path("", include('allauth.urls')),
+    # path("", include('allauth.urls')),
     path('profile/<slug:slug>/public', views.ProfileDetailView.as_view(), name='profile'),
     path('profile/<slug:slug>/followtoggle', views.follow_profile, name='follow_unfollow'),
     path('profile/<slug:slug>/following', views.FollowingListView.as_view(), name='following'),
