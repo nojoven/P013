@@ -83,7 +83,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         # Méthode pour récupérer les profils qui suivent le profil actuel
         return Follow.objects.followers(self)
 
-
     def get_absolute_url(self):
         return reverse('users:account', args=[self.slug])
 

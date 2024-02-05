@@ -191,7 +191,7 @@ MIDDLEWARE = [
     # Machina
     # 'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
     # Current user
-    'django_currentuser.middleware.ThreadLocalUserMiddleware',
+    # 'django_currentuser.middleware.ThreadLocalUserMiddleware',
     # Defender
     'defender.middleware.FailedLoginMiddleware',
     # Auto Logout

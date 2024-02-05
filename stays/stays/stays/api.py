@@ -5,11 +5,6 @@ from django.http import JsonResponse
 from users.models import Profile
 from locations.models import StayCountry
 
-
-# from django_currentuser.middleware import (
-#     get_current_user,
-#     get_current_authenticated_user)
-
 api = NinjaAPI()
 
 @throttle(zone='default')
