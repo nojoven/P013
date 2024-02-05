@@ -180,7 +180,7 @@ DJANGO_SETTINGS_MODULE = "stays.stays.settings"
 testpaths = [
     "tests"
 ]
-addopts = "--import-mode importlib"
+addopts = "-p pytest_mock --import-mode importlib"
 allowlist_externals = "poetry"
 # commands_pre = "poetry install"
 commands = "poetry run pytest --import-mode importlib"
