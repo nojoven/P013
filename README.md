@@ -11,8 +11,15 @@ P13 2023
    - ```cd stays/stays``` to open the file of the  pyproject.toml
    - ```poetry shell```
    - ```poetry install``` (or ```pip install -r requirements.txt``` )
-   - ````python manage.py makemigrations```
-   - ````python manage.py migrate```
+
+## Migrations
+   - ```python manage.py makemigrations users ```
+   - ```python manage.py migrate users```
+   - ```python manage.py makemigrations core ```
+   - ```python manage.py migrate core```
+   - ```python manage.py makemigrations locations```
+   - ```python manage.py migrate locations```
+   - ```python manage.py migrate```  (une dernière fois)
 
 ## Start the project
 ### Run the command     ```poetry shell```
