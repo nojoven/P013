@@ -5,11 +5,21 @@ P13 2023
 ## STAYS is a web social media for people who like to tell and share their stories.
 
 
+## Install this project: 
+   - Clone the repository
+   - Checkout to branch develop
+   - ```cd stays/stays``` to open the file of the  pyproject.toml
+   - ```poetry install``` (or ```pip install -r requirements.txt``` )
+   - ````python manage.py makemigrations```
+   - ````python manage.py migrate```
+
 ## Start the project
 ### Run the command     ```poetry shell```
-python manage.py runserver
+```python manage.py runserver```
 
-python manage.py qcluster
+
+### Install the Queue manager
+```python manage.py qcluster```
 
 [Unit]
 Description=Django-Q cluster for My Project
@@ -32,7 +42,10 @@ sudo systemctl enable myproject-qcluster
 ### Run tests:
 ```python -m pytest --import-mode importlib```
 
-Install mailpit
+
+
+
+#### Install mailpit
 https://github.com/axllent/mailpit/releases/tag/v1.13.1
 
 start it 
