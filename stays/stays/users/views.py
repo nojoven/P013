@@ -193,13 +193,14 @@ class ProfileStaysListView(ListView):
         context = super().get_context_data(**kwargs)
 
         # Ajouter les publications au contexte
-        context['publications'] = self.get_queryset()
+        publications = self.get_queryset()
 
-        paginator = Paginator(context['publications'], 9)
+        paginator = Paginator(publications, 9)
 
         page = self.request.GET.get('page')
         page_obj = paginator.get_page(page)
         context['page_obj'] = page_obj
+        context['publications'] = publications
 
         return context
 

@@ -470,32 +470,34 @@ if dsn and len(dsn) > 20:
 
 
 Q_CLUSTER = {
-    'name': 'myproject',  # Name of your project
-    'workers': 8 if DEBUG is True else 4,  # Number of workers to use
+    'name': 'stays',  # Name of your project
+    'workers': 3 if DEBUG is True else 4,  # Number of workers to use
     'orm': 'default',  # The ORM to use
-    'recycle': 500,  # Number of tasks a worker will perform before being recycled
-    'timeout': 60,  # Timeout before a task is considered as blocked
-    'compress': True,  # If True, tasks will be compressed before being queued
-    'save_limit': 250,  # Maximum number of successful tasks to keep in the database
-    'queue_limit': 500,  # Maximum number of tasks to queue
+    'recycle': 80,  # Number of tasks a worker will perform before being recycled
+    'timeout': 90,  # Timeout before a task is considered as blocked
+    # 'compress': True,  # If True, tasks will be compressed before being queued
+    'save_limit': 10,  # Maximum number of successful tasks to keep in the database
+    'queue_limit': 50,  # Maximum number of tasks to queue
     'cpu_affinity': 1,  # Number of CPU cores to use per worker
-    'label': 'Django Q2',  # Label for the cluster
+    'label': 'Django_Q2',  # Label for the cluster
+    'retry': 110,
     'redis': {  # Redis configuration
         'host': '127.0.0.1',  # Redis host address
         'port': 6379,  # Redis host port
-        'db': 0,  # Redis database to use
-    },
-    'ALT_CLUSTERS': {  # Alternative clusters for different categories of tasks
-        'long': {  # Configuration for long-running tasks
-            'timeout': 3000,  # Timeout before a task is considered as blocked
-            'retry': 3600,  # Time to wait before retrying a blocked task
-            'max_attempts': 2,  # Maximum number of attempts for a task
-        },
-        'short': {  # Configuration for short-running tasks
-            'timeout': 10,  # Timeout before a task is considered as blocked
-            'max_attempts': 1,  # Maximum number of attempts for a task
-        },
+        'db': 3,  # Redis database to use
     }
+    # ,
+    # 'ALT_CLUSTERS': {  # Alternative clusters for different categories of tasks
+    #     'long': {  # Configuration for long-running tasks
+    #         'timeout': 3000,  # Timeout before a task is considered as blocked
+    #         'retry': 3600,  # Time to wait before retrying a blocked task
+    #         'max_attempts': 2,  # Maximum number of attempts for a task
+    #     },
+    #     'short': {  # Configuration for short-running tasks
+    #         'timeout': 10,  # Timeout before a task is considered as blocked
+    #         'max_attempts': 1,  # Maximum number of attempts for a task
+    #     },
+    # }
 }
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)

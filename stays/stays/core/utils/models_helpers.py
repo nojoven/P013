@@ -12,7 +12,7 @@ def profanity_filter_and_update(publication):
         censored_text = ''
         for i in range(0, len(text), 1000):
             chunk = text[i:i+1000]
-            response = requests.get(url + chunk, headers=headers)
+            response = requests.get(url + chunk, headers=headers, timeout=15)
             response.raise_for_status()
             data = response.json()
             if data['has_profanity']:
