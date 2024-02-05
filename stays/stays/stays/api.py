@@ -6,9 +6,9 @@ from users.models import Profile
 from locations.models import StayCountry
 
 
-from django_currentuser.middleware import (
-    get_current_user, 
-    get_current_authenticated_user)
+# from django_currentuser.middleware import (
+#     get_current_user,
+#     get_current_authenticated_user)
 
 api = NinjaAPI()
 
@@ -17,6 +17,7 @@ api = NinjaAPI()
 def is_profile_online(request, slug: str):
     profile = Profile.objects.get(slug=slug)
     return JsonResponse({'is_online': profile.is_online})
+
 
 @api.get("/geodata/countries/country/{country_code}/")
 def get_names_from_country_code(request, country_code: str):
