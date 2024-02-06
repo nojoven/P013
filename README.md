@@ -40,26 +40,22 @@ P13 2023
 
 ### Create a publication
 
-### Start the Queue manager
-```python manage.py qcluster```
+### Configure the Queue manager
+   - ```python manage.py qcluster```
+   - Add these lines to pyproject.toml (or tox.ini ?):
+      [Unit]
+      Description=Django-Q cluster for My Project
+      After=network.target
 
-[Unit]
-Description=Django-Q cluster for My Project
-After=network.target
+      [Service]
+      User=myuser
+      Group=www-data
+      WorkingDirectory=/path/to/myproject
+      ExecStart=/path/to/myenv/bin/python manage.py qcluster
+      Restart=always
 
-[Service]
-User=myuser
-Group=www-data
-WorkingDirectory=/path/to/myproject
-ExecStart=/path/to/myenv/bin/python manage.py qcluster
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-
-
-sudo systemctl start myproject-qcluster
-sudo systemctl enable myproject-qcluster
+      [Install]
+      WantedBy=multi-user.target
 
 ### Run tests:
 ```python -m pytest --import-mode importlib```
@@ -68,17 +64,16 @@ sudo systemctl enable myproject-qcluster
 
 
 #### Install mailpit
-https://github.com/axllent/mailpit/releases/tag/v1.13.1
+   - https://github.com/axllent/mailpit/releases/tag/v1.13.1
 
-start it 
-INFO[2024/02/04 15:31:50] [http] accessible via http://localhost:8025/
+   - Start it manually from your terminal
+
+   - Example of log ```INFO[2024/02/04 15:31:50] [http] accessible via http://localhost:8025/```
 
 
-credits
-https://www.drlinkcheck.com/blog/free-http-error-images
-https://freefrontend.com/403-forbidden-html-templates
-https://freefrontend.com/500-error-page-html-templates
-# 500 Error
-
-A Pen created on CodePen.io. Original URL: [https://codepen.io/shubniggurath/pen/NLYzLj](https://codepen.io/shubniggurath/pen/NLYzLj).
-[https://codepen.io/jsonyeung/pen/ZMxdPg](https://codepen.io/jsonyeung/pen/ZMxdPg)
+## Credits:
+   - https://www.drlinkcheck.com/blog/free-http-error-images
+   - https://freefrontend.com/403-forbidden-html-templates
+   - https://freefrontend.com/500-error-page-html-templates
+   - A Pen created on CodePen.io. Original URL: [https://codepen.io/shubniggurath/pen/NLYzLj](https://codepen.io/shubniggurath/pen/NLYzLj).
+   - [https://codepen.io/jsonyeung/pen/ZMxdPg](https://codepen.io/jsonyeung/pen/ZMxdPg)
