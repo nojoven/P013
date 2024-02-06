@@ -8,6 +8,6 @@ git_root_dir = os.chdir("..")
 string_representation = display_tree(
     git_root_dir,
     string_rep=True,
-    show_hidden=True)
+    show_hidden=False)
 
 ic(string_representation)
