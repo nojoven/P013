@@ -25,6 +25,8 @@ from stays.utils.email_helpers import send_contact_form_email
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.cache import cache_page
 from django.db.models import Prefetch
+from django.db import connection
+
 
 @csrf_exempt
 @require_GET
@@ -129,6 +131,7 @@ def home(request):
     context = {
         'page_obj': page_obj
     }
+    # print(connection.queries)
     return render(request, 'feed.html', context)
 
 class PublicationDeleteView(LoginRequiredMixin, DeleteView):
