@@ -25,6 +25,9 @@ P13 2023
    - ```python manage.py migrate locations```
    - ```python manage.py migrate```  (une dernière fois)
 
+## Populate cities_light
+``` python manage.py cities_light```
+
 ## Start the project
 ### Run the command     
    - ```poetry shell```
