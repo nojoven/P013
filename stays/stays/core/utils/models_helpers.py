@@ -10,8 +10,8 @@ def profanity_filter_and_update(publication):
         headers = {'X-Api-Key': napk}
         url = 'https://api.api-ninjas.com/v1/profanityfilter?text='
         censored_text = ''
-        for i in range(0, len(text), 1000):
-            chunk = text[i:i+1000]
+        chunks = [text[i:i+1000] for i in range(0, len(text), 1000)]
+        for chunk in chunks:
             response = requests.get(url + chunk, headers=headers, timeout=15)
             response.raise_for_status()
             data = response.json()

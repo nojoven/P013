@@ -11,7 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from core.utils.requests_helpers import NeverCacheMixin
 from core.forms import PublicationEditForm, ContactAdminForm
-from django.core import serializers
 from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
@@ -21,11 +20,11 @@ from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
 from cities_light.models import Country
 from locations.utils.helpers import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
-from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email, get_all_profiles
+from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email
 from stays.utils.email_helpers import send_contact_form_email
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.cache import cache_page
-
+from django.db.models import Prefetch
 
 @csrf_exempt
 @require_GET
@@ -100,39 +99,37 @@ def toggle_upvote(request, uuid):
 # Create your views here.
 @cache_page(60 * 6)
 def home(request):
-    # profiles = get_all_profiles()
+    # Fetch all publications and related upvotes
+    publications = Publication.objects.prefetch_related(
+        Prefetch('publicationupvote_set', to_attr='upvoters')
+    ).all().order_by('-created_at')
 
-    publications = Publication.objects.prefetch_related('publicationupvote_set').all().order_by('-created_at')
+    # Fetch all countries in one query
+    countries = Country.objects.in_bulk(field_name='code2')
+
     for publication in publications:
-        country_data = Country.objects.get(code2=str(publication.country_code_of_stay))
+        country_data = countries.get(str(publication.country_code_of_stay))
 
-        publication.stay_country_name = country_data.name
-        publication.stay_continent_name = country_data.continent
+        if country_data:
+            publication.stay_country_name = country_data.name
+            publication.stay_continent_name = country_data.continent
+
         if publication.published_from_country_code:
             publication.published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
         else:
-            publication.published_from_country_name = "" if not publication.published_from_country_code else Country.objects.get(code2=str(publication.country_code_of_stay)).name
-    
+            publication.published_from_country_name = ""
+
         # Access the cached PublicationUpvote objects
-        publication.upvoters = [upvote.upvote_profile for upvote in publication.publicationupvote_set.all()]
+        publication.upvoters = [upvote.upvote_profile for upvote in publication.upvoters]
 
     paginator = Paginator(publications, 3)
-
     page = request.GET.get('page')
     page_obj = paginator.get_page(page)
 
-    # if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-    #     # Serialize the publications to JSON and return it
-    #     data = serializers.serialize('json', page_obj)
-    #     return JsonResponse(data, safe=False)
-
     context = {
-        # 'profiles_list': profiles,
-        # 'publications_list': publications,
         'page_obj': page_obj
     }
     return render(request, 'feed.html', context)
-
 
 class PublicationDeleteView(LoginRequiredMixin, DeleteView):
     model = Publication

@@ -338,7 +338,7 @@ class PublishView(LoginRequiredMixin, FormView, CreateView):
 
         if publication.text_story:
             # Background task to check for profanity
-            async_task(profanity_filter_and_update, publication)
+            async_task(profanity_filter_and_update, publication, timeout=1800)
 
         messages.success(self.request, 'Publication created successfully!', extra_tags='base_success')
         return super().form_valid(form)
