@@ -5,6 +5,9 @@ P13 2023
 ## STAYS is a web social media for people who like to tell and share their stories.
 
 
+## Install Poetry
+   - [https://python-poetry.org/docs/](https://python-poetry.org/docs/)
+
 ## Install this project: 
    - Clone the repository
    - Checkout to branch develop
@@ -13,6 +16,7 @@ P13 2023
    - ```poetry install``` (or ```pip install -r requirements.txt``` )
 
 ## Configurations
+
    - Renommer conf.js en confs.js
    - Compléter confs.js en ajoutant les valeurs en face des clés de dictionnaire
 
