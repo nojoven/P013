@@ -1,9 +1,9 @@
-from dynaconf import Dynaconf
+# from dynaconf import Dynaconf
 
-settings = Dynaconf(
-    envvar_prefix="DYNACONF_",
-    settings_files=[".env", 'settings.toml', '.secrets.toml'],
-)
+# settings = Dynaconf(
+#     envvar_prefix="DYNACONF_",
+#     settings_files=[".env", 'settings.toml', '.secrets.toml'],
+# )
 
 # `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
 # `settings_files` = Load these files in the order.

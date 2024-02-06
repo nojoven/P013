@@ -145,7 +145,7 @@ INSTALLED_APPS = [
     # "audiofield",
 
     # Easy Maps
-    "easy_maps",
+    # "easy_maps",
 
     # tinymce
     "tinymce",
@@ -399,9 +399,9 @@ AUTO_LOGOUT = {
     }
 
 
-EASY_MAPS_GOOGLE_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ___0123456789'
-EASY_MAPS_CENTER = (-41.3, 32)
-EASY_MAPS_LANGUAGE = 'fr'
+# EASY_MAPS_GOOGLE_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ___0123456789'
+# EASY_MAPS_CENTER = (-41.3, 32)
+# EASY_MAPS_LANGUAGE = 'fr'
 
 TINYMCE_JS_URL = f"https://cdn.tiny.cloud/1/{confs.get('TINY_MCE_API_KEY')}/tinymce/6/tinymce.min.js"
 TINYMCE_COMPRESSOR = confs.get("TINYMCE_COMPRESSOR", False)
@@ -502,6 +502,6 @@ Q_CLUSTER = {
 
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://www.dynaconf.com/django/
-import dynaconf  # noqa
-settings = dynaconf.DjangoDynaconf(__name__)  # noqa
+# import dynaconf  # noqa
+# settings = dynaconf.DjangoDynaconf(__name__)  # noqa
 # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
