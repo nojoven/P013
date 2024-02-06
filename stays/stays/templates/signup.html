@@ -7,6 +7,16 @@ Sign Up
 {% endblock title %}
 
     {% block content %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger d-flex align-items-center d-flex justify-content-around" role="alert">
+        <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <div>
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
     <style>
         body, main {
             background: transparent !important;

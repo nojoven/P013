@@ -10,6 +10,18 @@ Login
 </head>
 <main style="background-color: transparent; !important">
     {% block content %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level != messages.SUCCESS %}
+    <div class="alert alert-danger d-flex align-items-center d-flex justify-content-around" role="alert">
+        <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <div>
+            {{ message }}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
     <style>
         body {
             background-color: transparent !important;
