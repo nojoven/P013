@@ -252,11 +252,19 @@
             }
         }
 
-        setInterval(() => {
+        // Run the function 4 seconds after the page loads
+        setTimeout(function() {
             var slugs = Array.from(document.querySelectorAll(`[data-slug="${author_slug}"]`)).map(el => author_slug);
             console.log(`Updating status for slugs: ${slugs.join(', ')}`);
             slugs.forEach(author_slug => updateUserStatus(author_slug));
-        }, 7000);
+
+            // Then run the function every 45 seconds
+            setInterval(function() {
+                var slugs = Array.from(document.querySelectorAll(`[data-slug="${author_slug}"]`)).map(el => author_slug);
+                console.log(`Updating status for slugs: ${slugs.join(', ')}`);
+                slugs.forEach(author_slug => updateUserStatus(author_slug));
+            }, 45000); // 45000 milliseconds = 45 seconds
+        }, 4000); // 4000 milliseconds = 4 seconds
     }
     else {
         console.log('Not on feed');

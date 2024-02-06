@@ -284,7 +284,7 @@ THROTTLE_ZONES = {
         'VARY': 'throttle.zones.RemoteIP',
         'ALGORITHM': 'fixed-bucket',  # Default if not defined.
         'BUCKET_INTERVAL': 5 * 60,  # Number of seconds to enforce limit.
-        'BUCKET_CAPACITY': 500  # Maximum number of requests allowed within BUCKET_INTERVAL
+        'BUCKET_CAPACITY': 20  # Maximum number of requests allowed within BUCKET_INTERVAL
     },
 }
 
