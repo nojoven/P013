@@ -12,6 +12,10 @@ P13 2023
    - ```poetry shell```
    - ```poetry install``` (or ```pip install -r requirements.txt``` )
 
+## Configurations
+   - Renommer conf.js en confs.js
+   - Compléter confs.js en ajoutant les valeurs en face des clés de dictionnaire
+
 ## Migrations
    - ```python manage.py makemigrations users ```
    - ```python manage.py migrate users```
@@ -22,11 +26,18 @@ P13 2023
    - ```python manage.py migrate```  (une dernière fois)
 
 ## Start the project
-### Run the command     ```poetry shell```
-```python manage.py runserver```
+### Run the command     
+   - ```poetry shell```
+   - ```python manage.py runserver```
 
+### Create an administrator
+   - ```python manage.py createsuperuser```
+   - Define email password
+   - You can connect at ```localhost:5000/admin```
 
-### Install the Queue manager
+### Create a publication
+
+### Start the Queue manager
 ```python manage.py qcluster```
 
 [Unit]
