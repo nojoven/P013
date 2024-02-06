@@ -95,7 +95,7 @@ STAYS FEED
 
         <!-- left sidebar-->
         <div class="col-lg-7">
-
+        {% if page_obj.object_list %}    
             <!-- post 1-->
             {% for publication in page_obj %}
             
@@ -201,10 +201,10 @@ STAYS FEED
             <br>
             <div class="d-flex justify-content-center mt-6">
                 <div class="d-flex justify-content-center mt-6">
-                    {% cool_paginate page_obj=publication %}
+                    {% cool_paginate page_obj=page_obj %}
                 </div>
             </div>
-
+        {% endif %}
         </div>
     </div>
 </div>
