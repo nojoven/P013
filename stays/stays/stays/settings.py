@@ -310,7 +310,7 @@ HAYSTACK_CONNECTIONS = {
 
 
 # python manage.py cleanup_django_defender to unlock
-DEFENDER_LOGIN_FAILURE_LIMIT = 50
+DEFENDER_LOGIN_FAILURE_LIMIT = 20
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
