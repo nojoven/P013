@@ -1,9 +1,8 @@
-from ninja import NinjaAPI, Router
+from ninja import NinjaAPI
 from throttle.decorators import throttle
 from django.http import JsonResponse
 
 from users.models import Profile
-from locations.models import StayCountry
 
 api = NinjaAPI()
 
