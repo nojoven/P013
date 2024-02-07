@@ -7,9 +7,9 @@ import sys
 from unittest.mock import Mock
 
 
-@pytest.fixture(autouse=True)
-def no_faker(monkeypatch):
-    monkeypatch.setitem(sys.modules, 'faker', Mock())
+# @pytest.fixture(autouse=True)
+# def no_faker(monkeypatch):
+#     monkeypatch.setitem(sys.modules, 'faker', Mock())
 
 @pytest.fixture
 def client():

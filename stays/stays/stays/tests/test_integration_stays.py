@@ -1,6 +1,6 @@
 import pytest
 from stays.tests.fixtures.fixtures import profile_offline, profile_online, client
-
+from locations.models import StayCountry
 
 
 def test_is_profile_online(client, profile_online):
