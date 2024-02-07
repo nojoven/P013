@@ -33,7 +33,8 @@ P13 2023
 ``` python manage.py cities_light```
 
 ## Start the project
-### Run the command     
+### Run the command
+   - ```cd P013/stays/stays```
    - ```poetry shell```
    - ```python manage.py runserver```
 
