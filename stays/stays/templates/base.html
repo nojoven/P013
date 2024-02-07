@@ -217,53 +217,56 @@
 </style>
 
 <script>
-    if (typeof author_slug !== 'undefined') {
-        console.log('Display author presence');
-
-        async function updateUserStatus(author_slug) {
-            console.log(`Fetching status for ${author_slug}`);
-            try {
-                const cacheTime = 900000;
-                const response = await fetch(`/api/isonline/${author_slug}/`, { cache: "force-cache" }, cacheTime);
-                console.log(`Received response for ${author_slug}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                const statusElements = document.querySelectorAll(`[data-slug="${author_slug}"]`);
-                statusElements.forEach(statusElement => {
-                    if (data.is_online) {
-                        statusElement.className = 'fa-duotone fa-spin fa-solid fa-sun fa-xl';
-                        statusElement.style.color = '#f08205';
-                        statusElement.style.animation = 'spin 2s linear infinite';
-                        statusElement.title = 'This user is online.';
-                    } else {
-                        statusElement.className = 'fa-regular fa-sun fa-xs';
-                        statusElement.style.color = '#a0a4ac';
-                        statusElement.style.animation = '';
-                        statusElement.title = '';
-                    }
-                });
-            } catch (error) {
-                console.log('There was a problem with the fetch operation: ' + error.message);
-            }
+// Function to update user status
+async function updateUserStatus(author_slug) {
+    console.log(`Fetching status for ${author_slug}`);
+    try {
+        const cacheTime = 900000;
+        const response = await fetch(`/api/isonline/${author_slug}/`, { cache: "force-cache" }, cacheTime);
+        console.log(`Received response for ${author_slug}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        setTimeout(function() {
-            var slugs = Array.from(document.querySelectorAll(`[data-slug="${author_slug}"]`)).map(el => author_slug);
-            console.log(`Updating status for slugs: ${slugs.join(', ')}`);
-            slugs.forEach(author_slug => updateUserStatus(author_slug));
-
-            setInterval(function() {
-                var slugs = Array.from(document.querySelectorAll(`[data-slug="${author_slug}"]`)).map(el => author_slug);
-                console.log(`Updating status for slugs: ${slugs.join(', ')}`);
-                slugs.forEach(author_slug => updateUserStatus(author_slug));
-            }, 45000);
-        }, 4000);
+        const data = await response.json();
+        const statusElements = document.querySelectorAll(`[data-slug="${author_slug}"]`);
+        statusElements.forEach(statusElement => {
+            if (data.is_online) {
+                statusElement.className = 'fa-duotone fa-spin fa-solid fa-sun fa-xl';
+                statusElement.style.color = '#f08205';
+                statusElement.style.animation = 'spin 2s linear infinite';
+                statusElement.title = 'This user is online.';
+            } else {
+                statusElement.className = 'fa-regular fa-sun fa-xs';
+                statusElement.style.color = '#a0a4ac';
+                statusElement.style.animation = '';
+                statusElement.title = '';
+            }
+        });
+    } catch (error) {
+        console.log('There was a problem with the fetch operation: ' + error.message);
     }
-    else {
-        console.log('Not on feed');
-    }
+}
+
+// Function to update status for all slugs
+function updateAllStatuses() {
+    var slugs = Array.from(document.querySelectorAll(`[data-slug]`)).map(el => el.dataset.slug);
+    console.log(`Updating status for slugs: ${slugs.join(', ')}`);
+    slugs.forEach(slug => updateUserStatus(slug));
+}
+
+// Run once when the page loads
+updateAllStatuses();
+
+// Run every 45 seconds
+setInterval(updateAllStatuses, 45000);
+
+// Event listener for pagination
+document.querySelectorAll('.pagination a').forEach(a => {
+    a.addEventListener('click', function(event) {
+        // Wait for the new page content to load
+        setTimeout(updateAllStatuses, 1000);
+    });
+});
 </script>
 
 
