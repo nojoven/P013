@@ -46,7 +46,8 @@ STAYS FEED
                     }
                 })
                 .then(function (response) {
-                    console.log(response);
+                    // Ici, nous utilisons `true` comme argument pour forcer le rechargement à partir du serveur
+                    window.location.reload(true);
                     if (!response.data.error) {
                         Swal.fire({
                             position: 'center',
@@ -162,7 +163,7 @@ STAYS FEED
                     </style>
                     <center>
                     <div class="text-center">
-                        <button type="button" id="loginfromfeedbtn" class="btn btn-light btn-outline-info" style="color: red !important;" onclick="showLoginModal(event)">Login</button>
+                        <button type="button" id="loginfromfeedbtn" class="btn btn-light btn-outline-info" style="color: red !important;" onclick="showLoginModal(event)">Login test</button>
                     </div>
                     </center>
                     {% endif %}
