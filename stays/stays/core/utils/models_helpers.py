@@ -3,6 +3,39 @@ from django.db import models
 from users import models as users_models
 from stays.settings import NINJAS_API_KEY as napk
 from icecream import ic
+from django.db.models import Prefetch
+
+
+def cache_none(*args, **kwargs):
+    return None
+
+def get_publications_for_feed(publication_model, country_model, find_cities_light_country_name_with_code):
+    # Fetch all publications and related upvotes
+    publications = publication_model.objects.prefetch_related(
+        Prefetch('publicationupvote_set', to_attr='upvoters')
+    ).all().order_by('-created_at')
+
+    # Fetch all countries in one query
+    countries = country_model.objects.in_bulk(field_name='code2')
+
+    for publication in publications:
+        country_data = countries.get(str(publication.country_code_of_stay))
+
+        if country_data:
+            publication.stay_country_name = country_data.name
+            publication.stay_continent_name = country_data.continent
+
+        if publication.published_from_country_code:
+            publication.published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
+        else:
+            publication.published_from_country_name = ""
+
+        # Access the cached PublicationUpvote objects
+        publication.upvoters = [upvote.upvote_profile for upvote in publication.upvoters]
+
+    return publications
+
+
 
 def profanity_filter_and_update(publication):
     try:

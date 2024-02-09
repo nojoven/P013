@@ -26,6 +26,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.cache import cache_page
 from django.db.models import Prefetch
 from django.db import connection
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
+from core.utils.models_helpers import get_publications_for_feed, cache_none
+
+
+
+# Create a function that always returns None
 
 
 @csrf_exempt
@@ -99,40 +106,30 @@ def toggle_upvote(request, uuid):
 
 
 # Create your views here.
-@cache_page(60 * 6)
+@vary_on_cookie
 def home(request):
-    # Fetch all publications and related upvotes
-    publications = Publication.objects.prefetch_related(
-        Prefetch('publicationupvote_set', to_attr='upvoters')
-    ).all().order_by('-created_at')
-
-    # Fetch all countries in one query
-    countries = Country.objects.in_bulk(field_name='code2')
-
-    for publication in publications:
-        country_data = countries.get(str(publication.country_code_of_stay))
-
-        if country_data:
-            publication.stay_country_name = country_data.name
-            publication.stay_continent_name = country_data.continent
-
-        if publication.published_from_country_code:
-            publication.published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
-        else:
-            publication.published_from_country_name = ""
-
-        # Access the cached PublicationUpvote objects
-        publication.upvoters = [upvote.upvote_profile for upvote in publication.upvoters]
-
-    paginator = Paginator(publications, 3)
     page = request.GET.get('page')
-    page_obj = paginator.get_page(page)
+    if not page:
+        publications = get_publications_for_feed(Publication, Country, find_cities_light_country_name_with_code)
+        paginator = Paginator(publications, 5)
+        page_obj = paginator.get_page('1')
 
-    context = {
-        'page_obj': page_obj
-    }
-    # print(connection.queries)
-    return render(request, 'feed.html', context)
+        context = {
+            'page_obj': page_obj
+        }
+        return render(request, 'feed.html', context)
+    else:
+        @cache_page(60 * 6, cache=None, key_prefix=cache_none)
+        def cached_view(request):
+            publications = get_publications_for_feed(Publication, Country, find_cities_light_country_name_with_code)
+            paginator = Paginator(publications, 5)
+            page_obj = paginator.get_page(page)
+
+            context = {
+                'page_obj': page_obj
+            }
+            return render(request, 'feed.html', context)
+        return cached_view(request)
 
 class PublicationDeleteView(LoginRequiredMixin, DeleteView):
     model = Publication
