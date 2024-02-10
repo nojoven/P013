@@ -6,7 +6,7 @@ from stays.settings import NINJAS_API_KEY as napk
 
 import httpx
 import asyncio
-from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async, async_to_sync
 from django_countries import countries as dj_countries
 from django.core.cache import cache
 from cities_light.models import Country
@@ -23,6 +23,7 @@ async def fetch_country_data(country_code, headers):
 
     # If the response is not in the cache, fetch it
     if responses is None:
+        ic("Fetching country data")
         async with httpx.AsyncClient() as client:
             url1 = f'https://restcountries.com/v3.1/alpha/{country_code}'
             url2 = f'https://api.api-ninjas.com/v1/country?name={country_code}'
@@ -34,8 +35,9 @@ async def fetch_country_data(country_code, headers):
 
         # Store the response in the cache
         cache.set(cache_key, responses)
-
+    ic(type(responses))
     return responses
+
 
 async def fetch_additional_data(capital, country_code, headers):
     # Create a unique cache key for this function, capital and country_code
@@ -46,6 +48,7 @@ async def fetch_additional_data(capital, country_code, headers):
 
     # If the response is not in the cache, fetch it
     if responses is None:
+        ic("Fetching additional data")
         async with httpx.AsyncClient() as client:
             url3 = f'https://api.api-ninjas.com/v1/airquality?city={capital}'
             url4 = f'https://api.api-ninjas.com/v1/weather?city={capital}&country={country_code}'
@@ -56,27 +59,32 @@ async def fetch_additional_data(capital, country_code, headers):
                 client.get(url4, headers=headers),
                 client.get(url5, headers=headers)
             )
-        
         # Store the response in the cache
         cache.set(cache_key, responses)
+    ic(type(responses))
 
     return responses
 
-
-@login_required
-async def country_view(request, country_code):
+# @login_required
+@sync_to_async
+def country_view(request, country_code):
     # Get country data from Restcountries API
+    ic("country_code: ", country_code)
     if not isinstance(country_code, str) or len(country_code) < 2:
+        ic(f"Lentgh of {len(country_code)} is less than 2")
         return HttpResponse("Probable invalid code in the link url. Please inform our support team.", status=400)
     if len(country_code) == 2:
+        ic("lenght of country_code is 2")
         # Check if the country code exists in django-countries
         if country_code.upper() not in dj_countries:
+            ic("Not in django-countries")
             return HttpResponse("Invalid country code.", status=400)
     if len(country_code) > 2:
         # Check if the country name exists in django-cities-light
-        exists = await sync_to_async(Country.objects.filter(name=country_code.capitalize()).exists)()
-
+        exists = Country.objects.filter(name=country_code.capitalize()).exists()
+        ic(exists)
         if not exists:
+            ic("Not found with the  two first letters of the country name. Checking with the full name.")
             return HttpResponse("Invalid country name.", status=400)
         else:
             country_code = country_code[:2].upper()
@@ -88,11 +96,12 @@ async def country_view(request, country_code):
     ninjas_api_headers = {'X-Api-Key': napk}
 
     # Call the async function and wait for it to finish
-    responses = await fetch_country_data(country_code, ninjas_api_headers)
-
+    responses = async_to_sync(fetch_country_data)(country_code, ninjas_api_headers)
     # Unpack the responses
     country_details, country_details_ninjas = responses
+    ic(responses)
     if country_details.status_code != 200 or country_details_ninjas.status_code != 200:
+        ic(404)
         return HttpResponse("Invalid country code.", status=400)
 
     # Process The response from Restcountries API
@@ -154,8 +163,8 @@ async def country_view(request, country_code):
 
     # Call the second async function and wait for it to finish
     if context["general_information"].get("Capital"):
-        additional_responses = await fetch_additional_data(context["general_information"]["Capital"], country_code, ninjas_api_headers)
-
+        additional_responses = async_to_sync(fetch_additional_data)(context["general_information"]["Capital"], country_code, ninjas_api_headers)
+        ic(additional_responses)
         # Unpack the responses
         air_quality_ninjas_api_response, weather_ninjas_api_response, world_time_ninjas_api_response = additional_responses
     
@@ -211,6 +220,7 @@ async def country_view(request, country_code):
                     new_value = value
                 formatted_weather_json[new_key] = new_value
             else:
+                ic(wkey)
                 ic(f"{wkey} not in key_mapping")
         context["weather"] = formatted_weather_json
 
@@ -218,4 +228,8 @@ async def country_view(request, country_code):
     if world_time_json:
         context["country_time"] = {"Local_Time": world_time_json.get("datetime"), "Time_Zone": world_time_json.get("timezone")}
 
+    ic("output")
+    ic(type(context))
+    # ic(context)
     return render(request, 'country.html', context)
+    # return HttpResponse("OK", status=200)
