@@ -24,7 +24,7 @@ async def fetch_country_data(country_code, headers):
     # If the response is not in the cache, fetch it
     if responses is None:
         ic("Fetching country data")
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:
             url1 = f'https://restcountries.com/v3.1/alpha/{country_code}'
             url2 = f'https://api.api-ninjas.com/v1/country?name={country_code}'
 
@@ -70,9 +70,16 @@ async def fetch_additional_data(capital, country_code, headers):
 def country_view(request, country_code):
     # Get country data from Restcountries API
     ic("country_code: ", country_code)
+
     if not isinstance(country_code, str) or len(country_code) < 2:
         ic(f"Lentgh of {len(country_code)} is less than 2")
         return HttpResponse("Probable invalid code in the link url. Please inform our support team.", status=400)
+    
+    if country_code.isdigit() \
+        or "." in country_code and country_code.isdigit() \
+            or "," in country_code and country_code.isdigit():
+        return HttpResponse("Invalid country code. Please inform our support team.", status=400)
+
     if len(country_code) == 2:
         ic("lenght of country_code is 2")
         # Check if the country code exists in django-countries
