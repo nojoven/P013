@@ -75,9 +75,25 @@ async def fetch_country_data(country_code, headers):
     return responses
 
 
-async def fetch_additional_data(capital, country_code, headers):
+async def fetch_additional_data(capital, headers):
+
+    if not isinstance(capital, str):
+        raise TypeError("The 'capital' parameter must be a string.")
+
+    if not len(capital):
+        raise ValueError("Empty value of required parameters: 'capital'")
+
+    if headers and not capital:
+        raise ValueError("Invalid required parameters: 'capital'")
+
+    if headers and not isinstance(headers, dict):
+        raise TypeError("The 'headers' parameter must be a dictionary.")
+
+    if not headers:
+        raise ValueError("Invalid required parameters: 'headers'")
+
     # Create a unique cache key for this function, capital and country_code
-    cache_key = f'additional_data_{capital}_{country_code}'
+    cache_key = f'additional_data_{capital}'
 
     # Try to get the response from the cache
     responses = cache.get(cache_key)
@@ -87,8 +103,8 @@ async def fetch_additional_data(capital, country_code, headers):
         ic("Fetching additional data")
         async with httpx.AsyncClient(verify=False) as client:
             url3 = f'https://api.api-ninjas.com/v1/airquality?city={capital}'
-            url4 = f'https://api.api-ninjas.com/v1/weather?city={capital}&country={country_code}'
-            url5 = f"https://api.api-ninjas.com/v1/worldtime?city={capital}&country={country_code}"
+            url4 = f'https://api.api-ninjas.com/v1/weather?city={capital}'
+            url5 = f"https://api.api-ninjas.com/v1/worldtime?city={capital}"
 
             responses = await asyncio.gather(
                 client.get(url3, headers=headers),
