@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django_countries.fields import CountryField
@@ -12,11 +10,8 @@ from core.models import Publication
 from users.models import Profile
 
 from core.utils.models_helpers import SlugFieldForeignKey, UUIDFieldForeignKey, NullableBigIntegerFieldForeignKey
-
+from stays.utils.common_helpers import uuid_generator
 # Create your models here.
-
-def uuid_generator():
-    return uuid.uuid4().hex
 
 
 class StayCountry(models.Model):

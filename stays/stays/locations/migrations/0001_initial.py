@@ -3,7 +3,7 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import django_countries.fields
-import locations.models
+from stays import utils as stays_utils
 
 
 class Migration(migrations.Migration):
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 (
                     "uuid",
                     models.UUIDField(
-                        default=locations.models.uuid_generator, editable=False
+                        default=stays_utils.common_helpers.uuid_generator, editable=False
                     ),
                 ),
                 ("continent_name", models.CharField(null=True)),

@@ -1,5 +1,5 @@
 from datetime import datetime
-import uuid
+from stays.utils.common_helpers import uuid_generator
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -9,11 +9,7 @@ from django.urls import reverse
 # from locations.models import StayCountry
 from core.publications_types import ContentTypes
 from django_countries.fields import CountryField
-from .utils.models_helpers import UUIDFieldForeignKey
 
-
-def uuid_generator():
-    return uuid.uuid4().hex
 
 def voice_story_upload_to(instance, filename):
     return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/voice/{filename}"

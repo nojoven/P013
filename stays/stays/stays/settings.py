@@ -98,7 +98,6 @@ ALLOWED_HOSTS = ["*", "localhost", "0.0.0.0", "127.0.0.1"]
 INSTALLED_APPS = [
     # APM
     "django.contrib.sites",
-    "djapm.apm.apps.ApmConfig",
     "django.contrib.admin",
     "daphne",
     "django.contrib.auth",
@@ -114,7 +113,7 @@ INSTALLED_APPS = [
     "locations",
     "watchman",
     "django_select2",
-    "iommi",
+    # "iommi",
     # "allauth_ui",
     # "allauth",
     # "allauth.account",
@@ -123,8 +122,8 @@ INSTALLED_APPS = [
     # "allauth.socialaccount.providers.reddit",
     "django_countries",
     "django_htmx",
-    "formset",
-    "django_filters",
+    # "formset",
+    # "django_filters",
     # "extra_views",
 
     # Quill text editor
@@ -132,12 +131,12 @@ INSTALLED_APPS = [
 
     # Pagination
     "django_cool_paginator",
-    "el_pagination",
+    # "el_pagination",
 
     # Machina dependencies:
-    'mptt',
-    'haystack',
-    'widget_tweaks',
+    # 'mptt',
+    # 'haystack',
+    # 'widget_tweaks',
 
     # Machina apps:
     # 'machina',
@@ -198,8 +197,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "djapm.apm.middlewares.ApmMetricsMiddleware",
-    "djapm.apm.middlewares.ErrorTraceMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     # Iommi: these three are optional, but highly recommended!
     'iommi.live_edit.Middleware',

@@ -4,8 +4,8 @@ import core.utils.models_helpers
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import users.utils
-
+from stays import utils as stays_utils
+from users.utils import profile_picture_upload_to
 
 class Migration(migrations.Migration):
     initial = True
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 (
                     "uuid",
                     models.UUIDField(
-                        default=users.utils.uuid_generator, editable=False, null=True
+                        default=stays_utils.common_helpers.uuid_generator, editable=False, null=True
                     ),
                 ),
                 (
@@ -112,7 +112,7 @@ class Migration(migrations.Migration):
                     models.ImageField(
                         default="blank-profile-picture.jpg",
                         null=True,
-                        upload_to=users.utils.profile_picture_upload_to,
+                        upload_to=profile_picture_upload_to,
                     ),
                 ),
                 ("created_at", models.DateTimeField(auto_now=True)),

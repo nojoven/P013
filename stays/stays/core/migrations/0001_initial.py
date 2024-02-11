@@ -5,7 +5,7 @@ import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import django_countries.fields
-
+from stays import utils as stays_utils
 
 class Migration(migrations.Migration):
     initial = True
@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 (
                     "uuid",
                     models.UUIDField(
-                        default=core.models.uuid_generator,
+                        default=stays_utils.common_helpers.uuid_generator,
                         editable=False,
                         primary_key=True,
                         serialize=False,

@@ -1,6 +1,6 @@
 import pytest
 from django.http import HttpRequest
-from users.utils import uuid_generator
+from stays.utils.common_helpers import uuid_generator
 from stays.api import is_profile_online
 
 

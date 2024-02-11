@@ -1,10 +1,10 @@
 import pytest
 from django.test import Client
 from users.models import Profile
-from users.utils import uuid_generator
+from stays.utils.common_helpers import uuid_generator
 from django.utils.text import slugify
-import sys
-from unittest.mock import Mock
+# import sys
+# from unittest.mock import Mock
 
 
 # @pytest.fixture(autouse=True)
