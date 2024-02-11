@@ -1,7 +1,16 @@
+import os
+import random
+from django.conf import settings
+from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
 from django.http import (
-    Http404, HttpResponseForbidden, HttpResponseNotAllowed,
+    Http404,
+    HttpResponseForbidden,
+    HttpResponseNotAllowed,
     HttpResponseBadRequest,
-    HttpResponseNotModified, HttpResponseGone, HttpResponseServerError,
+    HttpResponseNotModified,
+    HttpResponseGone,
+    HttpResponseServerError,
     HttpResponsePermanentRedirect, HttpResponse
 )
 
@@ -23,16 +32,6 @@ response_gateway_timeout = HttpResponse(status=504)
 # Teapot
 response_teapot = HttpResponse(status=418)
 
-import os
-import random
-from http import HTTPStatus
-from django.urls import reverse
-from django.conf import settings
-from django.http import HttpResponseServerError
-from django.template import TemplateDoesNotExist
-from django.template.loader import get_template
-import sweetify
-from icecream import ic
 
 
 def random_error_handler(request, error_code):
