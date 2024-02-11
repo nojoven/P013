@@ -3,67 +3,16 @@ from django.shortcuts import render
 from datetime import datetime
 from icecream import ic
 from stays.settings import NINJAS_API_KEY as napk
-
 import httpx
 import asyncio
 from asgiref.sync import sync_to_async, async_to_sync
 from django_countries import countries as dj_countries
-from django.core.cache import cache
+
 from cities_light.models import Country
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+from locations.utils.helpers import fetch_country_data, fetch_additional_data, ninjas_api_headers
 
 
-async def fetch_country_data(country_code, headers):
-    # Create a unique cache key for this function and country_code
-    cache_key = f'country_data_{country_code}'
-
-    # Try to get the response from the cache
-    responses = cache.get(cache_key)
-
-    # If the response is not in the cache, fetch it
-    if responses is None:
-        ic("Fetching country data")
-        async with httpx.AsyncClient(verify=False) as client:
-            url1 = f'https://restcountries.com/v3.1/alpha/{country_code}'
-            url2 = f'https://api.api-ninjas.com/v1/country?name={country_code}'
-
-            responses = await asyncio.gather(
-                client.get(url1),
-                client.get(url2, headers=headers),
-            )
-
-        # Store the response in the cache
-        cache.set(cache_key, responses)
-    ic(type(responses))
-    return responses
-
-
-async def fetch_additional_data(capital, country_code, headers):
-    # Create a unique cache key for this function, capital and country_code
-    cache_key = f'additional_data_{capital}_{country_code}'
-
-    # Try to get the response from the cache
-    responses = cache.get(cache_key)
-
-    # If the response is not in the cache, fetch it
-    if responses is None:
-        ic("Fetching additional data")
-        async with httpx.AsyncClient() as client:
-            url3 = f'https://api.api-ninjas.com/v1/airquality?city={capital}'
-            url4 = f'https://api.api-ninjas.com/v1/weather?city={capital}&country={country_code}'
-            url5 = f"https://api.api-ninjas.com/v1/worldtime?city={capital}&country={country_code}"
-
-            responses = await asyncio.gather(
-                client.get(url3, headers=headers),
-                client.get(url4, headers=headers),
-                client.get(url5, headers=headers)
-            )
-        # Store the response in the cache
-        cache.set(cache_key, responses)
-    ic(type(responses))
-
-    return responses
 
 # @login_required
 @sync_to_async
@@ -99,8 +48,7 @@ def country_view(request, country_code):
     # Create the context dictionary
     context = {}
 
-    # Create the headers for the Ninjas API
-    ninjas_api_headers = {'X-Api-Key': napk}
+    
 
     # Call the async function and wait for it to finish
     responses = async_to_sync(fetch_country_data)(country_code, ninjas_api_headers)
