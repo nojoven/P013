@@ -6,9 +6,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from icecream import ic
 from cities_light.models import Country
 from django.core.cache import cache
+from asgiref.sync import sync_to_async, async_to_sync
 from stays.settings import NINJAS_API_KEY as napk
+from datetime import datetime
+from django.http import HttpResponse
+from django_countries import countries as dj_countries
+
+
 # Create the headers for the Ninjas API
-ninjas_api_headers = {'X-Api-Key': napk}
+NINJAS_API_HEADERS = {'X-Api-Key': napk}
 
 
 def get_continent_from_code(continent_code: str):
@@ -36,7 +42,7 @@ def find_cities_light_continent_with_country_code(country_code: str):
 
 def fill_context_general_informations(country_code: str, country_details_response: dict):
 
-    country_details = country_details_response.json()[0]
+    country_details = country_details_response[0]
 
     # Format some details
     currency_code = list(country_details.get('currencies').keys())[0]
@@ -62,7 +68,7 @@ def fill_context_general_informations(country_code: str, country_details_respons
 
 def append_ninjas_api_general_info(general_info_dict: dict, api_response: dict):
     # Start processing Ninjas API responses
-    country_data_ninjas = api_response.json()[0]
+    country_data_ninjas = api_response[0]
 
     for key in country_data_ninjas:
         if key == "currency":
@@ -186,3 +192,125 @@ async def fetch_additional_data(capital, headers):
     ic(type(responses))
 
     return responses
+
+async def fetch_air_weather_time(general_info: dict):
+
+    # Call the second async function and wait for it to finish
+    if general_info.get("Capital"):
+
+        additional_responses = await fetch_additional_data(general_info["Capital"], NINJAS_API_HEADERS)
+        ic(additional_responses)
+        # Unpack the responses
+        air_quality_ninjas_api_response, weather_ninjas_api_response, world_time_ninjas_api_response = additional_responses
+    
+        # Extract the wanted collections from the responses
+        air_quality_json = air_quality_ninjas_api_response.json()
+        weather_json = weather_ninjas_api_response.json()
+        world_time_json = world_time_ninjas_api_response.json()
+
+        return {
+            "air": air_quality_json,
+            "weather": weather_json,
+            "time": world_time_json
+        }
+
+def add_air_to_context(air_dict):
+    if air_dict and "overall_aqi" in air_dict:
+        air_dict["Overall"] = air_dict.get("overall_aqi")
+        del air_dict["overall_aqi"]
+    return air_dict
+
+def add_weather_to_context(weather_dict):
+    if not len(weather_dict) or weather_dict is None:
+        return {}
+
+    # Mapping dictionary
+    key_mapping = {
+        'cloud_pct': 'Clouds',
+        'feels_like': 'Perceived',
+        'humidity': 'Humidity',
+        'max_temp': 'Max',
+        'min_temp': 'Min',
+        'sunrise': 'Sunrise',
+        'sunset': 'Sunset',
+        'temp': 'Temperature',
+        'wind_degrees': 'Wind - Degrees',
+        'wind_speed': 'Wind - Speed'
+    }
+    formatted_weather_json = {}
+
+    # Improve format of the weather values
+    for wkey, value in weather_dict.items():
+        if wkey in key_mapping:
+            new_key = key_mapping.get(wkey).capitalize()  # Get the new key from the mapping, or use the old key if not found
+            if new_key in ['Clouds', 'Humidity']:
+                new_value = f'{value} %'
+            elif new_key in ['Perceived', 'Max', 'Min', 'Temperature']:
+                new_value = f'{value} °C'
+            elif new_key == 'Wind - degrees':
+                new_key = 'Wind - Degrees'
+                new_value = f'{value}°'
+            elif new_key == 'Wind - speed':
+                new_key = 'Wind - Speed'
+                new_value = f'{value} km/h'
+            elif new_key == 'Sunrise' or new_key == 'Sunset':
+                # Convert the timestamp to a datetime object
+                dt_object = datetime.fromtimestamp(value)
+
+                # Format the datetime object as a string
+                new_value = dt_object.strftime("%H:%M:%S")
+            else:
+                new_value = value
+            formatted_weather_json[new_key] = new_value
+        else:
+            ic(wkey)
+            ic(f"{wkey} not in key_mapping")
+    return formatted_weather_json
+
+def add_time_to_context(time_dict):
+    if not time_dict:
+        return {}
+    return {
+        "Local_Time": time_dict.get("datetime"),
+        "Time_Zone": time_dict.get("timezone")
+    }
+
+def validate_country_code(country_code):
+    if not isinstance(country_code, str) or len(country_code) < 2:
+        ic(f"Lentgh of {len(country_code)} is less than 2")
+        return HttpResponse("Probable invalid code in the link url. Please inform our support team.", status=400)
+    
+    if country_code.isdigit() \
+        or "." in country_code and country_code.isdigit() \
+            or "," in country_code and country_code.isdigit():
+        return HttpResponse("Invalid country code. Please inform our support team.", status=400)
+
+    if len(country_code) == 2:
+        ic("lenght of country_code is 2")
+        # Check if the country code exists in django-countries
+        if country_code.upper() not in dj_countries:
+            ic("Not in django-countries")
+            return HttpResponse("Invalid country code.", status=400)
+    if len(country_code) > 2:
+        # Check if the country name exists in django-cities-light
+        exists = Country.objects.filter(name=country_code.capitalize()).exists()
+        ic(exists)
+        if not exists:
+            ic("Not found with the  two first letters of the country name. Checking with the full name.")
+            return HttpResponse("Invalid country name.", status=400)
+        else:
+            country_code = country_code[:2].upper()
+
+
+async def send_http_requests(country_code):
+    # Call the async function and wait for it to finish
+    responses = await fetch_country_data(country_code, NINJAS_API_HEADERS)
+    # Unpack the responses
+    country_details, country_details_ninjas = responses
+    if country_details.status_code != 200 or country_details_ninjas.status_code != 200:
+        return HttpResponse("Invalid country code.", status=400)
+    
+    return {
+        "country_details": country_details.json(),
+        "country_details_ninjas": country_details_ninjas.json()
+    }
