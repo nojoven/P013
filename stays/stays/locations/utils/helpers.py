@@ -111,8 +111,14 @@ async def fetch_additional_data(capital, headers):
                 client.get(url4, headers=headers),
                 client.get(url5, headers=headers)
             )
+            # Check the status code of the responses
+            for response in responses:
+                if response.status_code >= 400:
+                    raise Exception(f'API request failed with status code {response.status_code}')
         # Store the response in the cache
         cache.set(cache_key, responses)
+    else:
+        ic("Responses found in cache")
     ic(type(responses))
 
     return responses
