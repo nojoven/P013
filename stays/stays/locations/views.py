@@ -56,7 +56,6 @@ def country_view(request, country_code):
     country_details, country_details_ninjas = responses
     ic(responses)
     if country_details.status_code != 200 or country_details_ninjas.status_code != 200:
-        ic(404)
         return HttpResponse("Invalid country code.", status=400)
 
     # Process The response from Restcountries API
