@@ -28,8 +28,72 @@ def find_cities_light_country_name_with_code(country_code: str):
         return None
 
 
+
+
 def find_cities_light_continent_with_country_code(country_code: str):
     return Country.objects.get(code2=country_code).continent
+
+
+def fill_context_general_informations(country_code: str, country_details_response: dict):
+
+    country_details = country_details_response.json()[0]
+
+    # Format some details
+    currency_code = list(country_details.get('currencies').keys())[0]
+    currency_name = country_details.get('currencies').get(currency_code).get('name')
+    currency_symbol = country_details.get('currencies').get(currency_code).get('symbol')
+    native_name_code = list(country_details.get("name").get("nativeName").keys())[0]
+
+    general_info = {}
+
+    general_info['Currency'] = f"{currency_name} ({currency_code}) - {currency_symbol}"
+    general_info['Latitude'] = country_details.get("latlng")[0] if country_details.get("latlng") else "N/A"
+    general_info['Longitude'] = country_details.get("latlng")[1] if country_details.get("latlng") else "N/A"
+    general_info['Official'] = country_details.get("name").get("official")
+    general_info['Native'] = country_details.get("name").get("nativeName").get(native_name_code).get("official")
+    general_info['Capital'] = country_details.get("capital")[0] if country_details.get("capital") else "N/A"
+    general_info['Languages'] = list(country_details.get("languages", "").values())[0]
+    general_info['Google'] = country_details.get("maps", "").get("googleMaps")
+    general_info['OpenStreet'] = country_details.get("maps", "").get("openStreetMaps")
+    general_info['coat_of_arms'] = country_details.get("coatOfArms", "").get("png", "")
+    general_info['flag'] = country_details.get("flags", f"https://flagcdn.com/w320/{country_code}.png").get("png")
+
+    return general_info
+
+def append_ninjas_api_general_info(general_info_dict: dict, api_response: dict):
+    # Start processing Ninjas API responses
+    country_data_ninjas = api_response.json()[0]
+
+    for key in country_data_ninjas:
+        if key == "currency":
+            continue
+
+        # If the key is not already in the context, add it
+        if key not in general_info_dict and key != "iso2" and "gdp not in key":
+            general_info_dict[key.capitalize()] = country_data_ninjas.get(key)
+        
+        if key == "iso2":
+            general_info_dict["ISO_2_Code"] = country_data_ninjas.get(key)
+        
+        if "rowth" in key or "rate" in key:
+            general_info_dict[key.capitalize()] = f'{country_data_ninjas.get(key)} %'
+        
+        if "gdp" in key and len(key.split("_")) > 1:
+            gdp_new_key = key.capitalize().replace("gdp", "GDP")
+            general_info_dict[gdp_new_key] = country_data_ninjas.get(key)
+
+        if "Gdp" in key and len(key.split("_")) > 1:
+            if key.startswith("Gdp") or key.startswith("gdp"):
+                updated_key = key.replace("gdp", "GDP")
+                general_info_dict[updated_key] = country_data_ninjas.get(key)
+            else:
+                updated_key = key.capitalize().replace("gdp", "GDP")
+                general_info_dict[updated_key] = country_data_ninjas.get(key)
+
+        if key == "GDP":
+            general_info_dict["GDP"] = country_data_ninjas.get(key)
+        return general_info_dict
+
 
 
 async def fetch_country_data(country_code, headers):

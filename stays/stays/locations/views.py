@@ -10,8 +10,7 @@ from django_countries import countries as dj_countries
 
 from cities_light.models import Country
 from django.contrib.auth.decorators import login_required
-from locations.utils.helpers import fetch_country_data, fetch_additional_data, ninjas_api_headers
-
+from locations.utils.helpers import fetch_country_data, fetch_additional_data, ninjas_api_headers, fill_context_general_informations, append_ninjas_api_general_info
 
 
 # @login_required
@@ -58,66 +57,20 @@ def country_view(request, country_code):
     if country_details.status_code != 200 or country_details_ninjas.status_code != 200:
         return HttpResponse("Invalid country code.", status=400)
 
-    # Process The response from Restcountries API
-    country_details = country_details.json()[0]
-    # Format the currency details
-    currency_code = list(country_details.get('currencies').keys())[0]
-    currency_name = country_details.get('currencies').get(currency_code).get('name')
-    currency_symbol = country_details.get('currencies').get(currency_code).get('symbol')
+   
 
-    # Extract the native name code (depends on the country in your httpp request)
-    native_name_code = list(country_details.get("name").get("nativeName").keys())[0]
+    context["general_information"] = fill_context_general_informations(country_code, country_details)
 
-    context["general_information"] = {
-        'Latitude': country_details.get("latlng")[0] if country_details.get("latlng") else "N/A",
-        'Longitude': country_details.get("latlng")[1] if country_details.get("latlng") else "N/A",
-        'Official': country_details.get("name").get("official"),
-        'Native': country_details.get("name").get("nativeName").get(native_name_code).get("official"),
-        'Capital': country_details.get("capital")[0] if country_details.get("capital") else "N/A",
-        "Currency": f"{currency_name} ({currency_code}) - {currency_symbol}",
-        'Languages': list(country_details.get("languages", "").values())[0],
-        'Google': country_details.get("maps", "").get("googleMaps"),
-        'OpenStreet': country_details.get("maps", "").get("openStreetMaps"),
-        'coat_of_arms': country_details.get("coatOfArms", "").get("png", ""),
-        'flag': country_details.get("flags", f"https://flagcdn.com/w320/{country_code}.png").get("png"),
-    }
 
+    context["general_information"] = append_ninjas_api_general_info(context["general_information"], country_details_ninjas)
     
-    # Start processing Ninjas API responses
-    country_data_ninjas = country_details_ninjas.json()[0]
     
-    for key in country_data_ninjas:
-        if key == "currency":
-            continue
-
-        # If the key is not already in the context, add it
-        if key not in context["general_information"] and key != "iso2" and "gdp not in key":
-            context["general_information"][key.capitalize()] = country_data_ninjas.get(key)
-        
-        if key == "iso2":
-            context["general_information"]["ISO_2_Code"] = country_data_ninjas.get(key)
-        
-        if "rowth" in key or "rate" in key:
-            context["general_information"][key.capitalize()] = f'{country_data_ninjas.get(key)} %'
-        
-        if "gdp" in key and len(key.split("_")) > 1:
-            gdp_new_key = key.capitalize().replace("gdp", "GDP")
-            context["general_information"][gdp_new_key] = country_data_ninjas.get(key)
-
-        if "Gdp" in key and len(key.split("_")) > 1:
-            if key.startswith("Gdp") or key.startswith("gdp"):
-                updated_key = key.replace("gdp", "GDP")
-                context["general_information"][updated_key] = country_data_ninjas.get(key)
-            else:
-                updated_key = key.capitalize().replace("gdp", "GDP")
-                context["general_information"][updated_key] = country_data_ninjas.get(key)
-
-        if key == "GDP":
-            context["general_information"]["GDP"] = country_data_ninjas.get(key)
+    
+    
 
     # Call the second async function and wait for it to finish
     if context["general_information"].get("Capital"):
-        additional_responses = async_to_sync(fetch_additional_data)(context["general_information"]["Capital"], country_code, ninjas_api_headers)
+        additional_responses = async_to_sync(fetch_additional_data)(context["general_information"]["Capital"], ninjas_api_headers)
         ic(additional_responses)
         # Unpack the responses
         air_quality_ninjas_api_response, weather_ninjas_api_response, world_time_ninjas_api_response = additional_responses
