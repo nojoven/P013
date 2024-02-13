@@ -266,18 +266,18 @@ def add_weather_to_context(weather_dict):
     # Improve format of the weather values
     for wkey, value in weather_dict.items():
         if wkey in key_mapping:
-            new_key = key_mapping.get(wkey).capitalize()  # Get the new key from the mapping, or use the old key if not found
+            new_key = key_mapping.get(wkey).replace('_', ' ')  # Get the new key from the mapping, or use the old key if not found
             if new_key in ['Clouds', 'Humidity']:
                 new_value = f'{value} %'
             elif new_key in ['Perceived', 'Max', 'Min', 'Temperature']:
                 new_value = f'{value} °C'
-            elif new_key == 'Wind - degrees':
-                new_key = 'Wind - Degrees'
+            elif new_key == 'Wind Degrees':
+                new_key = 'Wind Degrees'
                 new_value = f'{value}°'
-            elif new_key == 'Wind - speed':
-                new_key = 'Wind - Speed'
+            elif new_key == 'Wind Speed':
+                new_key = 'Wind Speed'
                 new_value = f'{value} km/h'
-            elif new_key == 'Sunrise' or new_key == 'Sunset':
+            elif new_key in ['Sunrise', 'Sunset']:
                 # Convert the timestamp to a datetime object
                 dt_object = datetime.fromtimestamp(value)
 
