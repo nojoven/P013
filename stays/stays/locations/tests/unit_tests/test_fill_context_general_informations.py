@@ -29,3 +29,9 @@ def test_fill_context_general_informations():
     assert result['OpenStreet'] == 'https://www.openstreetmap.org/relation/1403916'
     assert result['coat_of_arms'] == 'https://mainfacts.com/media/images/coats_of_arms/fr.png'
     assert result['flag'] == 'https://flagcdn.com/w320/fr.png'
+
+    # Test error cases
+    # Missing key
+    del country_details_response[0]['currencies']
+    with pytest.raises(AttributeError):
+        fill_context_general_informations('FR', country_details_response)
