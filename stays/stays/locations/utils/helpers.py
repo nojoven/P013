@@ -96,8 +96,6 @@ def append_ninjas_api_general_info(general_info_dict: dict, api_response: dict):
             general_info_dict["GDP"] = country_data_ninjas.get(key)
         return general_info_dict
 
-
-
 async def fetch_country_data(country_code, headers):
     if country_code is None:
         raise ValueError("The country_code parameter cannot be None.")
