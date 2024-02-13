@@ -28,7 +28,7 @@ def test_append_ninjas_api_general_info():
 
     # Call the function
     result = append_ninjas_api_general_info(general_info_dict, api_response)
-    ic(result.keys())
+
     # Check if the keys of general_info_dict have been modified
     assert "ISO2 CODE" in result
     assert "GDP" in result
