@@ -65,36 +65,66 @@ def fill_context_general_informations(country_code: str, country_details_respons
 def append_ninjas_api_general_info(general_info_dict: dict, api_response: dict):
     # Start processing Ninjas API responses
     country_data_ninjas = api_response[0]
-
+    
     for key in country_data_ninjas:
         if key == "currency":
             continue
-
+        
+        initial_key = key
+        key_has_changes = False
+        key_to_add = False
         # If the key is not already in the context, add it
-        if key not in general_info_dict and key != "iso2" and "gdp not in key":
-            general_info_dict[key.capitalize()] = country_data_ninjas.get(key)
-        
-        if key == "iso2":
-            general_info_dict["ISO_2_Code"] = country_data_ninjas.get(key)
-        
-        if "rowth" in key or "rate" in key:
-            general_info_dict[key.capitalize()] = f'{country_data_ninjas.get(key)} %'
-        
-        if "gdp" in key and len(key.split("_")) > 1:
-            gdp_new_key = key.capitalize().replace("gdp", "GDP")
-            general_info_dict[gdp_new_key] = country_data_ninjas.get(key)
+        if key not in general_info_dict:
+            if key != "iso2" \
+                and "gdp" not in key \
+                    and "Gdp" not in key \
+                        and "rate" not in key \
+                            and "growth" not in key:
+                general_info_dict[key.upper()] = country_data_ninjas.get(initial_key)
+                continue
 
-        if "Gdp" in key and len(key.split("_")) > 1:
-            if key.startswith("Gdp") or key.startswith("gdp"):
-                updated_key = key.replace("gdp", "GDP")
-                general_info_dict[updated_key] = country_data_ninjas.get(key)
-            else:
-                updated_key = key.capitalize().replace("gdp", "GDP")
-                general_info_dict[updated_key] = country_data_ninjas.get(key)
+            if key == "iso2":
+                key = "ISO2 Code"
+                key_has_changes = True
+                general_info_dict[key.upper()] = country_data_ninjas.get(initial_key)
+                continue
+            
+            if key == "GDP":
+                general_info_dict[key.upper()] = f'{int(country_data_ninjas.get(initial_key, "0"))}'
+                key_to_add = True
+                continue
 
-        if key == "GDP":
-            general_info_dict["GDP"] = country_data_ninjas.get(key)
-        return general_info_dict
+
+            # if "gdp" in key and len(key.split("_")) > 1:
+            #     gdp_new_key = key.capitalize().replace("gdp", "GDP")
+            #     general_info_dict[gdp_new_key] = country_data_ninjas.get(key)
+            #     key_has_changes = True
+
+            if "gdp" in key:
+                key = key.replace("gdp", "GDP")
+                key_has_changes = True
+        
+            if "Gdp" in key:
+                key = key.replace("Gdp", "GDP")
+                key_has_changes = True
+            
+
+            if "_" in key:
+                key = key.replace("_", " ")
+                key_has_changes = True
+            
+            if "rate" in key or "growth" in key:
+                general_info_dict[key.upper()] = f'{country_data_ninjas.get(initial_key, "0")} %'
+                key_to_add = True
+                continue
+
+            # Remove the original key from the dictionary
+            if key_has_changes or key_to_add:
+                general_info_dict[key.upper()] = country_data_ninjas.get(initial_key)
+            if initial_key in general_info_dict:   
+                del general_info_dict[initial_key]
+        
+    return general_info_dict
 
 async def fetch_country_data(country_code, headers):
     if country_code is None:
@@ -228,8 +258,8 @@ def add_weather_to_context(weather_dict):
         'sunrise': 'Sunrise',
         'sunset': 'Sunset',
         'temp': 'Temperature',
-        'wind_degrees': 'Wind - Degrees',
-        'wind_speed': 'Wind - Speed'
+        'wind_degrees': 'Wind Degrees',
+        'wind_speed': 'Wind Speed'
     }
     formatted_weather_json = {}
 
