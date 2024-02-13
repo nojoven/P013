@@ -34,8 +34,6 @@ def find_cities_light_country_name_with_code(country_code: str):
         return None
 
 
-
-
 def find_cities_light_continent_with_country_code(country_code: str):
     return Country.objects.get(code2=country_code).continent
 
@@ -50,21 +48,19 @@ def fill_context_general_informations(country_code: str, country_details_respons
     currency_symbol = country_details.get('currencies').get(currency_code).get('symbol')
     native_name_code = list(country_details.get("name").get("nativeName").keys())[0]
 
-    general_info = {}
-
-    general_info['Currency'] = f"{currency_name} ({currency_code}) - {currency_symbol}"
-    general_info['Latitude'] = country_details.get("latlng")[0] if country_details.get("latlng") else "N/A"
-    general_info['Longitude'] = country_details.get("latlng")[1] if country_details.get("latlng") else "N/A"
-    general_info['Official'] = country_details.get("name").get("official")
-    general_info['Native'] = country_details.get("name").get("nativeName").get(native_name_code).get("official")
-    general_info['Capital'] = country_details.get("capital")[0] if country_details.get("capital") else "N/A"
-    general_info['Languages'] = list(country_details.get("languages", "").values())[0]
-    general_info['Google'] = country_details.get("maps", "").get("googleMaps")
-    general_info['OpenStreet'] = country_details.get("maps", "").get("openStreetMaps")
-    general_info['coat_of_arms'] = country_details.get("coatOfArms", "").get("png", "")
-    general_info['flag'] = country_details.get("flags", f"https://flagcdn.com/w320/{country_code}.png").get("png")
-
-    return general_info
+    return {
+        'Currency': f"{currency_name} ({currency_code}) - {currency_symbol}",
+        'Latitude': country_details.get("latlng")[0] if country_details.get("latlng") else "N/A",
+        'Longitude': country_details.get("latlng")[1] if country_details.get("latlng") else "N/A",
+        'Official': country_details.get("name").get("official"),
+        'Native': country_details.get("name").get("nativeName").get(native_name_code).get("official"),
+        'Capital': country_details.get("capital")[0] if country_details.get("capital") else "N/A",
+        'Languages': list(country_details.get("languages", "").values())[0],
+        'Google':  country_details.get("maps", "").get("googleMaps"),
+        'OpenStreet':  country_details.get("maps", "").get("openStreetMaps"),
+        'coat_of_arms':  country_details.get("coatOfArms", "").get("png", ""),
+        'flag':  country_details.get("flags", f"https://flagcdn.com/w320/{country_code}.png").get("png")
+    }
 
 def append_ninjas_api_general_info(general_info_dict: dict, api_response: dict):
     # Start processing Ninjas API responses
