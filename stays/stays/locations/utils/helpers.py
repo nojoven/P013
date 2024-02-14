@@ -299,15 +299,20 @@ def add_time_to_context(time_dict):
         "Time_Zone": time_dict.get("timezone")
     }
 
-def validate_country_code(country_code):
+async def validate_country_code(country_code):
+    if isinstance(country_code, (int, float)):
+        return HttpResponse("Invalid country code. Please inform our support team.", status=400)
+
     if not isinstance(country_code, str) or len(country_code) < 2:
         ic(f"Lentgh of {len(country_code)} is less than 2")
         return HttpResponse("Probable invalid code in the link url. Please inform our support team.", status=400)
-    
-    if country_code.isdigit() \
-        or "." in country_code and country_code.isdigit() \
-            or "," in country_code and country_code.isdigit():
+
+    if country_code.isdigit():
         return HttpResponse("Invalid country code. Please inform our support team.", status=400)
+
+    if "." in country_code \
+        or "," in country_code:
+            return HttpResponse("Invalid country code. Please inform our support team.", status=400)
 
     if len(country_code) == 2:
         ic("lenght of country_code is 2")
@@ -317,13 +322,13 @@ def validate_country_code(country_code):
             return HttpResponse("Invalid country code.", status=400)
     if len(country_code) > 2:
         # Check if the country name exists in django-cities-light
-        exists = Country.objects.filter(name=country_code.capitalize()).exists()
+        exists = await sync_to_async(Country.objects.filter(name=country_code.capitalize()).exists)()
         ic(exists)
         if not exists:
             ic("Not found with the  two first letters of the country name. Checking with the full name.")
             return HttpResponse("Invalid country name.", status=400)
-        else:
-            country_code = country_code[:2].upper()
+    
+    # return country_code[:2].upper()
 
 
 async def send_http_requests(country_code):

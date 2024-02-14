@@ -19,7 +19,10 @@ async def country_view(request, country_code):
     # Get country data from Restcountries API
     ic("country_code: ", country_code)
 
-    validate_country_code(country_code)
+    error_in_code = await validate_country_code(country_code)
+    if error_in_code is not None:
+        return error_in_code
+
 
     # Create the context dictionary
     context = {}
