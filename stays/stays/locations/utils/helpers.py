@@ -325,6 +325,7 @@ async def validate_country_code(country_code):
         exists = await sync_to_async(Country.objects.filter(name=country_code.capitalize()).exists)()
         ic(exists)
         if not exists:
+            
             ic("Not found with the  two first letters of the country name. Checking with the full name.")
             return HttpResponse("Invalid country name.", status=400)
     

@@ -23,7 +23,6 @@ async def country_view(request, country_code):
     if error_in_code is not None:
         return error_in_code
 
-
     # Create the context dictionary
     context = {}
 
@@ -34,9 +33,8 @@ async def country_view(request, country_code):
 
     context["general_information"] = fill_context_general_informations(country_code, country_details)
 
-
     context["general_information"] = append_ninjas_api_general_info(context["general_information"], country_details_ninjas)
-    
+
     environment_data = await fetch_air_weather_time(context["general_information"])
     air_quality_json = environment_data.get("air")
     weather_json = environment_data.get("weather")
@@ -50,8 +48,5 @@ async def country_view(request, country_code):
 
     # World Time
     context["country_time"] = add_time_to_context(world_time_json)
-
-    ic("output")
-    ic(type(context))
-    # ic(context)
+    
     return render(request, 'country.html', context)

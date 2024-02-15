@@ -89,6 +89,7 @@ pvcobra = "^2.0.1"
 # robotframework-browser = "^18.0.0"
 httpx = "^0.26.0"
 sweetify =  "^2.3.1"
+pytest-asyncio = "^0.23.5"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.10,<4.0"
@@ -172,7 +173,7 @@ pipreqs = "^0.4.13"
 pvcobra = "^2.0.1"
 httpx = "^0.26.0"
 sweetify =  "^2.3.1"
-
+pytest-asyncio = "^0.23.5"
 
 [tool.pytest.ini_options]
 pythonpath = "."
