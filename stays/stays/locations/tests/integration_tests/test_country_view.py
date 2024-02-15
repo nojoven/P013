@@ -8,16 +8,24 @@ from locations.models import Country
 from users.models import Profile
 from icecream import ic
 from locations.views import country_view
+from django.core.cache import cache
 
 from django.contrib.auth import login
 from django.utils import timezone
 from django.contrib.sessions.middleware import SessionMiddleware
+
+@pytest.fixture(autouse=True)
+def clear_cache():
+    cache.clear()
+
+
 def add_session_to_request(request):
     """Annotate a request object with a session."""
     middleware = SessionMiddleware(lambda req: None)
     middleware.process_request(request)
     request.session.save()
     return request
+
 
 @pytest.mark.asyncio
 @pytest.mark.django_db
@@ -38,7 +46,6 @@ async def test_country_good_code():
     # Check that the response has a status code of 200
     assert response.status_code == 200
     assert '<!DOCTYPE html>' in response.content.decode()
-
 
 @pytest.mark.asyncio
 @pytest.mark.django_db
