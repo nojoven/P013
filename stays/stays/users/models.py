@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
 
         return user
     
-    def create_user_simply(**params):
+    def create_user_simply(self, **params):
         """Helper function to create new user"""
         return get_user_model().objects.create_user(**params)
 

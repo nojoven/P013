@@ -5,6 +5,29 @@ from users.models import Profile
 from django.utils.text import slugify
 
 @pytest.mark.django_db
+class TestUserManager:
+    def setup_method(self):
+        self.manager = Profile.objects
+
+    def test_create_user(self):
+        user = self.manager.create_user('user2@example.com', 'password')
+        assert user.email == 'user2@example.com'
+        assert user.check_password('password')
+
+    def test_create_user_simply(self):
+        user = self.manager.create_user_simply(email='user3@example.com', password='password')
+        assert user.email == 'user3@example.com'
+        assert user.check_password('password')
+
+    def test_create_superuser(self):
+        user = self.manager.create_superuser('superuser@example.com', 'password')
+        assert user.email == 'superuser@example.com'
+        assert user.check_password('password')
+        assert user.is_staff
+        assert user.is_superuser
+
+
+@pytest.mark.django_db
 class TestProfileModel:
     def setup(self):
         self.user1 = baker.make(Profile, email='user1@example.com')
