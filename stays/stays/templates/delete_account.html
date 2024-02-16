@@ -15,7 +15,7 @@
                     </div>
             {% endif %}
             <div class="d-flex justify-content-center align-items-center vh-100">
-                <form action="/" method="post" class="text-center">
+                <form action="{% url 'users:delete_account' profile.slug %}" method="post" class="text-center">
                     {% csrf_token %}
                     <h1>Are you sure?</h1>
                     <div class="form-group">

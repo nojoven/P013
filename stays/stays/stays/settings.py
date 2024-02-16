@@ -322,11 +322,11 @@ THROTTLE_REDIS_AUTH = 'pass'
 THROTTLE_ENABLED = True
 
 
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
-    },
-}
+# HAYSTACK_CONNECTIONS = {
+#     'default': {
+#         'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+#     },
+# }
 
 
 # python manage.py cleanup_django_defender to unlock

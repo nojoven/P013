@@ -48,11 +48,16 @@ class DeleteProfileView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('core:home')
 
     def get_object(self, queryset=None):
-        return retrieve_current_user(self.request.user, self.model)
+        return self.model.objects.get(email=self.request.user.email)
     
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Profile deleted successfully.', extra_tags='base_success')
         return super().delete(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = self.get_object()
+        return context
 
     def handle_no_permission(self):
         messages.error(self.request, 'You do not have permission to delete this profile.')
