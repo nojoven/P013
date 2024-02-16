@@ -9,7 +9,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.urls import reverse
-
+from users.utils import get_email_to_user, forge_token, generate_recovery_url, generate_reset_uid
 from core.models import Publication
 
 from .models import Profile
@@ -17,7 +17,7 @@ from .models import Profile
 from cities_light.models import CONTINENT_CHOICES
 
 from stays.utils.email_helpers import send_password_reset_email
-from stays.settings import EMAIL_HOST_USER, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME, DEFAULT_EMAIL_DESTINATION
+from stays.settings import EMAIL_HOST_USER, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME, DEFAULT_EMAIL_DESTINATION, DEBUG
 
 from icecream import ic
 
@@ -49,16 +49,21 @@ class PasswordResetForm(DjangoPasswordResetForm):
         # Get the user who requested the password reset
         self.email_to = self.cleaned_data.get("email", DEFAULT_EMAIL_DESTINATION) if not DEFAULT_EMAIL_DESTINATION else DEFAULT_EMAIL_DESTINATION
 
-        self.user = next(self.get_users(self.email_to), None)
+        self.user = get_email_to_user(self)
+
+        # self.user = next(self.get_users(self.email_to), None)
+        # # Vérifiez que l'utilisateur a été correctement récupéré
+        # if self.user is None:
+        #     raise ValueError(f"No user found with email {self.email_to}")
 
         # Generate the password reset token
-        self.token = default_token_generator.make_token(self.user)
+        self.token = forge_token(self.user)
 
         # Generate the uid
-        self.uid = urlsafe_base64_encode(force_bytes(self.user.pk))
+        self.uid = generate_reset_uid(self.user.pk)
 
         # Build the password reset link
-        self.recovery_url = request.build_absolute_uri(reverse('users:password_reset_confirm', kwargs={'uidb64': self.uid, 'token': self.token}))
+        self.recovery_url = generate_recovery_url(request, self.uid, self.token)
 
         send_password_reset_email(
             recovery_url=self.recovery_url,
