@@ -25,7 +25,7 @@ from .forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from friendship.models import Follow
 from icecream import ic
-
+from core.utils.requests_helpers import NeverCacheMixin
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm
 from users.models import Profile, ProfileHasPublication
 
@@ -42,7 +42,7 @@ from neattext.functions import clean_text
 # Create your views here.
 
 
-class DeleteProfileView(LoginRequiredMixin, DeleteView):
+class DeleteProfileView(NeverCacheMixin, LoginRequiredMixin, DeleteView):
     model = Profile
     template_name = 'delete_account.html'
     success_url = reverse_lazy('core:home')
@@ -64,7 +64,7 @@ class DeleteProfileView(LoginRequiredMixin, DeleteView):
         return super().handle_no_permission()
 
 
-class CreateProfileView(CreateView):
+class CreateProfileView(NeverCacheMixin, CreateView):
     """Create a new user in the system"""
     model = Profile
     form_class = RegistrationForm
@@ -87,7 +87,7 @@ class CreateProfileView(CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class AccountLoginView(authentication_views.LoginView):
+class AccountLoginView(NeverCacheMixin, authentication_views.LoginView):
     """Login with a registered profile"""
     model = Profile
     form_class = AccountLoginForm
@@ -123,7 +123,7 @@ class AccountLoginView(authentication_views.LoginView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-class AccountDetailsView(LoginRequiredMixin, DetailView):
+class AccountDetailsView(NeverCacheMixin, LoginRequiredMixin, DetailView):
     model = Profile
     template_name = "account.html"
     http_method_names = ['get', 'post']
@@ -210,7 +210,7 @@ class ProfileStaysListView(ListView):
         return context
 
 
-class UpdateAccountView(LoginRequiredMixin, UpdateView):
+class UpdateAccountView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = AccountEditionForm
     template_name = "settings.html"
@@ -256,7 +256,7 @@ class UpdateAccountView(LoginRequiredMixin, UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class PublishView(LoginRequiredMixin, FormView, CreateView):
+class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
     template_name = 'publish.html'  # replace with your actual template
     model = Publication
     form_class = PublishContentForm

@@ -152,9 +152,9 @@ class PasswordChangeFromConnectedProfile(PasswordChangeForm):
         ]
 
 
-class DeleteProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = [
-            "username"
-        ]
+# class DeleteProfileForm(forms.ModelForm):
+#     class Meta:
+#         model = Profile
+#         fields = [
+#             "username"
+#         ]

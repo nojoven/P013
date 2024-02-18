@@ -9,12 +9,12 @@ from users.forms import AccountEditionForm
 
 fake = Faker()
 
-# @pytest.fixture
-# def profile():
-#     return baker.prepare(Profile, username='testuser', email='test@example.com', password=make_password('testpassword'))
+@pytest.fixture
+def profile():
+    return Profile.objects.create_user(username='testuser', email='test@example.com', password=make_password('testpassword'))
 
 @pytest.fixture
-def form_data():
+def form_data(profile):
     return {
         'profile_picture': SimpleUploadedFile('profile_pic.jpg', b'file_content', content_type='image/jpeg'),
         'username': fake.user_name(),
@@ -26,7 +26,7 @@ def form_data():
         'motto': fake.sentence(),
         'signature': fake.sentence(),
         'continent_of_birth': CONTINENT_CHOICES[0][0],
-        'email': 'test@example.com'
+        'email': 'tester@users.net'
     }
 
 @pytest.mark.django_db
