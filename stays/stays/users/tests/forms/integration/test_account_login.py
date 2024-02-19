@@ -6,6 +6,7 @@ from icecream import ic
 import re
 
 class TestAccountLoginForm(WebTest):
+    csrf_checks = False
     def setUp(self):
         # Créez des instances de modèles nécessaires pour les tests ici
         self.user = baker.make('users.Profile', email='testuser@example.com')
@@ -47,8 +48,6 @@ class TestAccountLoginForm(WebTest):
             'email': 'testuser@example.com',
         }
 
-        # Simulez une requête POST sur la vue de connexion
-        response = self.app.post(reverse('users:login'), params=form_data)
         
         # Simulez une requête POST sur la vue de connexion
         response = self.app.post(reverse('users:login'), params=form_data)

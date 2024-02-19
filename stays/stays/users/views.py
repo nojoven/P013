@@ -108,12 +108,21 @@ class AccountLoginView(NeverCacheMixin, authentication_views.LoginView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
+        ic(form.errors.as_data())
         if 'fromfeed' in self.request.GET and self.request.GET['fromfeed'] == 'fromfeed':
             return JsonResponse({'error': 'Invalid username or password'})
         else:
+             # Extract the error message
+            error_message = form.errors.as_data()[list(form.errors.as_data().keys())[0]][0].messages[0]
+            # Create the full message
+            full_message = f'Validation Error. {error_message}'
             messages.error(
                 self.request,
-                f'Something went wrong. Please check your input ({", ".join([f.capitalize().replace("_"," ") for f in form.errors.as_data().keys()])}).'
+                f'Something went wrong. Please check your input ({", ".join([f.capitalize().replace("_"," ").replace("username","Email") for f in form.errors.as_data().keys()])}).'
+            )
+            messages.error(
+                self.request,
+                full_message
             )
             return self.render_to_response(self.get_context_data(form=form))
 

@@ -101,4 +101,8 @@ class TestCreateProfileViewMessages(TestCase):
             # assert Profile.objects.get(email=form_data['email']) is not None  # Check that the user was created
             messages = list(get_messages(response.wsgi_request))
             self.assertEqual(len(messages), 1)
-            self.assertEqual(str(messages[0]), f"Something went wrong. Please check your input (Email).")
+            self.assertEqual(
+                str(messages[0]),
+                "Something went wrong. Please check your input (Email)."
+            )
+
