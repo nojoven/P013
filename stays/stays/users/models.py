@@ -14,7 +14,7 @@ from friendship.models import Follow
 from cities_light.models import CONTINENT_CHOICES, Country, City
 from django_countries.fields import CountryField
 # from core.models import Publication
-from users.utils import profile_picture_upload_to, build_default_username
+from users.utils import profile_picture_upload_to
 from stays.utils.common_helpers import uuid_generator
 # Create your models here.
 
