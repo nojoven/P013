@@ -6,15 +6,12 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from friendship.models import Follow
 from django.contrib import messages
-from .models import Profile
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.contrib.gis.geoip2 import GeoIP2
-from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.contrib.auth import views as authentication_views
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
@@ -22,23 +19,21 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
 from .forms import PasswordResetForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from friendship.models import Follow
 from icecream import ic
 from core.utils.requests_helpers import NeverCacheMixin
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm
 from users.models import Profile, ProfileHasPublication
 
 from core.models import Publication
-from core.views import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
-from locations.utils.helpers import get_continent_from_code
+from locations.utils.helpers import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 from django_countries import countries
 from users.utils import retrieve_current_user
 from core.utils.models_helpers import profanity_filter_and_update
 # Custom sugar
 from cleantext import clean
 from neattext.functions import clean_text
-
+# from guest_user.decorators import allow_guest_user
+# from guest_user.mixins import AllowGuestUserMixin
 # Create your views here.
 
 
