@@ -58,18 +58,6 @@ class TestAccountLoginView(TestCase):
         self.assertEqual(len(messages), 2)
         self.assertEqual(str(messages[0]), 'Something went wrong. Please check your input (  all  ).')  # Check the error message
 
-    # @patch('users.signals.update_user_status')
-    # def test_login_with_already_authenticated_user(self, mock_update_user_status):
-    #     self.client.login(email='test@example.com', password='testpassword')  # Log in the user
-    #     form_data = {
-    #         'email': 'test@example.com',
-    #         'password': 'testpassword',
-    #     }
-    #     response = self.client.post(self.url, form_data)
-    #     ic(response.status_code)
-    #     self.assertEqual(response.status_code, 302)  # Check that the user is redirected
-    #     mock_update_user_status.assert_not_called()  # Check that the signal was not called
-
 
 @pytest.mark.django_db
 class TestAccountLoginViewFromFeed(TestCase):
