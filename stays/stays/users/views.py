@@ -130,7 +130,7 @@ class AccountLoginView(NeverCacheMixin, authentication_views.LoginView):
 class AccountDetailsView(NeverCacheMixin, LoginRequiredMixin, DetailView):
     model = Profile
     template_name = "account.html"
-    http_method_names = ['get', 'post']
+    http_method_names = ['get']
     slug_field = 'slug'  # Indiquez le nom du champ slug dans votre modèle
     slug_url_kwarg = 'slug'  # Indiquez le nom du paramètre slug dans votre URL
 
