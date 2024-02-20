@@ -46,7 +46,11 @@ Settings
             {% csrf_token %}
                 <div class="grid grid-cols-2 gap-3 p-4">
                     <div class="col-span-2 d-flex align-items-center">
+                        {% if current_user.profile_picture != 'blank-profile-picture.jpg' %}
                         <label for="pofile_picture" class="me-3">Your picture : {{ current_user.profile_picture|split_on_slash }}</label>
+                        {% else %}
+                        <label for="pofile_picture" class="me-3">Your picture : </label>
+                        {% endif %}
                         <img src="{% get_media_prefix %}{{ current_user.profile_picture }}" height="100px" width="100px" />
                         <input type="file" name="profile_picture" value="{{ current_user.profile_picture }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="form-control">
 
@@ -57,11 +61,19 @@ Settings
                     </div>
                     <div>
                         <label for="">First name</label>
+                        {% if current_user.first_name %}
                         <input type="text" name="first_name" placeholder="Your first name.." value="{{ current_user.first_name }}" class="form-control">
+                        {% else %}
+                        <input type="text" name="first_name" placeholder="Your first name.." value="" class="form-control">
+                        {% endif %}
                     </div>
                     <div>
                         <label for="">Last name</label>
+                        {% if current_user.last_name %}
                         <input type="text" name="last_name" placeholder="Your last name.." value="{{ current_user.last_name }}" class="form-control">
+                        {% else %}
+                        <input type="text" name="last_name" placeholder="Your last name.." value="" class="form-control">
+                        {% endif %}
                     </div>
                     {% if not current_user.username %}
                     <div class="col-span-2">
@@ -111,7 +123,11 @@ Settings
                     </div>
                     <div class="col-span-2">
                         <label for="">Signature</label> 
+                        {% if current_user.signature %}
                         <input id="signature" name="signature" placeholder="Profile signature" value="{{ current_user.signature }}" rows="3"  class="form-control">
+                        {% else %}
+                        <input id="signature" name="signature" placeholder="Profile signature" value="" rows="3"  class="form-control">
+                        {% endif %}
                     </div>
                 </div>
 
