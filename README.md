@@ -82,3 +82,6 @@ P13 2023
    - https://freefrontend.com/500-error-page-html-templates
    - A Pen created on CodePen.io. Original URL: [https://codepen.io/shubniggurath/pen/NLYzLj](https://codepen.io/shubniggurath/pen/NLYzLj).
    - [https://codepen.io/jsonyeung/pen/ZMxdPg](https://codepen.io/jsonyeung/pen/ZMxdPg)
+
+
+https://learndjango.com/tutorials/psycopg3-binary-and-django-42-installation-quick-t

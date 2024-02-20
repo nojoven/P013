@@ -72,25 +72,25 @@ if DEBUG is True:
 ALLOWED_HOSTS = ["*", "localhost", "0.0.0.0", "127.0.0.1"]
 
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'root': {
-#         'handlers': ['console'],
-#         'level': 'DEBUG',
-#     },
-#     'loggers': {
-#         'django.db.backends': {
-#             # 'level': 'DEBUG',
-#             'level': 'INFO',
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'ERROR',
+    },
+    'loggers': {
+        'django.db.backends': {
+            # 'level': 'DEBUG',
+            'level': 'ERROR',
+        },
+    },
+}
 
 
 # Application definition
@@ -172,7 +172,7 @@ INSTALLED_APPS = [
 
     # friendship
     "friendship",
-
+    "pagination",
     # sweetify
     'sweetify',
 ]
@@ -218,6 +218,7 @@ MIDDLEWARE = [
     "django_auto_logout.middleware.auto_logout",
     # http error handler
     "stays.utils.errors_helpers.ErrorHandlerMiddleware",
+    'pagination.middleware.PaginationMiddleware',
 ]
 
 ROOT_URLCONF = "stays.urls"
@@ -236,9 +237,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # "django.core.context_processors.request"
+                #"django.core.context_processors.request"
                 # Machina
-                'machina.core.context_processors.metadata',
+                # 'machina.core.context_processors.metadata',
                 # auto logout
                 'django_auto_logout.context_processors.auto_logout_client',
             ],

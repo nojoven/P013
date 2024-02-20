@@ -136,11 +136,11 @@ class AccountDetailsView(NeverCacheMixin, LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
-        user_email = context.get("profile")
-        try:
-            current_user = retrieve_current_user(user_email, self.model)
-        except ObjectDoesNotExist:
-            raise Http404("No profile found for this user")
+        # Get the slug from the URL
+        slug = self.kwargs.get('slug')
+
+        # Get the profile corresponding to the slug
+        current_user = get_object_or_404(self.model, slug=slug)
 
         context["current_user"] = current_user
         
@@ -162,7 +162,7 @@ class AccountDetailsView(NeverCacheMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class ProfileStaysListView(ListView):
+class ProfileStaysListView(NeverCacheMixin, LoginRequiredMixin, ListView):
     model = ProfileHasPublication
     template_name = 'stays.html'
 
@@ -208,6 +208,7 @@ class ProfileStaysListView(ListView):
 
         page = self.request.GET.get('page')
         page_obj = paginator.get_page(page)
+        ic(page_obj)
         context['page_obj'] = page_obj
         context['publications'] = publications
 
