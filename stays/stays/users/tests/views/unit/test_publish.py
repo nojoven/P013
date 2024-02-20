@@ -41,7 +41,8 @@ class TestUpdateAccountView(TestCase):
         self.assertTrue(response.templates[0].name == 'publish.html')  # Check the template
         self.assertIsNotNone(response.context)  # Check the context
         self.assertIn('form', response.context)  # Check the context
-        self.assertIn('current_user', response.context)  # Check the context
+        self.assertIn('active_from_contry_code', response.context)  # Check the context
+        self.assertIn('active_from_contry_name', response.context)  # Check the context
         self.assertIsInstance(response.context['current_user'], User)  # Check the current user
 
     def test_reach_publish_page_without_authenticated_user(self):
