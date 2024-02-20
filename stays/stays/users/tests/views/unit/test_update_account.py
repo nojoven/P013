@@ -6,6 +6,7 @@ from unittest.mock import patch
 from django.contrib.auth import get_user_model
 from stays.utils.common_helpers import uuid_generator
 from neattext.functions import clean_text
+from django.contrib.messages import get_messages
 from icecream import ic
 
 User = get_user_model()
@@ -63,6 +64,17 @@ class TestUpdateAccountView(TestCase):
         self.assertEqual(self.user.about_text, cleaned_about_text)  # Check that the profile was updated with cleaned text
         cleaned_signature = clean_text(dirty_signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=False, multiple_whitespaces=True, special_char=False, emojis=False, stopwords=True)
         self.assertEqual(self.user.signature, cleaned_signature)
+        # Get the messages from the response
+        messages = list(get_messages(response.wsgi_request))
+
+        # Check that there is exactly one message
+        self.assertEqual(len(messages), 1)
+
+        # Check that the message is what you expect
+        self.assertEqual(str(messages[0]), 'Profile updated successfully!')
+
+        # Check the message's extra tags
+        self.assertEqual(messages[0].extra_tags, 'base_success')
 
 
     @patch('users.signals.update_user_status')
@@ -101,3 +113,23 @@ class TestUpdateAccountView(TestCase):
         response = self.client.post(self.url, data=form_data, secure=False)
         self.assertEqual(response.status_code, 302)  # Check that the form submission is successful
 
+
+    @patch('users.signals.update_user_status')
+    def test_update_account_invalid_form(self, mock_update_user_status):
+        self.client.force_login(self.user)  # Log in the user
+        continent_of_birth = "UU"
+        form_data = {'continent_of_birth': continent_of_birth}
+        response = self.client.post(self.url, data=form_data, secure=False)
+        ic(response.status_code)
+         # Get the messages from the response
+        messages = list(get_messages(response.wsgi_request))
+
+        # Check that there is exactly one message
+        self.assertEqual(len(messages), 1)
+
+        # Check that the message is an error
+        self.assertEqual(messages[0].level_tag, 'error')
+
+        # Check that the message text is what you expect
+        expected_message = 'Something went wrong. Please check your input (Continent of birth).'
+        self.assertEqual(str(messages[0]), expected_message)
