@@ -254,7 +254,6 @@ class UpdateAccountView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
         return super(UpdateAccountView, self).form_valid(form)
 
     def form_invalid(self, form):
-        ic(form.errors.as_data())
         messages.error(
             self.request,
             f'Something went wrong. Please check your input ({", ".join([f.capitalize().replace("_"," ") for f in form.errors.as_data().keys()])}).'

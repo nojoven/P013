@@ -30,7 +30,10 @@ class TestUpdateAccountView(TestCase):
         ic(response.status_code)
         self.assertEqual(response.status_code, 200)  # Check that the user can access the page
         self.assertTemplateUsed(response, 'settings.html')  # Check the template
+        self.assertIsNotNone(response.context)  # Check the context
         self.assertIn('form', response.context)  # Check the context
+        self.assertIn('current_user', response.context)  # Check the context
+        self.assertIsInstance(response.context['current_user'], User)  # Check the current user
 
     def test_update_account_without_authenticated_user(self):
         response = self.client.get(self.url)
@@ -58,87 +61,43 @@ class TestUpdateAccountView(TestCase):
         ic(set(dirty_about_text.split()).symmetric_difference(set(cleaned_about_text.split())))
         ic(f"Something changed : {dirty_about_text != cleaned_about_text}")
         self.assertEqual(self.user.about_text, cleaned_about_text)  # Check that the profile was updated with cleaned text
-        
         cleaned_signature = clean_text(dirty_signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=False, multiple_whitespaces=True, special_char=False, emojis=False, stopwords=True)
-        self.assertEqual(self.user.signature, cleaned_signature)  # Check that the profile was updated with cleaned text
-        # addition_idxs = get_indexes_of_additions(cleaned_signature, dirty_signature)
-        # hl_signature = highlight_string_at_idxs(dirty_signature, addition_idxs)
-        # ic(hl_signature)
-        # self.assertEqual(self.user.signature, cleaned_signature)  # Check that the profile was updated with cleaned text
+        self.assertEqual(self.user.signature, cleaned_signature)
 
 
+    @patch('users.signals.update_user_status')
+    def test_update_account_form_submission_empty_signature(self, mock_update_user_status):
+        self.client.force_login(self.user)  # Log in the user
+        dirty_about_text = "Some NEW dirty about text with URLs like https://example.com, emails like test@example.com, phone numbers like +1-555-555-5555, numbers like 12345, currency symbols like $, multiple whitespaces, special characters like @#%^&*, emojis like 😃, and stopwords like 'the', 'is', 'in'."
+        form_data = {'about_text': dirty_about_text}
+        response = self.client.post(self.url, data=form_data, secure=False)
+        self.assertEqual(response.status_code, 302)  # Check that the form submission is successful
+        self.user.refresh_from_db()
+        cleaned_about_text = clean_text(dirty_about_text, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=False, multiple_whitespaces=True, special_char=False, emojis=False, stopwords=True)
+        ic(dirty_about_text)
+        ic("becomes")
+        ic(cleaned_about_text)
+        ic("changes:")
+        ic(set(dirty_about_text.split()).symmetric_difference(set(cleaned_about_text.split())))
+        ic(f"Something changed : {dirty_about_text != cleaned_about_text}")
+        self.assertEqual(self.user.about_text, cleaned_about_text)  # Check that the profile was updated with cleaned text
 
 
-    # @patch('users.signals.update_user_status')
-    # def test_update_account_form_submission_empty_signature(self, mock_update_user_status):
-    #     self.client.force_login(self.user)  # Log in the user
-    #     dirty_about_text = "Some dirty about text with URLs like https://example.com, emails like test@example.com, phone numbers like +1-555-555-5555, numbers like 12345, currency symbols like $, multiple whitespaces, special characters like @#%^&*, emojis like 😃, and stopwords like 'the', 'is', 'in'."
-    #     form_data = {'about_text': dirty_about_text, 'signature': ''}
-    #     response = self.client.post(self.url, data=form_data)
-    #     ic(response.status_code)
-    #     self.assertEqual(response.status_code, 302)  # Check that the form submission is successful
-    #     self.user.refresh_from_db()
-    #     cleaned_about_text = clean_text(dirty_about_text, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, multiple_whitespaces=True, special_char=True, emojis=True, stopwords=True)
-    #     self.assertEqual(self.user.about_text, cleaned_about_text)  # Check that the profile was updated with cleaned text
+    @patch('users.signals.update_user_status')
+    def test_update_account_form_submission_empty_about_text(self, mock_update_user_status):
+        self.client.force_login(self.user)  # Log in the user
+        dirty_signature = "Some dirty signature with URLs like https://example.com, emails like test@example.com, phone numbers like +1-555-555-5555, numbers like 12345, currency symbols like $, multiple whitespaces, special characters like @#%^&*, emojis like 😃, and stopwords like 'the', 'is', 'in'."
+        form_data = {'signature': dirty_signature}
+        response = self.client.post(self.url, data=form_data, secure=False)
+        self.assertEqual(response.status_code, 302)  # Check that the form submission is successful
+        self.user.refresh_from_db()
+        cleaned_signature = clean_text(dirty_signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=False, multiple_whitespaces=True, special_char=False, emojis=False, stopwords=True)
+        self.assertEqual(self.user.signature, cleaned_signature)
 
+    @patch('users.signals.update_user_status')
+    def test_update_account_form_submission_empty_data(self, mock_update_user_status):
+        self.client.force_login(self.user)  # Log in the user
+        form_data = {}
+        response = self.client.post(self.url, data=form_data, secure=False)
+        self.assertEqual(response.status_code, 302)  # Check that the form submission is successful
 
-    # @patch('users.signals.update_user_status')
-    # def test_update_account_form_submission_empty_about_text(self, mock_update_user_status):
-    #     self.client.force_login(self.user)  # Log in the user
-    #     dirty_signature = "Some dirty signature with URLs like https://example.com, emails like test@example.com, phone numbers like +1-555-555-5555, numbers like 12345, currency symbols like $, multiple whitespaces, special characters like @#%^&*, emojis like 😃, and stopwords like 'the', 'is', 'in'."
-    #     form_data = {'about_text': '', 'signature': dirty_signature}
-    #     response = self.client.post(self.url, data=form_data)
-    #     ic(response.status_code)
-    #     self.assertEqual(response.status_code, 302)  # Check that the form submission is successful
-    #     self.user.refresh_from_db()
-    #     cleaned_signature = clean_text(dirty_signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, multiple_whitespaces=True, special_char=True, emojis=True, stopwords=True)
-    #     self.assertEqual(self.user.signature, cleaned_signature)  # Check that the profile was updated with cleaned text
-
-
-        
-    # @patch('users.signals.update_user_status')
-    # def test_update_account_form_submission_with_empty_data(self, mock_update_user_status):
-    #     self.client.force_login(self.user)  # Log in the user
-    #     form_data = {
-    #         'username': '',
-    #         'first_name': '',
-    #         'last_name': '',
-    #         'season_of_birth': '',
-    #         'about_text': '',
-    #         'motto': '',
-    #         'signature': '',
-    #         'continent_of_birth': '',
-    #     }
-    #     response = self.client.post(self.url, data=form_data)
-    #     ic(response.status_code)
-    #     self.assertEqual(response.status_code, 302)  # Check that the form submission is successful
-    #     self.user.refresh_from_db()
-    #     self.assertEqual(self.user.about_text, '')  # Check that the profile was updated with cleaned text
-    #     self.assertEqual(self.user.signature, '')  # Check that the profile was updated with cleaned text
-
-
-    # @patch('users.signals.update_user_status')
-    # def test_update_account_form_submission_with_dirty_data(self, mock_update_user_status):
-    #     self.client.force_login(self.user)  # Log in the user
-    #     dirty_about_text = "Some dirty about text with URLs like https://example.com, emails like test@example.com, phone numbers like +1-555-555-5555, numbers like 12345, currency symbols like $, multiple whitespaces, special characters like @#%^&*, emojis like 😃, and stopwords like 'the', 'is', 'in'."
-    #     dirty_signature = "Some dirty signature with URLs like https://example.com, emails like test@example.com, phone numbers like +1-555-555-5555, numbers like 12345, currency symbols like $, multiple whitespaces, special characters like @#%^&*, emojis like 😃, and stopwords like 'the', 'is', 'in'."
-    #     form_data = {
-    #         'profile_picture': 'testimg.jpg',
-    #         'username': 'NewUsername',
-    #         'first_name': 'NewFirstName',
-    #         'last_name': 'NewLastName',
-    #         'season_of_birth': 'Summer',
-    #         'year_of_birth': 1995,
-    #         'about_text': dirty_about_text,
-    #         'motto': 'NewMotto',
-    #         'signature': dirty_signature,
-    #         'continent_of_birth': 'NA',
-    #     }
-    #     response = self.client.post(self.url, data=form_data)
-    #     ic(response.status_code)
-    #     self.assertEqual(response.status_code, 302)  # Check that the form submission is successful
-    #     self.user.refresh_from_db()
-    #     cleaned_about_text = clean_text(dirty_about_text, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, multiple_whitespaces=True, special_char=True, emojis=True, stopwords=True)
-    #     cleaned_signature = clean_text(dirty_signature, urls=True, emails=True, phone_num=True, numbers=True, currency_symbols=True, multiple_whitespaces=True, special_char=True, emojis=True, stopwords=True)
-    #     self.assertEqual(self.user.about_text, cleaned_about_text)  # Check that the profile was updated with cleaned text
-    #     self.assertEqual(self.user.signature, cleaned_signature)  # Check that the profile was updated with cleaned text
