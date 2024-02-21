@@ -11,15 +11,16 @@ from django.utils.encoding import force_bytes
 from django.urls import reverse
 from users.utils import get_email_to_user, forge_token, generate_recovery_url, generate_reset_uid
 from core.models import Publication
-
+from django.shortcuts import redirect
 from .models import Profile
 
 from cities_light.models import CONTINENT_CHOICES
-
 from stays.utils.email_helpers import send_password_reset_email
 from stays.settings import EMAIL_HOST_USER, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME, DEFAULT_EMAIL_DESTINATION, DEBUG
-
+from django.contrib import messages
 from icecream import ic
+
+
 
 
 class RegistrationForm(UserCreationForm):
@@ -38,6 +39,10 @@ class RegistrationForm(UserCreationForm):
         ]
 
 
+# Dans votre formulaire
+class UserNotFoundError(Exception):
+    pass
+
 class PasswordResetForm(DjangoPasswordResetForm):
     def save(self, request=None, **kwargs):
 
@@ -47,7 +52,7 @@ class PasswordResetForm(DjangoPasswordResetForm):
         kwargs.pop('email_template_name', None)
 
         # Get the user who requested the password reset
-        self.email_to = self.cleaned_data.get("email", DEFAULT_EMAIL_DESTINATION) if not DEFAULT_EMAIL_DESTINATION else DEFAULT_EMAIL_DESTINATION
+        self.email_to = self.cleaned_data.get("email", DEFAULT_EMAIL_DESTINATION)  # if not DEFAULT_EMAIL_DESTINATION else DEFAULT_EMAIL_DESTINATION
 
         self.user = get_email_to_user(self)
 

@@ -3,7 +3,7 @@ from django_q.tasks import async_task
 from django.core.paginator import Paginator
 import json
 from django.db.models import Count
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from friendship.models import Follow
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseNotAllowed
@@ -21,9 +21,8 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
 from .forms import PasswordResetForm
 from icecream import ic
 from core.utils.requests_helpers import NeverCacheMixin
-from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm
+from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm, UserNotFoundError
 from users.models import Profile, ProfileHasPublication
-
 from core.models import Publication
 from locations.utils.helpers import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 from django_countries import countries
@@ -366,6 +365,19 @@ class PasswordResetView(PasswordResetView):
     template_name = 'password_reset_form.html'
     success_url = reverse_lazy('users:password_reset_done')
 
+    def form_invalid(self, form):
+        messages.error(self.request, "There was an error in the form. Please check your input.")
+        return super().form_invalid(form)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            try:
+                return self.form_valid(form)
+            except Exception as e:
+                messages.error(request, str(e))
+                return self.form_invalid(form)
+        return redirect('users:password_reset')
 
 class PasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'password_reset_confirm.html'  # point this to your template
