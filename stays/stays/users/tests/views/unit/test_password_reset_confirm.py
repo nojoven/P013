@@ -37,6 +37,7 @@ class PasswordResetViewTest(TestCase):
     def test_view_reachable(self):
         response = self.client.get(self.new_password_input_form_url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'password_reset_confirm.html')
 
     def test_password_reset(self):
         form_data = {'new_password1': 'newpassword', 'new_password2': 'newpassword'}
