@@ -19,7 +19,7 @@ class TestTokenGenerator(PasswordResetTokenGenerator):
 
 @override_settings(CSRF_COOKIE_SECURE=False, CSRF_COOKIE_HTTPONLY=False, SESSION_COOKIE_SECURE=False)
 @pytest.mark.django_db
-class PasswordResetViewTest(TestCase):
+class PasswordResetConfirmViewTest(TestCase):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=False)
         self.user = baker.make(User, email=settings.DEFAULT_EMAIL_DESTINATION)
