@@ -27,7 +27,8 @@ class PasswordResetViewTest(TestCase):
 
     def test_view_class(self):
         response = self.client.get(reverse('users:password_reset'))
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'password_reset_form.html')
 
     def test_view_success_url_user_does_not_exist(self):
         form_data = {'email': 'test@example.com'}
