@@ -29,4 +29,3 @@ def generate_reset_uid(pk):
 
 def generate_recovery_url(request, uid, token):
     return request.build_absolute_uri(reverse('users:password_reset_confirm', kwargs={'uidb64': uid, 'token': token}))
-
