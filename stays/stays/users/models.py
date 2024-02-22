@@ -1,19 +1,12 @@
-from django.contrib.auth.signals import user_logged_in, user_logged_out
-from django.dispatch import receiver
-from channels.db import database_sync_to_async
 from django.contrib.auth import  get_user_model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from channels.db import database_sync_to_async
-from django.conf import settings as dj_conf_settings
 from core.models import Publication
-from core.utils.models_helpers import UUIDFieldForeignKey, SlugFieldForeignKey, BooleanFieldForeignKey
+from core.utils.models_helpers import UUIDFieldForeignKey, SlugFieldForeignKey
 from friendship.models import Follow
-from cities_light.models import CONTINENT_CHOICES, Country, City
-from django_countries.fields import CountryField
-# from core.models import Publication
+from cities_light.models import CONTINENT_CHOICES
 from users.utils import profile_picture_upload_to
 from stays.utils.common_helpers import uuid_generator
 # Create your models here.
