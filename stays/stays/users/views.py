@@ -442,12 +442,12 @@ def follow_profile(request, slug):
     relation_request = json.loads(request.body)
     # Récupère le profil demandeur et le profil cible à partir des slugs
     profile_asking = get_object_or_404(Profile, slug=relation_request.get('asking'))
-    profile_asking_slug = Profile.objects.get(email=profile_asking).slug
     profile_target = get_object_or_404(Profile, slug=relation_request.get('target'))
 
-    # Vérifie si l'utilisateur demandeur est l'utilisateur actuel
-    if profile_asking_slug != request.user.slug:
-        return JsonResponse({"error": "Invalid asking user"}, status=400)
+    # profile_asking_slug = Profile.objects.get(email=profile_asking).slug
+    # # Vérifie si l'utilisateur demandeur est l'utilisateur actuel
+    # if profile_asking_slug != request.user.slug:
+    #     return JsonResponse({"error": "Invalid asking user"}, status=400)
 
     # Vérifie la valeur de "relation"
     if relation_request.get('relation') == 'follow':
