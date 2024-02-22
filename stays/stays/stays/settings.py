@@ -82,12 +82,12 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'ERROR',
+        'level': 'INFO',
     },
     'loggers': {
         'django.db.backends': {
             # 'level': 'DEBUG',
-            'level': 'ERROR',
+            'level': 'INFO',
         },
     },
 }

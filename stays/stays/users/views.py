@@ -392,7 +392,7 @@ class PasswordResetDoneView(PasswordResetDoneView):
     template_name = 'password_reset_done.html'
 
 
-class ProfileDetailView(DetailView):
+class ProfileDetailView(NeverCacheMixin, DetailView):
     model = Profile
     template_name = 'profile.html'
     context_object_name = 'profile'
@@ -409,28 +409,26 @@ class ProfileDetailView(DetailView):
 
             # Modifie la valeur de profile.continent
             profile.continent_of_birth = continent_fullname
-            
+
             profile.number_of_published_stays = ProfileHasPublication.objects.filter(user_profile=profile.slug).count()
-
             profile.save()
-
             return profile
 
         except ObjectDoesNotExist:
             raise Http404("Désolé, ce profil n'existe plus.")
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile = self.get_object()
-        viewer = Profile.objects.get(slug=self.request.user.slug)
+        profile = self.object
+        if hasattr(self.request.user, 'slug'):
+            viewer = Profile.objects.get(slug=self.request.user.slug)
 
-        if Follow.objects.follows(viewer, profile):
-            context['viewer_follow_button'] = '<button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOWING</button>'
-            context['page_viewer_follows_profile'] = True
-        else:
-            context['viewer_follow_button'] = '<button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOW ME</button>'
-            context['page_viewer_follows_profile'] = False
-
+            if Follow.objects.follows(viewer, profile):
+                context['viewer_follow_button'] = '<button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOWING</button>'
+                context['page_viewer_follows_profile'] = True
+            else:
+                context['viewer_follow_button'] = '<button id="followButton" type="button" class="btn btn-info text-white fw-bold border border-dark">FOLLOW ME</button>'
+                context['page_viewer_follows_profile'] = False
         return context
 
 

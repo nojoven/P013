@@ -9,7 +9,10 @@ from django.test import override_settings
 from django.test import TestCase, Client
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from stays.utils.common_helpers import uuid_generator
+from friendship.models import Follow
+
 User = get_user_model()
 
 
@@ -17,12 +20,15 @@ User = get_user_model()
 @pytest.mark.django_db
 class ProfileDetailViewTest(TestCase):
     def setUp(self):
-        self.client = Client(enforce_csrf_checks=False)  # Disable CSRF checks
-        
+        # Disable CSRF checks
+        self.client = Client(enforce_csrf_checks=False)
+        self.client2 = Client(enforce_csrf_checks=False)
+
         self.user1 = baker.make(User, email='testeurdeouf@example.com')
         self.user1.set_password('testpassword')
         self.user1.username = 'testeurdeouf'
         self.user1.slug = f"testeurdeouf{uuid_generator()}"
+        self.user1.continent_of_birth = 'EU'
 
         self.user1.save()
         self.user1_profile_url = reverse('users:profile', kwargs={'slug': self.user1.slug})
@@ -31,50 +37,60 @@ class ProfileDetailViewTest(TestCase):
         self.user2.set_password('test_pKassword82312!')
         self.user2.username = 'testeurpro'
         self.user2.slug = f"testeurpro{uuid_generator()}"
+        self.user2.continent_of_birth = 'EU'
         self.user2.save()
 
+    @patch('users.signals.update_user_status')
+    def test_with_registered_viewer(self, mock_update_user_status):
 
-    def test_with_unauthenticated_user(self):
-        # Log in the user
-        # self.client.login(email=self.user1.email, password='testpassword')
-        ic(self.user1.slug)
-        ic(self.user1_profile_url)
-        ic(self.user2.slug)
+        self.client.force_login(self.user2)
+
+        assert User.objects.get(slug=self.user1.slug) is not None
+        assert User.objects.get(slug=self.user2.slug) is not None
+
         response = self.client.get(self.user1_profile_url, secure=False)
-        ic(response)
         # Check the status code
         assert response.status_code == 200
 
         # # Check the template used
-        # self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'profile.html')
 
         # Check the context data
         context = response.context
         assert 'user' in context
-        assert context['user'] == self.user1
-        assert 'page_viewer_follows_profile' in context
-        assert context['page_viewer_follows_profile'] is False
-        assert 'viewer_follow_button' in context
+        assert context['user'].slug != self.user1.slug
+        assert context['user'].slug == self.user2.slug
         assert ">FOLLOW ME<" in context['viewer_follow_button']
+        assert context['page_viewer_follows_profile'] is False
 
 
 
+    def test_with_unregistered_user(self):
+        response2 = self.client2.get(self.user1_profile_url, secure=False, )
+        # Check the status code
+        assert response2.status_code == 200
+        assert 'viewer_follow_button' not in response2.context
+
+    
     @patch('users.signals.update_user_status')
-    def test_with_unauthenticated_user(self, mock_update_user_status):
+    def test_with_registered_viewer_following(self, mock_update_user_status):
         self.client.force_login(self.user2)
-        ic(self.user2.slug)
+
+        # Make self.user2 follow self.user1
+        Follow.objects.add_follower(self.user2, self.user1)
+
+        assert User.objects.get(slug=self.user1.slug) is not None
+        assert User.objects.get(slug=self.user2.slug) is not None
+
         response = self.client.get(self.user1_profile_url, secure=False)
-        ic(response)
+
         # Check the status code
         assert response.status_code == 200
 
-        # Check the messages
-        # messages = list(get_messages(response.wsgi_request))
-        # assert len(messages) == 1
-        # assert str(messages[0]) == 'Profile detail view accessed successfully.'
-
-        # Check the signal was called
-        # mock_signal.assert_called_once_with(sender=Profile, instance=profile)
-
-        # Print the response content for debugging
-        ic(response.content)
+        # Check the context data
+        context = response.context
+        assert 'user' in context
+        assert context['user'].slug != self.user1.slug
+        assert context['user'].slug == self.user2.slug
+        assert ">FOLLOWING<" in context['viewer_follow_button']
+        assert context['page_viewer_follows_profile'] is True
