@@ -2,31 +2,13 @@
 from stays.utils.common_helpers import uuid_generator
 from core.utils.models_helpers import (
     voice_story_upload_to,
-    picture_upload_to
+    picture_upload_to,
+    ContentTypes
 )
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
-from core.publications_types import ContentTypes
 from django_countries.fields import CountryField
-
-# def voice_story_upload_to(instance, filename):
-#     return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/voice/{filename}"
-
-# def picture_upload_to(instance, filename):
-#     return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/picture/{filename}"
-
-# def gallery_upload_to(instance, filename):
-#     return f"uploads/galleries/gallery/{instance.gallery.uuid}/publication/{instance.gallery.publication.uuid}/{filename}"
-
-# class PublicationType(models.Model):
-#     def __str__(self):
-#         return self.content_type
-# 
-#     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
-#     is_text = models.BooleanField(default=True)
-#     is_voice = models.BooleanField(default=False)
-
 
 # Create your models here.
 class Publication(models.Model):

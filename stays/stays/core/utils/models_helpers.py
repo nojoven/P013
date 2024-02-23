@@ -5,6 +5,7 @@ from stays.settings import NINJAS_API_KEY as napk
 from icecream import ic
 from django.db.models import Prefetch
 from datetime import datetime
+from enum import Enum
 
 
 def get_publications_for_feed(publication_model, country_model, find_cities_light_country_name_with_code):
@@ -114,9 +115,9 @@ class BooleanFieldForeignKey(models.ForeignKey):
         super().__init__(to, **kwargs)
 
 
-# def get_all_profiles():
-#     profiles = users_models.Profile.objects.all()
-#     return profiles
+class ContentTypes(Enum):
+    text = ("text", "text")
+    voice = ("voice", "voice")
 
 
 def get_profile_from_email(email: str):

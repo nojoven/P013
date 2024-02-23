@@ -8,14 +8,8 @@ from core.utils.models_helpers import(
     NullableIntegerFieldForeignKey,
     NullableBigIntegerFieldForeignKey,
     BooleanFieldForeignKey,
-    users_models,
     cache_none,
-    get_profile_from_email,
-    get_author_picture_from_slug,
-    voice_story_upload_to,
-    picture_upload_to,
-    profanity_filter_and_update,
-    get_publications_for_feed,
+    ContentTypes
     )
 from stays.utils.common_helpers import uuid_generator
 from django.contrib.auth import get_user_model
@@ -100,3 +94,8 @@ def test_cache_none():
     assert cache_none(1, 2, a=3, b=4) is None
 
 
+# Test de la classe ContentTypes
+def test_content_types():
+    # Vérification que les valeurs de ContentTypes sont correctes
+    assert ContentTypes.text.value == ("text", "text")
+    assert ContentTypes.voice.value == ("voice", "voice")
