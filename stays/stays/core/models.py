@@ -34,8 +34,7 @@ class Publication(models.Model):
         default=0,
         validators=[MinValueValidator(0, message="Upvotes count cannot be negative.")]
     )
-    reveal_city = models.BooleanField(default=False)
-    city_name = models.CharField(max_length=255, null=True)
+
 
 
     def get_absolute_url(self):

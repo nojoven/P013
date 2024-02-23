@@ -161,7 +161,7 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
     model = Publication
     form_class = PublicationEditForm
     template_name = 'update_publication.html'
-    exclude_fields = ['upvotes_count', 'reveal_city', 'content_type', 'published_from_country_code']
+    exclude_fields = ['upvotes_count', 'content_type', 'published_from_country_code']
     years = list(range(1950, 2025))
     seasons = ['Spring', 'Summer', 'Autumn', 'Winter']
     file_fields = ['picture', 'voice_story']

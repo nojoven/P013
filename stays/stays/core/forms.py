@@ -13,7 +13,7 @@ class UpdateStayCountrySelectWidget(CountrySelectWidget):
 class PublicationEditForm(forms.ModelForm):
     class Meta:
         model = Publication
-        fields = ['title', 'season_of_stay', 'year_of_stay', 'summary', 'text_story', 'voice_story', 'content_type', 'country_code_of_stay', 'published_from_country_code', 'picture', 'upvotes_count', 'reveal_city']
+        fields = ['title', 'season_of_stay', 'year_of_stay', 'summary', 'text_story', 'voice_story', 'content_type', 'country_code_of_stay', 'published_from_country_code', 'picture', 'upvotes_count']
         widgets = {
             'voice_story': forms.FileInput(attrs={'no_clear': True}),
             'picture': forms.FileInput(attrs={'no_clear': True})
