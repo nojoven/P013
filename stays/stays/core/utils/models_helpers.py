@@ -4,6 +4,7 @@ from users import models as users_models
 from stays.settings import NINJAS_API_KEY as napk
 from icecream import ic
 from django.db.models import Prefetch
+from datetime import datetime
 
 
 def cache_none(*args, **kwargs):
@@ -124,3 +125,15 @@ def get_author_picture_from_slug(author_slug: str):
     author_slug = author_slug
     author_profile = users_models.Profile.objects.get(slug=author_slug)
     return author_profile.profile_picture
+
+
+def voice_story_upload_to(instance, filename):
+    return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/voice/{filename}"
+
+def picture_upload_to(instance, filename):
+    return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/picture/{filename}"
+
+# def gallery_upload_to(instance, filename):
+#     return f"uploads/galleries/gallery/{instance.gallery.uuid}/publication/{instance.gallery.publication.uuid}/{filename}"
+
+
