@@ -7,9 +7,6 @@ from django.db.models import Prefetch
 from datetime import datetime
 
 
-def cache_none(*args, **kwargs):
-    return None
-
 def get_publications_for_feed(publication_model, country_model, find_cities_light_country_name_with_code):
     # Fetch all publications and related upvotes
     publications = publication_model.objects.prefetch_related(
@@ -37,7 +34,6 @@ def get_publications_for_feed(publication_model, country_model, find_cities_ligh
     return publications
 
 
-
 def profanity_filter_and_update(publication):
     try:
         text = publication.text_story
@@ -60,6 +56,12 @@ def profanity_filter_and_update(publication):
         ic(f"Request to profanity filter API failed: {e}")
     except Exception as e:
         ic(f"Unexpected error in profanity_filter_and_update: {e}")
+
+
+
+def cache_none(*args, **kwargs):
+    return None
+
 
 
 class UUIDFieldForeignKey(models.ForeignKey):
@@ -112,9 +114,9 @@ class BooleanFieldForeignKey(models.ForeignKey):
         super().__init__(to, **kwargs)
 
 
-def get_all_profiles():
-    profiles = users_models.Profile.objects.all()
-    return profiles
+# def get_all_profiles():
+#     profiles = users_models.Profile.objects.all()
+#     return profiles
 
 
 def get_profile_from_email(email: str):
@@ -126,14 +128,8 @@ def get_author_picture_from_slug(author_slug: str):
     author_profile = users_models.Profile.objects.get(slug=author_slug)
     return author_profile.profile_picture
 
-
 def voice_story_upload_to(instance, filename):
     return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/voice/{filename}"
 
 def picture_upload_to(instance, filename):
     return f"uploads/{instance.author_slug}/{datetime.now().strftime('%Y/%m/%d')}/{instance.uuid}/picture/{filename}"
-
-# def gallery_upload_to(instance, filename):
-#     return f"uploads/galleries/gallery/{instance.gallery.uuid}/publication/{instance.gallery.publication.uuid}/{filename}"
-
-
