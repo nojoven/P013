@@ -1,6 +1,6 @@
 # from datetime import datetime
-from stays.utils.common_helpers import (
-    uuid_generator,
+from stays.utils.common_helpers import uuid_generator
+from core.utils.models_helpers import (
     voice_story_upload_to,
     picture_upload_to
 )
