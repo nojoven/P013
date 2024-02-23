@@ -31,8 +31,8 @@ def test_voice_story_upload_to():
 # Test de la fonction picture_upload_to
 def test_picture_upload_to():
     # Création d'un profil
-    profile = baker.make(Profile, 
-    email='testadmin@example.com', 
+    profile = baker.make(Profile,
+    email='testadmin@example.com',
     slug = f"'testadmin@example.com'{uuid_generator()}",
     username = 'testadmin',
     profile_picture = 'picture.jpg'
