@@ -1,23 +1,12 @@
 # Importations nécessaires pour les tests
-import pytest
-from django_countries import countries
 from datetime import datetime
 from model_bakery import baker
-from core.models import Publication
-from users.models import Profile
 from stays.utils.common_helpers import uuid_generator
-from icecream import ic
 from django.test import TestCase
-from django.urls import reverse
-from model_bakery import baker
 from core.models import Publication, PublicationUpvote
 from users.models import Profile
-from stays.utils.common_helpers import uuid_generator
 from core.utils.models_helpers import ContentTypes
-from django.core.validators import MaxValueValidator, MinValueValidator
-from datetime import datetime
-from django.db.models.signals import post_save
-from icecream import ic
+
 
 class PublicationUpvoteModelTest(TestCase):
 
