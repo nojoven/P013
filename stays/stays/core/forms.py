@@ -1,6 +1,7 @@
 from django import forms
 from core.models import Publication
 from core.utils.models_helpers import ContentTypes
+from icecream import ic
 
 # class UpdateStayCountrySelectWidget(CountrySelectWidget):
 #     def get_context(self, name, value, attrs):
@@ -21,6 +22,8 @@ class PublicationEditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PublicationEditForm, self).__init__(*args, **kwargs)
+        ic(self.fields)
+        ic(self.instance)
         if self.instance.content_type == ContentTypes.voice.value[0]:
             self.fields['text_story'].disabled = True
             self.fields['voice_story'].required = True

@@ -28,7 +28,7 @@ class Publication(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     content_type = models.CharField(max_length=5, default="text", blank=False, null=True, choices=[ContentTypes.voice.value, ContentTypes.text.value])
     country_code_of_stay = CountryField(null=True)
-    published_from_country_code = CountryField(null=True)
+    published_from_country_code = CountryField(null=True, default="IN")
     picture = models.ImageField(upload_to=picture_upload_to, default="seals-6627197_1280.jpg", null=True, max_length=800)
     upvotes_count = models.IntegerField(
         default=0,

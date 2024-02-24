@@ -1,4 +1,5 @@
 import json
+from django.core.cache import cache
 from django.middleware.csrf import get_token
 from stays.settings import ADMIN_EMAIL, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME
 from django.contrib import messages
@@ -157,7 +158,7 @@ class PublicationDeleteView(LoginRequiredMixin, DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class PublicationUpdateView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
+class PublicationUpdateView(LoginRequiredMixin, UpdateView):
     model = Publication
     form_class = PublicationEditForm
     template_name = 'update_publication.html'
@@ -168,6 +169,13 @@ class PublicationUpdateView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        publication_uuid = context['object'].uuid
+        publication = cache.get(f'publication_{publication_uuid}')
+        if publication is None:
+            publication = context['object']
+            cache.set(f'publication_{publication_uuid}', publication)
+        context["published_from_country_code"] = publication.published_from_country_code
+        context['object'] = publication
         context['title'] = context['object'].title
         context['years'] = PublicationUpdateView.years
         context['seasons'] = PublicationUpdateView.seasons
