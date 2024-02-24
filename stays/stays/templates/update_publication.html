@@ -22,8 +22,13 @@ Edit Publication
                 <form method="post" class="mt-4" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% for field in form %}
-                        {% if field.name not in exclude_fields %}
-                            {% if field.name == 'year_of_stay' %}
+                        {% if field not in exclude_fields %}
+                            {% if field.name == 'title' %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                            {% elif field.name == 'year_of_stay' %}
                                 <div class="mb-3">
                                     <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                                     <select name="{{ field.name }}" class="form-control">
@@ -52,22 +57,30 @@ Edit Publication
                                         {% endfor %}
                                     </select>
                                 </div>
-                            {% elif field.name == 'voice_story' and form.instance.content_type != 'text' %}
-                                <div class="mb-3">
-                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {% elif field.name == 'voice_story' and form.instance.content_type == 'voice' %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {% if field.value %}
                                     <audio controls class="embed-responsive-item">
                                         <source src="{{ field.value.url }}">
                                     </audio>
-                                    {{ field }}
-                                </div>
-                            {% elif field.name != 'voice_story' %}
+                                {% endif %}
+                                {{ field }}
+                            </div>
+                            {% elif field.name == 'text_story' and form.instance.content_type == 'text' %}
                                 <div class="mb-3">
                                     <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                                     {{ field }}
                                 </div>
                             {% endif %}
-                            {% if field.name == 'picture' and field.value %}
-                                <img loading="lazy" src="{{ field.value.url }}" alt="Current image">
+                            {% if field.name == 'picture' %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {% if field.value %}
+                                        <img loading="lazy" src="{{ field.value.url }}" alt="Current image" >
+                                    {% endif %}
+                                    {{ field }}
+                                </div>
                             {% endif %}
                             {% if field.help_text %}
                                 <small class="form-text text-muted">{{ field.help_text }}</small>

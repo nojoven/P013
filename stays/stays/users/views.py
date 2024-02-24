@@ -306,7 +306,16 @@ class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
         # Enregistrement de la publication
         publication = form.save(commit=False)
         publication.author_username = self.request.user.username
+        
+        # Enregistrement de l'enregistrement vocal s'il est fourni
+        if voice_story:
+            # Assurez-vous que le fichier est bien une piste audio
+            if not voice_story.name.endswith(('.mp3', '.wav', '.ogg')):
+                messages.error(self.request, 'Invalid audio file format.')
+                return self.form_invalid(form)
 
+            publication.voice_story = voice_story
+        
         # Enregistrement du texte s'il est fourni
         if text_story:
             publication.text_story = clean(  # Clean the texte
@@ -333,14 +342,7 @@ class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
             if self.request.user.signature and self.request.user.signature != "None":
                 publication.text_story += f"\n\n« {self.request.user.signature} »"
 
-        # Enregistrement de l'enregistrement vocal s'il est fourni
-        if voice_story:
-            # Assurez-vous que le fichier est bien une piste audio
-            if not voice_story.name.endswith(('.mp3', '.wav', '.ogg')):
-                messages.error(self.request, 'Invalid audio file format.')
-                return self.form_invalid(form)
-
-            publication.voice_story = voice_story
+        
 
         # Sauvegarde finale
         publication.save()

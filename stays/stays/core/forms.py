@@ -1,14 +1,13 @@
 from django import forms
-from django_countries.widgets import CountrySelectWidget
-from .models import Publication, ContentTypes
-from django.conf import settings
+from core.models import Publication
+from core.utils.models_helpers import ContentTypes
 
-class UpdateStayCountrySelectWidget(CountrySelectWidget):
-    def get_context(self, name, value, attrs):
-        context = super().get_context(name, value, attrs)
-        # Use the custom list of countries from settings
-        context['widget']['optgroups'] = self.optgroups(name, settings.COUNTRIES_LIST, context['widget']['value'])
-        return context
+# class UpdateStayCountrySelectWidget(CountrySelectWidget):
+#     def get_context(self, name, value, attrs):
+#         context = super().get_context(name, value, attrs)
+#         # Use the custom list of countries from settings
+#         # context['widget']['optgroups'] = self.optgroups(name, settings.COUNTRIES_LIST, context['widget']['value'])
+#         return context
 
 class PublicationEditForm(forms.ModelForm):
     class Meta:
@@ -22,12 +21,12 @@ class PublicationEditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PublicationEditForm, self).__init__(*args, **kwargs)
-        if self.instance.content_type == ContentTypes.voice.value:
-            self.fields['text_story'].required = False
+        if self.instance.content_type == ContentTypes.voice.value[0]:
+            self.fields['text_story'].disabled = True
             self.fields['voice_story'].required = True
-        elif self.instance.content_type == ContentTypes.text.value:
+        elif self.instance.content_type == ContentTypes.text.value[0]:
+            self.fields['voice_story'].disabled = True
             self.fields['text_story'].required = True
-            self.fields['voice_story'].required = False
         
         self.fields['title'].required = False
         self.fields['year_of_stay'].required = False

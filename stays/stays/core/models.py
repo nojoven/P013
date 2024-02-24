@@ -19,7 +19,7 @@ class Publication(models.Model):
     author_username = models.CharField(blank=False, null=True, max_length=255, default=None)
     author_slug = models.SlugField(blank=False, null=True, max_length=255, default=None)
     title = models.CharField(max_length=70, blank=False, null=True, help_text="Title of your publication.")
-    season_of_stay = models.CharField(max_length=6, blank=False, null=True, help_text="Title of your publication.")
+    season_of_stay = models.CharField(max_length=6, blank=False, null=True, help_text="Season of your publication.")
     year_of_stay = models.IntegerField(default=1990, blank=False, null=True)
     summary = models.TextField(max_length=170, blank=False, null=True, help_text="Summarize your story.")
     text_story = models.TextField(max_length=25000, blank=True, null=True, help_text="Write your story.")
