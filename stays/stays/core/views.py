@@ -157,7 +157,7 @@ class PublicationDeleteView(LoginRequiredMixin, DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class PublicationUpdateView(LoginRequiredMixin, UpdateView):
+class PublicationUpdateView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
     model = Publication
     form_class = PublicationEditForm
     template_name = 'update_publication.html'
@@ -168,7 +168,7 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        context['title'] = context['object'].title
         context['years'] = PublicationUpdateView.years
         context['seasons'] = PublicationUpdateView.seasons
         context['exclude_fields'] = PublicationUpdateView.exclude_fields
