@@ -112,7 +112,8 @@ INSTALLED_APPS = [
     "cities_light",
     "locations",
     "watchman",
-    "django_select2",
+    # "django_select2",
+    "silk",
     # "iommi",
     # "allauth_ui",
     # "allauth",
@@ -188,6 +189,7 @@ CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
 
 
 MIDDLEWARE = [
+    'silk.middleware.SilkyMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     'django.middleware.cache.UpdateCacheMiddleware',
