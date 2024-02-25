@@ -295,6 +295,8 @@ class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
         return context
 
     def form_valid(self, form):
+        ic(form)
+        ic(form.cleaned_data)
         text_story = form.cleaned_data.get('text_story')
         voice_story = form.cleaned_data.get('voice_story')
 
@@ -306,6 +308,7 @@ class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
         # Enregistrement de la publication
         publication = form.save(commit=False)
         publication.author_username = self.request.user.username
+        publication.published_from_country_code = self.get_publication_origin()
         
         # Enregistrement de l'enregistrement vocal s'il est fourni
         if voice_story:
