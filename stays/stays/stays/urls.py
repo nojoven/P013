@@ -35,6 +35,8 @@ urlpatterns = [
     # path("select2/", include("django_select2.urls")),
     re_path(r'^watchman/', include('watchman.urls')),
     path('tinymce/', include('tinymce.urls')),
+    
+    path('silk/', include('silk.urls', namespace='silk'))
 ] + static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
