@@ -1,9 +1,21 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from core.models import Publication, PublicationUpvote
 from locations.models import StayCountry
 from cities_light.models import Country
 from users.models import Profile, ProfileHasPublication
+
+
+
+# @receiver(pre_save, sender=Publication)
+# def handle_empty_fields(sender, instance, *args, **kwargs):
+#     if instance.uuid is not None:  # if instance.pk is not None, this is an update operation
+#         db_instance = Publication.objects.get(uuid=instance.uuid)
+#         for field in ['author_username', 'author_slug', 'title', 'season_of_stay', 'year_of_stay', 'summary', 'text_story', 'voice_story', 'content_type', 'country_code_of_stay', 'published_from_country_code', 'picture']:
+#             if getattr(instance, field) is None or getattr(instance, field) == '':
+#                 setattr(instance, field, getattr(db_instance, field))
+
+
 
 @receiver(post_save, sender=Publication)
 def create_stay_country(sender, instance, created, **kwargs):
