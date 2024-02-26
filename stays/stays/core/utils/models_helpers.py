@@ -10,7 +10,7 @@ from enum import Enum
 
 def get_publications_for_feed(publication_model, country_model, find_cities_light_country_name_with_code):
     # Fetch all publications and related upvotes
-    publications = publication_model.objects.prefetch_related(
+    publications = publication_model.objects.defer('picture').prefetch_related(
         Prefetch('publicationupvote_set', to_attr='upvoters')
     ).all().order_by('-created_at')
 
@@ -57,11 +57,6 @@ def profanity_filter_and_update(publication):
         ic(f"Request to profanity filter API failed: {e}")
     except Exception as e:
         ic(f"Unexpected error in profanity_filter_and_update: {e}")
-
-
-
-def cache_none(*args, **kwargs):
-    return None
 
 
 

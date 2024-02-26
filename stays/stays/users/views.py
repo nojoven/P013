@@ -355,6 +355,9 @@ class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
             async_task(profanity_filter_and_update, publication, timeout=1800)
 
         messages.success(self.request, 'Publication created successfully!', extra_tags='base_success')
+        # Set the session variable
+        self.request.session['updated_publication_model'] = True
+        self.request.session.save()
         return super().form_valid(form)
 
     def form_invalid(self, form):

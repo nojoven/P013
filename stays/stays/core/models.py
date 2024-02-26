@@ -12,8 +12,6 @@ from django_countries.fields import CountryField
 
 # Create your models here.
 class Publication(models.Model):
-    def __str__(self):
-        return self.title
 
     uuid = models.UUIDField(primary_key=True, default=uuid_generator, editable=False)
     author_username = models.CharField(blank=False, null=True, max_length=255, default=None)
@@ -35,10 +33,12 @@ class Publication(models.Model):
         validators=[MinValueValidator(0, message="Upvotes count cannot be negative.")]
     )
 
-
-
     def get_absolute_url(self):
         return reverse('users:account', args=[self.author_slug])
+
+    def __str__(self):
+        return self.title
+
 
 class PublicationUpvote(models.Model):
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True)

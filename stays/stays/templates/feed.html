@@ -125,7 +125,7 @@ STAYS FEED
                 </script>
                 <p class="card-text">{{ publication.summary }}</p>
                 </div>
-                <img loading="lazy" src="{{ publication.picture }}" class="card-img-bottom" alt="Illustration">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="{% url 'core:serve_publication_picture' publication.uuid %}" alt="Illustration" class="card-img-bottom lazyload">
                 <div class="card-body">
                     {% if user.is_authenticated %}
                     <h2 class="card-title">{{ publication.season_of_stay }}, <a href="{% url 'locations:country' publication.country_code_of_stay %}">{{ publication.stay_country_name }}</a></h2>
@@ -208,6 +208,32 @@ STAYS FEED
         </div>
     </div>
 </div>
+<script>
+    window.onload = function() {
+        console.log("window.onload");
+        var lazyloadImages = document.querySelectorAll("img.lazyload");    
+        var imageObserver = new IntersectionObserver(function(entries, observer) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var image = entry.target;
+              image.src = image.dataset.src;
+              image.classList.remove("lazyload");
+              imageObserver.unobserve(image);
+            }
+          });
+        });
+      
+        lazyloadImages.forEach(function(image) {
+          imageObserver.observe(image);
+      
+          // Add an error event listener to the image
+          image.addEventListener('error', function() {
+            // Retry loading the image
+            image.src = image.dataset.src;
+          });
+        });
+      };
+</script>
 {% endblock content %}
 
 
@@ -247,6 +273,7 @@ STAYS FEED
         }, 80);
     }
 </script>
+
 
 
 </main>

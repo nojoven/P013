@@ -37,7 +37,7 @@ Publish
                         </div>
                         <div class="col-12 d-none">
                             <label for="author_slug" class="form-label visually-hidden">Author ID</label>
-                            <input type="text" name="author_slug" value="{{ current_user.slug }}" class="form-control bg-light" s readonly>
+                            <input type="text" name="author_slug" value="{{ current_user.slug }}" class="form-control bg-light" readonly>
                         </div>
                         <div class="col-12 d-none">
                             <label for="author_username" class="form-label visually-hidden">Author Name</label>
@@ -45,7 +45,7 @@ Publish
                         </div>
                         <div class="col-12">
                             <label for="title" class="form-label text-black">Title (required)</label>
-                            <input type="text" name="title" placeholder="" value="{{ form.title.value|default_if_none:'' }}" class="form-control bg-light text-dark">
+                            <input type="text" name="title" placeholder="" value="{{ form.title.value|default_if_none:'' }}" class="form-control bg-light text-dark" style="text-align: center;">
                         </div>
                         <div class="col-12">
                             <label for="country_code_of_stay" class="form-label">Country of the stay (required)</label>
@@ -59,7 +59,7 @@ Publish
                         </div>
                         <div class="col-12">
                             <label for="published_from_country_code" class="form-label">This content is going to be published from {{ active_from_contry_name }} which code is :</label>
-                            <input type="text" name="published_from_country_code" value="{{ active_from_contry_code }}" class="form-control bg-light" readonly>
+                            <input type="text" name="published_from_country_code" value="{{ active_from_contry_code }}" class="form-control bg-light" style="text-align: center;" readonly>
                         </div>
                         <div class="col-12">
                             <label for="season_of_stay" class="form-label">Season (required)</label>
@@ -72,7 +72,11 @@ Publish
                         </div>
                         <div class="col-12">
                             <label for="year_of_stay" class="form-label">Year of Stay  (required)</label>
-                            <input type="number" name="year_of_stay" value="{{ form.year_of_stay.value }}" min=1918 max=2023 class="form-control bg-light text-dark">
+                            {% if form.year_of_stay.value %}
+                            <input type="number" name="year_of_stay" value="{{ form.year_of_stay.value }}" min=1918 max=2023 class="form-control bg-light text-dark" style="text-align: center;">
+                            {% else %}
+                            <input type="number" name="year_of_stay" value=1918 min=1918 max=2024 class="form-control bg-light text-dark" style="text-align: center;">
+                            {% endif %}
                         </div>
                         <div class="col-12">
                             <legend class="form-label">Type of publication  (required)</legend>
@@ -104,7 +108,7 @@ Publish
                         </div>
                         <div class="col-12">
                             <label for="summary" class="form-label text-dark">Summary  (required)</label>
-                            <input type="text" name="summary" placeholder="" value="{{ form.summary.value|default_if_none:'' }}" class="form-control bg-light text-dark">
+                            <input type="text" name="summary" placeholder="" value="{{ form.summary.value|default_if_none:'' }}" class="form-control bg-light text-dark" style="text-align: center;">
                         </div>
                         <div class="col-12">
                             <label for="text_story" class="form-label">Write about your stay (required)</label>

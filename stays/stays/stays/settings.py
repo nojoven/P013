@@ -255,7 +255,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "stays.wsgi.application"
 ASGI_APPLICATION = "stays.asgi.application"
-
+SILKY_PYTHON_PROFILER = True
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

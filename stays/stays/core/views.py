@@ -24,16 +24,25 @@ from locations.utils.helpers import get_continent_from_code, find_cities_light_c
 from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email
 from stays.utils.email_helpers import send_contact_form_email
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.decorators.cache import cache_page
-from django.db.models import Prefetch
-from django.db import connection
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, add_never_cache_headers, never_cache
+
 from django.views.decorators.vary import vary_on_cookie
-from core.utils.models_helpers import get_publications_for_feed, cache_none
+from core.utils.models_helpers import get_publications_for_feed
 from icecream import ic
+from django.shortcuts import redirect
+
+from django.http import FileResponse
+
+@never_cache
+def serve_publication_picture(request, publication_uuid):
+    publication = get_object_or_404(Publication, uuid=publication_uuid)
+    return FileResponse(open(publication.picture.path, 'rb'))
 
 
-# Create a function that always returns None
+@never_cache
+def serve_publication_audio(request, publication_uuid):
+    publication = get_object_or_404(Publication, uuid=publication_uuid)
+    return FileResponse(open(publication.voice_story.path, 'rb'))
 
 
 @csrf_exempt
@@ -100,31 +109,32 @@ def toggle_upvote(request, uuid):
     return HttpResponse(button_html)
 
 
-# Create your views here.
+# @never_cache
 @vary_on_cookie
+@cache_page(60 * 6, key_prefix='home_page_{}'.format(Publication.objects.count()))
 def home(request):
     page = request.GET.get('page')
     if not page:
-        publications = get_publications_for_feed(Publication, Country, find_cities_light_country_name_with_code)
-        paginator = Paginator(publications, 5)
-        page_obj = paginator.get_page('1')
+        return redirect('{}?page=1'.format(request.path))
+    
+    publications = get_publications_for_feed(Publication, Country, find_cities_light_country_name_with_code)
+    ic(publications)
+    paginator = Paginator(publications, 5)
+    page_obj = paginator.get_page(page)
+    ic(page_obj)
+    context = {
+        'page_obj': page_obj
+    }
 
-        context = {
-            'page_obj': page_obj
-        }
-        return render(request, 'feed.html', context)
-    else:
-        @cache_page(60 * 6, cache=None, key_prefix=cache_none)
-        def cached_view(request):
-            publications = get_publications_for_feed(Publication, Country, find_cities_light_country_name_with_code)
-            paginator = Paginator(publications, 5)
-            page_obj = paginator.get_page(page)
+    response = render(request, 'feed.html', context)
 
-            context = {
-                'page_obj': page_obj
-            }
-            return render(request, 'feed.html', context)
-        return cached_view(request)
+    # Check if the user has recently modified the Publication table
+    if request.session.get('updated_publication_model', False):
+        add_never_cache_headers(response)
+        # Reset the session variable
+        request.session['updated_publication_model'] = False
+
+    return response
 
 class PublicationDeleteView(LoginRequiredMixin, DeleteView):
     model = Publication
