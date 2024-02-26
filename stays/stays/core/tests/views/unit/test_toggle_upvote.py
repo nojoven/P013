@@ -1,5 +1,4 @@
 import pytest
-from django.urls import reverse
 from django.test import TestCase, Client
 from django_webtest import WebTest
 from model_bakery import baker
@@ -148,16 +147,3 @@ class TestCheckUserUpvotedPublicationView(WebTest, TestCase):
         self.text_publication.refresh_from_db()
         self.assertEqual(self.text_publication.upvotes_count, 0)
 
-
-
-    # @patch('users.signals.update_user_status')
-    # def test_downvote(self, mock_update_user_status):
-    #     self.client.force_login(self.profile)
-    #     response = self.client.post(reverse('core:toggle_upvote', kwargs={'uuid': self.voice_publication.uuid}), 
-    #     data={'publication_id': self.voice_publication.uuid, 'profile_email': self.profile.email})
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(response.content, b'')
-    #     publication = Publication.objects.get(uuid=self.voice_publication.uuid)
-    #     self.assertEqual(publication.upvotes_count, -1)
-    #     upvote = PublicationUpvote.objects.get(publication=publication, upvote_profile=self.profile.slug)
-    #     self.assertEqual(upvote.upvote_value, -1)
