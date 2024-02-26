@@ -6,15 +6,11 @@ from model_bakery import baker
 from stays.utils.common_helpers import uuid_generator
 from datetime import datetime
 from cities_light.models import Country
-from core.forms import PublicationEditForm
 from core.models import Publication, PublicationUpvote
 from users.models import Profile
 from core.utils.models_helpers import ContentTypes
 from uuid import uuid4
-from unittest import mock
-import io
 from icecream import ic
-from PIL import Image
 from unittest.mock import patch
 
 class TestCheckUserUpvotedPublicationView(WebTest, TestCase):

@@ -30,7 +30,7 @@ from django.db import connection
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from core.utils.models_helpers import get_publications_for_feed, cache_none
-
+from icecream import ic
 
 
 # Create a function that always returns None
@@ -55,17 +55,11 @@ def check_user_upvoted_publication(request, uuid):
 @login_required
 def toggle_upvote(request, uuid):
     publication_id = uuid
-    req = request.POST
-    profile_email = None
-    for key in req.keys():
-        if 'profile_email' in key:
-            profile_email = key.split(":")[1].strip(' "')
-            break
-        else:
-            continue
+    profile_email = request.POST.get('profile_email', request.user.email)
 
     publication = Publication.objects.get(uuid=publication_id)
     profile = get_profile_from_email(profile_email)
+    
     upvote, created = PublicationUpvote.objects.get_or_create(publication=publication, upvote_profile=profile.slug)
     
     # Get the CSRF token for the current session
