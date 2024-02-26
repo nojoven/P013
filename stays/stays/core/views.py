@@ -140,6 +140,7 @@ class PublicationDeleteView(LoginRequiredMixin, DeleteView):
     model = Publication
     success_url = reverse_lazy('core:home')
 
+    @never_cache
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
@@ -156,9 +157,13 @@ class PublicationDeleteView(LoginRequiredMixin, DeleteView):
             messages.error(self.request, 'Something went wrong. Please retry later.')
             return JsonResponse({'status': 'error', 'error': 'No identifier provided'})
 
+
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
+        # Set the session variable
+        self.request.session['updated_publication_model'] = True
+        self.request.session.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -190,7 +195,14 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
             context["exclude_fields"].append('voice_story')
         return context
 
+    @never_cache
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def get_success_url(self):
+        # Set the session variable
+        self.request.session['updated_publication_model'] = True
+        self.request.session.save()
         return reverse_lazy('core:publication', args=[str(self.object.uuid)])
     
     def form_valid(self, form):
