@@ -144,11 +144,11 @@ STAYS FEED
                     <p class="card-text">{{ publication.text_story }}</p>
                     {% endif %}
                     {% if user.is_authenticated and publication.content_type == "voice" %}
-                        <div class="col-sm-12 mx-auto embed-responsive embed-responsive-4by3">
-                            <audio controls class="embed-responsive-item" style="display: block; margin: 0 auto;">
-                                <source src="{{ publication.voice_story }}">
-                            </audio>
-                        </div>
+                    <div class="col-sm-12 mx-auto embed-responsive embed-responsive-4by3">
+                        <audio controls class="embed-responsive-item" style="display: block; margin: 0 auto;">
+                            <source id="audioSource" src="{% url 'core:serve_publication_audio' publication.uuid %}">
+                        </audio>
+                    </div>
                     {% endif %}
                     {% if not user.is_authenticated %}
                     <style>
@@ -232,8 +232,28 @@ STAYS FEED
             image.src = image.dataset.src;
           });
         });
-      };
+
+        var audios = document.querySelectorAll("audio");
+        audios.forEach(function(audio) {
+        var source = audio.querySelector('source');
+        source.src = source.dataset.src;
+
+        // Add an event listener for the canplaythrough event
+        audio.addEventListener('canplaythrough', function() {
+            // The audio is ready to play
+            console.log('Audio is ready to play');
+        });
+
+        // Add an error event listener to the source
+        source.addEventListener('error', function() {
+            // Retry loading the audio
+            source.src = source.dataset.src;
+        });
+    });
+
+};
 </script>
+
 {% endblock content %}
 
 
