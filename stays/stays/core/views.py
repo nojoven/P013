@@ -129,10 +129,10 @@ def home(request):
     response = render(request, 'feed.html', context)
 
     # Check if the user has recently modified the Publication table
-    if request.session.get('updated_publication_model', False):
+    if request.session.get('force_renew_session', False):
         add_never_cache_headers(response)
         # Reset the session variable
-        request.session['updated_publication_model'] = False
+        request.session['force_renew_session'] = False
 
     return response
 
@@ -162,7 +162,7 @@ class PublicationDeleteView(LoginRequiredMixin, DeleteView):
         self.object = self.get_object()
         self.object.delete()
         # Set the session variable
-        self.request.session['updated_publication_model'] = True
+        self.request.session['force_renew_session'] = True
         self.request.session.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -201,7 +201,7 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         # Set the session variable
-        self.request.session['updated_publication_model'] = True
+        self.request.session['force_renew_session'] = True
         self.request.session.save()
         return reverse_lazy('core:publication', args=[str(self.object.uuid)])
     

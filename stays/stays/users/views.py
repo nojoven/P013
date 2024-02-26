@@ -28,6 +28,8 @@ from locations.utils.helpers import get_continent_from_code, find_cities_light_c
 from django_countries import countries
 from users.utils import retrieve_current_user
 from core.utils.models_helpers import profanity_filter_and_update
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
 # Custom sugar
 from cleantext import clean
 from neattext.functions import clean_text
@@ -356,7 +358,7 @@ class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
 
         messages.success(self.request, 'Publication created successfully!', extra_tags='base_success')
         # Set the session variable
-        self.request.session['updated_publication_model'] = True
+        self.request.session['force_renew_session'] = True
         self.request.session.save()
         return super().form_valid(form)
 
@@ -505,3 +507,18 @@ class FollowingListView(LoginRequiredMixin, ListView):
         context['follower_of_stayer'] = profile.slug
         context['username_of_follower'] = profile.username
         return context
+
+
+
+
+
+def logout_view(request):
+    # Set the session variable
+    request.session['updated_publication_model'] = True
+    request.session.save()
+
+    # Log out the user
+    logout(request)
+
+    # Redirect to a success page.
+    return HttpResponseRedirect('/login')

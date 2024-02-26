@@ -16,7 +16,7 @@ User = get_user_model()
 
 @override_settings(CSRF_COOKIE_SECURE=False, CSRF_COOKIE_HTTPONLY=False, SESSION_COOKIE_SECURE=False)
 @pytest.mark.django_db
-class TestUpdateAccountView(TestCase):
+class TestPublishView(TestCase):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=False)  # Disable CSRF checks
         self.user = baker.make(User, email='testeurdeouf@example.com')
@@ -84,7 +84,7 @@ class TestUpdateAccountView(TestCase):
             'author_slug': self.user.slug,
             'author_username': self.user.username,
             'country_code_of_stay': 'FR',
-            'published_from_country_code': 'IT',
+            'published_from_country_code': 'FR',
             'summary': 'Test Summary',
             'picture': SimpleUploadedFile("file.jpg", b"file_content", content_type="image/jpeg"),
             'year_of_stay': 2022,
@@ -111,18 +111,20 @@ class TestUpdateAccountView(TestCase):
         self.assertEqual(messages[0].extra_tags, 'base_success')
 
         # Vérification que la publication a été enregistrée correctement
-        publication = Publication.objects.first()
+        publication = Publication.objects.get(content_type='text')
+        publication.refresh_from_db()
         self.assertEqual(publication.title, form_data['title'])
         self.assertEqual(publication.author_username, self.user.username)
         self.assertEqual(publication.author_slug, self.user.slug)
         self.assertEqual(publication.country_code_of_stay, form_data['country_code_of_stay'])
-        self.assertEqual(publication.published_from_country_code, form_data['published_from_country_code'])
+        self.assertEqual(publication.published_from_country_code.code, form_data['published_from_country_code'])
         self.assertEqual(publication.summary, form_data['summary'])
         self.assertEqual(publication.picture.name.split("/")[-1], "file.jpg")
         self.assertEqual(publication.year_of_stay, form_data['year_of_stay'])
         self.assertEqual(publication.season_of_stay, form_data['season_of_stay'])
         self.assertEqual(publication.content_type, form_data['content_type'])
         self.assertEqual(publication.text_story, cleaned_text_story)
+        self.assertTrue(self.client.session['force_renew_session'])
 
     @patch('users.signals.update_user_status')
     def test_publish_view_voice_story(self, mock_signal):
@@ -133,7 +135,7 @@ class TestUpdateAccountView(TestCase):
             'author_slug': self.user.slug,
             'author_username': self.user.username,
             'country_code_of_stay': 'FR',
-            'published_from_country_code': 'IT',
+            'published_from_country_code': 'FR',
             'summary': 'Test Summary',
             'picture': SimpleUploadedFile("file.jpg", b"file_content", content_type="image/jpeg"),
             'year_of_stay': 2022,
@@ -149,12 +151,13 @@ class TestUpdateAccountView(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirection après la soumission du formulaire
 
         # Vérification que la publication a été enregistrée correctement
-        publication = Publication.objects.first()
+        publication = Publication.objects.get(content_type="voice")
         self.assertEqual(publication.title, 'Test Title')
         self.assertEqual(publication.author_username, self.user.username)
         self.assertIsNotNone(publication.voice_story)
         self.assertTrue(publication.text_story == '')
-        self.assertTrue(publication.voice_story.name.split("/")[-1] == "file.mp3")
+        self.assertEqual(publication.published_from_country_code.code, form_data['published_from_country_code'])
+        self.assertTrue(self.client.session['force_renew_session'])
 
     @patch('users.signals.update_user_status')
     def test_publish_view_no_story(self, mock_update_user_status):
