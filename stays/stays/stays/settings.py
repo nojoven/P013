@@ -269,6 +269,7 @@ DATABASES = {
         "HOST": confs.get("HOST"),
         "PORT": confs.get("PORT"),
         # 'OPTIONS': {'sslmode': 'require'}
+        # 'CONN_MAX_AGE': 0,
     },
 }
 
