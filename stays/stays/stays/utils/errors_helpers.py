@@ -13,6 +13,8 @@ from django.http import (
     HttpResponseServerError,
     HttpResponsePermanentRedirect, HttpResponse
 )
+from icecream import ic
+
 
 # Unauthorized
 response_unauthorized = HttpResponse(status=401)
@@ -39,11 +41,16 @@ def random_error_handler(request, error_code):
     Error handler which supports multiple templates.
     Templates: <error_code>-a.html, <error_code>-b.html, etc.
     """
+    ic("random_error_handler")
+    ic(request)
+    ic(error_code)
     templates_dir = os.path.join(settings.BASE_DIR, 'templates')
     templates = [f for f in os.listdir(templates_dir) if f.startswith(f'{error_code}-') and f.endswith('.html')]
     if templates:
         template = random.choice(templates)
     else:
+        ic("500-a.html")
+        ic(error_code)
         template = '500-a.html'
     try:
         t = get_template(template)
@@ -58,16 +65,25 @@ class ErrorHandlerMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        ic("ErrorHandlerMiddleware")
+        ic(request)
         response = self.get_response(request)
+        ic(response)
+        ic(response.status_code)
         if not 199 < response.status_code <= 300 and response.status_code not in (200, 201, 204, 301, 302):
             return random_error_handler(request, response.status_code)
         return response
 
     def process_exception(self, request, exception):
+        ic("process_exception")
+        ic(request)
+        ic(exception)
         try:
             if isinstance(exception, Http404):
+                ic("isinstance 404")
                 return random_error_handler(request, 404)
             elif isinstance(exception, HttpResponse):
+                ic(exception)
                 if exception.status_code == response_unauthorized.status_code:
                     return random_error_handler(request, 401)
                 elif exception.status_code == HttpResponseForbidden.status_code:
@@ -98,5 +114,8 @@ class ErrorHandlerMiddleware:
                     return random_error_handler(request, 500)
             
         except ValueError:
+            ic("ValueError")
             response = self.get_response(request)
+            ic(response)
+            ic(response.status_code)
             return random_error_handler(request, response.status_code)

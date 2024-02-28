@@ -245,7 +245,7 @@ def add_air_to_context(air_dict):
     return air_dict
 
 def add_weather_to_context(weather_dict):
-    if not len(weather_dict) or weather_dict is None:
+    if weather_dict is None or len(weather_dict) == 0:
         return {}
 
     # Mapping dictionary

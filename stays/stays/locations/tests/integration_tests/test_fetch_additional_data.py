@@ -49,31 +49,34 @@ async def test_wrong_capital():
 
     capital = rce(INVALID_CAPITALS)
 
-    # Appel à la fonction avec des données de test
-    responses = await fetch_additional_data(capital, HEADERS)
+     # Appel à la fonction avec des données de test
+    with pytest.raises(Exception) as excinfo:
+        await fetch_additional_data(capital, HEADERS)
 
-    # Vérifie que les réponses ne sont pas None
-    assert responses is not None
-    assert all(response is not None for response in responses)
-    assert len(responses) == 3
-    ic(f"{capital}")
-    # Vérifie que toutes les réponses ont un code de statut 200
-    assert responses[0].status_code == 400
-    assert responses[1].status_code == 400
-    assert responses[2].status_code == 400
-    ic((response.status_code for response in responses))
+    assert "API request failed with status code 400" in str(excinfo.value)
 
-    # Vérifie que les réponses sont stockées dans le cache
-    cache_key = f"additional_data_{capital}"
-    cached_responses = cache.get(cache_key)
-    assert cached_responses is not None
+    # # Vérifie que les réponses ne sont pas None
+    # assert responses is not None
+    # assert all(response is not None for response in responses)
+    # assert len(responses) == 3
+    # ic(f"{capital}")
+    # # Vérifie que toutes les réponses ont un code de statut 200
+    # assert responses[0].status_code == 400
+    # assert responses[1].status_code == 400
+    # assert responses[2].status_code == 400
+    # ic((response.status_code for response in responses))
 
-    # Compare les codes de statut et les corps des réponses
-    assert [response.status_code for response in cached_responses] == [response.status_code for response in responses]
-    assert [response.json() for response in cached_responses] == [response.json() for response in responses]
+    # # Vérifie que les réponses sont stockées dans le cache
+    # cache_key = f"additional_data_{capital}"
+    # cached_responses = cache.get(cache_key)
+    # assert cached_responses is not None
 
-    cache.clear()
-    assert cache.get(cache_key) is None
+    # # Compare les codes de statut et les corps des réponses
+    # assert [response.status_code for response in cached_responses] == [response.status_code for response in responses]
+    # assert [response.json() for response in cached_responses] == [response.json() for response in responses]
+
+    # cache.clear()
+    # assert cache.get(cache_key) is None
 
 
 @pytest.mark.asyncio

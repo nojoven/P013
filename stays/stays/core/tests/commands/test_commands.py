@@ -1,25 +1,19 @@
 
-from django_q.models import OrmQ
-from datetime import datetime, timedelta
-from io import StringIO
-from django_q.models import Task
 import os
 from django.core.management import call_command
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from core.models import Publication
 from friendship.models import Follow
-from cities_light.models import Country
-
+from unittest.mock import patch
 
 class TestSetupStaysCommand(TestCase):
     def test_setup_stays(self):
         # Set an environment variable to indicate that the command is being run from a test
         os.environ['RUNNING_FROM_TEST'] = '1'
-        
+
         # Exécution de la commande
         call_command('setupstays')
-        
 
         # Vérification que 3 profils ont été créés
         User = get_user_model()
@@ -37,3 +31,16 @@ class TestSetupStaysCommand(TestCase):
 
         # Remove the environment variable
         del os.environ['RUNNING_FROM_TEST']
+
+
+
+class TestRunTestsCommand(TestCase):
+    @patch('subprocess.run')
+    def test_runtests(self, mock_run):
+        # Run the command
+        call_command('runtests')
+
+        # Check that subprocess.run was called with the expected arguments
+        apps = ['core', 'users', 'locations', 'stays']
+        for app in apps:
+            mock_run.assert_any_call(['pytest', f'{app}/tests/test_*.py', '-s', '-v'])

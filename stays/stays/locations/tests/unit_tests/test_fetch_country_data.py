@@ -1,15 +1,8 @@
 import pytest
-import asyncio
-# from unittest.mock import AsyncMock, patch
-from locations.views import fetch_country_data
+
+from locations.utils.helpers import fetch_country_data
 from locations.tests.datasets import VALID_COUNTRY_CODES, INVALID_COUNTRY_CODES, HEADERS
 from locations.tests.fixtures.fixtures import mock_client, mock_cache, clear_cache # noqa F401
-# from stays.settings import NINJAS_API_KEY as napk
-# from django.core.cache import cache
-# Constants for test cases
-# VALID_COUNTRY_CODES = ['US', 'FR', 'JP']
-# INVALID_COUNTRY_CODES = ['ZZ', '00']
-# HEADERS = {'X-Api-Key': napk}
 from icecream import ic
 
 

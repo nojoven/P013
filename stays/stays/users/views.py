@@ -18,7 +18,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
-from .forms import PasswordResetForm
+from users.forms import PasswordResetForm
 from icecream import ic
 from core.utils.requests_helpers import NeverCacheMixin
 from users.forms import RegistrationForm, AccountLoginForm, AccountEditionForm, PublishContentForm, UserNotFoundError
@@ -30,11 +30,8 @@ from users.utils import retrieve_current_user
 from core.utils.models_helpers import profanity_filter_and_update
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
-# Custom sugar
 from cleantext import clean
 from neattext.functions import clean_text
-# from guest_user.decorators import allow_guest_user
-# from guest_user.mixins import AllowGuestUserMixin
 # Create your views here.
 
 

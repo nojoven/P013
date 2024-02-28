@@ -1,24 +1,17 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, AuthenticationForm
-# from django_select2 import forms as s2forms
 from django_countries.widgets import CountrySelectWidget
 from django_countries.fields import CountryField
 from django.contrib.auth.forms import PasswordResetForm as DjangoPasswordResetForm
-# from django.core.mail import send_mail
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.urls import reverse
+
 from users.utils import get_email_to_user, forge_token, generate_recovery_url, generate_reset_uid
 from core.models import Publication
-from django.shortcuts import redirect
-from .models import Profile
+from users.models import Profile
 
 from cities_light.models import CONTINENT_CHOICES
 from stays.utils.email_helpers import send_password_reset_email
 from stays.settings import EMAIL_HOST_USER, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME, DEFAULT_EMAIL_DESTINATION, DEBUG
-from django.contrib import messages
-from icecream import ic
+
 
 
 

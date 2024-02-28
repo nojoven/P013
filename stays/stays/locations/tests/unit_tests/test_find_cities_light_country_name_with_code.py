@@ -8,9 +8,17 @@ def test_find_cities_light_country_name_with_code():
         # Test when country is found
         mock_country = Mock()
         mock_country.name = 'Test Country'
-        mock_get.return_value = mock_country
+        
+        def side_effect(*arg, **kwargs):
+            if kwargs.get('code2') == 'TC':
+                return mock_country
+            else:
+                raise ObjectDoesNotExist
 
-        assert find_cities_light_country_name_with_code('TC') == 'Test Country'
+        mock_get.side_effect = side_effect
+
+        result = find_cities_light_country_name_with_code('TC')
+        assert result == 'Test Country', f"Expected 'Test Country', but got {result}"
 
         # # Test when country is not found
         # mock_get.side_effect = ObjectDoesNotExist

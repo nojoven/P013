@@ -21,7 +21,7 @@ from django.urls import path, include, re_path
 from stays.utils.errors_helpers import random_error_handler
 # from machina import urls as machina_urls
 
-from .api import api
+from stays.api import api
 
 urlpatterns = [
     path("admin", admin.site.urls),

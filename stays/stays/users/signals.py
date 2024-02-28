@@ -3,7 +3,7 @@ from channels.db import database_sync_to_async
 from asgiref.sync import async_to_sync
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
-from .models import Profile
+from users.models import Profile
 from icecream import ic
 
 @receiver(user_logged_in)
