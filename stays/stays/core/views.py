@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from core.utils.requests_helpers import NeverCacheMixin
+from core.utils.requests_helpers import NeverCacheMixin, get_cache_key
 from core.forms import PublicationEditForm, ContactAdminForm
 from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
@@ -112,12 +112,12 @@ def toggle_upvote(request, uuid):
 
 # @override_settings(CACHE_MIDDLEWARE_SECONDS=0)
 @vary_on_cookie
-@cache_page(60 * 6, key_prefix='home_page_{}'.format(Publication.objects.count()))
+@cache_page(60 * 6, key_prefix=get_cache_key(Publication)())
 def home(request):
     page = request.GET.get('page')
     if not page:
         return redirect('{}?page=1'.format(request.path))
-    
+
     publications = get_publications_for_feed(Publication, Country, find_cities_light_country_name_with_code)
     ic(publications)
     paginator = Paginator(publications, 5)
@@ -196,9 +196,9 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
             context["exclude_fields"].append('voice_story')
         return context
 
-    @never_cache
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+    # @never_cache
+    # def dispatch(self, *args, **kwargs):
+    #     return super().dispatch(*args, **kwargs)
 
     def get_success_url(self):
         # Set the session variable
@@ -300,4 +300,3 @@ class ContactAdminView(FormView):
 
 if __name__ == '__main__':
     home()
-    print(get_continent_from_code('EU'))

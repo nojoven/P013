@@ -29,12 +29,9 @@ import random
 from django.http import HttpRequest
 
 
-# @pytest.mark.django_db
 
 
-
-
-
+@pytest.mark.django_db
 class TestPublicationDetailView(TestCase):
 
     def setUp(self):
@@ -86,13 +83,15 @@ class TestPublicationDetailView(TestCase):
         self.request.method = 'GET'
         # self.client.force_login(self.profile)  # Log in the user
 
-    @mock.patch('core.views.get_object_or_404')
-    @mock.patch('core.views.get_author_picture_from_slug')
-    @mock.patch('core.views.find_cities_light_country_name_with_code')
-    @mock.patch('core.views.find_cities_light_continent_with_country_code')
-    @mock.patch('core.views.get_continent_from_code')
-    @mock.patch('core.views.PublicationUpvote.objects.filter')
-    def test_get_object_and_context_data(self, mock_filter, mock_get_continent_from_code, mock_find_cities_light_continent_with_country_code, mock_find_cities_light_country_name_with_code, mock_get_author_picture_from_slug, mock_get_object_or_404):
+    @patch('core.views.get_object_or_404')
+    @patch('core.views.get_author_picture_from_slug')
+    @patch('core.views.find_cities_light_country_name_with_code')
+    @patch('core.views.find_cities_light_continent_with_country_code')
+    @patch('core.views.get_continent_from_code')
+    @patch('core.views.PublicationUpvote.objects.filter')
+    @patch('core.models.Publication')
+    @patch('users.signals.update_user_status')
+    def test_get_object_and_context_data(self, mock_update_user_status, mock_publication, mock_filter, mock_get_continent_from_code, mock_find_cities_light_continent_with_country_code, mock_find_cities_light_country_name_with_code, mock_get_author_picture_from_slug, mock_get_object_or_404):
         # Création d'une instance de la vue1
         view = PublicationDetailView()
         view.kwargs = {'uuid': '123'}
