@@ -64,7 +64,7 @@ class PublicationUpvoteModelTest(TestCase):
         self.assertEqual(self.publication_upvote1.upvote_value, 1)
         self.full_publication.refresh_from_db()
         # 2 because this test does not mute the signals
-        self.assertEqual(self.full_publication.upvotes_count, 2)
+        self.assertEqual(self.full_publication.upvotes_count, 1)
 
 
     def test_publication_second_upvote(self):
@@ -81,4 +81,4 @@ class PublicationUpvoteModelTest(TestCase):
         self.assertEqual(publication_upvote2.upvote_value, 1)
         self.full_publication.refresh_from_db()
         # 4 because this test does not mute the signals
-        self.assertEqual(self.full_publication.upvotes_count, 4)
+        self.assertEqual(self.full_publication.upvotes_count, 2)

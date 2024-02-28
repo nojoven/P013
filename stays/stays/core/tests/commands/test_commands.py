@@ -1,11 +1,12 @@
 
 import os
+import fnmatch
 from django.core.management import call_command
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from core.models import Publication
 from friendship.models import Follow
-from unittest.mock import patch
+from unittest.mock import patch, call
 
 class TestSetupStaysCommand(TestCase):
     def test_setup_stays(self):
@@ -42,5 +43,10 @@ class TestRunTestsCommand(TestCase):
 
         # Check that subprocess.run was called with the expected arguments
         apps = ['core', 'users', 'locations', 'stays']
+        expected_calls = []
         for app in apps:
-            mock_run.assert_any_call(['pytest', f'{app}/tests/test_*.py', '-s', '-v'])
+            for dirpath, dirnames, filenames in os.walk(f'{app}/tests'):
+                for filename in fnmatch.filter(filenames, 'test_*.py'):
+                    test_file = os.path.join(dirpath, filename)
+                    expected_calls.append(call(['pytest', '--cov=.', '--cov-append', test_file, '-s', '-v']))
+        mock_run.assert_has_calls(expected_calls, any_order=True)

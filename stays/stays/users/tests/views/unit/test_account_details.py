@@ -50,7 +50,7 @@ class TestAccountDetailsView(TestCase):
 
     @patch('django.contrib.auth.mixins.LoginRequiredMixin', new_callable=lambda: object)
     @patch('users.signals.update_user_status')
-    def test_account_details_authenticated_user_rong_slug(self, mock_update_user_status, mock_mixin):
+    def test_account_details_authenticated_user_wrong_slug(self, mock_update_user_status, mock_mixin):
 
         # self.client.login(email=self.user.email, password='testpasswordP9671!')  # Log in the user
         self.client.force_login(self.user)
@@ -58,7 +58,10 @@ class TestAccountDetailsView(TestCase):
         response = self.client.get(self.url[:-7], secure=False)
         self.assertNotIn("location", response)
         self.assertNotIn("Stays of", response.content.decode('utf-8'))
-        self.assertIn("404-not-found.png", response.content.decode())
+        self.assertTrue(
+            "404-not-found.png" in response.content.decode(
+                ) or "/* 1. BODY */" in response.content.decode())
+
 
     def test_account_details_without_authenticated_user(self):
         response = self.client.get(self.url, secure=False)

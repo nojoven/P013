@@ -1,5 +1,4 @@
 # Importations nécessaires pour les tests
-import pytest
 from django.db import models
 from core.utils.models_helpers import(
     UUIDFieldForeignKey,
@@ -8,14 +7,8 @@ from core.utils.models_helpers import(
     NullableIntegerFieldForeignKey,
     NullableBigIntegerFieldForeignKey,
     BooleanFieldForeignKey,
-    cache_none,
     ContentTypes
-    )
-from stays.utils.common_helpers import uuid_generator
-from django.contrib.auth import get_user_model
-from users.models import Profile
-from model_bakery import baker
-from django.utils.text import slugify
+)
 
 
 # Définition d'un modèle de test
@@ -83,16 +76,6 @@ def test_boolean_field_foreign_key():
     assert boolean_field.db_column is None
     assert boolean_field.blank is True
     assert boolean_field.null is True
-
-
-# Test de la fonction cache_none
-def test_cache_none():
-    # Appel de la fonction avec différents arguments
-    assert cache_none() is None
-    assert cache_none(1, 2, 3) is None
-    assert cache_none(a=1, b=2) is None
-    assert cache_none(1, 2, a=3, b=4) is None
-
 
 # Test de la classe ContentTypes
 def test_content_types():
