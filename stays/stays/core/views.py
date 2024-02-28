@@ -30,8 +30,9 @@ from django.views.decorators.vary import vary_on_cookie
 from core.utils.models_helpers import get_publications_for_feed
 from icecream import ic
 from django.shortcuts import redirect
-
+from django.test.utils import override_settings
 from django.http import FileResponse
+
 
 @never_cache
 def serve_publication_picture(request, publication_uuid):
@@ -109,7 +110,7 @@ def toggle_upvote(request, uuid):
     return HttpResponse(button_html)
 
 
-# @never_cache
+# @override_settings(CACHE_MIDDLEWARE_SECONDS=0)
 @vary_on_cookie
 @cache_page(60 * 6, key_prefix='home_page_{}'.format(Publication.objects.count()))
 def home(request):
@@ -136,14 +137,14 @@ def home(request):
 
     return response
 
-class PublicationDeleteView(LoginRequiredMixin, DeleteView):
+class PublicationDeleteView(NeverCacheMixin,LoginRequiredMixin, DeleteView):
     model = Publication
     success_url = reverse_lazy('core:home')
 
-    @never_cache
-    @method_decorator(csrf_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+    # @never_cache
+    # @method_decorator(csrf_exempt)
+    # def dispatch(self, *args, **kwargs):
+    #     return super().dispatch(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         body_unicode = request.body.decode('utf-8')
@@ -236,6 +237,8 @@ class PublicationDetailView(LoginRequiredMixin, NeverCacheMixin, DetailView):
         published_from_country_name = find_cities_light_country_name_with_code(publication.published_from_country_code)
         publication.published_from_country_name = published_from_country_name
 
+        self.object = publication
+
         return publication
 
     def get_context_data(self, **kwargs):
@@ -290,3 +293,11 @@ class ContactAdminView(FormView):
                 messages.error(self.request, 'Something went wrong. Please try again later.')
                 return super().form_invalid(form)
         return super().form_valid(form)
+
+
+
+
+
+if __name__ == '__main__':
+    home()
+    print(get_continent_from_code('EU'))
