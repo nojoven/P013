@@ -64,7 +64,7 @@ class TestGetCacheKey(TestCase):
                 title=' '.join(random.choices(self.words, k=3)), 
                 author_username=self.profile.username, 
                 author_slug=self.profile.slug, 
-                picture='picture.jpg',
+                # picture='picture.jpg',
                 text_story='This is a full story.',
                 content_type=ContentTypes.text.value[0],
                 season_of_stay='Winter',
@@ -74,7 +74,6 @@ class TestGetCacheKey(TestCase):
                 country_code_of_stay=self.country.code2,
                 published_from_country_code="FR",
                 upvotes_count=0
-            
             )
             self.publications = Publication.objects.all()
             # Création d'un client de test
