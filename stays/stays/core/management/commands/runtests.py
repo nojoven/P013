@@ -14,4 +14,4 @@ class Command(BaseCommand):
                 for filename in fnmatch.filter(filenames, 'test_*.py'):
                     test_file = os.path.join(dirpath, filename)
                     self.stdout.write(f'Running tests in {test_file}...')
-                    subprocess.run(['pytest', '--cov=.', '--cov-append', test_file, '-s', '-v'])
+                    subprocess.run(['pytest', '--cov=.', '--cov-append', '--cov-report=html', test_file, '-s', '-v'])

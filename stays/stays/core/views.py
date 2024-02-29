@@ -18,7 +18,6 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic.detail import DetailView
-from django.utils.decorators import method_decorator
 from cities_light.models import Country
 from locations.utils.helpers import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email
@@ -30,7 +29,6 @@ from django.views.decorators.vary import vary_on_cookie
 from core.utils.models_helpers import get_publications_for_feed
 from icecream import ic
 from django.shortcuts import redirect
-from django.test.utils import override_settings
 from django.http import FileResponse
 
 
@@ -141,11 +139,6 @@ class PublicationDeleteView(NeverCacheMixin,LoginRequiredMixin, DeleteView):
     model = Publication
     success_url = reverse_lazy('core:home')
 
-    # @never_cache
-    # @method_decorator(csrf_exempt)
-    # def dispatch(self, *args, **kwargs):
-    #     return super().dispatch(*args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
@@ -168,7 +161,7 @@ class PublicationDeleteView(NeverCacheMixin,LoginRequiredMixin, DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class PublicationUpdateView(LoginRequiredMixin, UpdateView):
+class PublicationUpdateView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
     model = Publication
     form_class = PublicationEditForm
     template_name = 'update_publication.html'
@@ -195,10 +188,6 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
         elif context['object'].content_type == 'text':
             context["exclude_fields"].append('voice_story')
         return context
-
-    # @never_cache
-    # def dispatch(self, *args, **kwargs):
-    #     return super().dispatch(*args, **kwargs)
 
     def get_success_url(self):
         # Set the session variable
@@ -293,9 +282,6 @@ class ContactAdminView(FormView):
                 messages.error(self.request, 'Something went wrong. Please try again later.')
                 return super().form_invalid(form)
         return super().form_valid(form)
-
-
-
 
 
 if __name__ == '__main__':
