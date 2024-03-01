@@ -5,20 +5,17 @@ P13 2023
 ## STAYS is a web social media for people who like to tell and share their stories.
 
 
-## Install Poetry
-   - [https://python-poetry.org/docs/](https://python-poetry.org/docs/)
-
-## Install this project: 
+## Install this project manually:
    - Clone the repository
    - Checkout to branch develop
    - ```cd stays/stays``` to open the file of the  pyproject.toml
-   - ```poetry shell```
-   - ```poetry install``` (or ```pip install -r requirements.txt``` )
+   - ```python -m venv .venv```
+   - ```source .venv/bin/activate```
+   - ```pip install -r requirements.txt```
 
 ## Configurations
-
-   - Renommer conf.js en confs.js
-   - Compléter confs.js en ajoutant les valeurs en face des clés de dictionnaire
+   - Rename conf.js to confs.js
+   - Add the missing values
 
 ## Migrations
    - ```python manage.py makemigrations users ```
@@ -27,20 +24,19 @@ P13 2023
    - ```python manage.py migrate core```
    - ```python manage.py makemigrations locations```
    - ```python manage.py migrate locations```
-   - ```python manage.py migrate```  (une dernière fois)
+   - ```python manage.py migrate```  (one last time)
 
 ## Populate cities_light
 ``` python manage.py cities_light```
 
 ## Start the project
 ### Run the command
-   - ```cd P013/stays/stays```
+   - ```cd P013/stays```
    - ```poetry shell```
-   - ```python manage.py runserver```
+   - ```python manage.py runserver 8001```
 
 ### Create an administrator
-   - ```python manage.py createsuperuser```
-   - Define email password
+   - In another terminal ```python manage.py createsuperuser```
    - You can connect at ```localhost:5000/admin```
 
 ### Create a publication
@@ -62,11 +58,11 @@ P13 2023
       [Install]
       WantedBy=multi-user.target
 
+### Automated installation
+```python manage.py setupstays```
+
 ### Run tests:
-```python -m pytest --import-mode importlib```
-
-
-
+```python manage.py runtests```
 
 #### Install mailpit
    - https://github.com/axllent/mailpit/releases/tag/v1.13.1
@@ -82,6 +78,3 @@ P13 2023
    - https://freefrontend.com/500-error-page-html-templates
    - A Pen created on CodePen.io. Original URL: [https://codepen.io/shubniggurath/pen/NLYzLj](https://codepen.io/shubniggurath/pen/NLYzLj).
    - [https://codepen.io/jsonyeung/pen/ZMxdPg](https://codepen.io/jsonyeung/pen/ZMxdPg)
-
-
-https://learndjango.com/tutorials/psycopg3-binary-and-django-42-installation-quick-t
