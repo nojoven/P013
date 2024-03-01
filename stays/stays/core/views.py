@@ -109,8 +109,8 @@ def toggle_upvote(request, uuid):
 
 
 # @override_settings(CACHE_MIDDLEWARE_SECONDS=0)
-@vary_on_cookie
-@cache_page(60 * 6, key_prefix=get_cache_key(Publication)())
+# @vary_on_cookie
+# @cache_page(15, key_prefix=get_cache_key(Publication)())
 def home(request):
     page = request.GET.get('page')
     if not page:

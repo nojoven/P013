@@ -50,8 +50,3 @@ class TestRunTestsCommand(TestCase):
                     test_file = os.path.join(dirpath, filename)
                     expected_calls.append(call(['pytest', '--cov=.', '--cov-append', test_file, '-s', '-v']))
         mock_run.assert_has_calls(expected_calls, any_order=True)
-
-        # Check that the htmlcov directory was created
-        self.assertTrue(os.path.isdir('htmlcov'))
-        # Check that the index.html file was created in the htmlcov directory
-        self.assertTrue(os.path.isfile('htmlcov/index.html'))

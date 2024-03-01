@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.contrib.auth import views as authentication_views
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -32,6 +32,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from cleantext import clean
 from neattext.functions import clean_text
+from django.core.cache import cache
 # Create your views here.
 
 
@@ -103,6 +104,10 @@ class AccountLoginView(NeverCacheMixin, authentication_views.LoginView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
+        # Set the session variable
+        cache.clear()
+        self.request.session['force_renew_session'] = True
+        self.request.session.save()
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -510,12 +515,11 @@ class FollowingListView(LoginRequiredMixin, ListView):
 
 
 def logout_view(request):
-    # Set the session variable
-    request.session['updated_publication_model'] = True
-    request.session.save()
-
     # Log out the user
     logout(request)
-
+    # Set the session variable
+    request.session['force_renew_session'] = True
+    request.session.save()
     # Redirect to a success page.
-    return HttpResponseRedirect('/login')
+    cache.clear()
+    return HttpResponseRedirect(reverse('core:home'))

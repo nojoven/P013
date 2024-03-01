@@ -192,20 +192,20 @@ MIDDLEWARE = [
     'silk.middleware.SilkyMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    'django.middleware.cache.UpdateCacheMiddleware',
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.middleware.common.CommonMiddleware",
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
     "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     # Iommi: these three are optional, but highly recommended!
-    'iommi.live_edit.Middleware',
-    'iommi.sql_trace.Middleware',
-    'iommi.profiling.Middleware',
+    # 'iommi.live_edit.Middleware',
+    # 'iommi.sql_trace.Middleware',
+    # 'iommi.profiling.Middleware',
     # Iommi : this one is required
-    'iommi.middleware',
+    # 'iommi.middleware',
     # better_exceptions
     # "better_exceptions.integrations.django.BetterExceptionsMiddleware",
     # Add the account middleware:

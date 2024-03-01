@@ -17,7 +17,7 @@ STAYS
             opacity: 0.1;
         }
         .card:hover {
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
         .card .card-img {
             transition: opacity 0.3s ease;
@@ -49,6 +49,11 @@ STAYS
         container {
             margin-right: inherit !important;
         }
+        .row.row-cols-1.row-cols-md-3.g-2 {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: flex-start !important;
+        }
     </style>
     <div class="container w-100">
         {% if publications.author_username != "None" %}
@@ -75,7 +80,7 @@ STAYS
         </div>
         <br>
         {% endif %}
-        <div class="row row-cols-1 row-cols-md-3 g-2 mx-auto w-100 justify-content-center align-item-center" style="width: 85%;">
+        <div class="row row-cols-sm-1 row-cols-md-2  row-cols-lg-3 row-cols-xl-4 g-2 mx-auto w-100 justify-content-center align-item-center" style="width: 85%;">
             {% autopaginate page_obj 9 %}
             {% for publication in page_obj %}
             <div class="col">
@@ -114,11 +119,21 @@ STAYS
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             var grid = document.querySelector('.row.row-cols-1.row-cols-md-3.g-2');
-            var pckry = new Packery( grid, {
-                // options
-                itemSelector: '.col',
-                gutter: 3,
-                columnWidth: '.col'
+            var images = grid.querySelectorAll('img');
+            var imagesLoaded = 0;
+
+            images.forEach((img) => {
+                img.addEventListener('load', () => {
+                    imagesLoaded++;
+                    if (imagesLoaded === images.length) {
+                        var pckry = new Packery(grid, {
+                            // options
+                            itemSelector: '.col',
+                            gutter: 3,
+                            columnWidth: '.col'
+                        });
+                    }
+                });
             });
         });
     </script>

@@ -5,9 +5,6 @@ from model_bakery import baker
 from unittest.mock import patch
 from stays.utils.common_helpers import uuid_generator
 from django.contrib.auth import get_user_model
-from icecream import ic
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
 User = get_user_model()
 
 @pytest.mark.django_db

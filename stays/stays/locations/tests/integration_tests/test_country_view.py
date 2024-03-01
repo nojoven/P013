@@ -40,14 +40,14 @@ async def test_country_good_code():
     await force_login(user)
 
     # Expect a SynchronousOnlyOperation exception when sending a GET request
-    with pytest.raises(SynchronousOnlyOperation):
-        await client.get(reverse('locations:country', args=['FR']))
-    # # Send a GET request to the country_view with a valid country code
-    # response = await client.get(reverse('locations:country', args=['FR']))
+    # with pytest.raises(SynchronousOnlyOperation):
+    #     await client.get(reverse('locations:country', args=['FR']))
+    # Send a GET request to the country_view with a valid country code
+    response = await client.get(reverse('locations:country', args=['FR']))
 
-    # # Check that the response has a status code of 200
-    # assert response.status_code == 200
-    # assert '<!DOCTYPE html>' in response.content.decode()
+    # Check that the response has a status code of 200
+    assert response.status_code == 200
+    assert '<!DOCTYPE html>' in response.content.decode()
 
 @pytest.mark.asyncio
 @pytest.mark.django_db
