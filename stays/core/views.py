@@ -23,9 +23,7 @@ from locations.utils.helpers import get_continent_from_code, find_cities_light_c
 from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email
 from stays.utils.email_helpers import send_contact_form_email
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.decorators.cache import cache_page, add_never_cache_headers, never_cache
-
-from django.views.decorators.vary import vary_on_cookie
+from django.views.decorators.cache import add_never_cache_headers, never_cache
 from core.utils.models_helpers import get_publications_for_feed
 from icecream import ic
 from django.shortcuts import redirect
