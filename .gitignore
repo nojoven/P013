@@ -163,6 +163,7 @@ cython_debug/
 .vscode
 
 # Secrets
+.secrets.*
 .secrets/
 settings.ini
 *.env
