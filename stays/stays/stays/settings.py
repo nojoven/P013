@@ -37,7 +37,7 @@ else:
         "HOST": os.environ.get("HOST"),
         "NAME": os.environ.get("NAME"),
         "PASSWORD": os.environ.get("PASSWORD"),
-        "PORT": int(os.environ.get("PORT")),
+        "PORT": int(os.environ.get("DBPORT")),
         "SECRET_KEY": os.environ.get("SECRET_KEY"),
         "TEMPLATE_DEBUG": os.environ.get(""),
         "USER": os.environ.get("USER"),
