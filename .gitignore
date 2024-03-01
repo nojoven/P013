@@ -170,4 +170,5 @@ settings.ini
 confs.json
 .cop*
 .idea/
-stays/stays/media/*
+*/media/*
+*/static/*

@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{{ publication.title }}
+{% endblock title %}
+<main>
+{% block content %}
+<style>
+    body {
+        background-color: #9cc2fb !important;
+    }
+</style>
+<br>
+<br>
+<br>
+<div class="container">
+    
+    <center><h1> {{ publication.title }}</h1></center>
+    {% if publication.total_upvotes_count %}
+    <center><h3> {{ publication.total_upvotes_count }} Stayers upvote(s) !</h3></center>
+    {% endif %}
+    <br>
+    <center><h1>It was {{ publication.season_of_stay }}, in {{ publication.year_of_stay }}. </h1></center>
+    <center><h2> It was in <a href="{% url 'locations:country' publication.country_code_of_stay %}">{{ publication.stay_country_name }}</a>, {{ publication.stay_continent_code }}. </h2></center>
+    <br>
+    <br>
+    <div class="row justify-content-md-center">
+      <div class="col-md-auto">
+        <img src='{{ publication.picture.url }}' class="img-fluid" alt="...">
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-md-center">
+    <br>
+    <hr>
+    <center>
+    <h3> {{ publication.created_at }} </h3>
+    <h3>Published by <a href="{% url 'users:profile' publication.author_slug %}">{{ publication.author_username }}</a></h3>
+    {% if publication.published_from_country_name %} 
+    <h4>Published from <a href="{% url 'locations:country' publication.published_from_country_code %}">{{ publication.published_from_country_name }}</a></h4>
+    {% endif %}
+    {% if publication.updated_at != publication.created_at %}
+    <h4> Updated : {{ publication.updated_at }}</h4>
+    {% endif %}
+    <br>
+    <hr>
+    </center>
+    </div>
+    {% if publication.content_type == "voice" and publication.voice_story %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <div class="col-sm-4 col-sm-offset-4 embed-responsive embed-responsive-4by3">
+                <audio controls class="embed-responsive-item">
+                    <source src="{{ publication.voice_story.url }}">
+                </audio>
+            </div>
+        </div>
+    </div>
+    <br>
+    <hr>
+    {% endif %}
+    <br>
+    <p>
+    {% if publication.content_type == "text" and publication.text_story %}
+        <center>{{ publication.text_story }}</center>
+    {% endif %}
+    </p>
+    {% if not user.is_authenticated %}
+    <center>
+        <a href="{% url 'users:login' %}" class="btn btn-light btn-outline-info">Connect <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-sm" style="color: #e22222;" data-fa-i2svg disabled></i></a>
+    </center>
+    <br>
+{% elif has_upvoted is False %}
+    <center>
+        <button id="upvbtn" 
+                type="button" 
+                class="btn btn-light btn-outline-info"
+                hx-post="{% url 'core:upvote' publication.uuid %}" 
+                hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                hx-target="#upvbtn" 
+                hx-swap="outerHTML"
+                hx-headers='{"Content-Type":"application/json"}'>
+            <i id="upvotei" class="fa-regular fa-heart" style="color: #e22222;" data-fa-i2svg>Upvote</i>
+        </button>
+    </center>
+{% elif has_upvoted is True %}
+    <center>
+        <button id="upvbtn" 
+                type="button" 
+                class="btn btn-light btn-outline-info"
+                hx-post="{% url 'core:upvote' publication.uuid %}" 
+                hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                hx-target="#upvbtn" 
+                hx-swap="outerHTML"
+                hx-headers='{"Content-Type":"application/json"}'>
+            <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm" style="color: #e22222;" data-fa-i2svg>You Like It</i>
+        </button>
+    </center>
+    <br>
+{% endif %}
+    <br>
+    {% if publication.author_slug == user.slug %}
+
+    <div class="text-center">
+        <a href="{% url 'core:edit_publication' publication.uuid %}"><button id="editbtn" class="btn btn-lg btn-warning border-black "><b>EDIT CONTENT</b></button></a>
+        <button id="deletebtn" class="btn btn-lg btn-danger">DELETE</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('deletebtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/publications/publication/rm', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({
+                            identifier: '{{ publication.uuid }}'
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                        window.location.href = '/';  // replace with actual path
+                    })
+                    .catch((error) => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+                }
+            });
+        });
+        </script>
+    
+    
+    {% endif %}
+    <br>
+    <br>
+</div>
+{% endblock content %}
+{% comment %} <script>
+    $(document).ready(function () {
+        var btn = $('#upvbtn');
+        $('.fa-heart').click(function () {
+            $(this).toggleClass("fa-solid fa-heart-circle-check fa-beat-fade fa-sm");
+        });
+    });
+</script> {% endcomment %}
+</main>
+
+{% comment %} <script>
+    document.getElementById('upvbtn').addEventListener('htmx:afterOnLoad', function (event) {
+        var btn = $(this);
+        var icon = btn.children('i');
+        if (btn.text().trim() == "Upvote") {
+            btn.text("You Like It");
+            icon.removeClass("fa-regular fa-heart");
+            icon.addClass("fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm");
+        } else {
+            btn.text("Upvote");
+            icon.removeClass("fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm");
+            icon.addClass("fa-regular fa-heart");
+        }
+    });
+</script> {% endcomment %}
+
+<script>
+    $('#upvbtn').click(function () {
+        var btn = $(this);
+        var icon = btn.children('i');
+        $.ajax({
+            url: "{% url 'core:upvote' publication.uuid %}",
+            method: 'POST',
+            data: {
+                'publication_id': '{{ publication.uuid }}',
+                'profile_email': '{{ user.email }}',
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function (data) {
+                console.log(data); // Log the response
+            }
+        });
+    });
+</script>

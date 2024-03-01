@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cool_paginate %}
+{% block title %}
+STAYS FEED 
+{% endblock title %}
+<main>
+{% block content %}
+
+<script>
+    // Définir la fonction showLoginModal ici
+    window.showLoginModal = function(event) {
+        event.preventDefault();
+    
+        Swal.fire({
+            title: '<strong style="color:black;">Login</strong>',
+            html:
+            '<form id="swal-form" onsubmit="event.preventDefault();">' +
+                '<input type="hidden" id="swal-csrf-token" value="{{ csrf_token }}">' +
+                '<label for="swal-input1">Email</label>' +
+                '<input name="username" id="swal-input1" class="swal2-input" placeholder="Email">' +
+                '<label for="swal-input2">Password</label>' +
+                '<input name="password" id="swal-input2" class="swal2-input" placeholder="Password" type="password">' +
+                '<div id="swal-input-error" style="color: red;"></div>' +
+                '</form>',
+            focusConfirm: false,
+            background: 'white',
+            preConfirm: () => {
+                const email = document.getElementById('swal-input1').value;
+                const password = document.getElementById('swal-input2').value;
+                const csrfToken = document.getElementById('swal-csrf-token').value;
+                const swalIcon = document.querySelector('.swal2-icon');
+                if (swalIcon) {
+                    swalIcon.style.display = 'flex'; // Show the error icon
+                }
+
+                const formData = new FormData();
+                formData.append('username', email);
+                formData.append('password', password);
+                formData.append('csrfmiddlewaretoken', csrfToken);
+
+                return axios.post('/login?fromfeed=fromfeed', formData, {
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                    }
+                })
+                .then(function (response) {
+                    // Ici, nous utilisons `true` comme argument pour forcer le rechargement à partir du serveur
+                    window.location.reload(true);
+                    if (!response.data.error) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Your are connected.',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        throw new Error(response.data.error);
+                    }
+                    
+                })
+                .catch(function (error) {
+                    document.getElementById('swal-input-error').textContent = 'Invalid credentials. Please try again';
+                    Swal.update({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Invalid credentials. Please try again',
+                        background: 'white',
+                        //position: 'center', // Position the error message at the center of the screen
+                        confirmButtonText: 'OK',
+
+                    });
+                    Swal.showValidationMessage(`Request failed: ${error}`);
+                    Swal.getConfirmButton().disabled = true; // Disable the confirm button
+                    setTimeout(() => {
+                        const swalIcon = document.querySelector('.swal2-icon');
+                        if (swalIcon) {
+                            swalIcon.style.display = 'none';
+                        }
+                        Swal.getConfirmButton().disabled = false; // Enable the confirm button
+                    }, 900); // Make the error icon disappear after 1.5 seconds
+                    return new Promise((resolve, reject) => reject(error)); // Return a rejected promise
+                });
+            }
+        });
+    }
+</script>
+<div class="container mx-auto">
+        
+    <div class="d-flex justify-content-center gx-4 gy-0">
+
+        <!-- left sidebar-->
+        <div class="col-lg-7">
+        {% if page_obj.object_list %}    
+            <!-- post 1-->
+            {% for publication in page_obj %}
+            
+            <div class="card">
+                <div class="card-body">
+                <center>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'core:publication' publication.uuid %}">
+                        <h2 class="card-title">{{ publication.title }}</h2>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'core:publication' publication.uuid %}"  onclick="showLoginModal(event)">
+                        <h2 class="card-title">{{ publication.title }}</h2>
+                    </a>
+                    {% endif %}
+                </center>
+                {% if user.is_authenticated %}
+                <h5 id="h5_username">Written by <a class="user-slug"  href="{% url 'users:profile' publication.author_slug %}"> {{ publication.author_username }}</a><i data-toggle="tooltip" data-slug="{{ publication.author_slug }}" class="fa-solid fa-sun" style="color: #a0a4ac"></i></h5>
+                {% else %}
+                <h5 id="h5_username">Written by <a class="user-slug"  href="{% url 'users:profile' publication.author_slug %}"  onclick="showLoginModal(event)"> {{ publication.author_username }}</a><i data-toggle="tooltip" data-slug="{{ publication.author_slug }}" class="fa-solid fa-sun" style="color: #a0a4ac"></i></h5>
+                {% endif %}
+
+                <h5>{{ publication.created_at }}</h5>
+                <script>
+                    var author_slug = "{{ publication.author_slug }}";
+                    var statusElement = document.querySelector(`[data-slug="${author_slug}"]`);
+                </script>
+                <p class="card-text">{{ publication.summary }}</p>
+                </div>
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="{% url 'core:serve_publication_picture' publication.uuid %}" alt="Illustration" class="card-img-bottom lazyload">
+                <div class="card-body">
+                    {% if user.is_authenticated %}
+                    <h2 class="card-title">{{ publication.season_of_stay }}, <a href="{% url 'locations:country' publication.country_code_of_stay %}">{{ publication.stay_country_name }}</a></h2>
+                    {% else %}
+                    <h2 class="card-title">{{ publication.season_of_stay }}, <a href="{% url 'locations:country' publication.country_code_of_stay %}" onclick="showLoginModal(event)">{{ publication.stay_country_name }}</a></h2>
+                    {% endif %}
+                    {% if publication.published_from_country_code and user.is_authenticated %}
+                    <h6>Published from <a href="{% url 'locations:country' publication.published_from_country_code %}" >{{ publication.published_from_country_name }}</a></h6>
+                    {% elif not user.is_authenticated %}
+                    <h6>Published from <a href="{% url 'locations:country' publication.published_from_country_code %}" onclick="showLoginModal(event)">{{ publication.published_from_country_name }}</a></h6>
+                    {% endif %}
+                    {% if publication.updated_at != publication.created_at %}
+                    <p class="card-text"><small class="text-muted">Updated {{ publication.updated_at }}</small></p>
+                    {% endif %}
+                    {% if user.is_authenticated and publication.content_type == "text" %}
+                    <p class="card-text">{{ publication.text_story }}</p>
+                    {% endif %}
+                    {% if user.is_authenticated and publication.content_type == "voice" %}
+                    <div class="col-sm-12 mx-auto embed-responsive embed-responsive-4by3">
+                        <audio controls class="embed-responsive-item" style="display: block; margin: 0 auto;">
+                            <source id="audioSource" src="{% url 'core:serve_publication_audio' publication.uuid %}">
+                        </audio>
+                    </div>
+                    {% endif %}
+                    {% if not user.is_authenticated %}
+                    <style>
+                        #loginfromfeedbtn:hover {
+                            background-color: transparent !important;
+                            color: red !important;
+                            transform: scale(1.1); /* Agrandit le bouton de 10% */
+                            font-size: 1.2em; /* Agrandit le texte de 20% */
+
+                        }
+                    </style>
+                    <center>
+                    <div class="text-center">
+                        <button type="button" id="loginfromfeedbtn" class="btn btn-light btn-outline-info" style="color: red !important;" onclick="showLoginModal(event)">Login</button>
+                    </div>
+                    </center>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    
+                    <center>
+                        {% if user.slug not in publication.upvoters %}
+                        <button id="upvbtn" 
+                                type="button" 
+                                class="btn btn-light btn-outline-info"
+                                hx-post="{% url 'core:upvote' publication.uuid %}" 
+                                hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                                hx-target="#upvbtn" 
+                                hx-swap="none"
+                                hx-headers='{"Content-Type":"application/json"}'>
+                            Upvote <i id="upvotei" class="fa-regular fa-heart" style="color: #e22222;" data-fa-i2svg></i>
+                        </button>
+                        {% else %}
+                        <button id="upvbtn" 
+                                type="button" 
+                                class="btn btn-light btn-outline-info"
+                                hx-post="{% url 'core:upvote' publication.uuid %}" 
+                                hx-params='{"publication_id": "{{ publication.uuid }}", "profile_email": "{{ user.email }}", "csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                                hx-target="#upvbtn" 
+                                hx-swap="none"
+                                hx-headers='{"Content-Type":"application/json"}'>
+                            Upvote <i id="upvotei" class="fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm" style="color: #e22222;" data-fa-i2svg></i>
+                        </button>
+                        {% endif %}
+                    </center>
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+            <br>
+            <div class="d-flex justify-content-center mt-6">
+                <div class="d-flex justify-content-center mt-6">
+                    {% cool_paginate page_obj=page_obj %}
+                </div>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    window.onload = function() {
+        console.log("window.onload");
+        var lazyloadImages = document.querySelectorAll("img.lazyload");    
+        var imageObserver = new IntersectionObserver(function(entries, observer) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var image = entry.target;
+              image.src = image.dataset.src;
+              image.classList.remove("lazyload");
+              imageObserver.unobserve(image);
+            }
+          });
+        });
+      
+        lazyloadImages.forEach(function(image) {
+          imageObserver.observe(image);
+      
+          // Add an error event listener to the image
+          image.addEventListener('error', function() {
+            // Retry loading the image
+            image.src = image.dataset.src;
+          });
+        });
+
+        var audios = document.querySelectorAll("audio");
+        audios.forEach(function(audio) {
+        var source = audio.querySelector('source');
+        source.src = source.dataset.src;
+
+        // Add an event listener for the canplaythrough event
+        audio.addEventListener('canplaythrough', function() {
+            // The audio is ready to play
+            console.log('Audio is ready to play');
+        });
+
+        // Add an error event listener to the source
+        source.addEventListener('error', function() {
+            // Retry loading the audio
+            source.src = source.dataset.src;
+        });
+    });
+
+};
+</script>
+
+{% endblock content %}
+
+
+<script>
+    $(document).ready(function () {
+        $('#upvbtn').click(function () {
+            $.ajax({
+                url: "{% url 'publications:publication_upvote' publication.uuid %}",
+                method: 'POST',
+                data: {
+                    'publication_id': '{{ publication.uuid }}',
+                    'profile_slug': '{{ user.slug }}',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    // Update the button text or do something else with the response
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    document.getElementById('upvotei').onclick = function() {
+        // Attendre 0,1 seconde
+        setTimeout(() => {
+            // Vérifier si toutes les classes sont présentes
+            if (this.classList.contains('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm')) {
+                // Si oui, remplacer les classes
+                this.classList.remove('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade', 'fa-sm');
+                this.classList.add('fa-regular', 'fa-heart');
+            } else if (!this.classList.contains('fa-heart-circle-check', 'fa-beat-fade')) {
+                // Si 'fa-heart-circle-check' et 'fa-beat-fade' ne sont pas présents, modifier les classes
+                this.classList.remove('fa-regular');
+                this.classList.add('fa-solid', 'fa-heart', 'fa-heart-circle-check', 'fa-beat-fade');
+            }
+        }, 80);
+    }
+</script>
+
+
+
+</main>

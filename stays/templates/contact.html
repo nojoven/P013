@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+<style>
+    body {
+        background-image: url({% static 'assets/images/logo.png' %});
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+
+<main>
+    {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger d-flex align-items-center d-flex justify-content-around" role="alert">
+            <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container d-flex align-items-center justify-content-center" style="height: calc(100vh - (header height + footer height))">
+        <form method="post" class="row g-3 bg-white rounded border border-primary col-12 col-lg-8 mx-auto p-4" style="max-width: 72%;">
+            {% csrf_token %}
+            <div class="col-12">
+                <label for="subject" class="form-label text-black">Subject</label>
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="" style="color: black;">
+            </div>
+            <div class="col-12">
+                <label for="name" class="form-label text-black">Name</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" style="color: black;">
+            </div>
+            <div class="col-12">
+                <label for="email" class="form-label text-black">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" style="color: black;">
+            </div>
+            <div class="col-12">
+                <label for="message" class="form-label text-black">Message</label>
+                <textarea class="form-control" id="message" name="message" rows="3" placeholder="Enter your message" style="color: black;"></textarea>
+            </div>
+            <div class="col-12 d-flex justify-content-center">
+                <button type="submit" class="btn btn-warning btn-block col-12 col-md-6">Send</button>
+            </div>
+        </form>
+    </div>
+    {% endblock content %}
+</main>

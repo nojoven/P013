@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+{% load split_on_slash %}
+{% block title %}
+Publish
+{% endblock title %}
+
+<main>
+    {% block content %}
+    <style>
+        .form-container {
+            margin-top: 10vh; /* Adjust this value based on the height of your header */
+        }
+    </style>
+    <div class="d-flex justify-content-center form-container">
+        <div class="card text-dark bg-light mb-3" style="max-width: 77%;">
+            <div class="card-body text-center fw-bold">
+                {% if messages %}
+                    <div class="d-flex justify-content-around">
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <h1 class="card-title">Let's publish a new content</h1>
+                <h4 class="card-title">You are currently in {{ active_from_contry_name }}</h4>
+                
+                <form action="{% url 'users:publish' current_user.slug %}" method="post" enctype="multipart/form-data" class="text-center">
+                {% csrf_token %}
+                    <!-- Add your form fields here -->
+                    <div class="row g-3 p-4 p-lg-6">
+                        <div class="col-12">
+                            <label for="picture" class="form-label">Select A Picture (required)</label>
+                            <input type="file" name="picture" value="{{ form.picture.value|default_if_none:'' }}" accept=".jpg,.JPEG,.png,.svg" capture="user" class="form-control bg-light">
+                        </div>
+                        <div class="col-12 d-none">
+                            <label for="author_slug" class="form-label visually-hidden">Author ID</label>
+                            <input type="text" name="author_slug" value="{{ current_user.slug }}" class="form-control bg-light" readonly>
+                        </div>
+                        <div class="col-12 d-none">
+                            <label for="author_username" class="form-label visually-hidden">Author Name</label>
+                            <input type="text" name="author_username" value="{{ current_user.username }}" class="form-control bg-light" readonly>
+                        </div>
+                        <div class="col-12">
+                            <label for="title" class="form-label text-black">Title (required)</label>
+                            <input type="text" name="title" placeholder="" value="{{ form.title.value|default_if_none:'' }}" class="form-control bg-light text-dark" style="text-align: center;">
+                        </div>
+                        <div class="col-12">
+                            <label for="country_code_of_stay" class="form-label">Country of the stay (required)</label>
+                            {% load countries %}
+                            {% get_countries as countries %}
+                            <select name="country_code_of_stay" class="form-select">
+                            {% for country in countries %}
+                                <option value="{{ country.code }}" {% if form.country_code_of_stay.value == country.code %}selected{% endif %}>{{ country.name }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="published_from_country_code" class="form-label">This content is going to be published from {{ active_from_contry_name }} which code is :</label>
+                            <input type="text" name="published_from_country_code" value="{{ active_from_contry_code }}" class="form-control bg-light" style="text-align: center;" readonly>
+                        </div>
+                        <div class="col-12">
+                            <label for="season_of_stay" class="form-label">Season (required)</label>
+                            <select id="stay_seasons" name="season_of_stay" class="form-select">
+                                <option value="Spring" {% if form.season_of_stay.value == "Spring" %}selected{% endif %}>Spring</option>
+                                <option value="Summer" {% if form.season_of_stay.value == "Summer" %}selected{% endif %}>Summer</option>
+                                <option value="Autumn" {% if form.season_of_stay.value == "Autumn" %}selected{% endif %}>Autumn</option>
+                                <option value="Winter" {% if form.season_of_stay.value == "Winter" %}selected{% endif %}>Winter</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="year_of_stay" class="form-label">Year of Stay  (required)</label>
+                            {% if form.year_of_stay.value %}
+                            <input type="number" name="year_of_stay" value="{{ form.year_of_stay.value }}" min=1918 max=2023 class="form-control bg-light text-dark" style="text-align: center;">
+                            {% else %}
+                            <input type="number" name="year_of_stay" value=1918 min=1918 max=2024 class="form-control bg-light text-dark" style="text-align: center;">
+                            {% endif %}
+                        </div>
+                        <div class="col-12">
+                            <legend class="form-label">Type of publication  (required)</legend>
+                            <div class="row">
+                                <style>
+                                    .form-check .form-check-input {
+                                        float: left;
+                                        margin-left: -3.5em;
+                                    }
+                                    input[type='radio'] {
+                                        width: 20px;
+                                        height: 40px;
+                                        border-radius: 50%;
+                                    }
+                                </style>
+                                <div class="col-6 d-flex justify-content-center">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="contenttype1" name="content_type" value="text" checked>
+                                        <label class="form-check-label" for="contenttype1">Text</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 d-flex justify-content-center">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="contenttype2" name="content_type" value="voice">
+                                        <label class="form-check-label" for="contenttype2">Voice</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="summary" class="form-label text-dark">Summary  (required)</label>
+                            <input type="text" name="summary" placeholder="" value="{{ form.summary.value|default_if_none:'' }}" class="form-control bg-light text-dark" style="text-align: center;">
+                        </div>
+                        <div class="col-12">
+                            <label for="text_story" class="form-label">Write about your stay (required)</label>
+                            <textarea id="textstory" name="text_story" placeholder="{{ form.text_story.value|default_if_none:'It was ...' }}" value="{{ form.text_story.value|default_if_none:'' }}" rows="5" class="form-control bg-light text-dark"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label for="voice_story" class="form-label">Record your experience  (required)</label>
+                            <input type="file" id="voicestory" name="voice_story" value="{{ form.voice_story.value|default_if_none:'' }}" accept="audio/*" class="form-control bg-light text-dark">
+                        </div>
+                        <div class="bg-gray-10 p-6 pt-0 d-flex justify-content-center space-x-6">
+                            <button type="submit" class="btn btn-primary">Publish</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+</main>
+
+ <!-- Scripts
+    ================================================== -->
+    <!-- tippy Development -->
+    {% comment %} <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <!-- tippy Production -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/6.2.5/simplebar.min.js"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script> {% endcomment %}
+
+{% comment %} 
+    <script>
+        $(document).ready(function() {
+            const text_story = document.getElementById('textstory');
+            const voice_story = document.getElementById('voicestory');
+            $('label[for="voice_story"]').hide();
+            voice_story.style.display = 'none';
+        
+            function handleRadioClick() {
+                if (document.getElementById('contenttype1').checked) {
+                    text_story.style.display = 'block';
+                    $('label[for="text_story"]').show();
+                    $('label[for="voice_story"]').hide();
+                    voice_story.style.display = 'none';
+                } else {
+                    $('label[for="voice_story"]').show();
+                    $('label[for="text_story"]').hide();
+                    voice_story.style.display = 'block';
+                    text_story.style.display = 'none';
+                }
+            }
+        
+            const radioButtons = document.querySelectorAll('input[name="content_type"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('click', handleRadioClick);
+            });
+        });
+    </script> {% endcomment %}

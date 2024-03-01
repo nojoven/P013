@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% load replace_in_str %}
+{% block title %}
+{{ general_information.Official }}
+{% endblock title %}
+<main>
+    {% block content %}
+    <div class="d-flex justify-content-center">
+        <div class="card text-center text-dark bg-white rounded" style="width: 18rem;">
+            <div class="card-body">
+                <h1 class="card-title font-weight-bold">{{ general_information.Official }}</h1>
+                <img src="{{ general_information.coat_of_arms }}" class="card-img-top rounded" alt="Coat of Arms">
+                <img src="{{ general_information.flag }}" class="card-img-top rounded mt-3" alt="Flag">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+                {% if country_time %}
+                <table class="table table-bordered table-striped rounded text-center">
+                    <tbody>
+                        {% for key, value in country_time.items %}
+                        <tr>
+                            <td>
+                                {{ key|replace_underscore_with_space }}
+                            </td>
+                            <td>
+                                {{ value }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+                {% if weather %}
+                <table class="table table-bordered table-striped rounded text-center">
+                    <thead class="text-center">
+                        <tr>
+                            <th colspan="2">Weather</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in weather.items %}
+                        <tr>
+                            <td>
+                                {{ key|replace_underscore_with_space }}
+                            </td>
+                            <td>
+                                {{ value }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+                {% if general_information %}
+                <table class="table table-bordered table-striped rounded text-center">
+                    <thead class="text-center">
+                        <tr>
+                            <th>Data</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in general_information.items %}
+                        {% if key != "flag" and key != "coat_of_arms" %}
+                        <tr>
+                            <td>
+                                {% if key == "Google" %}
+                                Google
+                                {% elif key == "OpenStreet" %}
+                                OpenStreet
+                                {% elif "_" in key %}
+                                {{ key|replace_underscore_with_space }}
+                                {% else %}
+                                {{ key }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if key == "Google" or key == "OpenStreet" %}
+                                <a href="{{ value }}" class="btn btn-lg" role="button" target="_blank" style="background-color: white; color: darkblue; border: 1px solid red;">View</a>                                {% else %}
+                                {{ value }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+</main>

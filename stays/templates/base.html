@@ -1,0 +1,305 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="{% static 'assets/images/favicon-32x32.png' %}" sizes="32x32" rel="icon" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add Bootstrap CSS link here -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    
+    <!-- Font Awesome -->
+    <!-- One file includes all the Font Awesome Free icons and utilities -->
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+   
+    <title>{% block title %}{% endblock %}</title>
+     
+</head>
+<style>
+    .site, html {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #f8f9fa;
+        margin: 0;
+    }
+    
+    .site-content {
+        flex: 1 0 auto;
+        
+    }
+    
+    footer {
+        flex-shrink: 0;
+    }
+</style>
+<body class="site">
+    <style>
+        .navbar {
+            font-family: 'Poppins', sans-serif; /* This is a modern and stylish font. You can change it to any font you like. */
+        }
+        
+        .navbar a {
+            color: black !important; /* This will make the links black */
+        }
+        
+        .header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%; /* This will make the profile picture round */
+        }
+        .navbar-toggler {
+            display: none;
+        }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <style>
+            /* ... other styles ... */
+            
+            h1 {
+                font-size: 1.5rem; /* Adjust as needed */
+            }
+            
+            /* Adjust the font size on larger screens */
+            @media (min-width: 991px) {
+                h1 {
+                    font-size: 2.5rem; /* Adjust as needed */
+                }
+            }
+            </style>
+        <div class="container" style="height: 107px !important;">
+            <!-- Left side -->
+            <div class="navbar-brand">
+                <a href="{% url 'core:home' %}">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+    
+            <!-- Center title -->
+            <h1 class="mx-auto text-center"><strong>S T A Y S </strong></h1>
+    
+            <!-- Right side -->
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user.is_authenticated %}
+                        <img src="{{ user.profile_picture.url }}" class="header-avatar" alt="{% static 'assets/images/avatars/vectorstock_7142223.png' %}">
+                    {% else %}
+                        <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar" alt="{% static 'assets/images/avatars/vectorstock_7142223.png' %}">
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'users:account' user.slug %}">Account</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:publish' user.slug %}">Publish</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:logout' %}">Log Out</a></li>
+                    {% else %}
+                        <li><a class="dropdown-item" href="{% url 'users:login' %}">Sign In</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Toggler/collapsibe Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+    </nav>
+
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="check-circle-fill" viewBox="0 0 16 16">
+      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+    </symbol>
+    <symbol id="info-fill" viewBox="0 0 16 16">
+      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+    </symbol>
+    <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
+      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+    </symbol>
+</svg>
+
+{% if messages %}
+<div class="d-flex justify-content-around">
+    {% for message in messages %}
+        {% if 'base_success' in message.tags %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+<main class="site-content">
+{{ redirect_to_login_immediately }}
+{% comment %} {% load easy_maps_tags %} {% endcomment %}
+{% block content %}
+{% endblock content %}
+</main>
+<!-- Footer -->
+<footer class="bg-dark text-light py-5 bottom-0 mt-auto" style="margin-top: 3% !important; margin-bottom: 0% !important">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-3">
+              <div class="bg-white p-3 rounded">
+                  <svg class="bi bi-chat-dots text-primary" width="2em" height="2em" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M11.354 1.646A7.996 7.996 0 0 0 8 15a7.996 7.996 0 0 0 6.354-12.354L14 1l-2.646 2.646zM8 13a6.5 6.5 0 0 1-4.95-2.286c-.39-.487-.696-1.038-.896-1.635A5.98 5.98 0 0 1 2 6c0-3.314 2.686-6 6-6s6 2.686 6 6-2.686 6-6 6z"/>
+                      <path d="M9.462 9.01c.08.25.154.498.218.743.071.269.13.51.176.708a8.467 8.467 0 0 1-2.527.267 8.467 8.467 0 0 1-2.527-.267c.047-.198.106-.439.176-.708.064-.245.138-.493.218-.743a6.5 6.5 0 0 0 1.495 0z"/>
+                      <path d="M8 2a6.48 6.48 0 0 0-4.441 1.734c-.199.159-.389.328-.573.514A5.991 5.991 0 0 1 2 6c0 3.314 2.686 6 6 6s6-2.686 6-6a5.99 5.99 0 0 1-1.986-2.752 7.99 7.99 0 0 0-3.533-1.55A6.48 6.48 0 0 0 8 2zM7 9.561a7.42 7.42 0 0 1 1 0c.049.003.098.004.147.004s.098 0 .147-.004z"/>
+                  </svg>
+                  <p class="mt-3 text-dark">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+          </div>
+          <div class="col-lg-6">
+              <h5 class="mb-4 text-light">Quick Links</h5>
+              <ul class="list-unstyled">
+                  <li><a href="{% url 'core:home' %}" class="text-light">Home</a></li>
+                  <li><a href="#" class="text-light">About</a></li>
+                  <li><a href="{% url 'core:contact' %}" class="text-light">Contact</a></li>
+              </ul>
+          </div>
+          <div class="col-lg-3">
+              <h5 class="mb-4 text-light">Follow Us</h5>
+              <a href='https://db-ip.com' class="text-light mr-3">IP Geolocation by DB-IP</a>
+          </div>
+      </div>
+  </div>
+  <!-- Add jQuery script link here -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <!-- Add SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+</footer>
+
+
+
+
+
+<!-- Scripts ================================================== -->
+
+<!-- Add Hyperscript script link here -->
+{% comment %} <script src="https://unpkg.com/hyperscript.org@0.9.12"></script> {% endcomment %}
+<!-- Add Bootstrap JS and Popper.js script links here -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- UIkit JS -->
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/6.2.5/simplebar.min.js"></script>
+{% comment %} <script src="{% static 'assets/js/custom.js' %}"></script> {% endcomment %}
+<!-- Add HTMX -->
+<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+<!--TinyMCE-->
+{% comment %} <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-webcomponent@2/dist/tinymce-webcomponent.min.js"></script> {% endcomment %}
+
+<!-- Script jQuery pour basculer les classes d'icônes -->
+<script>
+    $(document).ready(function () {
+      $('.fa-heart').click(function () {
+        $(this).toggleClass("fa-solid fa-heart-circle-check fa-beat-fade fa-sm");
+      });
+    });
+    
+</script>
+
+<style>
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<script>
+    // Function to update user status
+    async function updateUserStatus(author_slug) {
+        console.log(`Fetching status for ${author_slug}`);
+        try {
+            const cacheTime = 900000;
+            const response = await fetch(`/api/isonline/${author_slug}/`, { cache: "no-cache" }, cacheTime);
+            console.log(`Received response for ${author_slug}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            const statusElements = document.querySelectorAll(`[data-slug="${author_slug}"]`);
+            statusElements.forEach(statusElement => {
+                if (data.is_online) {
+                    statusElement.className = 'fa-duotone fa-spin fa-solid fa-sun fa-xl';
+                    statusElement.style.color = '#f08205';
+                    statusElement.style.animation = 'spin 2s linear infinite';
+                    statusElement.title = 'This user is online.';
+                } else {
+                    statusElement.className = 'fa-regular fa-sun fa-xs';
+                    statusElement.style.color = '#a0a4ac';
+                    statusElement.style.animation = '';
+                    statusElement.title = '';
+                }
+            });
+        } catch (error) {
+            console.log('There was a problem with the fetch operation: ' + error.message);
+        }
+    }
+
+    // Function to update status for all slugs
+    function updateAllStatuses() {
+        var slugs = Array.from(document.querySelectorAll(`[data-slug]`)).map(el => el.dataset.slug);
+        console.log(`Updating status for slugs: ${slugs.join(', ')}`);
+        slugs.forEach(slug => updateUserStatus(slug));
+    }
+
+    // Run once when the page loads
+    updateAllStatuses();
+
+    // Run every 45 seconds
+    setInterval(updateAllStatuses, 45000);
+
+    // Event listener for pagination
+    document.querySelectorAll('.pagination a').forEach(a => {
+        a.addEventListener('click', function(event) {
+            // Wait for the new page content to load
+            setTimeout(updateAllStatuses, 1000);
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        const text_story = document.getElementById('textstory');
+        const voice_story = document.getElementById('voicestory');
+        if (text_story && voice_story) {
+            $('label[for="voice_story"]').hide();
+            voice_story.style.display = 'none';
+        
+            function handleRadioClick() {
+                if (document.getElementById('contenttype1').checked) {
+                    text_story.style.display = 'block';
+                    $('label[for="text_story"]').show();
+                    $('label[for="voice_story"]').hide();
+                    voice_story.style.display = 'none';
+                } else {
+                    $('label[for="voice_story"]').show();
+                    $('label[for="text_story"]').hide();
+                    voice_story.style.display = 'block';
+                    text_story.style.display = 'none';
+                }
+            }
+    
+            const radioButtons = document.querySelectorAll('input[name="content_type"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('click', handleRadioClick);
+            });
+        }
+    });
+</script>
+{% block scripts %}
+{% endblock scripts %}
+</body>
+</html>
