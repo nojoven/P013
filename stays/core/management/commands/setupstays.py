@@ -103,7 +103,20 @@ class Command(BaseCommand):
                     published_from_country_code="FR",
                     upvotes_count=0
                 )
+        
+        # Create 1 superuser
+        superadmin = baker.make(
+            User,
+            email='superadmin@stays.com',
+            slug=f"superadmin{uuid4()}",
+            username='superadmin',
+            is_superuser=True,
+            is_staff=True
+        )
+        superadmin.set_password('testpassword')
+        superadmin.save()
 
+        profiles.append(superadmin)
         # Make each profile follow the others
         for profile in profiles:
             for other_profile in profiles:

@@ -8,6 +8,7 @@ from core.models import Publication
 from friendship.models import Follow
 from unittest.mock import patch, call
 
+
 class TestSetupStaysCommand(TestCase):
     def test_setup_stays(self):
         # Set an environment variable to indicate that the command is being run from a test
@@ -18,17 +19,25 @@ class TestSetupStaysCommand(TestCase):
 
         # Vérification que 3 profils ont été créés
         User = get_user_model()
-        self.assertEqual(User.objects.count(), 3)
+        self.assertEqual(User.objects.count(), 4)
 
         # Vérification que 12 publications ont été créées
         self.assertEqual(Publication.objects.count(), 12)
 
         # Vérification que chaque profil suit les autres
-        users = User.objects.all()
-        for user in users:
-            # self.assertEqual(user.following.count(), 2)
-            self.assertEqual(len(Follow.objects.following(user)), 2)
-            self.assertEqual(len(Follow.objects.followers(user)), 2)
+
+        self.assertEqual(Follow.objects.count(), 12)
+        
+        # Get the actual follow relationships
+        actual_follows = [(f.follower_id, f.followee_id) for f in Follow.objects.all().order_by('follower_id', 'followee_id')]
+
+        # Define the expected follow relationships
+        expected_follows = [(1, 2), (1, 3), (1, 4), (2, 1), (2, 3), (2, 4), (3, 1), (3, 2), (3, 4), (4, 1), (4, 2), (4, 3)]
+
+        # Assert that the actual follow relationships match the expected ones
+        self.assertListEqual(actual_follows, expected_follows)
+
+        self.assertTrue(User.objects.filter(is_superuser=True).exists())
 
         # Remove the environment variable
         del os.environ['RUNNING_FROM_TEST']
