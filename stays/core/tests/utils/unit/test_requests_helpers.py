@@ -2,10 +2,8 @@
 from django.http import HttpResponse
 from django.test import RequestFactory
 from django.views import View
-from core.utils.requests_helpers import NeverCacheMixin, get_cache_key
-from icecream import ic
+from core.utils.requests_helpers import NeverCacheMixin
 from django.test import TestCase
-from django.core.cache import cache
 from core.models import Publication
 from model_bakery import baker
 from stays.utils.common_helpers import uuid_generator
@@ -80,13 +78,13 @@ class TestGetCacheKey(TestCase):
             self.client = Client(enforce_csrf_checks=False)
             self.url = reverse('core:home')
 
-    def test_get_cache_key(self):
-        # Get the function from get_cache_key
-        _get_cache_key = get_cache_key(Publication)
+    # def test_get_cache_key(self):
+    #     # Get the function from get_cache_key
+    #     _get_cache_key = get_cache_key(Publication)
 
-        # Check that the cache is initially empty
-        self.assertIsNotNone(cache.get('publications_count'))
+    #     # Check that the cache is initially empty
+    #     self.assertIsNotNone(cache.get('publications_count'))
 
-        # Call _get_cache_key and check the returned key
-        key = _get_cache_key()
-        self.assertTrue(len(key) > len('home_page_'))
+    #     # Call _get_cache_key and check the returned key
+    #     key = _get_cache_key()
+    #     self.assertTrue(len(key) > len('home_page_'))

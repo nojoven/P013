@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from core.utils.requests_helpers import NeverCacheMixin, get_cache_key
+from core.utils.requests_helpers import NeverCacheMixin
 from core.forms import PublicationEditForm, ContactAdminForm
 from core.models import Publication, PublicationUpvote
 from django.core.paginator import Paginator
