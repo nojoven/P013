@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Followers
+{% endblock title %}
+<main>
+    {% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            {% for follower in followers %}
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 text-center text-dark mb-4">
+                <div class="p-3 border bg-light">
+                    <a href="{% url 'users:profile' follower.slug %}">
+                        {{ follower.username }}
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No followers yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock content %}
+</main>

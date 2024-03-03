@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Following
+{% endblock title %}
+<main>
+    {% block content %}
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="card text-dark mb-3" style="max-width: 55rem;">
+                <div class="card-body text-black">
+                    <strong>
+                    <h1>
+                    <a href="{% url 'users:profile' follower_of_stayer %}">
+                        {{ username_of_follower }} follows  
+                    </a>
+                    </h1>
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            {% for stayer in stayers %}
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 text-center text-dark mb-4">
+                <div class="p-3 border bg-light rounded" style="border-width: 2px;">
+                    <h3>@
+                        <a href="{% url 'users:profile' stayer.followee.slug %}" style="color: black; text-decoration-color: blue;">
+                            <strong>{{ stayer.followee.username }}</strong>
+                        </a>
+                    </h3>
+                <h4>{{ stayer.publication_count }} STAY ( S )</h4>
+                <h4 class="fst-italic blockquote">
+                    « {{ stayer.followee.motto }} »
+                </h4>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock content %}
+</main>

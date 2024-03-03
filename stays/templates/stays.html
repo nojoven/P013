@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% comment %} {% load cool_paginate %} {% endcomment %}
+{% load pagination_tags %}
+{% block title %}
+STAYS
+{% endblock title %}
+
+<main>
+    {% block content %}
+    <style>
+        body {
+            background-color: black !important;
+        }
+        .card:hover .card-img {
+            /*transform: scale(1.6);*/
+            opacity: 0.1;
+        }
+        .card:hover {
+            transform: scale(1.1);
+        }
+        .card .card-img {
+            transition: opacity 0.3s ease;
+        }
+        .card .card-img-overlay {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            overflow: auto;
+        }
+        .card:hover .card-img-overlay {
+            opacity: 1;
+        }
+        .card .card-img-overlay div {
+            text-align: center;
+        }
+
+        .card p {
+            margin: 0.05em 0; /* Réduit l'espace entre les éléments <p> */
+        }
+        .card h3 {
+            margin: 0.05em 0; /* Réduit l'espace entre les éléments <p> */
+        }
+        .w-80 {
+            width: 84% !important;
+        }
+        .site-content {
+            width: 100%; !important;
+        }
+        container {
+            margin-right: inherit !important;
+        }
+        .row.row-cols-1.row-cols-md-3.g-2 {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: flex-start !important;
+        }
+    </style>
+    <div class="container w-100">
+        {% if publications.author_username != "None" %}
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a href="{% url 'users:profile' publications.author_slug %}"><h2 class="text-dark">Stays of {{ publications.author_username }}</h2></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        {% if publications.author_motto != "None" %}
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h2 class="text-dark">{{ publications.author_motto }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        <div class="row row-cols-sm-1 row-cols-md-2  row-cols-lg-3 row-cols-xl-4 g-2 mx-auto w-100 justify-content-center align-item-center" style="width: 85%;">
+            {% autopaginate page_obj 9 %}
+            {% for publication in page_obj %}
+            <div class="col">
+                <div class="card bg-dark text-white border-1">
+                    <img loading="lazy" src="{{ publication.picture.url }}" class="card-img" alt="{{ publication.title }}">
+                    <div class="card-img-overlay d-flex align-items-center justify-content-center">
+                        <div>
+                            <a href="{% url 'core:publication' publication.uuid %}" class="text-decoration-none text-reset">
+                                <h3 class="card-title"> {{ publication.title }} </h3>
+                                <p class="card-text">{{ publication.stay_country_name }}, {{ publication.stay_continent_code }}</p>
+                                <p class="card-text">{{ publication.year_of_stay }}, {{ publication.season_of_stay }}</p>
+                                <p class="card-text">Published {{ publication.created_at }}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-6">
+        <div class="d-flex justify-content-center mt-6">
+            {% comment %} {% block paginator %} {% endcomment %}
+            {% comment %} <h1>{{ page_obj }}</h1> {% endcomment %}
+            {% comment %} {% cool_paginate %} {% endcomment %}
+            {% comment %} {% cool_paginate page_obj=publications %} {% endcomment %}
+            {% comment %} {% cool_paginate page_obj=publication %} {% endcomment %}
+            {% comment %} {% endblock paginator %} {% endcomment %}
+        </div>
+    </div>
+    {% endblock content %}
+</main>
+{% block scripts %}
+    {{ block.super }}
+    <script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var grid = document.querySelector('.row.row-cols-1.row-cols-md-3.g-2');
+            var images = grid.querySelectorAll('img');
+            var imagesLoaded = 0;
+
+            images.forEach((img) => {
+                img.addEventListener('load', () => {
+                    imagesLoaded++;
+                    if (imagesLoaded === images.length) {
+                        var pckry = new Packery(grid, {
+                            // options
+                            itemSelector: '.col',
+                            gutter: 3,
+                            columnWidth: '.col'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock scripts %}
