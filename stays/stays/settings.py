@@ -45,11 +45,11 @@ SECRET_KEY = confs.get("SECRET_KEY", getenv("SECRET_KEY"))
 DEBUG = confs.get("DEBUG", getenv("DEBUG")) # settings.DYNACONF_DEBUG
 TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG", getenv("TEMPLATE_DEBUG"))
 
-if DEBUG is True:
-    # Comment the one you don't need
+# if DEBUG is True:
+#     # Comment the one you don't need
 
-    import stackprinter
-    stackprinter.set_excepthook(style='darkbg2')
+#     import stackprinter
+#     stackprinter.set_excepthook(style='darkbg2')
 
 
 # Quick-start development settings - unsuitable for production
