@@ -187,7 +187,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "stays.wsgi.application"
+# WSGI_APPLICATION = "stays.wsgi.application"
 ASGI_APPLICATION = "stays.asgi.application"
 SILKY_PYTHON_PROFILER = True
 
