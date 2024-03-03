@@ -225,7 +225,7 @@ CACHES = {
     # … default cache config and others
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://:28xsyaxJM88ON55q1L2HM38hrCeC4vo5@redis-18488.c1.asia-northeast1-1.gce.cloud.redislabs.com:18488/1",
+        "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
