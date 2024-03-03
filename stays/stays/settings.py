@@ -92,12 +92,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "defender",
-    "rest_framework",
+    # "rest_framework",
     "users",
     "core",
     "cities_light",
     "locations",
-    "silk",
+    # "silk",
     # "allauth_ui",
     # "allauth",
     # "allauth.account",
@@ -120,18 +120,18 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
 
     # tinymce
-    "tinymce",
+    # "tinymce",
 
     # friendship
     "friendship",
     "pagination",
     # sweetify
-    'sweetify',
+    # 'sweetify',
 ]
 
 
 # Sweet Alert choices: 'sweetalert', 'sweetalert2' - default is 'sweetalert2'
-SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
+# SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
