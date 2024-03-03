@@ -9,6 +9,18 @@ P13 2023
 Ceci est pour une démo
 Armagnac.
 =======
+
+
+
+There are two ways to install Stays: manually or automatically.
+Scripter tout ça
+
+
+ ### Automated installation
++
++Cd vers répertoire où il y a manage.py
++
+
 -->
 
 ## Database user
@@ -81,6 +93,11 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO staydmin;
       WantedBy=multi-user.target
 
 ### Automated installation
+<!--
++
++Cd vers répertoire où il y a manage.py
++
+-->
 ```python manage.py setupstays```
 
 ### Run tests:
