@@ -28,8 +28,12 @@ P13 2023
    - ```python manage.py migrate locations```
    - ```python manage.py migrate```  (one last time)
 
+
 ## Populate cities_light
 ``` python manage.py cities_light```
+
+## Set the root of static files
+```python manage.py collectstatic```
 
 ## Start the project
 ### Run the command
