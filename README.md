@@ -12,6 +12,8 @@ P13 2023
    - ```python -m venv .venv```
    - ```source .venv/bin/activate```
    - ```pip install -r requirements.txt```
+   - Install redis
+   - Install Postgresql 15
 
 ## Configurations
    - Rename conf.js to confs.js
