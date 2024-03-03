@@ -10,11 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+# Add these at the top of your settings.py
 import json
 import os
 from pathlib import Path
-# import platform
-# from machina import MACHINA_MAIN_TEMPLATE_DIR
+from os import getenv
+from dotenv import load_dotenv
+import sentry_sdk
 
 from icecream import install as icinstall, ic
 icinstall()
@@ -22,7 +24,6 @@ icinstall()
 ic("Thanks to https://simplemaps.com/data/world-cities")
 ic("Image by Timur Kozmenko from Pixabay")
 
-import sentry_sdk
 
 
 if "confs.json" in os.listdir(Path(__file__).absolute().parent):
@@ -31,39 +32,24 @@ if "confs.json" in os.listdir(Path(__file__).absolute().parent):
         confs = json.loads(file.read())
 
 else:
-    confs = {
-        "DEBUG": True if os.environ.get("DEBUG") in ("True", "true") else False,
-        "ENGINE": os.environ.get("ENGINE"),
-        "HOST": os.environ.get("HOST"),
-        "NAME": os.environ.get("NAME"),
-        "PASSWORD": os.environ.get("PASSWORD"),
-        "PORT": int(os.environ.get("DBPORT")),
-        "SECRET_KEY": os.environ.get("SECRET_KEY"),
-        "TEMPLATE_DEBUG": os.environ.get(""),
-        "USER": os.environ.get("USER"),
-    }
+    load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # raise ValueError(settings.SECRET_KEY)
-SECRET_KEY = confs.get("SECRET_KEY")
+SECRET_KEY = confs.get("SECRET_KEY", getenv("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = confs.get("DEBUG") # settings.DYNACONF_DEBUG
-TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG")
+DEBUG = confs.get("DEBUG", getenv("DEBUG")) # settings.DYNACONF_DEBUG
+TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG", getenv("TEMPLATE_DEBUG"))
 
 if DEBUG is True:
     # Comment the one you don't need
 
     import stackprinter
     stackprinter.set_excepthook(style='darkbg2')
-
-    # from frosch import hook
-    # hook()
-
-    # os.environ['BETTER_EXCEPTIONS'] = "1"
 
 
 # Quick-start development settings - unsuitable for production
@@ -111,47 +97,18 @@ INSTALLED_APPS = [
     "core",
     "cities_light",
     "locations",
-    "watchman",
-    # "django_select2",
     "silk",
-    # "iommi",
     # "allauth_ui",
     # "allauth",
     # "allauth.account",
     # "allauth.socialaccount",
-    # "allauth.socialaccount.providers.github",
     # "allauth.socialaccount.providers.reddit",
     "django_countries",
     "django_htmx",
-    # "formset",
-    # "django_filters",
-    # "extra_views",
-
-    # Quill text editor
-    # 'django_quill',
 
     # Pagination
     "django_cool_paginator",
-    # "el_pagination",
-
-    # Machina dependencies:
-    # 'mptt',
-    # 'haystack',
-    # 'widget_tweaks',
-
-    # Machina apps:
-    # 'machina',
-    # 'machina.apps.forum',
-    # 'machina.apps.forum_conversation',
-    # 'machina.apps.forum_conversation.forum_attachments',
-    # 'machina.apps.forum_conversation.forum_polls',
-    # 'machina.apps.forum_feeds',
-    # 'machina.apps.forum_moderation',
-    # 'machina.apps.forum_search',
-    # 'machina.apps.forum_tracking',
-    # 'machina.apps.forum_member',
-    # 'machina.apps.forum_permission',
-
+    
     # Django-Ninja
     "ninja_extra",
     # Django Q2
@@ -161,12 +118,6 @@ INSTALLED_APPS = [
 
     # Thumbnails
     'sorl.thumbnail',
-
-    # Audiofield
-    # "audiofield",
-
-    # Easy Maps
-    # "easy_maps",
 
     # tinymce
     "tinymce",
@@ -184,8 +135,6 @@ SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
-# CITIES_LIGHT_INCLUDE_COUNTRIES = ['FR']
-# CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
 
 
 MIDDLEWARE = [
@@ -200,20 +149,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
-    # Iommi: these three are optional, but highly recommended!
-    # 'iommi.live_edit.Middleware',
-    # 'iommi.sql_trace.Middleware',
-    # 'iommi.profiling.Middleware',
-    # Iommi : this one is required
-    # 'iommi.middleware',
-    # better_exceptions
-    # "better_exceptions.integrations.django.BetterExceptionsMiddleware",
-    # Add the account middleware:
-    # "allauth.account.middleware.AccountMiddleware",
-    # Machina
-    # 'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
-    # Current user
-    # 'django_currentuser.middleware.ThreadLocalUserMiddleware',
     # Defender
     'defender.middleware.FailedLoginMiddleware',
     # Auto Logout
@@ -239,10 +174,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                #"django.core.context_processors.request"
-                # Machina
-                # 'machina.core.context_processors.metadata',
-                # auto logout
                 'django_auto_logout.context_processors.auto_logout_client',
             ],
             'loaders': [
@@ -259,20 +190,36 @@ SILKY_PYTHON_PROFILER = True
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": confs.get("ENGINE"),
-        "NAME": confs.get("NAME"),
-        "USER": confs.get("USER"),
-        "PASSWORD": confs.get("PASSWORD"),
-        "HOST": confs.get("HOST"),
-        "PORT": confs.get("PORT"),
-        # 'OPTIONS': {'sslmode': 'require'}
-        # 'CONN_MAX_AGE': 0,
-    },
-}
-
+if DEBUG is True:
+    DATABASES = {
+        "default": {
+            "ENGINE": confs.get("ENGINE"),
+            "NAME": confs.get("NAME"),
+            "USER": confs.get("USER"),
+            "PASSWORD": confs.get("PASSWORD"),
+            "HOST": confs.get("HOST"),
+            "PORT": confs.get("PORT"),
+            # 'OPTIONS': {'sslmode': 'require'}
+            # 'CONN_MAX_AGE': 0,
+        },
+    }
+else:
+    # Load the .env file
+    load_dotenv()
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': getenv('PGDATABASE'),
+            'USER': getenv('PGUSER'),
+            'PASSWORD': getenv('PGPASSWORD'),
+            'HOST': getenv('PGHOST'),
+            'PORT': getenv('PGPORT', 5432),
+            'OPTIONS': {
+                'sslmode': 'require',
+            },
+            'DISABLE_SERVER_SIDE_CURSORS': True,
+        }
+    }
 
 CACHES = {
     # … default cache config and others
@@ -282,22 +229,19 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
-    },
-    "select2": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    },
-    # 'machina_attachments': {
-    #     'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-    #     'LOCATION': confs.get("MACHINA_ATTACHMENT_CACHE_LOCATION") if platform.system() == 'Windows' else '/tmp',
-    # },
+    }
+    # ,
+    # "select2": {
+    #     "BACKEND": "django_redis.cache.RedisCache",
+    #     "LOCATION": "redis://127.0.0.1:6379/2",
+    #     "OPTIONS": {
+    #         "CLIENT_CLASS": "django_redis.client.DefaultClient",
+    #     }
+    # }
 }
 
 # SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS = "select2"
+# SESSION_CACHE_ALIAS = "select2"
 
 # # Tell select2 which cache configuration to use:
 # SELECT2_CACHE_BACKEND = "select2"
@@ -315,7 +259,6 @@ THROTTLE_ZONES = {
 # Where to store request counts.
 THROTTLE_BACKEND = 'throttle.backends.cache.CacheBackend'
 
-
 # Optional if Redis backend is chosen ('throttle.backends.redispy.RedisBackend')
 THROTTLE_REDIS_HOST = 'localhost'
 THROTTLE_REDIS_PORT = 6379
@@ -324,14 +267,6 @@ THROTTLE_REDIS_AUTH = 'pass'
 
 # Normally, throttling is disabled when DEBUG=True. Use this to force it to enabled.
 THROTTLE_ENABLED = True
-
-
-# HAYSTACK_CONNECTIONS = {
-#     'default': {
-#         'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
-#     },
-# }
-
 
 # python manage.py cleanup_django_defender to unlock
 DEFENDER_LOGIN_FAILURE_LIMIT = 20
@@ -369,7 +304,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = "/static/"
 COUNTRIES_FLAG_URL = "flags/{code}.png"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
@@ -379,7 +313,6 @@ GEOIP_PATH = os.path.join(BASE_DIR, "geoip")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_AUTO_FIELD = '/media/'
@@ -387,9 +320,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = "users.Profile"
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
+
+
 AUTHENTICATION_BACKENDS = [
     'users.backends.EmailBackend',  # custom backend
     # 'django.contrib.auth.backends.ModelBackend',  # default backend
@@ -423,47 +355,36 @@ AUTO_LOGOUT = {
     }
 
 
-# EASY_MAPS_GOOGLE_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ___0123456789'
-# EASY_MAPS_CENTER = (-41.3, 32)
-# EASY_MAPS_LANGUAGE = 'fr'
-
-TINYMCE_JS_URL = f"https://cdn.tiny.cloud/1/{confs.get('TINY_MCE_API_KEY')}/tinymce/6/tinymce.min.js"
-TINYMCE_COMPRESSOR = confs.get("TINYMCE_COMPRESSOR", False)
-
-PORCUPINE_ACCESSKEY = confs.get("PORCUPINE_ACCESSKEY")
-OPENAI_API_KEY = confs.get("OPENAI_API_KEY")
-
 
 COUNTRIES_FIRST = ['FR', 'US', 'GB']
 COUNTRIES_FIRST_SORT = True
 
-MAPBOX_TOKEN = confs.get("MAPBOX_TOKEN")
-NINJAS_API_KEY = confs.get("NINJAS_API_KEY")
-
-
-UNDETECTABLE_AI_API_KEY = confs.get("UNDETECTABLE_AI_API_KEY")
-
+NINJAS_API_KEY = confs.get("NINJAS_API_KEY", getenv("NINJAS_API_KEY"))
 
 # settings.py
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-EMAIL_BACKEND = confs.get("EMAIL_BACKEND")
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = confs.get("EMAIL_BACKEND", getenv("EMAIL_BACKEND"))
 # Hostname of your email provider
-EMAIL_HOST = confs.get("EMAIL_HOST")
+EMAIL_HOST = confs.get("EMAIL_HOST", getenv("EMAIL_HOST"))
 # port of your email provider
-EMAIL_PORT = confs.get("EMAIL_PORT")
-EMAIL_USE_TLS = confs.get("EMAIL_USE_TLS")
+EMAIL_PORT = confs.get("EMAIL_PORT", getenv("EMAIL_PORT"))
+EMAIL_USE_TLS = confs.get("EMAIL_USE_TLS", getenv("EMAIL_USE_TLS"))
 # your email account
-EMAIL_HOST_USER = confs.get("EMAIL_HOST_USER")
+EMAIL_HOST_USER = confs.get("EMAIL_HOST_USER", getenv("EMAIL_HOST_USER"))
 # your email password
-EMAIL_HOST_PASSWORD = confs.get("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_PASSWORD = confs.get("EMAIL_HOST_PASSWORD", getenv("EMAIL_HOST_PASSWORD"))
 
 # Mailgun Authorized email
-DEFAULT_EMAIL_DESTINATION = confs.get("DEFAULT_EMAIL_DESTINATION")
-ADMIN_EMAIL = confs.get("ADMIN_EMAIL")
+DEFAULT_EMAIL_DESTINATION = confs.get(
+    "DEFAULT_EMAIL_DESTINATION", 
+    getenv("DEFAULT_EMAIL_DESTINATION")
+)
+ADMIN_EMAIL = confs.get("ADMIN_EMAIL", getenv("ADMIN_EMAIL"))
 
-MAILGUN_API_KEY = confs.get("MAILGUN_API_KEY")
-MAILGUN_DOMAIN_NAME = confs.get("MAILGUN_DOMAIN_NAME")
+MAILGUN_API_KEY = confs.get("MAILGUN_API_KEY", getenv("MAILGUN_API_KEY"))
+MAILGUN_DOMAIN_NAME = confs.get("MAILGUN_DOMAIN_NAME", getenv("MAILGUN_DOMAIN_NAME"))
 
 HANDLER400 = 'stays.urls.handler400'
 HANDLER401 = 'stays.urls.handler401'
@@ -476,10 +397,17 @@ HANDLER500 = 'stays.urls.handler500'
 HANDLER503 = 'stays.urls.handler503'
 HANDLER504 = 'stays.urls.handler504'
 
-SENTRY_DSN_PROTOCOL = confs.get("SENTRY_DSN_PROTOCOL", "")
-SENTRY_DSN_START = confs.get("SENTRY_DSN_START", "")
-SENTRY_DSN_END = confs.get("SENTRY_DSN_END", "")
+if confs:
+    SENTRY_DSN_PROTOCOL = confs.get("SENTRY_DSN_PROTOCOL", "")
+    SENTRY_DSN_START = confs.get("SENTRY_DSN_START", "")
+    SENTRY_DSN_END = confs.get("SENTRY_DSN_END", "")
+else:
+    SENTRY_DSN_PROTOCOL = getenv("SENTRY_DSN_PROTOCOL")
+    SENTRY_DSN_START = getenv("SENTRY_DSN_START")
+    SENTRY_DSN_END = getenv("SENTRY_DSN_END")
+
 dsn = f"{SENTRY_DSN_PROTOCOL}://{SENTRY_DSN_START}/{SENTRY_DSN_END}"
+
 if dsn and len(dsn) > 20:
     sentry_sdk.init(
         dsn=dsn,
@@ -510,22 +438,4 @@ Q_CLUSTER = {
         'port': 6379,  # Redis host port
         'db': 3,  # Redis database to use
     }
-    # ,
-    # 'ALT_CLUSTERS': {  # Alternative clusters for different categories of tasks
-    #     'long': {  # Configuration for long-running tasks
-    #         'timeout': 3000,  # Timeout before a task is considered as blocked
-    #         'retry': 3600,  # Time to wait before retrying a blocked task
-    #         'max_attempts': 2,  # Maximum number of attempts for a task
-    #     },
-    #     'short': {  # Configuration for short-running tasks
-    #         'timeout': 10,  # Timeout before a task is considered as blocked
-    #         'max_attempts': 1,  # Maximum number of attempts for a task
-    #     },
-    # }
 }
-
-# HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
-# Read more at https://www.dynaconf.com/django/
-# import dynaconf  # noqa
-# settings = dynaconf.DjangoDynaconf(__name__)  # noqa
-# HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)

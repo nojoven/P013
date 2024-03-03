@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from stays.utils.errors_helpers import random_error_handler
 # from machina import urls as machina_urls
 
@@ -29,14 +29,8 @@ urlpatterns = [
     path("", include("core.urls")),
     path("", include("locations.urls")),
     path("", include("users.urls")),
-    path('friendship/', include('friendship.urls')),
-    # path("forum", include(machina_urls)),
     path("api/", api.urls),
-    # path("select2/", include("django_select2.urls")),
-    re_path(r'^watchman/', include('watchman.urls')),
-    path('tinymce/', include('tinymce.urls')),
-    
-    path('silk/', include('silk.urls', namespace='silk'))
+    # path('silk/', include('silk.urls', namespace='silk'))
 ] + static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
