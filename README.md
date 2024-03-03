@@ -20,9 +20,9 @@ P13 2023
    - Add the missing values
 
 ## Migrations
-   - ```python manage.py makemigrations users ```
+   - ```python manage.py makemigrations users```
    - ```python manage.py migrate users```
-   - ```python manage.py makemigrations core ```
+   - ```python manage.py makemigrations core```
    - ```python manage.py migrate core```
    - ```python manage.py makemigrations locations```
    - ```python manage.py migrate locations```
