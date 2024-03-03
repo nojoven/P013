@@ -171,5 +171,4 @@ confs.json
 .cop*
 .idea/
 */media/*
-*/static/*
 *.code-workspace
