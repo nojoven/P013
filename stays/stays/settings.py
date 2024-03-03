@@ -26,24 +26,27 @@ ic("Image by Timur Kozmenko from Pixabay")
 
 
 
-if "confs.json" in os.listdir(Path(__file__).absolute().parent):
-    vars_path = Path(__file__).absolute().parent / "confs.json"
-    with open(vars_path) as file:
-        confs = json.loads(file.read())
+# if "confs.json" in os.listdir(Path(__file__).absolute().parent):
+#     vars_path = Path(__file__).absolute().parent / "confs.json"
+#     with open(vars_path) as file:
+#         confs = json.loads(file.read())
 
-else:
-    load_dotenv()
+# else:
+load_dotenv()
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # raise ValueError(settings.SECRET_KEY)
-SECRET_KEY = confs.get("SECRET_KEY", getenv("SECRET_KEY"))
+SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = confs.get("DEBUG", getenv("DEBUG")) # settings.DYNACONF_DEBUG
-TEMPLATE_DEBUG = confs.get("TEMPLATE_DEBUG", getenv("TEMPLATE_DEBUG"))
+DEBUG = getenv("DEBUG")
+TEMPLATE_DEBUG = getenv("TEMPLATE_DEBUG")
 
 # if DEBUG is True:
 #     # Comment the one you don't need
@@ -190,36 +193,36 @@ SILKY_PYTHON_PROFILER = True
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if DEBUG is True:
-    DATABASES = {
-        "default": {
-            "ENGINE": confs.get("ENGINE"),
-            "NAME": confs.get("NAME"),
-            "USER": confs.get("USER"),
-            "PASSWORD": confs.get("PASSWORD"),
-            "HOST": confs.get("HOST"),
-            "PORT": confs.get("PORT"),
-            # 'OPTIONS': {'sslmode': 'require'}
-            # 'CONN_MAX_AGE': 0,
-        },
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': getenv('PGDATABASE'),
+#         'USER': getenv('PGUSER'),
+#         'PASSWORD': getenv('PGPASSWORD'),
+#         'HOST': getenv('PGHOST'),
+#         'PORT': getenv('PGPORT'),
+#         'OPTIONS': {
+#             'sslmode': 'require',
+#         },
+#         'DISABLE_SERVER_SIDE_CURSORS': True,
+#     }
+# }
+DATABASES = {
+    'default': {
+        'ENGINE': getenv('ENGINE'),
+        'NAME': getenv('NAME'),
+        'USER': getenv('USER'),
+        'PASSWORD': getenv('PASSWORD'),
+        'HOST': getenv('HOST'),
+        'PORT': getenv('PORT'),
+        # 'OPTIONS': {
+        #     'sslmode': 'require',
+        # },
+        'DISABLE_SERVER_SIDE_CURSORS': True,
     }
-else:
-    # Load the .env file
-    load_dotenv()
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': getenv('PGDATABASE'),
-            'USER': getenv('PGUSER'),
-            'PASSWORD': getenv('PGPASSWORD'),
-            'HOST': getenv('PGHOST'),
-            'PORT': getenv('PGPORT', 5432),
-            'OPTIONS': {
-                'sslmode': 'require',
-            },
-            'DISABLE_SERVER_SIDE_CURSORS': True,
-        }
-    }
+}
 
 CACHES = {
     # … default cache config and others
@@ -268,6 +271,8 @@ THROTTLE_REDIS_AUTH = 'pass'
 # Normally, throttling is disabled when DEBUG=True. Use this to force it to enabled.
 THROTTLE_ENABLED = True
 
+DEFENDER_REDIS_NAME = 'default'
+DEFENDER_REDIS_URL = getenv("DEFENDER_REDIS_URL")
 # python manage.py cleanup_django_defender to unlock
 DEFENDER_LOGIN_FAILURE_LIMIT = 20
 
@@ -352,39 +357,35 @@ AUTO_LOGOUT = {
     'SESSION_TIME': 36000,
     'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
     'MESSAGE': 'The session has expired. Please login again to continue.'
-    }
-
-
+}
 
 COUNTRIES_FIRST = ['FR', 'US', 'GB']
 COUNTRIES_FIRST_SORT = True
 
-NINJAS_API_KEY = confs.get("NINJAS_API_KEY", getenv("NINJAS_API_KEY"))
+NINJAS_API_KEY = getenv("NINJAS_API_KEY")
 
 # settings.py
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = confs.get("EMAIL_BACKEND", getenv("EMAIL_BACKEND"))
+EMAIL_BACKEND = getenv("EMAIL_BACKEND")
 # Hostname of your email provider
-EMAIL_HOST = confs.get("EMAIL_HOST", getenv("EMAIL_HOST"))
+EMAIL_HOST = getenv("EMAIL_HOST")
 # port of your email provider
-EMAIL_PORT = confs.get("EMAIL_PORT", getenv("EMAIL_PORT"))
-EMAIL_USE_TLS = confs.get("EMAIL_USE_TLS", getenv("EMAIL_USE_TLS"))
+EMAIL_PORT = getenv("EMAIL_PORT")
+EMAIL_USE_TLS = getenv("EMAIL_USE_TLS")
 # your email account
-EMAIL_HOST_USER = confs.get("EMAIL_HOST_USER", getenv("EMAIL_HOST_USER"))
+EMAIL_HOST_USER = getenv("EMAIL_HOST_USER")
 # your email password
-EMAIL_HOST_PASSWORD = confs.get("EMAIL_HOST_PASSWORD", getenv("EMAIL_HOST_PASSWORD"))
+EMAIL_HOST_PASSWORD = getenv("EMAIL_HOST_PASSWORD")
 
 # Mailgun Authorized email
-DEFAULT_EMAIL_DESTINATION = confs.get(
-    "DEFAULT_EMAIL_DESTINATION", 
-    getenv("DEFAULT_EMAIL_DESTINATION")
-)
-ADMIN_EMAIL = confs.get("ADMIN_EMAIL", getenv("ADMIN_EMAIL"))
+DEFAULT_EMAIL_DESTINATION = getenv("DEFAULT_EMAIL_DESTINATION")
 
-MAILGUN_API_KEY = confs.get("MAILGUN_API_KEY", getenv("MAILGUN_API_KEY"))
-MAILGUN_DOMAIN_NAME = confs.get("MAILGUN_DOMAIN_NAME", getenv("MAILGUN_DOMAIN_NAME"))
+ADMIN_EMAIL = getenv("ADMIN_EMAIL")
+
+MAILGUN_API_KEY = getenv("MAILGUN_API_KEY")
+MAILGUN_DOMAIN_NAME = getenv("MAILGUN_DOMAIN_NAME")
 
 HANDLER400 = 'stays.urls.handler400'
 HANDLER401 = 'stays.urls.handler401'
@@ -397,14 +398,9 @@ HANDLER500 = 'stays.urls.handler500'
 HANDLER503 = 'stays.urls.handler503'
 HANDLER504 = 'stays.urls.handler504'
 
-if confs:
-    SENTRY_DSN_PROTOCOL = confs.get("SENTRY_DSN_PROTOCOL", "")
-    SENTRY_DSN_START = confs.get("SENTRY_DSN_START", "")
-    SENTRY_DSN_END = confs.get("SENTRY_DSN_END", "")
-else:
-    SENTRY_DSN_PROTOCOL = getenv("SENTRY_DSN_PROTOCOL")
-    SENTRY_DSN_START = getenv("SENTRY_DSN_START")
-    SENTRY_DSN_END = getenv("SENTRY_DSN_END")
+SENTRY_DSN_PROTOCOL = getenv("SENTRY_DSN_PROTOCOL")
+SENTRY_DSN_START = getenv("SENTRY_DSN_START")
+SENTRY_DSN_END = getenv("SENTRY_DSN_END")
 
 dsn = f"{SENTRY_DSN_PROTOCOL}://{SENTRY_DSN_START}/{SENTRY_DSN_END}"
 
