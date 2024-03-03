@@ -228,7 +228,7 @@ CACHES = {
     # … default cache config and others
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": getenv("REDIS_URL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -272,7 +272,6 @@ THROTTLE_REDIS_AUTH = 'pass'
 THROTTLE_ENABLED = True
 
 DEFENDER_REDIS_NAME = 'default'
-DEFENDER_REDIS_URL = getenv("DEFENDER_REDIS_URL")
 # python manage.py cleanup_django_defender to unlock
 DEFENDER_LOGIN_FAILURE_LIMIT = 20
 
