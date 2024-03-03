@@ -117,7 +117,7 @@ INSTALLED_APPS = [
     "fontawesomefree",
 
     # Thumbnails
-    'sorl.thumbnail',
+    # 'sorl.thumbnail',
 
     # tinymce
     # "tinymce",
