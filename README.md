@@ -4,6 +4,14 @@ P13 2023
 # STAYS
 ## STAYS is a web social media for people who like to tell and share their stories.
 
+## Database user
+Create postgresql user with the name "staydmin"
+```
+GRANT ALL PRIVILEGES ON DATABASE your_database TO your_user;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO your_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO your_user;
+```
+
 
 ## Install this project manually:
    - Clone the repository
@@ -26,7 +34,7 @@ P13 2023
    - ```python manage.py migrate core```
    - ```python manage.py makemigrations locations```
    - ```python manage.py migrate locations```
-   - ```python manage.py migrate```  (one last time)
+   - ```python manage.py migrate```  
 
 
 ## Populate cities_light
@@ -40,6 +48,7 @@ P13 2023
    - ```cd P013/stays```
    - ```poetry shell```
    - ```python manage.py runserver 8001```
+   - ```python manage.py migrate```
 
 ### Create an administrator
    - In another terminal ```python manage.py createsuperuser```
