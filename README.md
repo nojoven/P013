@@ -7,9 +7,9 @@ P13 2023
 ## Database user
 Create postgresql user with the name "staydmin"
 ```
-GRANT ALL PRIVILEGES ON DATABASE your_database TO your_user;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO your_user;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO your_user;
+GRANT ALL PRIVILEGES ON DATABASE defaultdb TO staydmin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO staydmin;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO staydmin;
 ```
 
 
