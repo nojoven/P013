@@ -19,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from cities_light.models import Country
+from users.models import Profile
 from locations.utils.helpers import get_continent_from_code, find_cities_light_country_name_with_code, find_cities_light_continent_with_country_code
 from core.utils.models_helpers import get_author_picture_from_slug, get_profile_from_email
 from stays.utils.email_helpers import send_contact_form_email
@@ -64,7 +65,7 @@ def toggle_upvote(request, uuid):
     profile_email = request.POST.get('profile_email', request.user.email)
 
     publication = Publication.objects.get(uuid=publication_id)
-    profile = get_profile_from_email(profile_email)
+    profile = get_profile_from_email(profile_email, Profile)
     
     upvote, created = PublicationUpvote.objects.get_or_create(publication=publication, upvote_profile=profile.slug)
     
@@ -212,7 +213,7 @@ class PublicationDetailView(LoginRequiredMixin, NeverCacheMixin, DetailView):
     def get_object(self):
         publication = get_object_or_404(Publication, uuid=self.kwargs['uuid'])
 
-        author_profile_picture = get_author_picture_from_slug(publication.author_slug)
+        author_profile_picture = get_author_picture_from_slug(publication.author_slug, Profile)
         publication.author_profile_picture = author_profile_picture
 
         stay_country_name = find_cities_light_country_name_with_code(publication.country_code_of_stay)

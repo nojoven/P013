@@ -23,7 +23,7 @@ def test_get_profile_from_email():
     profile.save()
 
     # Vérification que get_profile_from_email renvoie le bon profil
-    assert get_profile_from_email('testadmin@example.com') == profile
+    assert get_profile_from_email('testadmin@example.com', Profile) == profile
 
 # Test de la fonction get_author_picture_from_slug
 @pytest.mark.django_db
@@ -40,4 +40,4 @@ def test_get_author_picture_from_slug():
     profile.save()
 
     # Vérification que get_author_picture_from_slug renvoie la bonne image
-    assert get_author_picture_from_slug(profile.slug) == 'picture.jpg'
+    assert get_author_picture_from_slug(profile.slug, Profile) == 'picture.jpg'

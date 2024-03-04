@@ -1,6 +1,5 @@
 import requests
 from django.db import models
-from users import models as users_models
 from stays.settings import NINJAS_API_KEY as napk
 from icecream import ic
 from django.db.models import Prefetch
@@ -115,13 +114,13 @@ class ContentTypes(Enum):
     voice = ("voice", "voice")
 
 
-def get_profile_from_email(email: str):
-    profile = users_models.Profile.objects.get(email=email)
+def get_profile_from_email(email, model):
+    profile = model.objects.get(email=email)
     return profile
 
-def get_author_picture_from_slug(author_slug: str):
+def get_author_picture_from_slug(author_slug, model):
     author_slug = author_slug
-    author_profile = users_models.Profile.objects.get(slug=author_slug)
+    author_profile = model.objects.get(slug=author_slug)
     return author_profile.profile_picture
 
 def voice_story_upload_to(instance, filename):
