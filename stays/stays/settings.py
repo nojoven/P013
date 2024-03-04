@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 # Add these at the top of your settings.py
-import json
 import os
 from pathlib import Path
 from os import getenv
@@ -26,7 +25,7 @@ ic("Image by Timur Kozmenko from Pixabay")
 
 
 
-# if "confs.json" in os.listdir(Path(__file__).absolute().parent):
+# if ".env" in os.listdir(Path(__file__).absolute().parent):
 #     vars_path = Path(__file__).absolute().parent / "confs.json"
 #     with open(vars_path) as file:
 #         confs = json.loads(file.read())
@@ -39,6 +38,7 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# load_dotenv(os.path.join(BASE_DIR, "stays/.env"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # raise ValueError(settings.SECRET_KEY)
@@ -220,15 +220,16 @@ DATABASES = {
         # 'OPTIONS': {
         #     'sslmode': 'require',
         # },
-        'DISABLE_SERVER_SIDE_CURSORS': True,
+        # 'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 }
+
 
 CACHES = {
     # … default cache config and others
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": getenv("REDIS_URL"),
+        "LOCATION": getenv("REDISURL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -243,11 +244,8 @@ CACHES = {
     # }
 }
 
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-# SESSION_CACHE_ALIAS = "select2"
 
-# # Tell select2 which cache configuration to use:
-# SELECT2_CACHE_BACKEND = "select2"
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 
 THROTTLE_ZONES = {
@@ -263,7 +261,7 @@ THROTTLE_ZONES = {
 THROTTLE_BACKEND = 'throttle.backends.cache.CacheBackend'
 
 # Optional if Redis backend is chosen ('throttle.backends.redispy.RedisBackend')
-THROTTLE_REDIS_HOST = 'localhost'
+THROTTLE_REDIS_HOST = '127.0.0.1'
 THROTTLE_REDIS_PORT = 6379
 THROTTLE_REDIS_DB = 0
 THROTTLE_REDIS_AUTH = 'pass'
