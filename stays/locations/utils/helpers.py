@@ -153,7 +153,7 @@ async def fetch_country_data(country_code, headers):
     # If the response is not in the cache, fetch it
     if responses is None:
         ic("Fetching country data")
-        async with httpx.AsyncClient(verify=False) as client:
+        async with httpx.AsyncClient(verify=True) as client:
             url1 = f'https://restcountries.com/v3.1/alpha/{country_code}'
             url2 = f'https://api.api-ninjas.com/v1/country?name={country_code}'
 
@@ -195,7 +195,7 @@ async def fetch_additional_data(capital, headers):
     # If the response is not in the cache, fetch it
     if responses is None:
         ic("Fetching additional data")
-        async with httpx.AsyncClient(verify=False) as client:
+        async with httpx.AsyncClient(verify=True) as client:
             url3 = f'https://api.api-ninjas.com/v1/airquality?city={capital}'
             url4 = f'https://api.api-ninjas.com/v1/weather?city={capital}'
             url5 = f"https://api.api-ninjas.com/v1/worldtime?city={capital}"
