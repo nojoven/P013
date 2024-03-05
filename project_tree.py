@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 from icecream import ic
 from directory_tree import display_tree
