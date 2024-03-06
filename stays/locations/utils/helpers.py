@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from icecream import ic
 from cities_light.models import Country
 from django.core.cache import cache
-from asgiref.sync import sync_to_async, async_to_sync
+from asgiref.sync import sync_to_async
 from stays.settings import NINJAS_API_KEY as napk
 from datetime import datetime
 from django.http import HttpResponse
@@ -142,7 +142,7 @@ async def fetch_country_data(country_code, headers):
     if headers["X-Api-Key"] != napk or not headers["X-Api-Key"]:
         raise ValueError("The 'X-Api-Key' header value does not match the expected value.")
     if  len(headers["X-Api-Key"]) < 30:
-        raise ValueError("Invalid API key.")
+        raise ValueError(f"Invalid API key: {headers['X-Api-Key']}")
 
     # Create a unique cache key for this function and country_code
     cache_key = f'country_data_{country_code}'
@@ -152,7 +152,6 @@ async def fetch_country_data(country_code, headers):
 
     # If the response is not in the cache, fetch it
     if responses is None:
-        ic("Fetching country data")
         async with httpx.AsyncClient(verify=False) as client:
             url1 = f'https://restcountries.com/v3.1/alpha/{country_code}'
             url2 = f'https://api.api-ninjas.com/v1/country?name={country_code}'
@@ -164,8 +163,7 @@ async def fetch_country_data(country_code, headers):
 
         # Store the response in the cache
         cache.set(cache_key, responses)
-    ic(type(responses))
-    ic(responses)
+
     return responses
 
 
