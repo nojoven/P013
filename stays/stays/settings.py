@@ -24,21 +24,10 @@ ic("Thanks to https://simplemaps.com/data/world-cities")
 ic("Image by Timur Kozmenko from Pixabay")
 
 
-
-# if ".env" in os.listdir(Path(__file__).absolute().parent):
-#     vars_path = Path(__file__).absolute().parent / "confs.json"
-#     with open(vars_path) as file:
-#         confs = json.loads(file.read())
-
-# else:
-load_dotenv()
-
-
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# load_dotenv(os.path.join(BASE_DIR, "stays/.env"))
+vars_path = BASE_DIR / "stays" / ".env"
+load_dotenv(vars_path)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # raise ValueError(settings.SECRET_KEY)
