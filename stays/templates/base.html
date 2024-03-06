@@ -217,6 +217,15 @@
 </style>
 
 <script>
+    function isInViewport(elem) {
+    const rect = elem.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+    }
     // Function to update user status
     async function updateUserStatus(author_slug) {
         console.log(`Fetching status for ${author_slug}`);
@@ -249,7 +258,7 @@
 
     // Function to update status for all slugs
     function updateAllStatuses() {
-        var slugs = Array.from(document.querySelectorAll(`[data-slug]`)).map(el => el.dataset.slug);
+        var slugs = Array.from(document.querySelectorAll(`[data-slug]`)).filter(isInViewport).map(el => el.dataset.slug);
         console.log(`Updating status for slugs: ${slugs.join(', ')}`);
         slugs.forEach(slug => updateUserStatus(slug));
     }
