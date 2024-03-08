@@ -250,17 +250,17 @@ THROTTLE_ZONES = {
 THROTTLE_BACKEND = 'throttle.backends.cache.CacheBackend'
 
 # Optional if Redis backend is chosen ('throttle.backends.redispy.RedisBackend')
-THROTTLE_REDIS_HOST = '127.0.0.1'
-THROTTLE_REDIS_PORT = 6379
-THROTTLE_REDIS_DB = 0
-THROTTLE_REDIS_AUTH = 'pass'
+# THROTTLE_REDIS_HOST = getenv("REDIS_HOST")
+# THROTTLE_REDIS_PORT = getenv("REDIS_PORT")
+# THROTTLE_REDIS_DB = 0
+# THROTTLE_REDIS_AUTH = 'pass'
 
 # Normally, throttling is disabled when DEBUG=True. Use this to force it to enabled.
 THROTTLE_ENABLED = True
 
 DEFENDER_REDIS_NAME = 'default'
 # python manage.py cleanup_django_defender to unlock
-DEFENDER_LOGIN_FAILURE_LIMIT = 20
+DEFENDER_LOGIN_FAILURE_LIMIT = 8
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
