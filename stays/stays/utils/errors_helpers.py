@@ -11,7 +11,8 @@ from django.http import (
     HttpResponseNotModified,
     HttpResponseGone,
     HttpResponseServerError,
-    HttpResponsePermanentRedirect, HttpResponse
+    HttpResponsePermanentRedirect,
+    HttpResponse,
 )
 from icecream import ic
 
@@ -35,7 +36,6 @@ response_gateway_timeout = HttpResponse(status=504)
 response_teapot = HttpResponse(status=418)
 
 
-
 def random_error_handler(request, error_code):
     """
     Error handler which supports multiple templates.
@@ -44,14 +44,18 @@ def random_error_handler(request, error_code):
     ic("random_error_handler")
     ic(request)
     ic(error_code)
-    templates_dir = os.path.join(settings.BASE_DIR, 'templates')
-    templates = [f for f in os.listdir(templates_dir) if f.startswith(f'{error_code}-') and f.endswith('.html')]
+    templates_dir = os.path.join(settings.BASE_DIR, "templates")
+    templates = [
+        f
+        for f in os.listdir(templates_dir)
+        if f.startswith(f"{error_code}-") and f.endswith(".html")
+    ]
     if templates:
         template = random.choice(templates)
     else:
         ic("500-a.html")
         ic(error_code)
-        template = '500-a.html'
+        template = "500-a.html"
     try:
         t = get_template(template)
 
@@ -70,7 +74,13 @@ class ErrorHandlerMiddleware:
         response = self.get_response(request)
         ic(response)
         ic(response.status_code)
-        if not 199 < response.status_code <= 300 and response.status_code not in (200, 201, 204, 301, 302):
+        if not 199 < response.status_code <= 300 and response.status_code not in (
+            200,
+            201,
+            204,
+            301,
+            302,
+        ):
             return random_error_handler(request, response.status_code)
         return response
 
@@ -112,7 +122,7 @@ class ErrorHandlerMiddleware:
                     return random_error_handler(request, 504)
                 else:
                     return random_error_handler(request, 500)
-            
+
         except ValueError:
             ic("ValueError")
             response = self.get_response(request)

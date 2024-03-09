@@ -1,5 +1,9 @@
-from django.contrib.auth import  get_user_model
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
@@ -24,7 +28,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
-    
+
     def create_user_simply(self, **params):
         """Helper function to create new user"""
         return get_user_model().objects.create_user(**params)
@@ -41,20 +45,42 @@ class UserManager(BaseUserManager):
 
 class Profile(AbstractBaseUser, PermissionsMixin):
     is_online = models.BooleanField(default=False, verbose_name="Online Status")
-    slug = models.SlugField(unique=True, blank=False, null=True, max_length=255, default=None)
+    slug = models.SlugField(
+        unique=True, blank=False, null=True, max_length=255, default=None
+    )
     uuid = models.UUIDField(default=uuid_generator, null=True, editable=False)
-    email = models.EmailField(max_length=100, blank=False, null=True, help_text="Your email address", unique=True)
+    email = models.EmailField(
+        max_length=100,
+        blank=False,
+        null=True,
+        help_text="Your email address",
+        unique=True,
+    )
     username = models.CharField(max_length=44, blank=False, null=True, unique=True)
-    password = models.CharField(max_length=255, blank=False, null=True, help_text="Your password")
-    year_of_birth = models.IntegerField(help_text="User's birth year", default=1900, null=False)
-    season_of_birth = models.CharField(max_length=50, default="Spring", blank=False, null=False)
+    password = models.CharField(
+        max_length=255, blank=False, null=True, help_text="Your password"
+    )
+    year_of_birth = models.IntegerField(
+        help_text="User's birth year", default=1900, null=False
+    )
+    season_of_birth = models.CharField(
+        max_length=50, default="Spring", blank=False, null=False
+    )
     first_name = models.CharField(max_length=25, blank=False, null=True)
     last_name = models.CharField(max_length=35, blank=False, null=True)
-    motto = models.CharField(max_length=300, blank=False, null=False, default="I LOVE THIS WEBSITE!")
+    motto = models.CharField(
+        max_length=300, blank=False, null=False, default="I LOVE THIS WEBSITE!"
+    )
     signature = models.CharField(max_length=300, blank=False, null=True, unique=True)
     about_text = models.TextField(blank=False, null=True, default="Once upon a time...")
-    continent_of_birth = models.CharField(max_length=15, choices=CONTINENT_CHOICES, null=True, default='AN')
-    profile_picture = models.ImageField(upload_to=profile_picture_upload_to, default="blank-profile-picture.jpg", null=True)
+    continent_of_birth = models.CharField(
+        max_length=15, choices=CONTINENT_CHOICES, null=True, default="AN"
+    )
+    profile_picture = models.ImageField(
+        upload_to=profile_picture_upload_to,
+        default="blank-profile-picture.jpg",
+        null=True,
+    )
     created_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -77,7 +103,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         return Follow.objects.followers(self)
 
     def get_absolute_url(self):
-        return reverse('users:account', args=[self.slug])
+        return reverse("users:account", args=[self.slug])
 
     def save(self, *args, **kwargs):
         self.slug = slugify(f"{self.email.split('@')[0]}{self.uuid}")
@@ -88,8 +114,12 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
 
 class ProfileHasPublication(models.Model):
-    user_profile = SlugFieldForeignKey(Profile, to_field='slug', on_delete=models.CASCADE, null=True)
-    publication_of_user = UUIDFieldForeignKey(Publication, to_field='uuid', on_delete=models.CASCADE, null=True)
+    user_profile = SlugFieldForeignKey(
+        Profile, to_field="slug", on_delete=models.CASCADE, null=True
+    )
+    publication_of_user = UUIDFieldForeignKey(
+        Publication, to_field="uuid", on_delete=models.CASCADE, null=True
+    )
 
     class Meta:
-        unique_together = ('user_profile', 'publication_of_user')
+        unique_together = ("user_profile", "publication_of_user")

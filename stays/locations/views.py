@@ -1,7 +1,5 @@
 from django.shortcuts import render
 from icecream import ic
-from asgiref.sync import sync_to_async
-from django.contrib.auth.decorators import login_required
 from locations.utils.helpers import (
     fill_context_general_informations,
     append_ninjas_api_general_info,
@@ -10,11 +8,10 @@ from locations.utils.helpers import (
     add_weather_to_context,
     add_time_to_context,
     validate_country_code,
-    send_http_requests
+    send_http_requests,
 )
 
 
-# @login_required
 async def country_view(request, country_code):
     # Get country data from Restcountries API
     ic("country_code: ", country_code)
@@ -31,9 +28,13 @@ async def country_view(request, country_code):
     country_details = response_collection["country_details"]
     country_details_ninjas = response_collection["country_details_ninjas"]
 
-    context["general_information"] = fill_context_general_informations(country_code, country_details)
+    context["general_information"] = fill_context_general_informations(
+        country_code, country_details
+    )
 
-    context["general_information"] = append_ninjas_api_general_info(context["general_information"], country_details_ninjas)
+    context["general_information"] = append_ninjas_api_general_info(
+        context["general_information"], country_details_ninjas
+    )
 
     environment_data = await fetch_air_weather_time(context["general_information"])
     air_quality_json = environment_data.get("air")
@@ -48,5 +49,5 @@ async def country_view(request, country_code):
 
     # World Time
     context["country_time"] = add_time_to_context(world_time_json)
-    
-    return render(request, 'country.html', context)
+
+    return render(request, "country.html", context)

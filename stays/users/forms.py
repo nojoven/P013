@@ -1,19 +1,31 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, AuthenticationForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    UserChangeForm,
+    PasswordChangeForm,
+    AuthenticationForm,
+)
 from django_countries.widgets import CountrySelectWidget
 from django_countries.fields import CountryField
 from django.contrib.auth.forms import PasswordResetForm as DjangoPasswordResetForm
 
-from users.utils import get_email_to_user, forge_token, generate_recovery_url, generate_reset_uid
+from users.utils import (
+    get_email_to_user,
+    forge_token,
+    generate_recovery_url,
+    generate_reset_uid,
+)
 from core.models import Publication
 from users.models import Profile
 
 from cities_light.models import CONTINENT_CHOICES
 from stays.utils.email_helpers import send_password_reset_email
-from stays.settings import EMAIL_HOST_USER, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME, DEFAULT_EMAIL_DESTINATION, DEBUG
-
-
-
+from stays.settings import (
+    EMAIL_HOST_USER,
+    MAILGUN_API_KEY,
+    MAILGUN_DOMAIN_NAME,
+    DEFAULT_EMAIL_DESTINATION,
+)
 
 
 class RegistrationForm(UserCreationForm):
@@ -24,35 +36,27 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = Profile
-        fields = [
-            "username",
-            "email",
-            "password1",
-            "password2"
-        ]
+        fields = ["username", "email", "password1", "password2"]
 
 
 # Dans votre formulaire
 class UserNotFoundError(Exception):
     pass
 
+
 class PasswordResetForm(DjangoPasswordResetForm):
     def save(self, request=None, **kwargs):
-
         # Ensure use_https is not in kwargs
-        kwargs.pop('use_https', None)
+        kwargs.pop("use_https", None)
         # Ensure email_template_name is not in kwargs
-        kwargs.pop('email_template_name', None)
+        kwargs.pop("email_template_name", None)
 
         # Get the user who requested the password reset
-        self.email_to = self.cleaned_data.get("email", DEFAULT_EMAIL_DESTINATION)  # if not DEFAULT_EMAIL_DESTINATION else DEFAULT_EMAIL_DESTINATION
+        self.email_to = self.cleaned_data.get(
+            "email", DEFAULT_EMAIL_DESTINATION
+        )  # if not DEFAULT_EMAIL_DESTINATION else DEFAULT_EMAIL_DESTINATION
 
         self.user = get_email_to_user(self)
-
-        # self.user = next(self.get_users(self.email_to), None)
-        # # Vérifiez que l'utilisateur a été correctement récupéré
-        # if self.user is None:
-        #     raise ValueError(f"No user found with email {self.email_to}")
 
         # Generate the password reset token
         self.token = forge_token(self.user)
@@ -68,7 +72,7 @@ class PasswordResetForm(DjangoPasswordResetForm):
             destination_email=self.email_to,
             domain_name=MAILGUN_DOMAIN_NAME,
             api_key=MAILGUN_API_KEY,
-            from_email=EMAIL_HOST_USER
+            from_email=EMAIL_HOST_USER,
         )
 
 
@@ -78,23 +82,21 @@ class AccountLoginForm(AuthenticationForm):
 
     class Meta:
         model = Profile
-        fields = [
-            "username",
-            "password"
-        ]
+        fields = ["username", "password"]
 
 
 class AccountEditionForm(UserChangeForm):
     """Update form for the currennt authenticated profile."""
-    profile_picture=forms.ImageField(required=False, allow_empty_file=True)
-    username=forms.CharField(required=False, empty_value="Username")
-    first_name=forms.CharField(required=False, empty_value="First Name")
-    last_name=forms.CharField(required=False, empty_value="Last Name")
-    season_of_birth=forms.CharField(required=False, empty_value="Spring")
-    year_of_birth=forms.IntegerField(required=False)
-    about_text=forms.CharField(required=False, empty_value="Once upon a time...")
-    motto=forms.CharField(required=False, empty_value="I LOVE THIS WEBSITE!")
-    signature=forms.CharField(required=False, empty_value="Myself!")
+
+    profile_picture = forms.ImageField(required=False, allow_empty_file=True)
+    username = forms.CharField(required=False, empty_value="Username")
+    first_name = forms.CharField(required=False, empty_value="First Name")
+    last_name = forms.CharField(required=False, empty_value="Last Name")
+    season_of_birth = forms.CharField(required=False, empty_value="Spring")
+    year_of_birth = forms.IntegerField(required=False)
+    about_text = forms.CharField(required=False, empty_value="Once upon a time...")
+    motto = forms.CharField(required=False, empty_value="I LOVE THIS WEBSITE!")
+    signature = forms.CharField(required=False, empty_value="Myself!")
     continent_of_birth = forms.ChoiceField(choices=CONTINENT_CHOICES, required=False)
 
     class Meta:
@@ -118,7 +120,6 @@ class PublishCountrySelectWidget(CountrySelectWidget):
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
         # Use the custom list of countries from settings
-        # context['widget']['optgroups'] = self.optgroups(name, settings.COUNTRIES_LIST, context['widget']['value'])
         return context
 
 
@@ -128,7 +129,7 @@ class PublishContentForm(forms.ModelForm):
     author_slug = forms.SlugField(required=True)
     author_username = forms.CharField(required=True)
     country_code_of_stay = CountryField().formfield()
-    published_from_country_code = CountryField(default='IT').formfield(required=True)
+    published_from_country_code = CountryField(default="IT").formfield(required=True)
     summary = forms.CharField(required=True)
     picture = forms.FileField(required=True, allow_empty_file=False)
     year_of_stay = forms.IntegerField(required=True)
@@ -138,21 +139,25 @@ class PublishContentForm(forms.ModelForm):
 
     class Meta:
         model = Publication
-        fields = ['title', 'author_slug', 'author_username', 'author_username', 'country_code_of_stay', 'published_from_country_code', 'year_of_stay', 'season_of_stay', 'summary', 'picture', 'content_type', 'text_story', 'voice_story']
+        fields = [
+            "title",
+            "author_slug",
+            "author_username",
+            "author_username",
+            "country_code_of_stay",
+            "published_from_country_code",
+            "year_of_stay",
+            "season_of_stay",
+            "summary",
+            "picture",
+            "content_type",
+            "text_story",
+            "voice_story",
+        ]
         widgets = {"country_code_of_stay": PublishCountrySelectWidget()}
 
 
 class PasswordChangeFromConnectedProfile(PasswordChangeForm):
     class Meta:
         model = Profile
-        fields = [
-            "password"
-        ]
-
-
-# class DeleteProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = [
-#             "username"
-#         ]
+        fields = ["password"]

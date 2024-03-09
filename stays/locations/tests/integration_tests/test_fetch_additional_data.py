@@ -1,17 +1,16 @@
 from random import choice as rce
 import pytest
 from icecream import ic
-# from unittest.mock import AsyncMock, patch
 from locations.tests.datasets import HEADERS, VALID_CAPITALS, INVALID_CAPITALS
 from locations.utils.helpers import fetch_additional_data
-from locations.tests.fixtures.fixtures import clear_cache # noqa F401
+from locations.tests.fixtures.fixtures import clear_cache  # noqa F401
 from django.core.cache import cache
+
 headers = HEADERS
 
 
 @pytest.mark.asyncio
 async def test_valid_capital():
-
     capital = rce(VALID_CAPITALS)
 
     # Appel à la fonction avec des données de test
@@ -32,18 +31,22 @@ async def test_valid_capital():
     assert cached_responses is not None
 
     # Compare les codes de statut et les corps des réponses
-    assert [response.status_code for response in cached_responses] == [response.status_code for response in responses]
-    assert [response.json() for response in cached_responses] == [response.json() for response in responses]
+    assert [response.status_code for response in cached_responses] == [
+        response.status_code for response in responses
+    ]
+    assert [response.json() for response in cached_responses] == [
+        response.json() for response in responses
+    ]
 
     cache.clear()
     assert cache.get(cache_key) is None
 
+
 @pytest.mark.asyncio
 async def test_wrong_capital():
-
     capital = rce(INVALID_CAPITALS)
 
-     # Appel à la fonction avec des données de test
+    # Appel à la fonction avec des données de test
     with pytest.raises(Exception) as excinfo:
         await fetch_additional_data(capital, HEADERS)
 
@@ -52,7 +55,6 @@ async def test_wrong_capital():
 
 @pytest.mark.asyncio
 async def test_headers_are_missing():
-
     capital = rce(INVALID_CAPITALS)
 
     # Appel à la fonction avec des données de test
@@ -61,22 +63,23 @@ async def test_headers_are_missing():
     except TypeError as e:
         assert "missing 1 required positional argument: 'headers'" in str(e)
 
+
 @pytest.mark.asyncio
 async def test_capital_is_missing():
-
     # Appel à la fonction avec des données de test
     try:
         await fetch_additional_data(HEADERS)
     except TypeError as e:
         assert "missing 1 required positional argument: 'headers'" in str(e)
 
+
 @pytest.mark.asyncio
 async def test_capital_is_none():
-
     capital = None
     # Appel à la fonction avec des données de test
     with pytest.raises(TypeError):
         await fetch_additional_data(capital, None)
+
 
 @pytest.mark.asyncio
 async def test_headers_is_none():

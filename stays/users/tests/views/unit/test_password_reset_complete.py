@@ -1,10 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse
 
+
 class PasswordResetCompleteViewTest(TestCase):
     def test_password_reset_done_view(self):
         # Get the URL for the password reset done view
-        password_reset_done_url = reverse('users:password_reset_complete')
+        password_reset_done_url = reverse("users:password_reset_complete")
 
         # Make a GET request to the password reset done view
         response = self.client.get(password_reset_done_url)
@@ -13,4 +14,4 @@ class PasswordResetCompleteViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check that the correct template was used
-        self.assertTemplateUsed(response, 'password_reset_complete.html')
+        self.assertTemplateUsed(response, "password_reset_complete.html")

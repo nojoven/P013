@@ -6,11 +6,11 @@ from django.urls import reverse
 from users.models import Profile
 from icecream import ic
 from django.core.cache import cache
-from django.core.exceptions import SynchronousOnlyOperation
 
 
 from django.utils import timezone
 from django.contrib.sessions.middleware import SessionMiddleware
+
 
 @pytest.fixture(autouse=True)
 def clear_cache():
@@ -33,21 +33,20 @@ async def test_country_good_code():
 
     # Create a user and authenticate the request
     create_user = sync_to_async(Profile.objects.create_user, thread_sensitive=True)
-    user = await create_user(email='testuser@test.com', username='mike375P', password='12345')
+    user = await create_user(
+        email="testuser@test.com", username="mike375P", password="12345"
+    )
     # client.headers = {'Authorization': f'Bearer {user.auth_token}'}
     # Use sync_to_async to run force_login in a separate thread
     force_login = sync_to_async(client.force_login, thread_sensitive=True)
     await force_login(user)
 
-    # Expect a SynchronousOnlyOperation exception when sending a GET request
-    # with pytest.raises(SynchronousOnlyOperation):
-    #     await client.get(reverse('locations:country', args=['FR']))
-    # Send a GET request to the country_view with a valid country code
-    response = await client.get(reverse('locations:country', args=['FR']))
+    response = await client.get(reverse("locations:country", args=["FR"]))
 
     # Check that the response has a status code of 200
     assert response.status_code == 200
-    assert '<!DOCTYPE html>' in response.content.decode()
+    assert "<!DOCTYPE html>" in response.content.decode()
+
 
 @pytest.mark.asyncio
 @pytest.mark.django_db
@@ -60,16 +59,18 @@ async def test_country_good_code_context():
     # Create an instance of a GET request
     # request = factory.get('/country/FR')
     # Add session to the request
-    add_session_to_request_async = sync_to_async(add_session_to_request, thread_sensitive=True)
-    # request = await add_session_to_request_async(request)
-    await add_session_to_request_async(factory.get('/country/FR'))
-
+    add_session_to_request_async = sync_to_async(
+        add_session_to_request, thread_sensitive=True
+    )
+    await add_session_to_request_async(factory.get("/country/FR"))
 
     # Create a user and add it to the request
     create_user = sync_to_async(Profile.objects.create_user, thread_sensitive=True)
-    user = await create_user(email='testcontext@test.com', username='boBy96715', password='12345paw')
+    user = await create_user(
+        email="testcontext@test.com", username="boBy96715", password="12345paw"
+    )
     user.last_login = timezone.now()  # Set last_login to the current time
-    
+
     # Save the user
     save_user = sync_to_async(user.save, thread_sensitive=True)
     await save_user()
@@ -79,11 +80,11 @@ async def test_country_good_code_context():
     await force_login(user)
 
     # Use the client to get a response from the view
-    response = await client.get('/country/RO')
+    response = await client.get("/country/RO")
     ic(response)
 
     # Check that 'general_information' is in the response context
-    assert 'general_information' in response.context
-    assert 'air' in response.context
-    assert 'weather' in response.context
-    assert 'country_time' in response.context
+    assert "general_information" in response.context
+    assert "air" in response.context
+    assert "weather" in response.context
+    assert "country_time" in response.context

@@ -13,7 +13,9 @@ import json
 User = get_user_model()
 
 
-@override_settings(CSRF_COOKIE_SECURE=False, CSRF_COOKIE_HTTPONLY=False, SESSION_COOKIE_SECURE=False)
+@override_settings(
+    CSRF_COOKIE_SECURE=False, CSRF_COOKIE_HTTPONLY=False, SESSION_COOKIE_SECURE=False
+)
 @pytest.mark.django_db
 class ProfileDetailViewTest(TestCase):
     def setUp(self):
@@ -21,38 +23,43 @@ class ProfileDetailViewTest(TestCase):
         self.client = Client(enforce_csrf_checks=False)
         self.client2 = Client(enforce_csrf_checks=False)
 
-        self.user1 = baker.make(User, email='testeurdeouf@example.com')
-        self.user1.set_password('testpassword')
-        self.user1.username = 'testeurdeouf'
+        self.user1 = baker.make(User, email="testeurdeouf@example.com")
+        self.user1.set_password("testpassword")
+        self.user1.username = "testeurdeouf"
         self.user1.slug = f"testeurdeouf{uuid_generator()}"
-        self.user1.continent_of_birth = 'EU'
+        self.user1.continent_of_birth = "EU"
 
         self.user1.save()
-        self.user1_profile_url = reverse('users:profile', kwargs={'slug': self.user1.slug})
+        self.user1_profile_url = reverse(
+            "users:profile", kwargs={"slug": self.user1.slug}
+        )
 
-        self.user2 = baker.make(User, email='testeurpro@example.com')
-        self.user2.set_password('test_pKassword82312!')
-        self.user2.username = 'testeurpro'
+        self.user2 = baker.make(User, email="testeurpro@example.com")
+        self.user2.set_password("test_pKassword82312!")
+        self.user2.username = "testeurpro"
         self.user2.slug = f"testeurpro{uuid_generator()}"
-        self.user2.continent_of_birth = 'EU'
+        self.user2.continent_of_birth = "EU"
         self.user2.save()
 
-
-    @patch('users.signals.update_user_status')
+    @patch("users.signals.update_user_status")
     def test_follow_profile(self, mock_update_user_status):
         self.client.force_login(self.user2)
 
-        follow_profile_url = reverse('users:follow_unfollow', kwargs={'slug': self.user1.slug})
+        follow_profile_url = reverse(
+            "users:follow_unfollow", kwargs={"slug": self.user1.slug}
+        )
 
         # Prepare the data to send in the request
         data = {
-            'asking': self.user2.slug,
-            'target': self.user1.slug,
-            'relation': 'follow'
+            "asking": self.user2.slug,
+            "target": self.user1.slug,
+            "relation": "follow",
         }
 
         # Send a POST request to the follow_profile view
-        response = self.client.post(follow_profile_url, json.dumps(data), content_type='application/json')
+        response = self.client.post(
+            follow_profile_url, json.dumps(data), content_type="application/json"
+        )
 
         # Check the status code
         assert response.status_code == 201
@@ -65,25 +72,28 @@ class ProfileDetailViewTest(TestCase):
         assert len(messages) == 1
         assert str(messages[0]) == f"You are now following {self.user1.username}"
 
-
-    @patch('users.signals.update_user_status')
+    @patch("users.signals.update_user_status")
     def test_unfollow_profile(self, mock_update_user_status):
         self.client.force_login(self.user2)
 
         # Make self.user2 follow self.user1
         Follow.objects.add_follower(self.user2, self.user1)
 
-        follow_profile_url = reverse('users:follow_unfollow', kwargs={'slug': self.user1.slug})
+        follow_profile_url = reverse(
+            "users:follow_unfollow", kwargs={"slug": self.user1.slug}
+        )
 
         # Prepare the data to send in the request
         data = {
-            'asking': self.user2.slug,
-            'target': self.user1.slug,
-            'relation': 'unfollow'
+            "asking": self.user2.slug,
+            "target": self.user1.slug,
+            "relation": "unfollow",
         }
 
         # Send a POST request to the follow_profile view
-        response = self.client.post(follow_profile_url, json.dumps(data), content_type='application/json')
+        response = self.client.post(
+            follow_profile_url, json.dumps(data), content_type="application/json"
+        )
 
         # Check the status code
         assert response.status_code == 204
@@ -96,22 +106,28 @@ class ProfileDetailViewTest(TestCase):
         assert len(messages) == 1
         assert str(messages[0]) == f"You have unfollowed {self.user1.username}"
 
-
-    @patch('users.signals.update_user_status')
+    @patch("users.signals.update_user_status")
     def test_follow_profile_invalid_relation(self, mock_update_user_status):
         self.client.force_login(self.user2)
 
-        follow_profile_url = reverse('users:follow_unfollow', kwargs={'slug': self.user1.slug})
+        follow_profile_url = reverse(
+            "users:follow_unfollow", kwargs={"slug": self.user1.slug}
+        )
 
         # Prepare the data to send in the request
         data = {
-            'asking': self.user2.slug,
-            'target': self.user1.slug,
-            'relation': 'invalid'
+            "asking": self.user2.slug,
+            "target": self.user1.slug,
+            "relation": "invalid",
         }
 
         # Send a POST request to the follow_profile view
-        response = self.client.post(follow_profile_url, json.dumps(data), content_type='application/json', follow=True)
+        response = self.client.post(
+            follow_profile_url,
+            json.dumps(data),
+            content_type="application/json",
+            follow=True,
+        )
 
-        # Status 400 redirects successfully to error page with code 200 
+        # Status 400 redirects successfully to error page with code 200
         assert response.status_code == 200

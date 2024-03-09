@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 import sentry_sdk
 
 from icecream import install as icinstall, ic
+
 icinstall()
 
 ic("Thanks to https://simplemaps.com/data/world-cities")
@@ -37,12 +38,6 @@ SECRET_KEY = getenv("SECRET_KEY")
 DEBUG = getenv("DEBUG")
 TEMPLATE_DEBUG = getenv("TEMPLATE_DEBUG")
 
-# if DEBUG is True:
-#     # Comment the one you don't need
-
-#     import stackprinter
-#     stackprinter.set_excepthook(style='darkbg2')
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -51,21 +46,21 @@ ALLOWED_HOSTS = ["*", "localhost", "0.0.0.0", "127.0.0.1"]
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
     },
-    'loggers': {
-        'django.db.backends': {
+    "loggers": {
+        "django.db.backends": {
             # 'level': 'DEBUG',
-            'level': 'INFO',
+            "level": "INFO",
         },
     },
 }
@@ -84,49 +79,28 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "defender",
-    # "rest_framework",
     "users",
     "core",
     "cities_light",
     "locations",
-    # "silk",
-    # "allauth_ui",
-    # "allauth",
-    # "allauth.account",
-    # "allauth.socialaccount",
-    # "allauth.socialaccount.providers.reddit",
     "django_countries",
     "django_htmx",
-
     # Pagination
     "django_cool_paginator",
-    
     # Django-Ninja
     "ninja_extra",
     # Django Q2
     "django_q",
     # Font-Awesome
     "fontawesomefree",
-
-    # Thumbnails
-    # 'sorl.thumbnail',
-
-    # tinymce
-    # "tinymce",
-
     # friendship
     "friendship",
     "pagination",
-    # sweetify
-    # 'sweetify',
 ]
 
 
-# Sweet Alert choices: 'sweetalert', 'sweetalert2' - default is 'sweetalert2'
-# SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
-
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ["fr", "en"]
 
 
 MIDDLEWARE = [
@@ -135,19 +109,19 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.middleware.common.CommonMiddleware",
-    'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    "django.middleware.cache.UpdateCacheMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     # Defender
-    'defender.middleware.FailedLoginMiddleware',
+    "defender.middleware.FailedLoginMiddleware",
     # Auto Logout
     "django_auto_logout.middleware.auto_logout",
     # http error handler
     "stays.utils.errors_helpers.ErrorHandlerMiddleware",
-    'pagination.middleware.PaginationMiddleware',
+    "pagination.middleware.PaginationMiddleware",
 ]
 
 ROOT_URLCONF = "stays.urls"
@@ -158,7 +132,7 @@ TEMPLATES = [
         "DIRS": [
             os.path.join(BASE_DIR, "templates"),
             #  MACHINA_MAIN_TEMPLATE_DIR,
-            ],
+        ],
         # "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -166,12 +140,12 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'django_auto_logout.context_processors.auto_logout_client',
+                "django_auto_logout.context_processors.auto_logout_client",
             ],
-            'loaders': [
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
-            ]
+            "loaders": [
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
+            ],
         },
     },
 ]
@@ -199,13 +173,13 @@ SILKY_PYTHON_PROFILER = True
 #     }
 # }
 DATABASES = {
-    'default': {
-        'ENGINE': getenv('ENGINE'),
-        'NAME': getenv('NAME'),
-        'USER': getenv('USER'),
-        'PASSWORD': getenv('PASSWORD'),
-        'HOST': getenv('HOST'),
-        'PORT': getenv('DBPORT'),
+    "default": {
+        "ENGINE": getenv("ENGINE"),
+        "NAME": getenv("NAME"),
+        "USER": getenv("USER"),
+        "PASSWORD": getenv("PASSWORD"),
+        "HOST": getenv("HOST"),
+        "PORT": getenv("DBPORT"),
         # 'OPTIONS': {
         #     'sslmode': 'require',
         # },
@@ -221,7 +195,7 @@ CACHES = {
         "LOCATION": getenv("REDISURL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        },
     }
     # ,
     # "select2": {
@@ -238,16 +212,16 @@ CACHES = {
 
 
 THROTTLE_ZONES = {
-    'default': {
-        'VARY': 'throttle.zones.RemoteIP',
-        'ALGORITHM': 'fixed-bucket',  # Default if not defined.
-        'BUCKET_INTERVAL': 5 * 60,  # Number of seconds to enforce limit.
-        'BUCKET_CAPACITY': 20  # Maximum number of requests allowed within BUCKET_INTERVAL
+    "default": {
+        "VARY": "throttle.zones.RemoteIP",
+        "ALGORITHM": "fixed-bucket",  # Default if not defined.
+        "BUCKET_INTERVAL": 5 * 60,  # Number of seconds to enforce limit.
+        "BUCKET_CAPACITY": 20,  # Maximum number of requests allowed within BUCKET_INTERVAL
     },
 }
 
 # Where to store request counts.
-THROTTLE_BACKEND = 'throttle.backends.cache.CacheBackend'
+THROTTLE_BACKEND = "throttle.backends.cache.CacheBackend"
 
 # Optional if Redis backend is chosen ('throttle.backends.redispy.RedisBackend')
 # THROTTLE_REDIS_HOST = getenv("REDIS_HOST")
@@ -258,7 +232,7 @@ THROTTLE_BACKEND = 'throttle.backends.cache.CacheBackend'
 # Normally, throttling is disabled when DEBUG=True. Use this to force it to enabled.
 THROTTLE_ENABLED = True
 
-DEFENDER_REDIS_NAME = 'default'
+DEFENDER_REDIS_NAME = "default"
 # python manage.py cleanup_django_defender to unlock
 DEFENDER_LOGIN_FAILURE_LIMIT = 8
 
@@ -306,22 +280,23 @@ GEOIP_PATH = os.path.join(BASE_DIR, "geoip")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-MEDIA_AUTO_FIELD = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_AUTO_FIELD = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTH_USER_MODEL = "users.Profile"
 
 
-
 AUTHENTICATION_BACKENDS = [
-    'users.backends.EmailBackend',  # custom backend
+    "users.backends.EmailBackend",  # custom backend
     # 'django.contrib.auth.backends.ModelBackend',  # default backend
     # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-FRIENDSHIP_CONTEXT_OBJECT_NAME = 'profile'
-FRIENDSHIP_CONTEXT_OBJECT_LIST_NAME = 'profiles'
-FRIENDSHIP_MANAGER_FRIENDSHIP_REQUEST_SELECT_RELATED_STRATEGY = 'select_related'  # ('select_related', 'prefetch_related', 'none')
+FRIENDSHIP_CONTEXT_OBJECT_NAME = "profile"
+FRIENDSHIP_CONTEXT_OBJECT_LIST_NAME = "profiles"
+FRIENDSHIP_MANAGER_FRIENDSHIP_REQUEST_SELECT_RELATED_STRATEGY = (
+    "select_related"  # ('select_related', 'prefetch_related', 'none')
+)
 
 LOGIN_URL = "users:login"
 LOGIN_REDIRECT_URL = "users:account"
@@ -333,25 +308,25 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_UNIQUE_EMAIL = True
 
 COOL_PAGINATOR_ELASTIC = True
 
 AUTO_LOGOUT = {
-    'IDLE_TIME': 6000,
-    'SESSION_TIME': 36000,
-    'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
-    'MESSAGE': 'The session has expired. Please login again to continue.'
+    "IDLE_TIME": 6000,
+    "SESSION_TIME": 36000,
+    "REDIRECT_TO_LOGIN_IMMEDIATELY": True,
+    "MESSAGE": "The session has expired. Please login again to continue.",
 }
 
-COUNTRIES_FIRST = ['FR', 'US', 'GB']
+COUNTRIES_FIRST = ["FR", "US", "GB"]
 COUNTRIES_FIRST_SORT = True
 
 NINJAS_API_KEY = getenv("NINJAS_API_KEY")
 
 # settings.py
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = getenv("EMAIL_BACKEND")
@@ -373,16 +348,16 @@ ADMIN_EMAIL = getenv("ADMIN_EMAIL")
 MAILGUN_API_KEY = getenv("MAILGUN_API_KEY")
 MAILGUN_DOMAIN_NAME = getenv("MAILGUN_DOMAIN_NAME")
 
-HANDLER400 = 'stays.urls.handler400'
-HANDLER401 = 'stays.urls.handler401'
-HANDLER403 = 'stays.urls.handler403'
-HANDLER404 = 'stays.urls.handler404'
-HANDLER410 = 'stays.urls.handler410'
-HANDLER418 = 'stays.urls.handler418'
-HANDLER429 = 'stays.urls.handler429'
-HANDLER500 = 'stays.urls.handler500'
-HANDLER503 = 'stays.urls.handler503'
-HANDLER504 = 'stays.urls.handler504'
+HANDLER400 = "stays.urls.handler400"
+HANDLER401 = "stays.urls.handler401"
+HANDLER403 = "stays.urls.handler403"
+HANDLER404 = "stays.urls.handler404"
+HANDLER410 = "stays.urls.handler410"
+HANDLER418 = "stays.urls.handler418"
+HANDLER429 = "stays.urls.handler429"
+HANDLER500 = "stays.urls.handler500"
+HANDLER503 = "stays.urls.handler503"
+HANDLER504 = "stays.urls.handler504"
 
 SENTRY_DSN_PROTOCOL = getenv("SENTRY_DSN_PROTOCOL")
 SENTRY_DSN_START = getenv("SENTRY_DSN_START")
@@ -404,20 +379,20 @@ if dsn and len(dsn) > 20:
 
 
 Q_CLUSTER = {
-    'name': 'stays',  # Name of your project
-    'workers': 3 if DEBUG is True else 4,  # Number of workers to use
-    'orm': 'default',  # The ORM to use
-    'recycle': 80,  # Number of tasks a worker will perform before being recycled
-    'timeout': 90,  # Timeout before a task is considered as blocked
+    "name": "stays",  # Name of your project
+    "workers": 3 if DEBUG is True else 4,  # Number of workers to use
+    "orm": "default",  # The ORM to use
+    "recycle": 80,  # Number of tasks a worker will perform before being recycled
+    "timeout": 90,  # Timeout before a task is considered as blocked
     # 'compress': True,  # If True, tasks will be compressed before being queued
-    'save_limit': 10,  # Maximum number of successful tasks to keep in the database
-    'queue_limit': 50,  # Maximum number of tasks to queue
-    'cpu_affinity': 1,  # Number of CPU cores to use per worker
-    'label': 'Django_Q2',  # Label for the cluster
-    'retry': 110,
-    'redis': {  # Redis configuration
-        'host': '127.0.0.1',  # Redis host address
-        'port': 6379,  # Redis host port
-        'db': 3,  # Redis database to use
-    }
+    "save_limit": 10,  # Maximum number of successful tasks to keep in the database
+    "queue_limit": 50,  # Maximum number of tasks to queue
+    "cpu_affinity": 1,  # Number of CPU cores to use per worker
+    "label": "Django_Q2",  # Label for the cluster
+    "retry": 110,
+    "redis": {  # Redis configuration
+        "host": "127.0.0.1",  # Redis host address
+        "port": 6379,  # Redis host port
+        "db": 3,  # Redis database to use
+    },
 }

@@ -1,6 +1,7 @@
 import pytest
 from selenium.webdriver.common.by import By
 
+
 @pytest.mark.django_db
 def test_register_user(selenium, live_server):
     # Allez à la page de login

@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import patch, AsyncMock
 from locations.utils.helpers import send_http_requests
-from icecream import ic
 from unittest.mock import MagicMock
 
 # Mock responses for fetch_country_data
@@ -14,7 +13,11 @@ mock_response_invalid.status_code = 400
 mock_response_invalid.json.return_value = {"data": "country_data"}
 
 
-@patch("locations.utils.helpers.fetch_country_data", new_callable=AsyncMock, return_value=[mock_response_valid, mock_response_valid])
+@patch(
+    "locations.utils.helpers.fetch_country_data",
+    new_callable=AsyncMock,
+    return_value=[mock_response_valid, mock_response_valid],
+)
 @pytest.mark.asyncio
 async def test_send_http_requests_valid_code(mock_fetch_country_data):
     # Test with a valid country code
@@ -24,7 +27,12 @@ async def test_send_http_requests_valid_code(mock_fetch_country_data):
     assert response["country_details"] == {"data": "country_data"}
     assert response["country_details_ninjas"] == {"data": "country_data"}
 
-@patch("locations.utils.helpers.fetch_country_data", new_callable=AsyncMock, return_value=[mock_response_invalid, mock_response_invalid])
+
+@patch(
+    "locations.utils.helpers.fetch_country_data",
+    new_callable=AsyncMock,
+    return_value=[mock_response_invalid, mock_response_invalid],
+)
 @pytest.mark.asyncio
 async def test_send_http_requests_invalid_code(mock_fetch_country_data):
     # Test with an invalid country code

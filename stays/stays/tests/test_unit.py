@@ -1,4 +1,3 @@
-import pytest
 from django.http import HttpRequest
 from stays.utils.common_helpers import uuid_generator
 from stays.api import is_profile_online
@@ -11,8 +10,8 @@ def test_is_profile_online(mocker):
     slug = test_slug
     # Setup
     request = HttpRequest()
-    request.META = {'HTTP_X_FORWARDED_FOR': '127.0.0.1'}
-    mock_profile = mocker.patch('users.models.Profile.objects.get')
+    request.META = {"HTTP_X_FORWARDED_FOR": "127.0.0.1"}
+    mock_profile = mocker.patch("users.models.Profile.objects.get")
     mock_profile.return_value = mocker.MagicMock(is_online=True)
 
     # Call the function

@@ -1,6 +1,7 @@
 from httpx import Response as httpx_response
 from locations.tests.datasets import INVALID_COUNTRY_CODES
 
+
 # Mock pour httpx.AsyncClient
 class MockClient:
     async def __aenter__(self):
@@ -13,7 +14,8 @@ class MockClient:
         if any(code in url for code in INVALID_COUNTRY_CODES):
             return httpx_response(400, json={})
         else:
-            return httpx_response(200, json={'data': 'country_data'})
+            return httpx_response(200, json={"data": "country_data"})
+
 
 # Mock pour cache
 class MockCache:

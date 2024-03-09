@@ -1,6 +1,5 @@
 import pytest
 from icecream import ic
-# from unittest.mock import AsyncMock, patch
 from locations.tests.datasets import VALID_COUNTRY_CODES, INVALID_COUNTRY_CODES, HEADERS
 from locations.utils.helpers import fetch_country_data
 
@@ -8,7 +7,6 @@ from locations.utils.helpers import fetch_country_data
 @pytest.mark.asyncio
 async def test_fetch_country_data_valid_code():
     for country_code in VALID_COUNTRY_CODES:
-
         responses = await fetch_country_data(country_code, HEADERS)
 
         assert responses is not None
@@ -16,6 +14,7 @@ async def test_fetch_country_data_valid_code():
         for response in responses:
             assert response.status_code == 200
             assert len(response.json()) > 0
+
 
 @pytest.mark.asyncio
 async def test_fetch_country_data_invalid_code():
@@ -26,7 +25,7 @@ async def test_fetch_country_data_invalid_code():
         assert len(responses) == 2
         assert responses[0].status_code == 404
         assert responses[1].status_code == 200 and responses[1].json() == []
-        
+
 
 @pytest.mark.asyncio
 async def test_fetch_country_data_missing_api_key():

@@ -9,7 +9,8 @@ from users.models import Profile
 from stays.utils.common_helpers import uuid_generator
 from django.http import HttpResponse
 
-@patch('users.signals.update_user_status')
+
+@patch("users.signals.update_user_status")
 @pytest.mark.django_db
 def test_DeleteProfileView_get(mock_update_user_status):
     # Create a mock request
@@ -17,14 +18,16 @@ def test_DeleteProfileView_get(mock_update_user_status):
     # Create a mock user and profile
     profile = baker.make(
         Profile,
-        username='testuser010',
-        email='testuser010@test.com',
-        slug=f'testuser010{uuid_generator()}'
-        )
-    profile.set_password('éàAQUE@$_testpa051ssword')
+        username="testuser010",
+        email="testuser010@test.com",
+        slug=f"testuser010{uuid_generator()}",
+    )
+    profile.set_password("éàAQUE@$_testpa051ssword")
     profile.save()
     # Assign the mock user to the request
-    request = factory.get(reverse('users:delete_account', kwargs={'slug': profile.slug}))
+    request = factory.get(
+        reverse("users:delete_account", kwargs={"slug": profile.slug})
+    )
     request.user = profile
 
     # Instantiate the view with the mock request
@@ -41,9 +44,7 @@ def test_DeleteProfileView_get(mock_update_user_status):
     assert response.status_code == 200
 
 
-
-
-@patch('users.signals.update_user_status')
+@patch("users.signals.update_user_status")
 @pytest.mark.django_db
 def test_DeleteProfileView_post(mock_update_user_status):
     # Create a mock request
@@ -51,14 +52,16 @@ def test_DeleteProfileView_post(mock_update_user_status):
     # Create a mock user and profile
     profile = baker.make(
         Profile,
-        username='testuser05',
-        email='testuser05@test.com',
-        slug=f'testuser05{uuid_generator()}'
-        )
-    profile.set_password('test*pa89241_Yssword')
+        username="testuser05",
+        email="testuser05@test.com",
+        slug=f"testuser05{uuid_generator()}",
+    )
+    profile.set_password("test*pa89241_Yssword")
     profile.save()
     # Assign the mock user to the request
-    request = factory.post(reverse('users:delete_account', kwargs={'slug': profile.slug}))
+    request = factory.post(
+        reverse("users:delete_account", kwargs={"slug": profile.slug})
+    )
     request.user = profile
 
     # Instantiate the view with the mock request

@@ -1,5 +1,5 @@
 from django import template
-from icecream import ic
+
 register = template.Library()
 
 

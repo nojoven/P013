@@ -6,13 +6,16 @@ from django.dispatch import receiver
 from users.models import Profile
 from icecream import ic
 
+
 @receiver(user_logged_in)
 def user_logged_in_handler(sender, request, **kwargs):
     async_to_sync(update_user_status)(kwargs.get("user").email, True)
 
+
 @receiver(user_logged_out)
 def user_logged_out_handler(sender, request, **kwargs):
     async_to_sync(update_user_status)(kwargs.get("user").email, False)
+
 
 @database_sync_to_async
 def update_user_status(user, is_online):

@@ -1,23 +1,14 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django_countries.fields import CountryField
-from cities_light.models import City, Country
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
-
-from django.utils.translation import gettext_lazy as _
+from cities_light.models import Country
 from core.models import Publication
-from users.models import Profile
-
-from core.utils.models_helpers import SlugFieldForeignKey, UUIDFieldForeignKey, NullableBigIntegerFieldForeignKey
 from stays.utils.common_helpers import uuid_generator
-# Create your models here.
 
 
 class StayCountry(models.Model):
     uuid = models.UUIDField(default=uuid_generator, editable=False)
     publication = models.ForeignKey(
-        Publication, 
+        Publication,
         on_delete=models.CASCADE,
         null=True,
     )
@@ -30,7 +21,9 @@ class StayCountry(models.Model):
             super().save(*args, **kwargs)
             return
 
-        country_instance, created = Country.objects.get_or_create(code2=self.publication.country_code_of_stay)
+        country_instance, created = Country.objects.get_or_create(
+            code2=self.publication.country_code_of_stay
+        )
         self.continent_name = country_instance.continent
         self.country_name = country_instance.name
         self.country_code_of_stay = country_instance.code2

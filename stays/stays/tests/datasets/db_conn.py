@@ -4,5 +4,5 @@ db_settings = {
     "USER": "",
     "PASSWORD": "",
     "HOST": "",
-    "PORT": 0
+    "PORT": 0,
 }
