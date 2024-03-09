@@ -1,5 +1,10 @@
 import pytest
-from stays.tests.fixtures.fixtures import profile_online, profile_offline , client
+
+from stays.tests.fixtures.fixtures import (
+    client,
+    profile_offline,
+    profile_online
+)
 
 
 @pytest.mark.django_db
@@ -8,6 +13,8 @@ def test_is_profile_online(client, profile_online):
 
     # Check that the response has a status code of 200
     assert response.status_code == 200
+
+
 def test_is_profile_online(client, profile_online):
     response = client.get(f"/api/isonline/{profile_online.slug}/")
 

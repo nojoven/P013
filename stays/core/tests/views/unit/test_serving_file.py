@@ -1,14 +1,16 @@
-import pytest
-from core.models import Publication
-from users.models import Profile
-from django.test import TestCase, Client
-from django.core.files.uploadedfile import SimpleUploadedFile
-from model_bakery import baker
-from stays.utils.common_helpers import uuid_generator
-from uuid import uuid4
 from datetime import datetime
-from core.utils.models_helpers import ContentTypes
+from uuid import uuid4
+
+import pytest
 from cities_light.models import Country
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import Client, TestCase
+from model_bakery import baker
+
+from core.models import Publication
+from core.utils.models_helpers import ContentTypes
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 class ServeFilesTest(TestCase):

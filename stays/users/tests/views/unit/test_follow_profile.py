@@ -1,14 +1,15 @@
-import pytest
-from django.urls import reverse
-from model_bakery import baker
-from django.contrib.messages import get_messages
-from unittest.mock import patch
-from django.test import override_settings
-from django.test import TestCase, Client
-from django.contrib.auth import get_user_model
-from stays.utils.common_helpers import uuid_generator
-from friendship.models import Follow
 import json
+from unittest.mock import patch
+
+import pytest
+from django.contrib.auth import get_user_model
+from django.contrib.messages import get_messages
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
+from friendship.models import Follow
+from model_bakery import baker
+
+from stays.utils.common_helpers import uuid_generator
 
 User = get_user_model()
 

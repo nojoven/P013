@@ -1,8 +1,9 @@
+from cities_light.models import Country
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from core.models import Publication, PublicationUpvote
 from locations.models import StayCountry
-from cities_light.models import Country
 from users.models import Profile, ProfileHasPublication
 
 

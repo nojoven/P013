@@ -1,6 +1,7 @@
 import pytest
-from locations.tests.helpers import MockClient, MockCache
 from django.core.cache import cache
+
+from locations.tests.helpers import MockCache, MockClient
 
 
 @pytest.fixture(autouse=True)

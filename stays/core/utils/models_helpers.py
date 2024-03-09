@@ -1,10 +1,12 @@
-import requests
-from django.db import models
-from stays.settings import NINJAS_API_KEY as napk
-from icecream import ic
-from django.db.models import Prefetch
 from datetime import datetime
 from enum import Enum
+
+import requests
+from django.db import models
+from django.db.models import Prefetch
+from icecream import ic
+
+from stays.settings import NINJAS_API_KEY as napk
 
 
 def get_publications_for_feed(

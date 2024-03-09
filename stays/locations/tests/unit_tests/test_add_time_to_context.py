@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 from locations.utils.helpers import add_time_to_context
 
 

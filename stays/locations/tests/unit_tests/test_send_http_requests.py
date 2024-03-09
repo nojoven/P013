@@ -1,7 +1,8 @@
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import patch, AsyncMock
+
 from locations.utils.helpers import send_http_requests
-from unittest.mock import MagicMock
 
 # Mock responses for fetch_country_data
 mock_response_valid = MagicMock()

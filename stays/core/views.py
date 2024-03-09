@@ -1,41 +1,36 @@
 import json
-from django.core.cache import cache
-from django.middleware.csrf import get_token
-from stays.settings import ADMIN_EMAIL, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME
-from django.contrib import messages
-from django.views.generic.edit import FormView
-from django.urls import reverse_lazy
-from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.views.decorators.http import require_POST, require_GET
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-from core.utils.requests_helpers import NeverCacheMixin
-from core.forms import PublicationEditForm, ContactAdminForm
-from core.models import Publication, PublicationUpvote
-from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import UpdateView, DeleteView
-from django.views.generic.detail import DetailView
+
 from cities_light.models import Country
-from users.models import Profile
-from locations.utils.helpers import (
-    get_continent_from_code,
-    find_cities_light_country_name_with_code,
-    find_cities_light_continent_with_country_code,
-)
-from core.utils.models_helpers import (
-    get_author_picture_from_slug,
-    get_profile_from_email,
-)
-from stays.utils.email_helpers import send_contact_form_email
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.db.models import F
+from django.http import (FileResponse, HttpResponse, HttpResponseRedirect,
+                         JsonResponse)
+from django.middleware.csrf import get_token
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.views.decorators.cache import add_never_cache_headers, never_cache
-from core.utils.models_helpers import get_publications_for_feed
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET, require_POST
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import DeleteView, FormView, UpdateView
 from icecream import ic
-from django.shortcuts import redirect
-from django.http import FileResponse
+
+from core.forms import ContactAdminForm, PublicationEditForm
+from core.models import Publication, PublicationUpvote
+from core.utils.models_helpers import (get_author_picture_from_slug,
+                                       get_profile_from_email,
+                                       get_publications_for_feed)
+from core.utils.requests_helpers import NeverCacheMixin
+from locations.utils.helpers import (
+    find_cities_light_continent_with_country_code,
+    find_cities_light_country_name_with_code, get_continent_from_code)
+from stays.settings import ADMIN_EMAIL, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME
+from stays.utils.email_helpers import send_contact_form_email
+from users.models import Profile
 
 
 @never_cache

@@ -1,21 +1,18 @@
-from django.test import TestCase, RequestFactory
-from django.urls import reverse
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
-from model_bakery import baker
-from users.forms import PasswordResetForm
-from users.utils import (
-    get_email_to_user,
-    forge_token,
-    generate_reset_uid,
-    generate_recovery_url,
-    retrieve_current_user,
-    profile_picture_upload_to,
-)
-from django.utils import timezone
-from stays.settings import DEFAULT_EMAIL_DESTINATION
 from unittest.mock import Mock
+
+from django.contrib.auth.tokens import default_token_generator
+from django.test import RequestFactory, TestCase
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from model_bakery import baker
+
+from stays.settings import DEFAULT_EMAIL_DESTINATION
+from users.forms import PasswordResetForm
+from users.utils import (forge_token, generate_recovery_url,
+                         generate_reset_uid, get_email_to_user,
+                         profile_picture_upload_to, retrieve_current_user)
 
 
 class TestPasswordResetFormFunctions(TestCase):

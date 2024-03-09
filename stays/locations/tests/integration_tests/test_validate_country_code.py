@@ -1,8 +1,9 @@
 import pytest
 from asgiref.sync import sync_to_async
 from django.http import HttpResponse
-from locations.utils.helpers import validate_country_code
+
 from locations.models import Country
+from locations.utils.helpers import validate_country_code
 
 
 @pytest.mark.asyncio

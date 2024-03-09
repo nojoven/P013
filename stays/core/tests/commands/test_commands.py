@@ -1,11 +1,13 @@
-import os
 import fnmatch
+import os
+from unittest.mock import call, patch
+
+from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import TestCase
-from django.contrib.auth import get_user_model
-from core.models import Publication
 from friendship.models import Follow
-from unittest.mock import patch, call
+
+from core.models import Publication
 
 
 class TestSetupStaysCommand(TestCase):

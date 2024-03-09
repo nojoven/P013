@@ -1,15 +1,12 @@
 from django.shortcuts import render
 from icecream import ic
-from locations.utils.helpers import (
-    fill_context_general_informations,
-    append_ninjas_api_general_info,
-    fetch_air_weather_time,
-    add_air_to_context,
-    add_weather_to_context,
-    add_time_to_context,
-    validate_country_code,
-    send_http_requests,
-)
+
+from locations.utils.helpers import (add_air_to_context, add_time_to_context,
+                                     add_weather_to_context,
+                                     append_ninjas_api_general_info,
+                                     fetch_air_weather_time,
+                                     fill_context_general_informations,
+                                     send_http_requests, validate_country_code)
 
 
 async def country_view(request, country_code):

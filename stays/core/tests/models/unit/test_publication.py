@@ -1,12 +1,14 @@
 # Importations nécessaires pour les tests
 from datetime import datetime
-from model_bakery import baker
-from core.models import Publication
-from users.models import Profile
-from stays.utils.common_helpers import uuid_generator
+
 from django.test import TestCase
 from django.urls import reverse
+from model_bakery import baker
+
+from core.models import Publication
 from core.utils.models_helpers import ContentTypes
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 class PublicationModelTest(TestCase):

@@ -12,12 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 # Add these at the top of your settings.py
 import os
-from pathlib import Path
 from os import getenv
-from dotenv import load_dotenv
-import sentry_sdk
+from pathlib import Path
 
-from icecream import install as icinstall, ic
+import sentry_sdk
+from dotenv import load_dotenv
+from icecream import ic
+from icecream import install as icinstall
 
 icinstall()
 
@@ -97,7 +98,6 @@ INSTALLED_APPS = [
     "friendship",
     "pagination",
 ]
-
 
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ["fr", "en"]

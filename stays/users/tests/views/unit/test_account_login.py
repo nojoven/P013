@@ -1,12 +1,14 @@
-import pytest
-from django.test import TestCase, Client
-from django.urls import reverse
-from model_bakery import baker
 from unittest.mock import patch
+
+import pytest
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
-from stays.utils.common_helpers import uuid_generator
+from django.test import Client, TestCase
+from django.urls import reverse
 from icecream import ic
+from model_bakery import baker
+
+from stays.utils.common_helpers import uuid_generator
 
 User = get_user_model()
 

@@ -1,11 +1,13 @@
-import pytest
 from datetime import datetime
-from model_bakery import baker
-from core.models import Publication
-from users.models import Profile
-from core.utils.models_helpers import voice_story_upload_to, picture_upload_to
-from stays.utils.common_helpers import uuid_generator
+
+import pytest
 from django.urls import reverse
+from model_bakery import baker
+
+from core.models import Publication
+from core.utils.models_helpers import picture_upload_to, voice_story_upload_to
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 @pytest.mark.django_db

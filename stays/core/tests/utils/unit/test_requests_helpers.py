@@ -1,20 +1,20 @@
 # Importations nécessaires pour les tests
+import random
+from datetime import datetime
+from uuid import uuid4
+
+from cities_light.models import Country
 from django.http import HttpResponse
-from django.test import RequestFactory
+from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse
 from django.views import View
-from core.utils.requests_helpers import NeverCacheMixin
-from django.test import TestCase
-from core.models import Publication
 from model_bakery import baker
+
+from core.models import Publication
+from core.utils.models_helpers import ContentTypes
+from core.utils.requests_helpers import NeverCacheMixin
 from stays.utils.common_helpers import uuid_generator
 from users.models import Profile
-from cities_light.models import Country
-from uuid import uuid4
-from datetime import datetime
-import random
-from core.utils.models_helpers import ContentTypes
-from django.test import Client
-from django.urls import reverse
 
 
 # Création d'une vue de test qui utilise NeverCacheMixin

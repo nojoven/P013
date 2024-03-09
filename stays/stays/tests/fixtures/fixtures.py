@@ -1,8 +1,9 @@
 import pytest
 from django.test import Client
-from users.models import Profile
-from stays.utils.common_helpers import uuid_generator
 from django.utils.text import slugify
+
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 @pytest.fixture

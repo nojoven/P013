@@ -1,8 +1,10 @@
-import os
 import json
+import os
 from datetime import datetime
-from locations.utils.helpers import add_weather_to_context
+
 from icecream import ic
+
+from locations.utils.helpers import add_weather_to_context
 
 
 class TestAddWeatherToContext:

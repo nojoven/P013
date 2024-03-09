@@ -1,31 +1,19 @@
-from django import forms
-from django.contrib.auth.forms import (
-    UserCreationForm,
-    UserChangeForm,
-    PasswordChangeForm,
-    AuthenticationForm,
-)
-from django_countries.widgets import CountrySelectWidget
-from django_countries.fields import CountryField
-from django.contrib.auth.forms import PasswordResetForm as DjangoPasswordResetForm
-
-from users.utils import (
-    get_email_to_user,
-    forge_token,
-    generate_recovery_url,
-    generate_reset_uid,
-)
-from core.models import Publication
-from users.models import Profile
-
 from cities_light.models import CONTINENT_CHOICES
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import \
+    PasswordResetForm as DjangoPasswordResetForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django_countries.fields import CountryField
+from django_countries.widgets import CountrySelectWidget
+
+from core.models import Publication
+from stays.settings import (DEFAULT_EMAIL_DESTINATION, EMAIL_HOST_USER,
+                            MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME)
 from stays.utils.email_helpers import send_password_reset_email
-from stays.settings import (
-    EMAIL_HOST_USER,
-    MAILGUN_API_KEY,
-    MAILGUN_DOMAIN_NAME,
-    DEFAULT_EMAIL_DESTINATION,
-)
+from users.models import Profile
+from users.utils import (forge_token, generate_recovery_url,
+                         generate_reset_uid, get_email_to_user)
 
 
 class RegistrationForm(UserCreationForm):

@@ -1,7 +1,8 @@
 from django import forms
+from icecream import ic
+
 from core.models import Publication
 from core.utils.models_helpers import ContentTypes
-from icecream import ic
 
 
 class PublicationEditForm(forms.ModelForm):

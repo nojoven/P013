@@ -1,14 +1,12 @@
 import pytest
-from model_bakery import baker
-from users.models import ProfileHasPublication
-from django.db import IntegrityError
-
-from users.models import Profile
-from core.models import Publication
 from django.contrib.auth.hashers import make_password
-
+from django.db import IntegrityError
 from django.db.models.signals import post_save
+from model_bakery import baker
+
+from core.models import Publication
 from core.signals import create_profile_has_publication
+from users.models import Profile, ProfileHasPublication
 
 
 @pytest.fixture

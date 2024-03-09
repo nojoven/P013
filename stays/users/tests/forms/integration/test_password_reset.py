@@ -1,15 +1,11 @@
-from model_bakery import baker
-from django.test import TestCase
-from users.forms import PasswordResetForm
-from django.utils import timezone
-from django.test import Client
+from django.test import Client, TestCase
 from django.test.client import RequestFactory
-from stays.settings import (
-    EMAIL_HOST_USER,
-    MAILGUN_API_KEY,
-    MAILGUN_DOMAIN_NAME,
-    DEFAULT_EMAIL_DESTINATION,
-)
+from django.utils import timezone
+from model_bakery import baker
+
+from stays.settings import (DEFAULT_EMAIL_DESTINATION, EMAIL_HOST_USER,
+                            MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME)
+from users.forms import PasswordResetForm
 
 
 class TestPasswordResetForm(TestCase):

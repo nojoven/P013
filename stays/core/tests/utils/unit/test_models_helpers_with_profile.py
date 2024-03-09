@@ -1,12 +1,11 @@
 # Importations nécessaires pour les tests
 import pytest
-from core.utils.models_helpers import (
-    get_profile_from_email,
-    get_author_picture_from_slug,
-)
+from model_bakery import baker
+
+from core.utils.models_helpers import (get_author_picture_from_slug,
+                                       get_profile_from_email)
 from stays.utils.common_helpers import uuid_generator
 from users.models import Profile
-from model_bakery import baker
 
 
 @pytest.mark.django_db

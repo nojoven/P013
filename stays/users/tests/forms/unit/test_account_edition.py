@@ -1,7 +1,8 @@
 import pytest
+from cities_light.models import CONTINENT_CHOICES
 from django.core.files.uploadedfile import SimpleUploadedFile
 from faker import Faker
-from cities_light.models import CONTINENT_CHOICES
+
 from users.forms import AccountEditionForm
 
 fake = Faker()

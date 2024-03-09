@@ -1,12 +1,12 @@
 import pytest
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.hashers import make_password
-from model_bakery import baker
+from django.core.files.uploadedfile import SimpleUploadedFile
 from faker import Faker
-from users.forms import PublishContentForm
-from core.models import Publication
-from users.models import Profile
+from model_bakery import baker
 
+from core.models import Publication
+from users.forms import PublishContentForm
+from users.models import Profile
 
 fake = Faker()
 

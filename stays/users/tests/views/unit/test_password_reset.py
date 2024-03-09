@@ -1,11 +1,10 @@
 import pytest
-from django.test import override_settings
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.messages import get_messages
-from model_bakery import baker
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.messages import get_messages
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
+from model_bakery import baker
 
 User = get_user_model()
 

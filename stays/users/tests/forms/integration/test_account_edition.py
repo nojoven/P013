@@ -1,10 +1,11 @@
 import pytest
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.contrib.auth.hashers import make_password
-from faker import Faker
 from cities_light.models import CONTINENT_CHOICES
-from users.models import Profile
+from django.contrib.auth.hashers import make_password
+from django.core.files.uploadedfile import SimpleUploadedFile
+from faker import Faker
+
 from users.forms import AccountEditionForm
+from users.models import Profile
 
 fake = Faker()
 

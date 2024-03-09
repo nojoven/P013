@@ -1,14 +1,12 @@
 # Importations nécessaires pour les tests
 from django.db import models
-from core.utils.models_helpers import (
-    UUIDFieldForeignKey,
-    CharFieldForeignKey,
-    SlugFieldForeignKey,
-    NullableIntegerFieldForeignKey,
-    NullableBigIntegerFieldForeignKey,
-    BooleanFieldForeignKey,
-    ContentTypes,
-)
+
+from core.utils.models_helpers import (BooleanFieldForeignKey,
+                                       CharFieldForeignKey, ContentTypes,
+                                       NullableBigIntegerFieldForeignKey,
+                                       NullableIntegerFieldForeignKey,
+                                       SlugFieldForeignKey,
+                                       UUIDFieldForeignKey)
 
 
 # Définition d'un modèle de test

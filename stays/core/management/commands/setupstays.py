@@ -1,15 +1,17 @@
-from django.core.management import call_command, CommandError
-from django.core.management.base import BaseCommand
 import os
-from django.contrib.auth import get_user_model
-from model_bakery import baker
-from friendship.models import Follow
-from core.models import Publication, ContentTypes
-from cities_light.models import Country
-from datetime import datetime
-from uuid import uuid4
 import random
+from datetime import datetime
 from io import StringIO
+from uuid import uuid4
+
+from cities_light.models import Country
+from django.contrib.auth import get_user_model
+from django.core.management import CommandError, call_command
+from django.core.management.base import BaseCommand
+from friendship.models import Follow
+from model_bakery import baker
+
+from core.models import ContentTypes, Publication
 
 
 class Command(BaseCommand):

@@ -1,7 +1,9 @@
 import pytest
-from django.test import TestCase
-from locations.utils.helpers import find_cities_light_continent_with_country_code
 from cities_light.models import Country
+from django.test import TestCase
+
+from locations.utils.helpers import \
+    find_cities_light_continent_with_country_code
 
 
 class TestFindCitiesLightContinentWithCountryCode(TestCase):

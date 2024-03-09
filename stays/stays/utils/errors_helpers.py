@@ -1,21 +1,15 @@
 import os
 import random
+
 from django.conf import settings
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, HttpResponseGone,
+                         HttpResponseNotAllowed, HttpResponseNotModified,
+                         HttpResponsePermanentRedirect,
+                         HttpResponseServerError)
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
-from django.http import (
-    Http404,
-    HttpResponseForbidden,
-    HttpResponseNotAllowed,
-    HttpResponseBadRequest,
-    HttpResponseNotModified,
-    HttpResponseGone,
-    HttpResponseServerError,
-    HttpResponsePermanentRedirect,
-    HttpResponse,
-)
 from icecream import ic
-
 
 # Unauthorized
 response_unauthorized = HttpResponse(status=401)

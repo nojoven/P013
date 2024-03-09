@@ -1,6 +1,8 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 from django.http import HttpResponse
+
 from locations.utils.helpers import validate_country_code
 
 

@@ -1,7 +1,9 @@
 import json
 import os
-from locations.utils.helpers import append_ninjas_api_general_info
+
 from icecream import ic
+
+from locations.utils.helpers import append_ninjas_api_general_info
 
 
 def test_append_ninjas_api_general_info():

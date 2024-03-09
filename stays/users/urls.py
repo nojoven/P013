@@ -1,7 +1,7 @@
 from django.contrib.auth import views as authentication_views
 from django.urls import path
-from users import views
 
+from users import views
 
 app_name = "users"
 

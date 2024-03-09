@@ -1,16 +1,18 @@
+import random
+from datetime import datetime
+from uuid import uuid4
+
 import pytest
-from django.test import TestCase, Client
-from django.urls import reverse
-from model_bakery import baker
-from core.models import Publication
 from cities_light.models import Country
+from django.test import Client, TestCase
+from django.urls import reverse
+from icecream import ic
+from model_bakery import baker
+
+from core.models import Publication
+from core.utils.models_helpers import ContentTypes
 from stays.utils.common_helpers import uuid_generator
 from users.models import Profile
-from core.utils.models_helpers import ContentTypes
-from uuid import uuid4
-from datetime import datetime
-import random
-from icecream import ic
 
 
 @pytest.mark.django_db

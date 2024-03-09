@@ -1,7 +1,9 @@
-import os
 import json
+import os
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import patch, AsyncMock, MagicMock
+
 from locations.utils.helpers import fetch_air_weather_time
 
 

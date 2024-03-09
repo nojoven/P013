@@ -1,6 +1,8 @@
 import pytest
 from icecream import ic
-from locations.tests.datasets import VALID_COUNTRY_CODES, INVALID_COUNTRY_CODES, HEADERS
+
+from locations.tests.datasets import (HEADERS, INVALID_COUNTRY_CODES,
+                                      VALID_COUNTRY_CODES)
 from locations.utils.helpers import fetch_country_data
 
 

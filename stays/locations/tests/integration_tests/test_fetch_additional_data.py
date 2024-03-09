@@ -1,10 +1,12 @@
 from random import choice as rce
+
 import pytest
-from icecream import ic
-from locations.tests.datasets import HEADERS, VALID_CAPITALS, INVALID_CAPITALS
-from locations.utils.helpers import fetch_additional_data
-from locations.tests.fixtures.fixtures import clear_cache  # noqa F401
 from django.core.cache import cache
+from icecream import ic
+
+from locations.tests.datasets import HEADERS, INVALID_CAPITALS, VALID_CAPITALS
+from locations.tests.fixtures.fixtures import clear_cache  # noqa F401
+from locations.utils.helpers import fetch_additional_data
 
 headers = HEADERS
 

@@ -1,7 +1,10 @@
-import pytest
 from unittest.mock import Mock, patch
-from locations.utils.helpers import find_cities_light_continent_with_country_code
+
+import pytest
 from django.core.exceptions import ObjectDoesNotExist
+
+from locations.utils.helpers import \
+    find_cities_light_continent_with_country_code
 
 
 def test_find_cities_light_continent_with_country_code():

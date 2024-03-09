@@ -1,7 +1,8 @@
 import pytest
 from model_bakery import baker
-from users.models import Profile
+
 from core.models import Publication
+from users.models import Profile
 
 
 @pytest.fixture

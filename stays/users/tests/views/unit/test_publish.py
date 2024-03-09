@@ -1,15 +1,17 @@
-import pytest
-from django.test import TestCase, Client, override_settings
-from django.urls import reverse
-from model_bakery import baker
 from unittest.mock import patch
-from django.contrib.auth import get_user_model
-from stays.utils.common_helpers import uuid_generator
+
+import pytest
 from cleantext import clean
-from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
 from icecream import ic
+from model_bakery import baker
+
 from core.models import Publication
+from stays.utils.common_helpers import uuid_generator
 
 User = get_user_model()
 

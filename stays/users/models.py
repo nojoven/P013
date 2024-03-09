@@ -1,18 +1,17 @@
+from cities_light.models import CONTINENT_CHOICES
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    BaseUserManager,
-    PermissionsMixin,
-)
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from core.models import Publication
-from core.utils.models_helpers import UUIDFieldForeignKey, SlugFieldForeignKey
 from friendship.models import Follow
-from cities_light.models import CONTINENT_CHOICES
-from users.utils import profile_picture_upload_to
+
+from core.models import Publication
+from core.utils.models_helpers import SlugFieldForeignKey, UUIDFieldForeignKey
 from stays.utils.common_helpers import uuid_generator
+from users.utils import profile_picture_upload_to
+
 # Create your models here.
 
 

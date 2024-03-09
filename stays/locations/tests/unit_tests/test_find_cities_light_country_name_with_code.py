@@ -1,6 +1,8 @@
 from unittest.mock import Mock, patch
-from locations.utils.helpers import find_cities_light_country_name_with_code
+
 from django.core.exceptions import ObjectDoesNotExist
+
+from locations.utils.helpers import find_cities_light_country_name_with_code
 
 
 def test_find_cities_light_country_name_with_code():

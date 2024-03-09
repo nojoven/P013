@@ -1,5 +1,6 @@
-from model_bakery import baker
 from django.test import TestCase
+from model_bakery import baker
+
 from users.forms import PasswordResetForm
 
 

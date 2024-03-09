@@ -1,11 +1,13 @@
+from unittest.mock import patch
+
 import pytest
-from django.urls import reverse
-from django.test import TestCase, Client
-from django_webtest import WebTest
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
-from unittest.mock import patch
+from django.test import Client, TestCase
+from django.urls import reverse
+from django_webtest import WebTest
 from icecream import ic
+
 from users.models import Profile
 
 User = get_user_model()

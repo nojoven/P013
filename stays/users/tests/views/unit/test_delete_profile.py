@@ -1,13 +1,15 @@
 # Python
+from unittest.mock import MagicMock, patch
+
 import pytest
+from django.http import HttpResponse
+from django.test import RequestFactory
 from django.urls import reverse
 from model_bakery import baker
-from django.test import RequestFactory
-from users.views import DeleteProfileView
-from unittest.mock import MagicMock, patch
-from users.models import Profile
+
 from stays.utils.common_helpers import uuid_generator
-from django.http import HttpResponse
+from users.models import Profile
+from users.views import DeleteProfileView
 
 
 @patch("users.signals.update_user_status")

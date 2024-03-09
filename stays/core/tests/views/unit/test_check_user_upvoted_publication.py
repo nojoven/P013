@@ -1,17 +1,19 @@
-import pytest
-from django.urls import reverse
-from django.test import TestCase, Client
-from django_webtest import WebTest
-from model_bakery import baker
-from stays.utils.common_helpers import uuid_generator
 from datetime import datetime
-from cities_light.models import Country
-from core.models import Publication, PublicationUpvote
-from users.models import Profile
-from core.utils.models_helpers import ContentTypes
-from uuid import uuid4
-from icecream import ic
 from unittest.mock import patch
+from uuid import uuid4
+
+import pytest
+from cities_light.models import Country
+from django.test import Client, TestCase
+from django.urls import reverse
+from django_webtest import WebTest
+from icecream import ic
+from model_bakery import baker
+
+from core.models import Publication, PublicationUpvote
+from core.utils.models_helpers import ContentTypes
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 class TestCheckUserUpvotedPublicationView(WebTest, TestCase):

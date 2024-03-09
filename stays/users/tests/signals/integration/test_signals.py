@@ -1,10 +1,9 @@
-from django.test import TestCase
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import user_logged_in, user_logged_out
-from django.contrib.auth import get_user_model
-from django.test.client import RequestFactory
-
 from unittest import mock
+
+from django.contrib.auth import get_user_model, user_logged_in, user_logged_out
+from django.contrib.auth.hashers import make_password
+from django.test import TestCase
+from django.test.client import RequestFactory
 
 
 class TestUserLoginLogoutSignals(TestCase):

@@ -18,11 +18,13 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
-from stays.utils.errors_helpers import random_error_handler
-# from machina import urls as machina_urls
+from django.urls import include, path
 
 from stays.api import api
+from stays.utils.errors_helpers import random_error_handler
+
+# from machina import urls as machina_urls
+
 
 urlpatterns = [
     path("admin", admin.site.urls),

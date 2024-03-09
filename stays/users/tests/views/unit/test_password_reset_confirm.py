@@ -1,13 +1,12 @@
 import pytest
-from django.test import override_settings
-from django.test import TestCase, Client
-from django.urls import reverse
 from django.conf import settings
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from model_bakery import baker
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from model_bakery import baker
 
 User = get_user_model()
 

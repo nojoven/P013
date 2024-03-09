@@ -1,7 +1,8 @@
-from django_webtest import WebTest
-from django.urls import reverse
-from model_bakery import baker
 import re
+
+from django.urls import reverse
+from django_webtest import WebTest
+from model_bakery import baker
 
 
 class TestAccountLoginForm(WebTest):

@@ -1,6 +1,7 @@
 import pytest
-from users.templatetags.split_on_slash import split_on_slash
 from django.test import TestCase
+
+from users.templatetags.split_on_slash import split_on_slash
 
 
 class TestSplitOnSlashFilter(TestCase):

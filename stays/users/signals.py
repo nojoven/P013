@@ -1,10 +1,11 @@
 # signals.py
-from channels.db import database_sync_to_async
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
-from users.models import Profile
 from icecream import ic
+
+from users.models import Profile
 
 
 @receiver(user_logged_in)

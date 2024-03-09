@@ -1,6 +1,6 @@
+from django.http import JsonResponse
 from ninja import NinjaAPI
 from throttle.decorators import throttle
-from django.http import JsonResponse
 
 from users.models import Profile
 

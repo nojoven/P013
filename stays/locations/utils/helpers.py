@@ -1,17 +1,18 @@
+import asyncio
 import json
 import os
-import asyncio
+from datetime import datetime
+
 import httpx
-from django.core.exceptions import ObjectDoesNotExist
-from icecream import ic
+from asgiref.sync import sync_to_async
 from cities_light.models import Country
 from django.core.cache import cache
-from asgiref.sync import sync_to_async
-from stays.settings import NINJAS_API_KEY as napk
-from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django_countries import countries as dj_countries
+from icecream import ic
 
+from stays.settings import NINJAS_API_KEY as napk
 
 # Create the headers for the Ninjas API
 NINJAS_API_HEADERS = {"X-Api-Key": napk}
@@ -110,7 +111,6 @@ def append_ninjas_api_general_info(general_info_dict: dict, api_response: dict):
                 )
                 key_to_add = True
                 continue
-
 
             if "gdp" in key:
                 key = key.replace("gdp", "GDP")

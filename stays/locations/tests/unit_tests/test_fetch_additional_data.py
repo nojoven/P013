@@ -1,10 +1,13 @@
+from random import choice as rce
+
 import pytest
 from django.core.cache import cache
+
+from locations.tests.datasets import HEADERS, VALID_CAPITALS
+from locations.tests.fixtures.fixtures import clear_cache  # noqa F401
+from locations.tests.fixtures.fixtures import mock_cache
 from locations.tests.helpers import FakeResponse
 from locations.utils.helpers import fetch_additional_data
-from locations.tests.fixtures.fixtures import clear_cache, mock_cache  # noqa F401
-from locations.tests.datasets import VALID_CAPITALS, HEADERS
-from random import choice as rce
 
 # Constantes pour les tests
 CAPITAL = rce(VALID_CAPITALS)

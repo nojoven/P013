@@ -1,8 +1,9 @@
 import pytest
-from model_bakery import baker
 from django.urls import reverse
-from users.models import Profile
 from django.utils.text import slugify
+from model_bakery import baker
+
+from users.models import Profile
 
 
 @pytest.mark.django_db

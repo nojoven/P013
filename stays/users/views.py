@@ -1,52 +1,46 @@
-from django.http import JsonResponse
-from django_q.tasks import async_task
-from django.core.paginator import Paginator
 import json
-from django.db.models import Count
-from django.shortcuts import get_object_or_404, redirect
-from friendship.models import Follow
+
+from cleantext import clean
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseNotAllowed
-from django.contrib.gis.geoip2 import GeoIP2
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.contrib.auth import logout
 from django.contrib.auth import views as authentication_views
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.views import (
-    PasswordResetView,
-    PasswordResetConfirmView,
-    PasswordResetCompleteView,
-    PasswordResetDoneView,
-)
-from users.forms import PasswordResetForm
-from icecream import ic
-from core.utils.requests_helpers import NeverCacheMixin
-from users.forms import (
-    RegistrationForm,
-    AccountLoginForm,
-    AccountEditionForm,
-    PublishContentForm,
-)
-from users.models import Profile, ProfileHasPublication
-from core.models import Publication
-from locations.utils.helpers import (
-    get_continent_from_code,
-    find_cities_light_country_name_with_code,
-    find_cities_light_continent_with_country_code,
-)
-from django_countries import countries
-from users.utils import retrieve_current_user
-from core.utils.models_helpers import profanity_filter_and_update
-from django.contrib.auth import logout
-from django.http import HttpResponseRedirect
-from cleantext import clean
-from neattext.functions import clean_text
+from django.contrib.auth.views import (PasswordResetCompleteView,
+                                       PasswordResetConfirmView,
+                                       PasswordResetDoneView,
+                                       PasswordResetView)
+from django.contrib.gis.geoip2 import GeoIP2
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
+from django.db.models import Count
+from django.http import (Http404, HttpResponse, HttpResponseNotAllowed,
+                         HttpResponseRedirect, JsonResponse)
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import (CreateView, DeleteView, FormView,
+                                       UpdateView)
+from django.views.generic.list import ListView
+from django_countries import countries
+from django_q.tasks import async_task
+from friendship.models import Follow
+from icecream import ic
+from neattext.functions import clean_text
+
+from core.models import Publication
+from core.utils.models_helpers import profanity_filter_and_update
+from core.utils.requests_helpers import NeverCacheMixin
+from locations.utils.helpers import (
+    find_cities_light_continent_with_country_code,
+    find_cities_light_country_name_with_code, get_continent_from_code)
+from users.forms import (AccountEditionForm, AccountLoginForm,
+                         PasswordResetForm, PublishContentForm,
+                         RegistrationForm)
+from users.models import Profile, ProfileHasPublication
+from users.utils import retrieve_current_user
+
 # Create your views here.
 
 

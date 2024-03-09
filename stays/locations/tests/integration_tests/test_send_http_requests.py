@@ -1,4 +1,5 @@
 import pytest
+
 from locations.utils.helpers import send_http_requests
 
 

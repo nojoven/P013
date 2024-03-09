@@ -1,24 +1,23 @@
+import random
+from datetime import datetime
+from unittest import mock
+from unittest.mock import patch
+from uuid import uuid4
+
 import pytest
-from django.test import TestCase, Client, RequestFactory
+from cities_light.models import Country
+from django.contrib.auth.models import AnonymousUser
+from django.http import HttpRequest
+from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from model_bakery import baker
-from unittest import mock
-from django.contrib.auth.models import AnonymousUser
-from unittest.mock import patch
-
-from stays.utils.common_helpers import uuid_generator
-from uuid import uuid4
-from datetime import datetime
-from cities_light.models import Country
-from core.utils.models_helpers import ContentTypes
-from users.models import Profile
-
 
 # User = get_user_model()
 from core.models import Publication
+from core.utils.models_helpers import ContentTypes
 from core.views import PublicationDetailView
-import random
-from django.http import HttpRequest
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 @pytest.mark.django_db

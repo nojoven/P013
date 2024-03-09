@@ -1,11 +1,13 @@
-import pytest
-from icecream import ic
-from django.urls import reverse
-from model_bakery import baker
-from users.models import Profile
 from unittest import mock
-from stays.utils.common_helpers import uuid_generator
+
+import pytest
+from django.urls import reverse
 from django_webtest import WebTest
+from icecream import ic
+from model_bakery import baker
+
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 class TestDeleteProfileView(WebTest):

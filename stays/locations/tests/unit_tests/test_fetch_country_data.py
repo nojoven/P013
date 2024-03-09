@@ -1,9 +1,11 @@
 import pytest
-
-from locations.utils.helpers import fetch_country_data
-from locations.tests.datasets import VALID_COUNTRY_CODES, INVALID_COUNTRY_CODES, HEADERS
-from locations.tests.fixtures.fixtures import mock_client, mock_cache, clear_cache  # noqa F401
 from icecream import ic
+
+from locations.tests.datasets import (HEADERS, INVALID_COUNTRY_CODES,
+                                      VALID_COUNTRY_CODES)
+from locations.tests.fixtures.fixtures import clear_cache  # noqa F401
+from locations.tests.fixtures.fixtures import mock_cache, mock_client
+from locations.utils.helpers import fetch_country_data
 
 
 # Tests unitaires

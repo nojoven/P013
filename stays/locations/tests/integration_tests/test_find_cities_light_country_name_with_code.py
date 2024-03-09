@@ -1,6 +1,7 @@
-from django.test import TestCase
-from locations.utils.helpers import find_cities_light_country_name_with_code
 from cities_light.models import Country
+from django.test import TestCase
+
+from locations.utils.helpers import find_cities_light_country_name_with_code
 
 
 class TestFindCitiesLightCountryNameWithCode(TestCase):

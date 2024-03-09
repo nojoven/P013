@@ -1,4 +1,5 @@
 from httpx import Response as httpx_response
+
 from locations.tests.datasets import INVALID_COUNTRY_CODES
 
 

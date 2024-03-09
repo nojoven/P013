@@ -1,6 +1,7 @@
+from cities_light.models import Country
 from django.db import models
 from django_countries.fields import CountryField
-from cities_light.models import Country
+
 from core.models import Publication
 from stays.utils.common_helpers import uuid_generator
 

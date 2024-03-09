@@ -1,20 +1,22 @@
-import pytest
-from django.urls import reverse
-from django.test import TestCase
-from django_webtest import WebTest
-from model_bakery import baker
-from stays.utils.common_helpers import uuid_generator
+import io
 from datetime import datetime
+from unittest import mock
+from uuid import uuid4
+
+import pytest
 from cities_light.models import Country
+from django.test import TestCase
+from django.urls import reverse
+from django_webtest import WebTest
+from icecream import ic
+from model_bakery import baker
+from PIL import Image
+
 from core.forms import PublicationEditForm
 from core.models import Publication
-from users.models import Profile
 from core.utils.models_helpers import ContentTypes
-from uuid import uuid4
-from unittest import mock
-import io
-from icecream import ic
-from PIL import Image
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 class PublicationEditFormTest(WebTest, TestCase):

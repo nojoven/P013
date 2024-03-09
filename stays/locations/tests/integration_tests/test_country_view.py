@@ -1,15 +1,13 @@
 import pytest
 from asgiref.sync import sync_to_async
-from django.test import RequestFactory, AsyncClient
-
-from django.urls import reverse
-from users.models import Profile
-from icecream import ic
-from django.core.cache import cache
-
-
-from django.utils import timezone
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.core.cache import cache
+from django.test import AsyncClient, RequestFactory
+from django.urls import reverse
+from django.utils import timezone
+from icecream import ic
+
+from users.models import Profile
 
 
 @pytest.fixture(autouse=True)

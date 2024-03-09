@@ -1,6 +1,8 @@
-import pytest
-import os
 import json
+import os
+
+import pytest
+
 from locations.utils.helpers import fill_context_general_informations
 
 

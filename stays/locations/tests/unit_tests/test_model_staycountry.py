@@ -1,4 +1,5 @@
 import pytest
+
 from locations.models import StayCountry
 
 

@@ -1,5 +1,6 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
+
 # from django.core.cache import cache
 
 # def get_cache_key(model):

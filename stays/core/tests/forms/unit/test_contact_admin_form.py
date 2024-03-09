@@ -1,5 +1,6 @@
-from core.forms import ContactAdminForm
 from django.test import TestCase
+
+from core.forms import ContactAdminForm
 
 
 class ContactAdminFormTest(TestCase):

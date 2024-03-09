@@ -1,16 +1,18 @@
+import json
+from datetime import datetime
+from unittest.mock import patch
+from uuid import uuid4
+
 import pytest
-from django.test import TestCase, Client
+from cities_light.models import Country
+from django.test import Client, TestCase
 from django_webtest import WebTest
 from model_bakery import baker
-from stays.utils.common_helpers import uuid_generator
-from datetime import datetime
-from cities_light.models import Country
+
 from core.models import Publication
-from users.models import Profile
 from core.utils.models_helpers import ContentTypes
-from uuid import uuid4
-from unittest.mock import patch
-import json
+from stays.utils.common_helpers import uuid_generator
+from users.models import Profile
 
 
 class TestCheckUserUpvotedPublicationView(WebTest, TestCase):

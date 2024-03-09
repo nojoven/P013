@@ -1,4 +1,5 @@
 import pytest  # noqa F401
+
 from locations.utils.helpers import get_continent_from_code
 
 

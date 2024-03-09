@@ -1,7 +1,7 @@
 from django.http import HttpRequest
-from stays.utils.common_helpers import uuid_generator
-from stays.api import is_profile_online
 
+from stays.api import is_profile_online
+from stays.utils.common_helpers import uuid_generator
 
 test_slug = uuid_generator()
 
