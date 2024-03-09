@@ -4,6 +4,10 @@ P13 2023
 # STAYS
 ## STAYS is a web social media for people who like to tell and share their stories.
 
+## Environment variables
+- in staiys/stays rename the *env* file to ***.env***
+- add the missing values
+
 ## Data storages
 You need to install Postgresql and Redis
 
