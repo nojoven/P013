@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     # friendship
     "friendship",
     "pagination",
+    "corsheaders",
 ]
 
 
@@ -105,6 +106,7 @@ CITIES_LIGHT_TRANSLATION_LANGUAGES = ["fr", "en"]
 
 MIDDLEWARE = [
     # 'silk.middleware.SilkyMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -152,8 +154,10 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = "stays.wsgi.application"
 ASGI_APPLICATION = "stays.asgi.application"
-SILKY_PYTHON_PROFILER = True
-
+# SILKY_PYTHON_PROFILER = True
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://\w+\.herokuapp\.com$",
+]
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
