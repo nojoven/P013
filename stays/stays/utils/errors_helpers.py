@@ -74,6 +74,7 @@ class ErrorHandlerMiddleware:
             204,
             301,
             302,
+            304
         ):
             return random_error_handler(request, response.status_code)
         return response
