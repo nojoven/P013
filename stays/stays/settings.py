@@ -155,9 +155,9 @@ TEMPLATES = [
 # WSGI_APPLICATION = "stays.wsgi.application"
 ASGI_APPLICATION = "stays.asgi.application"
 # SILKY_PYTHON_PROFILER = True
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://\w+\.herokuapp\.com$",
-]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
