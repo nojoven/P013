@@ -288,13 +288,7 @@ class UpdateAccountView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
                 about_text,
                 urls=True,
                 emails=True,
-                phone_num=True,
-                numbers=True,
-                currency_symbols=False,
-                multiple_whitespaces=True,
-                special_char=False,
-                emojis=False,
-                stopwords=True,
+                phone_num=True
             )
 
         signature = form.cleaned_data.get("signature")
@@ -304,13 +298,7 @@ class UpdateAccountView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
                 signature,
                 urls=True,
                 emails=True,
-                phone_num=True,
-                numbers=True,
-                currency_symbols=False,
-                multiple_whitespaces=True,
-                special_char=False,
-                emojis=False,
-                stopwords=True,
+                phone_num=True
             )
 
         # Enregistrement de la publication

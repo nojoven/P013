@@ -1,6 +1,5 @@
-from unittest.mock import patch
-
 import pytest
+from unittest.mock import patch
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from django.test import Client, TestCase
@@ -8,7 +7,6 @@ from django.urls import reverse
 from icecream import ic
 from model_bakery import baker
 from neattext.functions import clean_text
-
 from stays.utils.common_helpers import uuid_generator
 
 User = get_user_model()
@@ -65,13 +63,7 @@ class TestUpdateAccountView(TestCase):
             dirty_about_text,
             urls=True,
             emails=True,
-            phone_num=True,
-            numbers=True,
-            currency_symbols=False,
-            multiple_whitespaces=True,
-            special_char=False,
-            emojis=False,
-            stopwords=True,
+            phone_num=True
         )
         ic(dirty_about_text)
         ic("becomes")
@@ -90,13 +82,7 @@ class TestUpdateAccountView(TestCase):
             dirty_signature,
             urls=True,
             emails=True,
-            phone_num=True,
-            numbers=True,
-            currency_symbols=False,
-            multiple_whitespaces=True,
-            special_char=False,
-            emojis=False,
-            stopwords=True,
+            phone_num=True
         )
         self.assertEqual(self.user.signature, cleaned_signature)
         # Get the messages from the response
@@ -127,13 +113,7 @@ class TestUpdateAccountView(TestCase):
             dirty_about_text,
             urls=True,
             emails=True,
-            phone_num=True,
-            numbers=True,
-            currency_symbols=False,
-            multiple_whitespaces=True,
-            special_char=False,
-            emojis=False,
-            stopwords=True,
+            phone_num=True
         )
         ic(dirty_about_text)
         ic("becomes")
@@ -165,13 +145,7 @@ class TestUpdateAccountView(TestCase):
             dirty_signature,
             urls=True,
             emails=True,
-            phone_num=True,
-            numbers=True,
-            currency_symbols=False,
-            multiple_whitespaces=True,
-            special_char=False,
-            emojis=False,
-            stopwords=True,
+            phone_num=True
         )
         self.assertEqual(self.user.signature, cleaned_signature)
 
