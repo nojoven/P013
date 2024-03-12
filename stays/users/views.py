@@ -1,5 +1,5 @@
 import json
-
+import re
 from cleantext import clean
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -282,24 +282,56 @@ class UpdateAccountView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        about_text = form.cleaned_data.get("about_text")
-        if about_text:
+        about_text_input = form.cleaned_data.get("about_text")
+        if about_text_input:
             about_text = clean_text(
-                about_text,
+                about_text_input,
                 urls=True,
                 emails=True,
-                phone_num=True
+                phone_num=True,
+                stopwords=False,
             )
+            # Split the original and cleaned text into words
+            words_input = re.findall(r'\b[\w\'-]+\b', about_text_input)
+            words = re.findall(r'\b[\w\'-]+\b', about_text)
 
-        signature = form.cleaned_data.get("signature")
+            # For each word in the cleaned text, check if an uppercase version of the word exists in the original text
+            for i, word in enumerate(words):
+                for word_input in words_input:
+                    if word.lower() == word_input.lower() and word_input[0].isupper():
+                        # If an uppercase version of the word exists, replace the word with the uppercase version
+                        words[i] = word_input
+                        break
 
-        if signature:
+            # Join the words back into a string
+            about_text = ' '.join(words)
+
+
+        signature_input = form.cleaned_data.get("signature")
+        if signature_input:
             signature = clean_text(
-                signature,
+                signature_input,
                 urls=True,
                 emails=True,
-                phone_num=True
+                phone_num=True,
+                stopwords=False,
+                special_char=True,
             )
+
+            # Split the original and cleaned text into words
+            words_input = re.findall(r'\b[\w\'-]+\b', signature_input)
+            words = re.findall(r'\b[\w\'-]+\b', signature)
+
+            # For each word in the cleaned text, check if an uppercase version of the word exists in the original text
+            for i, word in enumerate(words):
+                for word_input in words_input:
+                    if word.lower() == word_input.lower() and word_input[0].isupper():
+                        # If an uppercase version of the word exists, replace the word with the uppercase version
+                        words[i] = word_input
+                        break
+
+            # Join the words back into a string
+            signature = ' '.join(words)
 
         # Enregistrement de la publication
         profile = form.save(commit=False)
