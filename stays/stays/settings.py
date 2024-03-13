@@ -105,26 +105,50 @@ CITIES_LIGHT_TRANSLATION_LANGUAGES = ["fr", "en"]
 
 
 MIDDLEWARE = [
-    # 'silk.middleware.SilkyMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.cache.UpdateCacheMiddleware",
-    "django.middleware.cache.FetchFromCacheMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_htmx.middleware.HtmxMiddleware",
-    # Defender
-    "defender.middleware.FailedLoginMiddleware",
-    # Auto Logout
-    "django_auto_logout.middleware.auto_logout",
-    # http error handler
-    "stays.utils.errors_helpers.ErrorHandlerMiddleware",
-    "pagination.middleware.PaginationMiddleware",
+
+  # Sécurité
+  "django.middleware.security.SecurityMiddleware",
+  
+  # Session
+  "django.contrib.sessions.middleware.SessionMiddleware",
+  
+  # CORS
+  "corsheaders.middleware.CorsMiddleware",
+
+  # Cache 
+  "django.middleware.cache.UpdateCacheMiddleware",
+  "django.middleware.cache.FetchFromCacheMiddleware",
+
+  # Standards Django
+  "django.middleware.common.CommonMiddleware",
+  "django.middleware.csrf.CsrfViewMiddleware",
+  
+  # Auth 
+  "django.contrib.auth.middleware.AuthenticationMiddleware",
+
+  # Messages
+  "django.contrib.messages.middleware.MessageMiddleware",
+
+  # Sécurité
+  "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+  # Pagination
+  "pagination.middleware.PaginationMiddleware",
+
+  # Htmx
+  "django_htmx.middleware.HtmxMiddleware",
+
+  # Sécurité
+  "defender.middleware.FailedLoginMiddleware",
+
+  # Auto logout
+  "django_auto_logout.middleware.auto_logout",
+
+  # Error handler
+  "stays.utils.errors_helpers.ErrorHandlerMiddleware",
+  
 ]
+
 
 ROOT_URLCONF = "stays.urls"
 
@@ -154,7 +178,6 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = "stays.wsgi.application"
 ASGI_APPLICATION = "stays.asgi.application"
-# SILKY_PYTHON_PROFILER = True
 
 CORS_ALLOW_HEADERS = ['*']
 CORS_ALLOW_CREDENTIALS = False
