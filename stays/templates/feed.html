@@ -227,10 +227,10 @@ STAYS FEED
           imageObserver.observe(image);
       
           // Add an error event listener to the image
-          image.addEventListener('error', function() {
+          //image.addEventListener('error', function() {
             // Retry loading the image
-            image.src = image.dataset.src;
-          });
+            //image.src = image.dataset.src;
+          //});
         });
 
         var audios = document.querySelectorAll("audio");
@@ -245,10 +245,10 @@ STAYS FEED
         });
 
         // Add an error event listener to the source
-        source.addEventListener('error', function() {
+        //source.addEventListener('error', function() {
             // Retry loading the audio
-            source.src = source.dataset.src;
-        });
+        //    source.src = source.dataset.src;
+        //});
     });
 
 };
