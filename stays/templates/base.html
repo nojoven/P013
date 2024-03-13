@@ -230,7 +230,7 @@
     async function updateUserStatus(author_slug) {
         console.log(`Fetching status for ${author_slug}`);
         try {
-            const cacheTime = 900000;
+            const cacheTime = 400000;
             const response = await fetch(`/api/isonline/${author_slug}/`, { cache: "no-cache" }, cacheTime);
             console.log(`Received response for ${author_slug}`);
             if (!response.ok) {
@@ -253,12 +253,16 @@
             });
         } catch (error) {
             console.log('There was a problem with the fetch operation: ' + error.message);
+            statusElement.className = 'fa-regular fa-sun fa-xs';
+            statusElement.style.color = '#a0a4ac';
+            statusElement.style.animation = '';
+            statusElement.title = '';
         }
     }
 
     // Function to update status for all slugs
     function updateAllStatuses() {
-        var slugs = Array.from(document.querySelectorAll(`[data-slug]`)).filter(isInViewport).map(el => el.dataset.slug);
+        var slugs = Array.from(document.querySelectorAll(`[data-slug]`)).filter(el => isInViewport(el)).map(el => el.dataset.slug);
         console.log(`Updating status for slugs: ${slugs.join(', ')}`);
         slugs.forEach(slug => updateUserStatus(slug));
     }
