@@ -125,7 +125,8 @@ STAYS FEED
                 </script>
                 <p class="card-text">{{ publication.summary }}</p>
                 </div>
-                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="{% url 'core:serve_publication_picture' publication.uuid %}" alt="Illustration" class="card-img-bottom lazyload">
+                <img src='{{ publication.picture.url }}' class="img-fluid" alt="...">
+                {% comment %} <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="{% url 'core:serve_publication_picture' publication.uuid %}" alt="Illustration" class="card-img-bottom lazyload"> {% endcomment %}
                 <div class="card-body">
                     {% if user.is_authenticated %}
                     <h2 class="card-title">{{ publication.season_of_stay }}, <a href="{% url 'locations:country' publication.country_code_of_stay %}">{{ publication.stay_country_name }}</a></h2>
@@ -146,7 +147,8 @@ STAYS FEED
                     {% if user.is_authenticated and publication.content_type == "voice" %}
                     <div class="col-sm-12 mx-auto embed-responsive embed-responsive-4by3">
                         <audio controls class="embed-responsive-item" style="display: block; margin: 0 auto;">
-                            <source id="audioSource" src="{% url 'core:serve_publication_audio' publication.uuid %}">
+                            {% comment %} <source id="audioSource" src="{% url 'core:serve_publication_audio' publication.uuid %}"> {% endcomment %}
+                            <source src="{{ publication.voice_story.url }}">
                         </audio>
                     </div>
                     {% endif %}
