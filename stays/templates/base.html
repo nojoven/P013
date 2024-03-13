@@ -231,7 +231,7 @@
         console.log(`Fetching status for ${author_slug}`);
         try {
             const cacheTime = 400000;
-            const response = await fetch(`/api/isonline/${author_slug}/`, { cache: "no-cache" }, cacheTime);
+            const response = await fetch(`/api/isonline/${author_slug}/`, { cache: "no-cache" });
             console.log(`Received response for ${author_slug}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

@@ -11,4 +11,5 @@ api = NinjaAPI()
 @api.get("/isonline/{slug}/")
 def is_profile_online(request, slug: str):
     profile = Profile.objects.get(slug=slug)
-    return JsonResponse({"is_online": profile.is_online})
+    # return JsonResponse({"is_online": profile.is_online})
+    return JsonResponse({"is_online": True})
