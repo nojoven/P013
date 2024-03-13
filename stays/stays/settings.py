@@ -159,6 +159,7 @@ ASGI_APPLICATION = "stays.asgi.application"
 CORS_ALLOW_HEADERS = ['*']
 CORS_ALLOW_CREDENTIALS = False
 CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = ["*"]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
