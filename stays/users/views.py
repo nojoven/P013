@@ -568,22 +568,14 @@ def follow_profile(request, slug):
     if relation_request.get("relation") == "follow":
         # Si "relation" est "follow", commence à suivre le profil
         Follow.objects.add_follower(profile_asking, profile_target)
-        messages.success(
-            request,
-            f"You are now following {profile_target.username}",
-            extra_tags="base_success",
-        )
+
         # Renvoie une réponse HTTP 201 (Created)
         return HttpResponse(status=201)
 
     elif relation_request.get("relation") == "unfollow":
         # Si "relation" est "unfollow", arrête de suivre le profil
         Follow.objects.remove_follower(profile_asking, profile_target)
-        messages.success(
-            request,
-            f"You have unfollowed {profile_target.username}",
-            extra_tags="base_success",
-        )
+
         # Renvoie une réponse HTTP 204 (No Content)
         return HttpResponse(status=204)
 
