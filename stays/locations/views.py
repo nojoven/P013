@@ -11,8 +11,6 @@ from locations.utils.helpers import (add_air_to_context, add_time_to_context,
 
 async def country_view(request, country_code):
     # Get country data from Restcountries API
-    ic("country_code: ", country_code)
-
     error_in_code = await validate_country_code(country_code)
     if error_in_code is not None:
         return error_in_code
@@ -21,7 +19,6 @@ async def country_view(request, country_code):
     context = {}
 
     response_collection = await send_http_requests(country_code)
-    ic(response_collection.keys())
     country_details = response_collection["country_details"]
     country_details_ninjas = response_collection["country_details_ninjas"]
 

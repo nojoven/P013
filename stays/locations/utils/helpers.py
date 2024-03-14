@@ -207,7 +207,6 @@ async def fetch_additional_data(capital, headers):
 
     # If the response is not in the cache, fetch it
     if responses is None:
-        ic("Fetching additional data")
         async with httpx.AsyncClient(verify=False) as client:
             url3 = f"https://api.api-ninjas.com/v1/airquality?city={capital}"
             url4 = f"https://api.api-ninjas.com/v1/weather?city={capital}"
@@ -228,7 +227,6 @@ async def fetch_additional_data(capital, headers):
         cache.set(cache_key, responses)
     else:
         ic("Responses found in cache")
-    ic(type(responses))
 
     return responses
 
@@ -239,7 +237,7 @@ async def fetch_air_weather_time(general_info: dict):
         additional_responses = await fetch_additional_data(
             general_info["Capital"], NINJAS_API_HEADERS
         )
-        ic(additional_responses)
+
         # Unpack the responses
         (
             air_quality_ninjas_api_response,
@@ -311,7 +309,6 @@ def add_weather_to_context(weather_dict):
                 new_value = value
             formatted_weather_json[new_key] = new_value
         else:
-            ic(wkey)
             ic(f"{wkey} not in key_mapping")
     return formatted_weather_json
 
@@ -359,14 +356,12 @@ async def validate_country_code(country_code):
         exists = await sync_to_async(
             Country.objects.filter(name=country_code.capitalize()).exists
         )()
-        ic(exists)
+
         if not exists:
             ic(
                 "Not found with the  two first letters of the country name. Checking with the full name."
             )
             return HttpResponse("Invalid country name.", status=400)
-
-    # return country_code[:2].upper()
 
 
 async def send_http_requests(country_code):

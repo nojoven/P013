@@ -17,13 +17,13 @@ from pathlib import Path
 
 import sentry_sdk
 from dotenv import load_dotenv
-from icecream import ic
 from icecream import install as icinstall
 
 icinstall()
 
-ic("Thanks to https://simplemaps.com/data/world-cities")
-ic("Image by Timur Kozmenko from Pixabay")
+print(
+    "Code2: https://simplemaps.com/data/world-cities. Img: Timur Kozmenko Pixabay"
+)
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

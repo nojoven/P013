@@ -63,11 +63,10 @@ class ErrorHandlerMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        ic("ErrorHandlerMiddleware")
+        ic("Request Handler")
         ic(request)
         response = self.get_response(request)
         ic(response)
-        ic(response.status_code)
         if not 199 < response.status_code <= 300 and response.status_code not in (
             200,
             201,
@@ -80,7 +79,6 @@ class ErrorHandlerMiddleware:
         return response
 
     def process_exception(self, request, exception):
-        ic("process_exception")
         ic(request)
         ic(exception)
         try:

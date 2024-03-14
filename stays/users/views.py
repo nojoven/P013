@@ -78,6 +78,18 @@ class CreateProfileView(NeverCacheMixin, CreateView):
     template_name = "signup.html"
     success_url = reverse_lazy("users:login")
 
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect(
+                reverse_lazy(
+                    'users:account',
+                    kwargs={
+                        "slug": self.request.user.slug
+                    }
+                )
+            )
+        
+
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
@@ -128,7 +140,6 @@ class AccountLoginView(NeverCacheMixin, authentication_views.LoginView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        ic(form.errors.as_data())
         if (
             "fromfeed" in self.request.GET
             and self.request.GET["fromfeed"] == "fromfeed"
@@ -254,7 +265,6 @@ class ProfileStaysListView(NeverCacheMixin, LoginRequiredMixin, ListView):
 
         page = self.request.GET.get("page")
         page_obj = paginator.get_page(page)
-        ic(page_obj)
         context["page_obj"] = page_obj
         context["publications"] = publications
 
@@ -391,8 +401,6 @@ class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
         return context
 
     def form_valid(self, form):
-        ic(form)
-        ic(form.cleaned_data)
         text_story = form.cleaned_data.get("text_story")
         voice_story = form.cleaned_data.get("voice_story")
 

@@ -17,7 +17,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, FormView, UpdateView
-from icecream import ic
 
 from core.forms import ContactAdminForm, PublicationEditForm
 from core.models import Publication, PublicationUpvote
@@ -124,10 +123,8 @@ def home(request):
     publications = get_publications_for_feed(
         Publication, Country, find_cities_light_country_name_with_code
     )
-    ic(publications)
     paginator = Paginator(publications, 5)
     page_obj = paginator.get_page(page)
-    ic(page_obj)
     context = {"page_obj": page_obj}
 
     response = render(request, "feed.html", context)
