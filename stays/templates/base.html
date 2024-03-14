@@ -91,9 +91,9 @@
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {% if user.is_authenticated %}
-                        <img src="{{ user.profile_picture.url }}" class="header-avatar" alt="{% static 'assets/images/avatars/vectorstock_7142223.png' %}">
+                        <img src="{{ user.profile_picture.url }}" class="header-avatar" alt="CONNECTED">
                     {% else %}
-                        <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar" alt="{% static 'assets/images/avatars/vectorstock_7142223.png' %}">
+                        <img src="{% static 'assets/images/avatars/icons8-login-64.png' %}" class="header-avatar" alt="">
                     {% endif %}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
