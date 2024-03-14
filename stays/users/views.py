@@ -415,6 +415,7 @@ class PublishView(NeverCacheMixin, LoginRequiredMixin, FormView, CreateView):
         publication = form.save(commit=False)
         publication.author_username = self.request.user.username
         publication.published_from_country_code = self.get_publication_origin()
+        publication.updated_at = None
 
         # Enregistrement de l'enregistrement vocal s'il est fourni
         if voice_story:

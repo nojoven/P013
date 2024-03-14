@@ -2,6 +2,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django_countries.fields import CountryField
 
 from core.utils.models_helpers import (ContentTypes, picture_upload_to,
@@ -38,7 +39,7 @@ class Publication(models.Model):
         help_text="Record your story.",
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
     content_type = models.CharField(
         max_length=5,
         default="text",
@@ -64,6 +65,11 @@ class Publication(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:  # the object already exists, so it's being updated
+            self.updated_at = timezone.now()
+        super().save(*args, **kwargs)
 
 
 class PublicationUpvote(models.Model):

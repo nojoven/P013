@@ -39,7 +39,7 @@
     {% if publication.published_from_country_name %} 
     <h4>Published from <a href="{% url 'locations:country' publication.published_from_country_code %}">{{ publication.published_from_country_name }}</a></h4>
     {% endif %}
-    {% if publication.updated_at != publication.created_at %}
+    {% if publication.updated_at %}
     <h4> Updated : {{ publication.updated_at }}</h4>
     {% endif %}
     <br>

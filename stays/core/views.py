@@ -264,6 +264,11 @@ class PublicationDetailView(LoginRequiredMixin, NeverCacheMixin, DetailView):
 
         publication.total_upvotes_count = total_upvotes_count
 
+        # If created_at and updated_at are within one second of each other, set updated_at to None
+        from datetime import timedelta
+        if abs(publication.created_at - publication.updated_at) < timedelta(seconds=1):
+            publication.updated_at = None
+
         return context
 
 

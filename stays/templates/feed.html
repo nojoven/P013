@@ -138,9 +138,6 @@ STAYS FEED
                     {% elif not user.is_authenticated %}
                     <h6>Published from <a href="{% url 'locations:country' publication.published_from_country_code %}" onclick="showLoginModal(event)">{{ publication.published_from_country_name }}</a></h6>
                     {% endif %}
-                    {% if publication.updated_at != publication.created_at %}
-                    <p class="card-text"><small class="text-muted">Updated {{ publication.updated_at }}</small></p>
-                    {% endif %}
                     {% if user.is_authenticated and publication.content_type == "text" %}
                     <p class="card-text">{{ publication.text_story }}</p>
                     {% endif %}
