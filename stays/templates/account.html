@@ -131,6 +131,35 @@ Account
                                     {% if continent_of_birth %}
                                         , {{ continent_of_birth }}
                                     {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if current_user.motto %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingMotto">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMotto" aria-expanded="false" aria-controls="collapseMotto">
+                                    Motto
+                                </button>
+                            </h2>
+                            <div id="collapseMotto" class="accordion-collapse collapse" aria-labelledby="headingMotto" data-bs-parent="#userInformationAccordion">
+                                <div class="accordion-body">
+                                    « {{ current_user.motto }} »
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if current_user.signature %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSignature">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSignature" aria-expanded="false" aria-controls="collapseSignature">
+                                    Signature
+                                </button>
+                            </h2>
+                            <div id="collapseSignature" class="accordion-collapse collapse" aria-labelledby="headingSignature" data-bs-parent="#userInformationAccordion">
+                                <div class="accordion-body">
+                                    « {{ current_user.signature }} »
+                                </div>
                             </div>
                         </div>
                         {% endif %}
