@@ -314,10 +314,13 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 if DEBUG is False:
     # settings
+    AWS_S3_OBJECT_PARAMETERS = {
+    'Expires': '86400',
+    }
     AWS_ACCESS_KEY_ID = getenv('SPACE_ACCESS_KEY')
     AWS_SECRET_ACCESS_KEY = getenv('SPACE_SECRET_KEY')
     AWS_STORAGE_BUCKET_NAME = getenv('SPACE_NAME')
-    AWS_DEFAULT_ACL = 'FULL_CONTROL'
+    AWS_DEFAULT_ACL = 'public-read'
     AWS_S3_ENDPOINT_URL = 'https://stays.fra1.digitaloceanspaces.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
     # static settings
