@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+
 # Add these at the top of your settings.py
 import os
 from os import getenv
@@ -108,10 +109,10 @@ MIDDLEWARE = [
 
   # Sécurité
   "django.middleware.security.SecurityMiddleware",
-  
+
   # Session
   "django.contrib.sessions.middleware.SessionMiddleware",
-  
+
   # CORS
   "corsheaders.middleware.CorsMiddleware",
 
@@ -122,7 +123,7 @@ MIDDLEWARE = [
   # Standards Django
   "django.middleware.common.CommonMiddleware",
   "django.middleware.csrf.CsrfViewMiddleware",
-  
+
   # Auth 
   "django.contrib.auth.middleware.AuthenticationMiddleware",
 
@@ -146,7 +147,7 @@ MIDDLEWARE = [
 
   # Error handler
   "stays.utils.errors_helpers.ErrorHandlerMiddleware",
-  
+
 ]
 
 
@@ -328,10 +329,11 @@ MEDIA_AUTO_FIELD = "/media/"
 AUTH_USER_MODEL = "users.Profile"
 
 
-if DEBUG is False:
+if not DEBUG:
     # settings
     AWS_S3_OBJECT_PARAMETERS = {
-    'Expires': '86400',
+    'CacheControl': 'max-age=86400',
+    # 'Expires': '86400',
     }
     AWS_ACCESS_KEY_ID = getenv('SPACE_ACCESS_KEY')
     AWS_SECRET_ACCESS_KEY = getenv('SPACE_SECRET_KEY')
@@ -346,11 +348,9 @@ if DEBUG is False:
     MEDIA_URL = f'https://{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    STATIC_ROOT = Path(BASE_DIR) / 'staticfiles'
 else:
     STATIC_URL = '/static/'
-    STATIC_ROOT = Path(BASE_DIR) / 'staticfiles'
-
+STATIC_ROOT = Path(BASE_DIR) / 'staticfiles'
 STATICFILES_DIRS = (Path(BASE_DIR) / 'static',)
 
 MEDIA_URL = '/media/'
