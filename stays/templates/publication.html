@@ -158,31 +158,8 @@
     <br>
 </div>
 {% endblock content %}
-{% comment %} <script>
-    $(document).ready(function () {
-        var btn = $('#upvbtn');
-        $('.fa-heart').click(function () {
-            $(this).toggleClass("fa-solid fa-heart-circle-check fa-beat-fade fa-sm");
-        });
-    });
-</script> {% endcomment %}
 </main>
 
-{% comment %} <script>
-    document.getElementById('upvbtn').addEventListener('htmx:afterOnLoad', function (event) {
-        var btn = $(this);
-        var icon = btn.children('i');
-        if (btn.text().trim() == "Upvote") {
-            btn.text("You Like It");
-            icon.removeClass("fa-regular fa-heart");
-            icon.addClass("fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm");
-        } else {
-            btn.text("Upvote");
-            icon.removeClass("fa-solid fa-heart fa-heart-circle-check fa-beat-fade fa-sm");
-            icon.addClass("fa-regular fa-heart");
-        }
-    });
-</script> {% endcomment %}
 
 <script>
     $('#upvbtn').click(function () {

@@ -19,6 +19,7 @@ from pathlib import Path
 import sentry_sdk
 from dotenv import load_dotenv
 from icecream import install as icinstall
+from icecream import ic
 
 icinstall()
 
@@ -37,7 +38,11 @@ SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = getenv("DEBUG")
-DEBUG = getenv('DEBUG', 'False') == 'True'
+# ic(getenv('DEBUG'))
+# print(getenv('DEBUG'))
+# print(type(getenv('DEBUG')))
+DEBUG = getenv('DEBUG', 'false') == 'true'
+# ic(DEBUG)
 # TEMPLATE_DEBUG = getenv("TEMPLATE_DEBUG") == "True"
 
 
@@ -158,7 +163,6 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, "templates"),
-            #  MACHINA_MAIN_TEMPLATE_DIR,
         ],
         # "APP_DIRS": True,
         "OPTIONS": {
@@ -205,21 +209,6 @@ CSRF_TRUSTED_ORIGINS = [
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': getenv('PGDATABASE'),
-#         'USER': getenv('PGUSER'),
-#         'PASSWORD': getenv('PGPASSWORD'),
-#         'HOST': getenv('PGHOST'),
-#         'PORT': getenv('PGPORT'),
-#         'OPTIONS': {
-#             'sslmode': 'require',
-#         },
-#         'DISABLE_SERVER_SIDE_CURSORS': True,
-#     }
-# }
 DATABASES = {
     "default": {
         "ENGINE": getenv("ENGINE"),
@@ -245,14 +234,6 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
     }
-    # ,
-    # "select2": {
-    #     "BACKEND": "django_redis.cache.RedisCache",
-    #     "LOCATION": "redis://127.0.0.1:6379/2",
-    #     "OPTIONS": {
-    #         "CLIENT_CLASS": "django_redis.client.DefaultClient",
-    #     }
-    # }
 }
 
 
@@ -331,10 +312,6 @@ AUTH_USER_MODEL = "users.Profile"
 
 if not DEBUG:
     # settings
-    AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-    # 'Expires': '86400',
-    }
     AWS_ACCESS_KEY_ID = getenv('SPACE_ACCESS_KEY')
     AWS_SECRET_ACCESS_KEY = getenv('SPACE_SECRET_KEY')
     AWS_STORAGE_BUCKET_NAME = getenv('SPACE_NAME')
@@ -344,17 +321,18 @@ if not DEBUG:
     # static settings
     AWS_LOCATION = 'static'
     MEDIA_LOCATION = 'media'
-    STATIC_URL = f'https://{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/'
-    MEDIA_URL = f'https://{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/'
+    STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/{AWS_LOCATION}/'
+    MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 else:
+    ic(DEBUG)
     STATIC_URL = '/static/'
-STATIC_ROOT = Path(BASE_DIR) / 'staticfiles'
-STATICFILES_DIRS = (Path(BASE_DIR) / 'static',)
+    STATIC_ROOT = Path(BASE_DIR) / 'staticfiles'
+    STATICFILES_DIRS = (Path(BASE_DIR) / 'static',)
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = Path(BASE_DIR) / 'mediafiles'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = Path(BASE_DIR) / 'mediafiles'
 
 AUTHENTICATION_BACKENDS = [
     "users.backends.EmailBackend",  # custom backend

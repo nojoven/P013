@@ -88,7 +88,8 @@ class CreateProfileView(NeverCacheMixin, CreateView):
                     }
                 )
             )
-        
+        else:
+            return super().dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.

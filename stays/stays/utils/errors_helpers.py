@@ -67,6 +67,7 @@ class ErrorHandlerMiddleware:
         ic(request)
         response = self.get_response(request)
         ic(response)
+        ic(response.status_code)
         if not 199 < response.status_code <= 300 and response.status_code not in (
             200,
             201,
@@ -114,6 +115,7 @@ class ErrorHandlerMiddleware:
                 elif exception.status_code == response_gateway_timeout.status_code:
                     return random_error_handler(request, 504)
                 else:
+                    ic(request)
                     return random_error_handler(request, 500)
 
         except ValueError:

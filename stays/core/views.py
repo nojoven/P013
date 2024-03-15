@@ -1,5 +1,5 @@
 import json
-
+from datetime import timedelta
 from cities_light.models import Country
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -198,6 +198,8 @@ class PublicationUpdateView(NeverCacheMixin, LoginRequiredMixin, UpdateView):
         return reverse_lazy("core:publication", args=[str(self.object.uuid)])
 
     def form_valid(self, form):
+        # Invalidate the cache for this publication
+        cache.delete(f"publication_{self.object.uuid}")
         messages.success(
             self.request, "Publication updated successfully!", extra_tags="base_success"
         )
@@ -265,7 +267,6 @@ class PublicationDetailView(LoginRequiredMixin, NeverCacheMixin, DetailView):
         publication.total_upvotes_count = total_upvotes_count
 
         # If created_at and updated_at are within one second of each other, set updated_at to None
-        from datetime import timedelta
         if abs(publication.created_at - publication.updated_at) < timedelta(seconds=1):
             publication.updated_at = None
 

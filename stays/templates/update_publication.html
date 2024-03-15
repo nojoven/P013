@@ -53,7 +53,7 @@ Edit Publication
                                     {% get_countries as countries %}
                                     <select name="country_code_of_stay" class="form-control">
                                         {% for country in countries %}
-                                            <option value="{{ country.code }}">{{ country.name }}</option>
+                                            <option value="{{ country.code }}" {% if field.value == country.code %}selected{% endif %}>{{ country.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
