@@ -32,12 +32,12 @@ vars_path = BASE_DIR / "stays" / ".env"
 load_dotenv(vars_path)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# raise ValueError(settings.SECRET_KEY)
 SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv("DEBUG")
-TEMPLATE_DEBUG = getenv("TEMPLATE_DEBUG")
+# DEBUG = getenv("DEBUG")
+DEBUG = getenv('DEBUG', 'False') == 'True'
+# TEMPLATE_DEBUG = getenv("TEMPLATE_DEBUG") == "True"
 
 
 # Quick-start development settings - unsuitable for production
@@ -161,6 +161,7 @@ TEMPLATES = [
         ],
         # "APP_DIRS": True,
         "OPTIONS": {
+            "debug": getenv("TEMPLATE_DEBUG") == "True",
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
@@ -180,9 +181,25 @@ TEMPLATES = [
 ASGI_APPLICATION = "stays.asgi.application"
 
 CORS_ALLOW_HEADERS = ['*']
-CORS_ALLOW_CREDENTIALS = False
+# CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = ["https://p13stays-04d316820bf8.herokuapp.com"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://p13stays-04d316820bf8.herokuapp.com",
+    "http:localhost",
+    "https://localhost",
+    "http:localhost:8080",
+    "http:localhost:8000",
+    "http:localhost:5000",
+    "http:localhost:443",
+    "http:localhost:80",
+    "http://127.0.0.1",
+    "https://127.0.0.1",
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:5000",
+    "http://127.0.0.1:443",
+    "http://127.0.0.1:80",
+    ]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -310,7 +327,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_AUTO_FIELD = "/media/"
 AUTH_USER_MODEL = "users.Profile"
 
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 if DEBUG is False:
     # settings
@@ -388,7 +404,7 @@ EMAIL_BACKEND = getenv("EMAIL_BACKEND")
 EMAIL_HOST = getenv("EMAIL_HOST")
 # port of your email provider
 EMAIL_PORT = getenv("EMAIL_PORT")
-EMAIL_USE_TLS = getenv("EMAIL_USE_TLS")
+EMAIL_USE_TLS = getenv("EMAIL_USE_TLS") == "True"
 # your email account
 EMAIL_HOST_USER = getenv("EMAIL_HOST_USER")
 # your email password
