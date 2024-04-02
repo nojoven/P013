@@ -444,3 +444,4 @@ Q_CLUSTER = {
         "db": 3,  # Redis database to use
     },
 }
+SESSION_COOKIE_SECURE = True
