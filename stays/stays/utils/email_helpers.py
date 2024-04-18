@@ -11,7 +11,7 @@ def send_password_reset_email(**kwargs):
             "subject": "Password Reset",
             "text": f'Please click on the following link: {kwargs.get("recovery_url")}',
         },
-    )
+    timeout=60)
 
 
 def send_contact_form_email(**kwargs):
@@ -24,4 +24,4 @@ def send_contact_form_email(**kwargs):
             "subject": kwargs.get("subject"),
             "text": kwargs.get("message"),
         },
-    )
+    timeout=60)
